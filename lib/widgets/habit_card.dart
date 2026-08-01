@@ -26,6 +26,15 @@ class HabitCard extends StatelessWidget {
     }
   }
 
+  String _frequencyLabel() {
+    if (habit.frequency == HabitFrequency.specificDays) {
+      if (habit.selectedDays.isEmpty) return 'specificDays';
+      final sorted = [...habit.selectedDays]..sort();
+      return sorted.map((d) => kWeekdayShortNames[d]).join(', ');
+    }
+    return habit.frequency.name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -41,7 +50,7 @@ class HabitCard extends StatelessWidget {
             decoration: habit.completed ? TextDecoration.lineThrough : null,
           ),
         ),
-        subtitle: Text('${habit.category.name} • ${habit.frequency.name}'),
+        subtitle: Text('${habit.category.name} • ${_frequencyLabel()}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

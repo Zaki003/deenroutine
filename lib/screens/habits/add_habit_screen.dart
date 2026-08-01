@@ -20,12 +20,73 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   TimeOfDay? _reminderTime;
   bool _saving = false;
 
+  /// Selected day indices for HabitFrequency.specificDays, using the
+  /// S M T W T F S order (0=Sun ... 6=Sat) defined in kWeekdayLetters.
+  final Set<int> _selectedDays = {};
+  String? _dayPickerError;
+
   Future<void> _pickReminderTime() async {
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime ?? const TimeOfDay(hour: 20, minute: 0),
     );
     if (picked != null) setState(() => _reminderTime = picked);
+  }
+
+  Widget _buildDayPicker() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Repeat on', style: TextStyle(fontWeight: FontWeight.w600)),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(7, (index) {
+              final selected = _selectedDays.contains(index);
+              return InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onTap: () {
+                  setState(() {
+                    if (selected) {
+                      _selectedDays.remove(index);
+                    } else {
+                      _selectedDays.add(index);
+                    }
+                    _dayPickerError = null;
+                  });
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: selected
+                      ? const Color(0xFF2E7D32)
+                      : Theme.of(context).colorScheme.surfaceContainerHighest,
+                  child: Text(
+                    kWeekdayLetters[index],
+                    style: TextStyle(
+                      color: selected ? Colors.white : null,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+          if (_dayPickerError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                _dayPickerError!,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -44,8 +105,6 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               TextFormField(
                 controller: _titleCtrl,
                 decoration: const InputDecoration(labelText: 'Habit title'),
-                // FIX (item 2): previously an empty title just silently did
-                // nothing on Save. This makes it a real validation error.
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please enter a habit title';
@@ -69,10 +128,16 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 items: HabitFrequency.values
                     .map((f) => DropdownMenuItem(value: f, child: Text(f.name)))
                     .toList(),
-                onChanged: (v) => setState(() => _frequency = v!),
+                onChanged: (v) => setState(() {
+                  _frequency = v!;
+                  if (_frequency != HabitFrequency.specificDays) {
+                    _selectedDays.clear();
+                    _dayPickerError = null;
+                  }
+                }),
               ),
+              if (_frequency == HabitFrequency.specificDays) _buildDayPicker(),
               const SizedBox(height: 16),
-              // FR-08: optional daily reminder, this is "Step 8" wired in.
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.notifications_outlined),
@@ -97,6 +162,14 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                     : () async {
                         if (!_formKey.currentState!.validate()) return;
 
+                        if (_frequency == HabitFrequency.specificDays &&
+                            _selectedDays.isEmpty) {
+                          setState(() {
+                            _dayPickerError = 'Select at least one day';
+                          });
+                          return;
+                        }
+
                         setState(() => _saving = true);
                         final title = _titleCtrl.text.trim();
 
@@ -105,6 +178,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                               title: title,
                               category: _category,
                               frequency: _frequency,
+                              selectedDays: _selectedDays.toList()..sort(),
                             );
 
                         if (_reminderTime != null) {

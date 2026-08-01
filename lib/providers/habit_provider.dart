@@ -74,6 +74,7 @@ class HabitProvider extends ChangeNotifier {
     required String title,
     required HabitCategory category,
     required HabitFrequency frequency,
+    List<int> selectedDays = const [],
   }) {
     final habit = Habit(
       habitId: _uuid.v4(),
@@ -81,6 +82,7 @@ class HabitProvider extends ChangeNotifier {
       title: title,
       category: category,
       frequency: frequency,
+      selectedDays: selectedDays,
     );
     return _service.addHabit(habit);
   }
