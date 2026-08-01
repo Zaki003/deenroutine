@@ -40,6 +40,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final habitProvider = context.watch<HabitProvider>();
     final prayerProvider = context.watch<PrayerProvider>();
 
+    if (habitProvider.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(habitProvider.error!)),
+        );
+        habitProvider.clearError();
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('DeenRoutine'),
@@ -73,6 +83,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.only(bottom: 24),
           children: [
             const SizedBox(height: 16),
+            const Text(
+              'Barakah Circle',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.3,
+              ),
+            ),
+            const SizedBox(height: 8),
             Center(
               child: BarakahCircle(percentage: habitProvider.completionPercentage),
             ),
