@@ -1,0 +1,38 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+
+# Android
+android/.gradle/
+android/captures/
+android/local.properties
+android/key.properties
+android/app/*.jks
+android/**/GeneratedPluginRegistrant.java
+
+# iOS
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/.symlinks/
+**/xcuserdata/
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Firebase (do NOT commit real credentials — regenerate locally via
+# `flutterfire configure` instead; see the implementation guide, Step 3)
+# lib/firebase_options.dart is intentionally kept OUT of this ignore list —
+# for a client-side Flutter app, these values are not secret (they're
+# baked into every APK anyway); real protection comes from Firestore
+# security rules and App Check, not from hiding this file.

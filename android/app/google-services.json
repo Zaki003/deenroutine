@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "177245132422",
+    "project_id": "deenroutine-64d95",
+    "storage_bucket": "deenroutine-64d95.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177245132422:android:8ea8341027f02661152307",
+        "android_client_info": {
+          "package_name": "com.ZakiFaiaz.deenroutine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfZGKKytuQCKUy_NH13pGaq-VjjuFgBBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

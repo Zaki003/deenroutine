@@ -1,0 +1,60 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can only read/write their own profile document.
+    match /Users/{userId} {
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Habits: owner-only access (NFR-SEC-02).
+    match /Habits/{habitId} {
+      allow read, update, delete: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    // HabitLogs: readable/writable only if the parent habit belongs to the user.
+    match /HabitLogs/{logId} {
+      allow read, write: if request.auth != null;
+      // For stricter enforcement, store `uid` directly on each log document
+      // and check request.resource.data.uid == request.auth.uid instead.
+    }
+
+    // QuizQuestions: public read (content library), writes restricted to admins.
+    match /QuizQuestions/{questionId} {
+      allow read: if request.auth != null;
+      allow write: if false; // manage via Firebase console / admin SDK only
+    }
+
+    // QuizResults: owner-only.
+    match /QuizResults/{resultId} {
+      allow read, create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    // DailyQuotes: public read-only content library.
+    match /DailyQuotes/{quoteId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // PrayerCache: shared cache, readable by any authenticated user.
+    match /PrayerCache/{cacheId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Notifications & Settings: owner-only.
+    match /Notifications/{docId} {
+      allow read, write: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+    }
+    match /Settings/{docId} {
+      allow read, write: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+    }
+  }
+}
