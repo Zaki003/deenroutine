@@ -5,9 +5,12 @@ import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/firestore_service.dart';
+import 'quiz_result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  final int questionCount;
+
+  const QuizScreen({super.key, required this.questionCount});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -19,12 +22,12 @@ class _QuizScreenState extends State<QuizScreen> {
   int _index = 0;
   int _score = 0;
   String? _selectedOption;
-  bool _finished = false;
+  bool _answered = false;
 
   @override
   void initState() {
     super.initState();
-    _questionsFuture = _service.getQuizQuestions();
+    _questionsFuture = _service.getQuizQuestions(count: widget.questionCount);
   }
 
   Future<void> _submitResult(List<QuizQuestion> questions) async {
@@ -33,12 +36,44 @@ class _QuizScreenState extends State<QuizScreen> {
       resultId: const Uuid().v4(),
       uid: uid,
       score: _score,
+      totalQuestions: questions.length,
     );
     await _service.saveQuizResult(result);
   }
 
+  void _selectOption(String option) {
+    if (_answered) return;
+    setState(() => _selectedOption = option);
+  }
+
+  void _checkAnswer(QuizQuestion q) {
+    setState(() {
+      _answered = true;
+      if (_selectedOption == q.correctAnswer) _score++;
+    });
+  }
+
+  Future<void> _next(List<QuizQuestion> questions) async {
+    if (_index < questions.length - 1) {
+      setState(() {
+        _index++;
+        _selectedOption = null;
+        _answered = false;
+      });
+    } else {
+      await _submitResult(questions);
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => QuizResultScreen(score: _score, total: questions.length),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Islamic Knowledge Quiz')),
       body: FutureBuilder<List<QuizQuestion>>(
@@ -52,58 +87,181 @@ class _QuizScreenState extends State<QuizScreen> {
             return const Center(child: Text('No quiz questions available yet.'));
           }
 
-          if (_finished) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Quiz complete!', style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 12),
-                  Text('Score: $_score / ${questions.length}'),
-                ],
-              ),
-            );
-          }
-
           final q = questions[_index];
           return Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text('Question ${_index + 1} of ${questions.length}'),
-                const SizedBox(height: 12),
-                Text(q.questionText, style: const TextStyle(fontSize: 18)),
-                const SizedBox(height: 20),
-                for (final option in q.options)
-                  RadioListTile<String>(
-                    title: Text(option),
-                    value: option,
-                    groupValue: _selectedOption,
-                    onChanged: (v) => setState(() => _selectedOption = v),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: LinearProgressIndicator(
+                    value: (_index + 1) / questions.length,
+                    minHeight: 8,
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
                   ),
-                const Spacer(),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Question ${_index + 1} of ${questions.length}',
+                  style: theme.textTheme.labelLarge
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    q.questionText,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      for (final option in q.options)
+                        _OptionTile(
+                          option: option,
+                          isSelected: _selectedOption == option,
+                          isCorrectAnswer: option == q.correctAnswer,
+                          answered: _answered,
+                          onTap: () => _selectOption(option),
+                        ),
+                    ],
+                  ),
+                ),
+                if (_answered)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _selectedOption == q.correctAnswer
+                              ? Icons.check_circle_rounded
+                              : Icons.cancel_rounded,
+                          color: _selectedOption == q.correctAnswer
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _selectedOption == q.correctAnswer
+                                ? 'Correct!'
+                                : 'Correct answer: ${q.correctAnswer}',
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 FilledButton(
-                  onPressed: _selectedOption == null
-                      ? null
-                      : () async {
-                          if (_selectedOption == q.correctAnswer) _score++;
-                          if (_index < questions.length - 1) {
-                            setState(() {
-                              _index++;
-                              _selectedOption = null;
-                            });
-                          } else {
-                            await _submitResult(questions);
-                            setState(() => _finished = true);
-                          }
-                        },
-                  child: Text(_index < questions.length - 1 ? 'Next' : 'Finish'),
+                  onPressed: !_answered
+                      ? (_selectedOption == null ? null : () => _checkAnswer(q))
+                      : () => _next(questions),
+                  child: Text(
+                    !_answered
+                        ? 'Check Answer'
+                        : (_index < questions.length - 1 ? 'Next Question' : 'See Results'),
+                  ),
                 ),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _OptionTile extends StatelessWidget {
+  final String option;
+  final bool isSelected;
+  final bool isCorrectAnswer;
+  final bool answered;
+  final VoidCallback onTap;
+
+  const _OptionTile({
+    required this.option,
+    required this.isSelected,
+    required this.isCorrectAnswer,
+    required this.answered,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    Color background = theme.colorScheme.secondaryContainer;
+    Color foreground = theme.colorScheme.onSecondaryContainer;
+    Color borderColor = Colors.transparent;
+    IconData? trailingIcon;
+
+    if (answered) {
+      if (isCorrectAnswer) {
+        background = Colors.green.withOpacity(0.18);
+        foreground = Colors.green.shade800;
+        borderColor = Colors.green;
+        trailingIcon = Icons.check_circle_rounded;
+      } else if (isSelected) {
+        background = Colors.red.withOpacity(0.15);
+        foreground = Colors.red.shade800;
+        borderColor = Colors.red;
+        trailingIcon = Icons.cancel_rounded;
+      } else {
+        background = theme.colorScheme.surfaceContainerHighest;
+        foreground = theme.colorScheme.onSurfaceVariant;
+      }
+    } else if (isSelected) {
+      borderColor = theme.colorScheme.primary;
+      background = theme.colorScheme.primary.withValues(alpha: 0.15);
+      foreground = theme.colorScheme.primary;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: background,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: answered ? null : onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: borderColor, width: 2),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    option,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: foreground,
+                      fontWeight: isSelected || (answered && isCorrectAnswer)
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                    ),
+                  ),
+                ),
+                if (trailingIcon != null)
+                  Icon(trailingIcon,
+                      color: isCorrectAnswer ? Colors.green : Colors.red),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

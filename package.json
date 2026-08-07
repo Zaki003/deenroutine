@@ -1,4 +1,10 @@
 {
+  "private": true,
+  "scripts": {
+    "seed:quiz": "node scripts/seed_quiz_questions.js",
+    "seed:quiz:check": "node scripts/seed_quiz_questions.js --dry-run",
+    "seed:quiz:prune": "node scripts/seed_quiz_questions.js --prune"
+  },
   "dependencies": {
     "firebase-admin": "^14.2.0"
   }

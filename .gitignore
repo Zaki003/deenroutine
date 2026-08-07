@@ -30,6 +30,15 @@ ios/.symlinks/
 # macOS
 .DS_Store
 
+# Node (content seeding scripts)
+node_modules/
+
+# Service account key for scripts/seed_quiz_questions.js — NEVER commit this,
+# it grants full admin access to the Firebase project.
+scripts/serviceAccountKey.json
+**/*serviceAccountKey*.json
+**/*-firebase-adminsdk-*.json
+
 # Firebase (do NOT commit real credentials — regenerate locally via
 # `flutterfire configure` instead; see the implementation guide, Step 3)
 # lib/firebase_options.dart is intentionally kept OUT of this ignore list —

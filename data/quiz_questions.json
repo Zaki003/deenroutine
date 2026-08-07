@@ -1,0 +1,905 @@
+[
+  {
+    "id": "q001",
+    "category": "Quran",
+    "question": "How many surahs are there in the Quran?",
+    "options": ["114", "110", "120", "99"],
+    "answer": "114"
+  },
+  {
+    "id": "q002",
+    "category": "Quran",
+    "question": "Which is the longest surah in the Quran?",
+    "options": ["Al-Baqarah", "Al-Fatihah", "Ya-Sin", "An-Nisa"],
+    "answer": "Al-Baqarah"
+  },
+  {
+    "id": "q003",
+    "category": "Quran",
+    "question": "Which is the shortest surah in the Quran?",
+    "options": ["Al-Kawthar", "Al-Ikhlas", "Al-Asr", "An-Nas"],
+    "answer": "Al-Kawthar"
+  },
+  {
+    "id": "q004",
+    "category": "Quran",
+    "question": "Which surah does not begin with Bismillah?",
+    "options": ["At-Tawbah", "Al-Anfal", "Yunus", "Hud"],
+    "answer": "At-Tawbah"
+  },
+  {
+    "id": "q005",
+    "category": "Quran",
+    "question": "Which surah is described in hadith as equal to one third of the Quran?",
+    "options": ["Al-Ikhlas", "Al-Fatihah", "Al-Kahf", "Al-Mulk"],
+    "answer": "Al-Ikhlas"
+  },
+  {
+    "id": "q006",
+    "category": "Quran",
+    "question": "The very first verses of the Quran were revealed from which surah?",
+    "options": ["Al-Alaq", "Al-Fatihah", "Al-Muzzammil", "Al-Qalam"],
+    "answer": "Al-Alaq"
+  },
+  {
+    "id": "q007",
+    "category": "Quran",
+    "question": "In which month was the Quran first revealed?",
+    "options": ["Ramadan", "Rajab", "Shawwal", "Muharram"],
+    "answer": "Ramadan"
+  },
+  {
+    "id": "q008",
+    "category": "Quran",
+    "question": "How many juz (parts) is the Quran divided into?",
+    "options": ["30", "40", "60", "20"],
+    "answer": "30"
+  },
+  {
+    "id": "q009",
+    "category": "Quran",
+    "question": "Ayat al-Kursi is found in which surah?",
+    "options": ["Al-Baqarah", "Ali Imran", "An-Nur", "Al-Furqan"],
+    "answer": "Al-Baqarah"
+  },
+  {
+    "id": "q010",
+    "category": "Quran",
+    "question": "Which surah of the Quran is named after a woman?",
+    "options": ["Maryam", "Aisha", "Khadijah", "Fatimah"],
+    "answer": "Maryam"
+  },
+  {
+    "id": "q011",
+    "category": "Quran",
+    "question": "Which two surahs are known as Al-Mu'awwidhatayn, the two surahs of seeking refuge?",
+    "options": [
+      "Al-Falaq and An-Nas",
+      "Al-Fil and Al-Kawthar",
+      "Al-Asr and Al-Humazah",
+      "Ad-Duha and Ash-Sharh"
+    ],
+    "answer": "Al-Falaq and An-Nas"
+  },
+  {
+    "id": "q012",
+    "category": "Quran",
+    "question": "Which surah is recited in every rak'ah of the prayer?",
+    "options": ["Al-Fatihah", "Al-Ikhlas", "Al-Asr", "Al-Kafirun"],
+    "answer": "Al-Fatihah"
+  },
+  {
+    "id": "q013",
+    "category": "Quran",
+    "question": "How many verses are in Surah Al-Fatihah?",
+    "options": ["7", "5", "10", "11"],
+    "answer": "7"
+  },
+  {
+    "id": "q014",
+    "category": "Quran",
+    "question": "Which prophet's name appears most often in the Quran?",
+    "options": ["Musa", "Isa", "Ibrahim", "Nuh"],
+    "answer": "Musa"
+  },
+  {
+    "id": "q015",
+    "category": "Quran",
+    "question": "Under which caliph was the Quran standardized into one official written copy?",
+    "options": [
+      "Uthman ibn Affan",
+      "Abu Bakr as-Siddiq",
+      "Umar ibn al-Khattab",
+      "Ali ibn Abi Talib"
+    ],
+    "answer": "Uthman ibn Affan"
+  },
+  {
+    "id": "q016",
+    "category": "Quran",
+    "question": "Which surah tells the story of the companions of the cave?",
+    "options": ["Al-Kahf", "Al-Qasas", "Al-Hijr", "Ar-Rum"],
+    "answer": "Al-Kahf"
+  },
+  {
+    "id": "q017",
+    "category": "Quran",
+    "question": "Which surah comes last in the order of the Quran?",
+    "options": ["An-Nas", "Al-Falaq", "Al-Ikhlas", "Al-Asr"],
+    "answer": "An-Nas"
+  },
+  {
+    "id": "q018",
+    "category": "Belief",
+    "question": "Which angel was responsible for bringing revelation to the prophets?",
+    "options": ["Jibril", "Mikail", "Israfil", "Malik"],
+    "answer": "Jibril"
+  },
+  {
+    "id": "q019",
+    "category": "Pillars",
+    "question": "How many pillars of Islam are there?",
+    "options": ["5", "6", "4", "7"],
+    "answer": "5"
+  },
+  {
+    "id": "q020",
+    "category": "Pillars",
+    "question": "What is the first pillar of Islam?",
+    "options": [
+      "The shahadah, the declaration of faith",
+      "Salah, the daily prayers",
+      "Zakat, obligatory charity",
+      "Sawm, fasting in Ramadan"
+    ],
+    "answer": "The shahadah, the declaration of faith"
+  },
+  {
+    "id": "q021",
+    "category": "Belief",
+    "question": "How many articles of faith (iman) are there in Islam?",
+    "options": ["6", "5", "7", "4"],
+    "answer": "6"
+  },
+  {
+    "id": "q022",
+    "category": "Belief",
+    "question": "What is the Arabic term for belief in the absolute oneness of Allah?",
+    "options": ["Tawhid", "Taqwa", "Tawakkul", "Tazkiyah"],
+    "answer": "Tawhid"
+  },
+  {
+    "id": "q023",
+    "category": "Pillars",
+    "question": "What is the standard rate of zakat on savings and monetary wealth?",
+    "options": ["2.5%", "5%", "10%", "1%"],
+    "answer": "2.5%"
+  },
+  {
+    "id": "q024",
+    "category": "Pillars",
+    "question": "What is the Arabic name for the annual pilgrimage to Makkah?",
+    "options": ["Hajj", "Umrah", "Hijrah", "Ziyarah"],
+    "answer": "Hajj"
+  },
+  {
+    "id": "q025",
+    "category": "Pillars",
+    "question": "Sawm refers to which act of worship?",
+    "options": ["Fasting", "Prayer", "Charity", "Pilgrimage"],
+    "answer": "Fasting"
+  },
+  {
+    "id": "q026",
+    "category": "Pillars",
+    "question": "Which lesser pilgrimage to Makkah can be performed at any time of the year?",
+    "options": ["Umrah", "Hajj", "I'tikaf", "Tawaf"],
+    "answer": "Umrah"
+  },
+  {
+    "id": "q027",
+    "category": "Belief",
+    "question": "Which scripture was revealed to Prophet Musa?",
+    "options": ["The Tawrat", "The Injil", "The Zabur", "The Quran"],
+    "answer": "The Tawrat"
+  },
+  {
+    "id": "q028",
+    "category": "Belief",
+    "question": "Which scripture was revealed to Prophet Dawud?",
+    "options": ["The Zabur", "The Injil", "The Tawrat", "The Quran"],
+    "answer": "The Zabur"
+  },
+  {
+    "id": "q029",
+    "category": "Belief",
+    "question": "Which scripture was revealed to Prophet Isa?",
+    "options": ["The Injil", "The Tawrat", "The Zabur", "The Quran"],
+    "answer": "The Injil"
+  },
+  {
+    "id": "q030",
+    "category": "Belief",
+    "question": "What is the Day of Judgement called in Arabic?",
+    "options": [
+      "Yawm al-Qiyamah",
+      "Laylat al-Qadr",
+      "Yawm al-Jumu'ah",
+      "Yawm Arafah"
+    ],
+    "answer": "Yawm al-Qiyamah"
+  },
+  {
+    "id": "q031",
+    "category": "Salah",
+    "question": "How many obligatory (fard) prayers are there each day?",
+    "options": ["5", "3", "6", "7"],
+    "answer": "5"
+  },
+  {
+    "id": "q032",
+    "category": "Salah",
+    "question": "Which of the five daily prayers is performed before sunrise?",
+    "options": ["Fajr", "Dhuhr", "Asr", "Isha"],
+    "answer": "Fajr"
+  },
+  {
+    "id": "q033",
+    "category": "Salah",
+    "question": "How many rak'ahs are in the fard of Fajr?",
+    "options": ["2", "3", "4", "5"],
+    "answer": "2"
+  },
+  {
+    "id": "q034",
+    "category": "Salah",
+    "question": "How many rak'ahs are in the fard of Dhuhr?",
+    "options": ["4", "2", "3", "5"],
+    "answer": "4"
+  },
+  {
+    "id": "q035",
+    "category": "Salah",
+    "question": "How many rak'ahs are in the fard of Asr?",
+    "options": ["4", "2", "3", "5"],
+    "answer": "4"
+  },
+  {
+    "id": "q036",
+    "category": "Salah",
+    "question": "How many rak'ahs are in the fard of Maghrib?",
+    "options": ["3", "2", "4", "5"],
+    "answer": "3"
+  },
+  {
+    "id": "q037",
+    "category": "Salah",
+    "question": "How many rak'ahs are in the fard of Isha?",
+    "options": ["4", "3", "2", "5"],
+    "answer": "4"
+  },
+  {
+    "id": "q038",
+    "category": "Salah",
+    "question": "What is the direction Muslims face during prayer called?",
+    "options": ["Qiblah", "Mihrab", "Minbar", "Sajdah"],
+    "answer": "Qiblah"
+  },
+  {
+    "id": "q039",
+    "category": "Salah",
+    "question": "Toward which place do Muslims face when they pray?",
+    "options": [
+      "The Ka'bah in Makkah",
+      "Masjid an-Nabawi in Madinah",
+      "Masjid al-Aqsa in Jerusalem",
+      "The rising sun"
+    ],
+    "answer": "The Ka'bah in Makkah"
+  },
+  {
+    "id": "q040",
+    "category": "Salah",
+    "question": "What is the call to prayer called?",
+    "options": ["Adhan", "Iqamah", "Khutbah", "Talbiyah"],
+    "answer": "Adhan"
+  },
+  {
+    "id": "q041",
+    "category": "Salah",
+    "question": "What is the second, shorter call made just before a congregational prayer begins?",
+    "options": ["Iqamah", "Adhan", "Takbir", "Tasbih"],
+    "answer": "Iqamah"
+  },
+  {
+    "id": "q042",
+    "category": "Salah",
+    "question": "What is the ritual washing performed before prayer called?",
+    "options": ["Wudu", "Ghusl", "Tayammum", "Istinja"],
+    "answer": "Wudu"
+  },
+  {
+    "id": "q043",
+    "category": "Salah",
+    "question": "When no water is available, purification using clean earth is called what?",
+    "options": ["Tayammum", "Ghusl", "Wudu", "Miswak"],
+    "answer": "Tayammum"
+  },
+  {
+    "id": "q044",
+    "category": "Salah",
+    "question": "What is the Friday congregational prayer called?",
+    "options": ["Jumu'ah", "Tarawih", "Tahajjud", "Witr"],
+    "answer": "Jumu'ah"
+  },
+  {
+    "id": "q045",
+    "category": "Salah",
+    "question": "What is the sermon delivered before the Friday prayer called?",
+    "options": ["Khutbah", "Adhan", "Du'a", "Dhikr"],
+    "answer": "Khutbah"
+  },
+  {
+    "id": "q046",
+    "category": "Salah",
+    "question": "What is the voluntary prayer performed in the later part of the night called?",
+    "options": ["Tahajjud", "Tarawih", "Duha", "Jumu'ah"],
+    "answer": "Tahajjud"
+  },
+  {
+    "id": "q047",
+    "category": "Salah",
+    "question": "Which phrase does a person say to begin the prayer?",
+    "options": ["Allahu Akbar", "Bismillah", "Subhanallah", "Alhamdulillah"],
+    "answer": "Allahu Akbar"
+  },
+  {
+    "id": "q048",
+    "category": "Salah",
+    "question": "What is the position of prostration in prayer called?",
+    "options": ["Sujud", "Ruku", "Qiyam", "Tashahhud"],
+    "answer": "Sujud"
+  },
+  {
+    "id": "q049",
+    "category": "Salah",
+    "question": "What is the bowing position in prayer called?",
+    "options": ["Ruku", "Sujud", "Julus", "Qiyam"],
+    "answer": "Ruku"
+  },
+  {
+    "id": "q050",
+    "category": "Ramadan",
+    "question": "Which month of the Islamic calendar is the month of obligatory fasting?",
+    "options": ["Ramadan", "Sha'ban", "Shawwal", "Dhul Hijjah"],
+    "answer": "Ramadan"
+  },
+  {
+    "id": "q051",
+    "category": "Ramadan",
+    "question": "What is the pre-dawn meal eaten before a fast called?",
+    "options": ["Suhur", "Iftar", "Tarawih", "I'tikaf"],
+    "answer": "Suhur"
+  },
+  {
+    "id": "q052",
+    "category": "Ramadan",
+    "question": "What is the meal that breaks the fast at sunset called?",
+    "options": ["Iftar", "Suhur", "Sadaqah", "Sunnah"],
+    "answer": "Iftar"
+  },
+  {
+    "id": "q053",
+    "category": "Ramadan",
+    "question": "What is the special night prayer performed during Ramadan called?",
+    "options": ["Tarawih", "Tahajjud", "Witr", "Jumu'ah"],
+    "answer": "Tarawih"
+  },
+  {
+    "id": "q054",
+    "category": "Ramadan",
+    "question": "In which part of Ramadan is Laylat al-Qadr most commonly sought?",
+    "options": [
+      "The last ten nights",
+      "The first ten nights",
+      "The middle ten nights",
+      "The very first night"
+    ],
+    "answer": "The last ten nights"
+  },
+  {
+    "id": "q055",
+    "category": "Ramadan",
+    "question": "Which charity must be given before the Eid al-Fitr prayer?",
+    "options": ["Zakat al-Fitr", "Zakat al-Mal", "Sadaqah jariyah", "Kaffarah"],
+    "answer": "Zakat al-Fitr"
+  },
+  {
+    "id": "q056",
+    "category": "Ramadan",
+    "question": "Which festival marks the end of Ramadan?",
+    "options": ["Eid al-Fitr", "Eid al-Adha", "Ashura", "Laylat al-Mi'raj"],
+    "answer": "Eid al-Fitr"
+  },
+  {
+    "id": "q057",
+    "category": "Ramadan",
+    "question": "What is the practice of secluding oneself in the mosque for worship, especially in the last ten days of Ramadan?",
+    "options": ["I'tikaf", "Tawaf", "Sa'i", "Dhikr"],
+    "answer": "I'tikaf"
+  },
+  {
+    "id": "q058",
+    "category": "Hajj",
+    "question": "In which Islamic month is Hajj performed?",
+    "options": ["Dhul Hijjah", "Ramadan", "Muharram", "Rajab"],
+    "answer": "Dhul Hijjah"
+  },
+  {
+    "id": "q059",
+    "category": "Hajj",
+    "question": "What is the circling of the Ka'bah seven times called?",
+    "options": ["Tawaf", "Sa'i", "Wuquf", "Ramy"],
+    "answer": "Tawaf"
+  },
+  {
+    "id": "q060",
+    "category": "Hajj",
+    "question": "What is the walking between the hills of Safa and Marwah called?",
+    "options": ["Sa'i", "Tawaf", "Ihram", "Talbiyah"],
+    "answer": "Sa'i"
+  },
+  {
+    "id": "q061",
+    "category": "Hajj",
+    "question": "What is the simple white garment worn by male pilgrims called?",
+    "options": ["Ihram", "Abaya", "Thawb", "Kufi"],
+    "answer": "Ihram"
+  },
+  {
+    "id": "q062",
+    "category": "Hajj",
+    "question": "Pilgrims stand on the plain of Arafah on which day of Dhul Hijjah?",
+    "options": ["The 9th", "The 10th", "The 8th", "The 12th"],
+    "answer": "The 9th"
+  },
+  {
+    "id": "q063",
+    "category": "Hajj",
+    "question": "Which festival is celebrated during the days of Hajj?",
+    "options": ["Eid al-Adha", "Eid al-Fitr", "Ashura", "Laylat al-Qadr"],
+    "answer": "Eid al-Adha"
+  },
+  {
+    "id": "q064",
+    "category": "Hajj",
+    "question": "Which prophet, together with his son, is described in the Quran as raising the foundations of the Ka'bah?",
+    "options": ["Ibrahim", "Nuh", "Musa", "Adam"],
+    "answer": "Ibrahim"
+  },
+  {
+    "id": "q065",
+    "category": "Prophets",
+    "question": "How many prophets are mentioned by name in the Quran?",
+    "options": ["25", "40", "12", "99"],
+    "answer": "25"
+  },
+  {
+    "id": "q066",
+    "category": "Prophets",
+    "question": "Who was the first prophet and the first human being?",
+    "options": ["Adam", "Nuh", "Ibrahim", "Idris"],
+    "answer": "Adam"
+  },
+  {
+    "id": "q067",
+    "category": "Prophets",
+    "question": "Which prophet built an ark to survive the great flood?",
+    "options": ["Nuh", "Hud", "Salih", "Yunus"],
+    "answer": "Nuh"
+  },
+  {
+    "id": "q068",
+    "category": "Prophets",
+    "question": "Which prophet was swallowed by a great fish?",
+    "options": ["Yunus", "Yusuf", "Ayyub", "Ilyas"],
+    "answer": "Yunus"
+  },
+  {
+    "id": "q069",
+    "category": "Prophets",
+    "question": "Which prophet is remembered above all for his patience through severe illness and loss?",
+    "options": ["Ayyub", "Yaqub", "Zakariyya", "Sulayman"],
+    "answer": "Ayyub"
+  },
+  {
+    "id": "q070",
+    "category": "Prophets",
+    "question": "Which prophet was given command over the wind and the understanding of animals?",
+    "options": ["Sulayman", "Dawud", "Musa", "Harun"],
+    "answer": "Sulayman"
+  },
+  {
+    "id": "q071",
+    "category": "Prophets",
+    "question": "Which prophet was thrown into a well by his brothers?",
+    "options": ["Yusuf", "Yunus", "Ismail", "Ishaq"],
+    "answer": "Yusuf"
+  },
+  {
+    "id": "q072",
+    "category": "Prophets",
+    "question": "Which prophet was given the miracle of a staff that turned into a serpent?",
+    "options": ["Musa", "Isa", "Harun", "Dawud"],
+    "answer": "Musa"
+  },
+  {
+    "id": "q073",
+    "category": "Prophets",
+    "question": "Which prophet is known by the title Khalilullah, the friend of Allah?",
+    "options": ["Ibrahim", "Musa", "Isa", "Nuh"],
+    "answer": "Ibrahim"
+  },
+  {
+    "id": "q074",
+    "category": "Prophets",
+    "question": "Who was the brother of Prophet Musa and also a prophet?",
+    "options": ["Harun", "Yusuf", "Yaqub", "Ilyas"],
+    "answer": "Harun"
+  },
+  {
+    "id": "q075",
+    "category": "Prophets",
+    "question": "Which prophet was born to a virgin mother by the command of Allah?",
+    "options": ["Isa", "Yahya", "Ismail", "Ishaq"],
+    "answer": "Isa"
+  },
+  {
+    "id": "q076",
+    "category": "Prophets",
+    "question": "Who is the final messenger of Allah?",
+    "options": ["Muhammad", "Isa", "Musa", "Ibrahim"],
+    "answer": "Muhammad"
+  },
+  {
+    "id": "q077",
+    "category": "Prophets",
+    "question": "Who was the father of Prophet Yusuf?",
+    "options": ["Yaqub", "Ishaq", "Ibrahim", "Ismail"],
+    "answer": "Yaqub"
+  },
+  {
+    "id": "q078",
+    "category": "Seerah",
+    "question": "In which city was Prophet Muhammad born?",
+    "options": ["Makkah", "Madinah", "Ta'if", "Jerusalem"],
+    "answer": "Makkah"
+  },
+  {
+    "id": "q079",
+    "category": "Seerah",
+    "question": "What was the name of Prophet Muhammad's father?",
+    "options": ["Abdullah", "Abu Talib", "Abdul Muttalib", "Hamza"],
+    "answer": "Abdullah"
+  },
+  {
+    "id": "q080",
+    "category": "Seerah",
+    "question": "What was the name of Prophet Muhammad's mother?",
+    "options": ["Aminah", "Khadijah", "Halimah", "Fatimah"],
+    "answer": "Aminah"
+  },
+  {
+    "id": "q081",
+    "category": "Seerah",
+    "question": "Which uncle took care of Prophet Muhammad after his grandfather passed away?",
+    "options": ["Abu Talib", "Hamza", "Abbas", "Abu Lahab"],
+    "answer": "Abu Talib"
+  },
+  {
+    "id": "q082",
+    "category": "Seerah",
+    "question": "At what age did Prophet Muhammad receive the first revelation?",
+    "options": ["40", "30", "25", "35"],
+    "answer": "40"
+  },
+  {
+    "id": "q083",
+    "category": "Seerah",
+    "question": "In which cave did Prophet Muhammad receive the first revelation?",
+    "options": [
+      "The cave of Hira",
+      "The cave of Thawr",
+      "The cave of Uhud",
+      "The cave of Safa"
+    ],
+    "answer": "The cave of Hira"
+  },
+  {
+    "id": "q084",
+    "category": "Seerah",
+    "question": "Who was the first wife of Prophet Muhammad?",
+    "options": ["Khadijah", "Aisha", "Hafsah", "Sawdah"],
+    "answer": "Khadijah"
+  },
+  {
+    "id": "q085",
+    "category": "Seerah",
+    "question": "What is the migration of the Prophet and his companions from Makkah to Madinah called?",
+    "options": ["The Hijrah", "The Isra", "The Fath", "The Umrah"],
+    "answer": "The Hijrah"
+  },
+  {
+    "id": "q086",
+    "category": "Seerah",
+    "question": "What was Madinah called before the Hijrah?",
+    "options": ["Yathrib", "Ta'if", "Khaybar", "Tabuk"],
+    "answer": "Yathrib"
+  },
+  {
+    "id": "q087",
+    "category": "Seerah",
+    "question": "Which was the first major battle fought by the Muslims after the Hijrah?",
+    "options": ["Badr", "Uhud", "Khandaq", "Khaybar"],
+    "answer": "Badr"
+  },
+  {
+    "id": "q088",
+    "category": "Seerah",
+    "question": "In which battle was a trench dug around Madinah for defence?",
+    "options": ["Khandaq", "Badr", "Uhud", "Hunayn"],
+    "answer": "Khandaq"
+  },
+  {
+    "id": "q089",
+    "category": "Seerah",
+    "question": "What was the name of the first mosque built by Prophet Muhammad?",
+    "options": [
+      "Masjid Quba",
+      "Masjid an-Nabawi",
+      "Masjid al-Haram",
+      "Masjid al-Aqsa"
+    ],
+    "answer": "Masjid Quba"
+  },
+  {
+    "id": "q090",
+    "category": "Seerah",
+    "question": "The Prophet's night journey to Jerusalem and his ascension to the heavens is known as what?",
+    "options": ["Al-Isra and Al-Mi'raj", "The Hijrah", "Laylat al-Qadr", "Bay'ah"],
+    "answer": "Al-Isra and Al-Mi'raj"
+  },
+  {
+    "id": "q091",
+    "category": "Seerah",
+    "question": "In which city is Prophet Muhammad buried?",
+    "options": ["Madinah", "Makkah", "Jerusalem", "Damascus"],
+    "answer": "Madinah"
+  },
+  {
+    "id": "q092",
+    "category": "Seerah",
+    "question": "Roughly how many years did the Prophet's mission last, from the first revelation to his passing?",
+    "options": ["23 years", "13 years", "10 years", "40 years"],
+    "answer": "23 years"
+  },
+  {
+    "id": "q093",
+    "category": "History",
+    "question": "Who was the first caliph after Prophet Muhammad?",
+    "options": [
+      "Abu Bakr as-Siddiq",
+      "Umar ibn al-Khattab",
+      "Uthman ibn Affan",
+      "Ali ibn Abi Talib"
+    ],
+    "answer": "Abu Bakr as-Siddiq"
+  },
+  {
+    "id": "q094",
+    "category": "History",
+    "question": "Who was the second caliph of Islam?",
+    "options": [
+      "Umar ibn al-Khattab",
+      "Abu Bakr as-Siddiq",
+      "Uthman ibn Affan",
+      "Ali ibn Abi Talib"
+    ],
+    "answer": "Umar ibn al-Khattab"
+  },
+  {
+    "id": "q095",
+    "category": "History",
+    "question": "Which companion was the first mu'adhdhin, the first to call the adhan in Islam?",
+    "options": [
+      "Bilal ibn Rabah",
+      "Zayd ibn Thabit",
+      "Salman al-Farsi",
+      "Abu Hurayrah"
+    ],
+    "answer": "Bilal ibn Rabah"
+  },
+  {
+    "id": "q096",
+    "category": "History",
+    "question": "Which companion is known for narrating the largest number of hadith?",
+    "options": ["Abu Hurayrah", "Anas ibn Malik", "Ibn Abbas", "Ibn Umar"],
+    "answer": "Abu Hurayrah"
+  },
+  {
+    "id": "q097",
+    "category": "History",
+    "question": "Who was the Prophet's cousin and the fourth caliph of Islam?",
+    "options": [
+      "Ali ibn Abi Talib",
+      "Uthman ibn Affan",
+      "Zubayr ibn al-Awwam",
+      "Talhah ibn Ubaydullah"
+    ],
+    "answer": "Ali ibn Abi Talib"
+  },
+  {
+    "id": "q098",
+    "category": "History",
+    "question": "What title is given collectively to the first four caliphs?",
+    "options": [
+      "Al-Khulafa ar-Rashidun, the Rightly Guided Caliphs",
+      "As-Sahabah, the Companions",
+      "At-Tabi'un, the Successors",
+      "Al-Ansar, the Helpers"
+    ],
+    "answer": "Al-Khulafa ar-Rashidun, the Rightly Guided Caliphs"
+  },
+  {
+    "id": "q099",
+    "category": "History",
+    "question": "The Islamic (Hijri) calendar begins counting from which event?",
+    "options": [
+      "The Hijrah to Madinah",
+      "The birth of the Prophet",
+      "The first revelation",
+      "The conquest of Makkah"
+    ],
+    "answer": "The Hijrah to Madinah"
+  },
+  {
+    "id": "q100",
+    "category": "History",
+    "question": "How many months are there in the Islamic (Hijri) calendar?",
+    "options": ["12", "10", "13", "14"],
+    "answer": "12"
+  },
+  {
+    "id": "q101",
+    "category": "History",
+    "question": "Which is the first month of the Islamic calendar?",
+    "options": ["Muharram", "Ramadan", "Safar", "Rajab"],
+    "answer": "Muharram"
+  },
+  {
+    "id": "q102",
+    "category": "History",
+    "question": "The Hijri calendar follows the cycles of what?",
+    "options": ["The moon", "The sun", "The stars", "The seasons"],
+    "answer": "The moon"
+  },
+  {
+    "id": "q103",
+    "category": "Manners",
+    "question": "What does \"Bismillah\" mean?",
+    "options": [
+      "In the name of Allah",
+      "Praise be to Allah",
+      "Allah is the greatest",
+      "Glory be to Allah"
+    ],
+    "answer": "In the name of Allah"
+  },
+  {
+    "id": "q104",
+    "category": "Manners",
+    "question": "What does \"Alhamdulillah\" mean?",
+    "options": [
+      "All praise is due to Allah",
+      "Allah is the greatest",
+      "If Allah wills",
+      "In the name of Allah"
+    ],
+    "answer": "All praise is due to Allah"
+  },
+  {
+    "id": "q105",
+    "category": "Manners",
+    "question": "What does \"InshaAllah\" mean?",
+    "options": [
+      "If Allah wills",
+      "Praise be to Allah",
+      "May Allah reward you",
+      "There is no god but Allah"
+    ],
+    "answer": "If Allah wills"
+  },
+  {
+    "id": "q106",
+    "category": "Manners",
+    "question": "What is the Islamic greeting?",
+    "options": [
+      "Assalamu alaykum",
+      "Alhamdulillah",
+      "Bismillah",
+      "Subhanallah"
+    ],
+    "answer": "Assalamu alaykum"
+  },
+  {
+    "id": "q107",
+    "category": "Manners",
+    "question": "What is the reply to \"Assalamu alaykum\"?",
+    "options": [
+      "Wa alaykum assalam",
+      "Alhamdulillah",
+      "Jazakallahu khayran",
+      "Bismillah"
+    ],
+    "answer": "Wa alaykum assalam"
+  },
+  {
+    "id": "q108",
+    "category": "Manners",
+    "question": "What does \"Jazakallahu khayran\" express?",
+    "options": [
+      "Thanks, may Allah reward you with good",
+      "An apology",
+      "A greeting on arrival",
+      "A farewell before travel"
+    ],
+    "answer": "Thanks, may Allah reward you with good"
+  },
+  {
+    "id": "q109",
+    "category": "Manners",
+    "question": "What is voluntary charity, given at any time and in any amount, called?",
+    "options": ["Sadaqah", "Zakat", "Kaffarah", "Fitrah"],
+    "answer": "Sadaqah"
+  },
+  {
+    "id": "q110",
+    "category": "Manners",
+    "question": "Which of these financial dealings is forbidden (haram) in Islam?",
+    "options": [
+      "Riba, charging interest",
+      "Honest trade",
+      "Giving gifts",
+      "Renting property"
+    ],
+    "answer": "Riba, charging interest"
+  },
+  {
+    "id": "q111",
+    "category": "Manners",
+    "question": "What is the term for what is permitted in Islam?",
+    "options": ["Halal", "Haram", "Makruh", "Mustahab"],
+    "answer": "Halal"
+  },
+  {
+    "id": "q112",
+    "category": "Manners",
+    "question": "What is the remembrance of Allah through repeated words of praise called?",
+    "options": ["Dhikr", "Du'a", "Khutbah", "Tafsir"],
+    "answer": "Dhikr"
+  },
+  {
+    "id": "q113",
+    "category": "Belief",
+    "question": "What is the scholarly explanation and commentary of the Quran called?",
+    "options": ["Tafsir", "Hadith", "Fiqh", "Seerah"],
+    "answer": "Tafsir"
+  },
+  {
+    "id": "q114",
+    "category": "Belief",
+    "question": "What are the recorded sayings and actions of Prophet Muhammad called?",
+    "options": ["Hadith", "Quran", "Ijma", "Qiyas"],
+    "answer": "Hadith"
+  }
+]

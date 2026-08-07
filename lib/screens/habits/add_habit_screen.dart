@@ -114,7 +114,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<HabitCategory>(
-                value: _category,
+                initialValue: _category,
                 decoration: const InputDecoration(labelText: 'Category'),
                 items: HabitCategory.values
                     .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
@@ -123,7 +123,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<HabitFrequency>(
-                value: _frequency,
+                initialValue: _frequency,
                 decoration: const InputDecoration(labelText: 'Frequency'),
                 items: HabitFrequency.values
                     .map((f) => DropdownMenuItem(value: f, child: Text(f.name)))

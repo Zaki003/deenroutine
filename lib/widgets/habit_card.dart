@@ -41,7 +41,7 @@ class HabitCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: _categoryColor().withOpacity(0.15),
+          backgroundColor: _categoryColor().withValues(alpha: 0.15),
           child: Icon(Icons.circle, size: 12, color: _categoryColor()),
         ),
         title: Text(

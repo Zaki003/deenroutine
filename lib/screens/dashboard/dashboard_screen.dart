@@ -8,7 +8,7 @@ import '../../services/firestore_service.dart';
 import '../../widgets/barakah_circle.dart';
 import '../../widgets/habit_card.dart';
 import '../habits/add_habit_screen.dart';
-import '../quiz/quiz_screen.dart';
+import '../quiz/quiz_setup_dialog.dart';
 import '../profile/profile_screen.dart';
 
 /// FR-06: Dashboard displaying daily habits, completion %, streaks,
@@ -56,10 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.quiz_outlined),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const QuizScreen()),
-            ),
+            onPressed: () => startQuiz(context),
           ),
           IconButton(
             icon: const Icon(Icons.person_outline),
