@@ -97,7 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (habitProvider.habits.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
-                '${habitProvider.habits.where((h) => h.completed).length} of '
+                '${habitProvider.habits.where((h) => h.isCompletedToday).length} of '
                 '${habitProvider.habits.length} habits done today',
                 textAlign: TextAlign.center,
                 style: TextStyle(

@@ -23,7 +23,7 @@ class HabitProvider extends ChangeNotifier {
 
   double get completionPercentage {
     if (_habits.isEmpty) return 0;
-    final done = _habits.where((h) => h.completed).length;
+    final done = _habits.where((h) => h.isCompletedToday).length;
     return done / _habits.length;
   }
 
@@ -89,7 +89,7 @@ class HabitProvider extends ChangeNotifier {
 
   Future<void> toggleComplete(Habit habit) async {
     try {
-      await _service.markHabitComplete(habit, !habit.completed);
+      await _service.markHabitComplete(habit, !habit.isCompletedToday);
     } catch (e) {
       _error = 'Could not update habit: $e';
       notifyListeners();

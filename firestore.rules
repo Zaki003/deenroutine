@@ -32,7 +32,9 @@ service cloud.firestore {
 
     // QuizResults: owner-only.
     match /QuizResults/{resultId} {
-      allow read, create: if request.auth != null
+      allow read: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null
         && request.resource.data.uid == request.auth.uid;
     }
 

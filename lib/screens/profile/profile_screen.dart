@@ -63,7 +63,12 @@ class ProfileScreen extends StatelessWidget {
           ),
           const Divider(height: 32),
           FilledButton.tonal(
-            onPressed: () => context.read<AuthProvider>().logout(),
+            onPressed: () async {
+              await context.read<AuthProvider>().logout();
+              if (context.mounted) {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
             child: const Text('Log out'),
           ),
         ],

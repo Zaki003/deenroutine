@@ -39,10 +39,14 @@ class FirestoreService {
   Future<void> markHabitComplete(Habit habit, bool status) async {
     final batch = _db.batch();
 
-    final habitRef = _db.collection('Habits').doc(habit.habitId);
-    batch.update(habitRef, {'completed': status});
-
     final today = DateTime.now();
+    final habitRef = _db.collection('Habits').doc(habit.habitId);
+    batch.update(habitRef, {
+      'completed': status,
+      'lastCompletedDate':
+          Timestamp.fromDate(DateTime(today.year, today.month, today.day)),
+    });
+
     final logId = '${habit.habitId}_${today.year}-${today.month}-${today.day}';
     final logRef = _db.collection('HabitLogs').doc(logId);
     final log = HabitLog(
@@ -76,6 +80,13 @@ class FirestoreService {
     final byDate = {
       for (final l in logs) DateTime(l.date.year, l.date.month, l.date.day): l.status,
     };
+
+    // Not having done today's habit yet doesn't break an in-progress streak —
+    // only a fully missed day does. Anchor on today only once it's done;
+    // otherwise start the walk from yesterday so the streak still shows.
+    if (byDate[cursor] != true) {
+      cursor = cursor.subtract(const Duration(days: 1));
+    }
 
     while (byDate[cursor] == true) {
       streak++;
@@ -189,6 +200,18 @@ class FirestoreService {
 
   Future<void> saveQuizResult(QuizResult result) {
     return _db.collection('QuizResults').doc(result.resultId).set(result.toMap());
+  }
+
+  /// The single highest-scoring attempt on record for [uid].
+  Future<QuizResult?> getBestQuizResult(String uid) async {
+    final snap = await _db
+        .collection('QuizResults')
+        .where('uid', isEqualTo: uid)
+        .orderBy('score', descending: true)
+        .limit(1)
+        .get();
+    if (snap.docs.isEmpty) return null;
+    return QuizResult.fromMap(snap.docs.first.id, snap.docs.first.data());
   }
 
   Stream<List<QuizResult>> watchQuizHistory(String uid) {

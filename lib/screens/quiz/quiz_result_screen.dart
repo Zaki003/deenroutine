@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../models/quiz_result.dart';
+import '../../providers/auth_provider.dart';
+import '../../services/firestore_service.dart';
 import '../../utils/app_theme.dart';
 import 'quiz_screen.dart';
 
@@ -42,6 +46,7 @@ class QuizResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final outcome = _outcome(theme.colorScheme);
+    final uid = context.read<AuthProvider>().firebaseUser?.uid;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Quiz Results')),
@@ -122,6 +127,26 @@ class QuizResultScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              if (uid != null) ...[
+                const SizedBox(height: 16),
+                FutureBuilder<QuizResult?>(
+                  future: FirestoreService().getBestQuizResult(uid),
+                  builder: (context, snapshot) {
+                    final best = snapshot.data;
+                    if (best == null || best.totalQuestions == 0) {
+                      return const SizedBox.shrink();
+                    }
+                    final bestPct = (best.score / best.totalQuestions * 100).round();
+                    return Text(
+                      'Your best score: ${best.score}/${best.totalQuestions} ($bestPct%)',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    );
+                  },
+                ),
+              ],
               const SizedBox(height: 40),
               SizedBox(
                 width: double.infinity,

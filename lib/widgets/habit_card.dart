@@ -51,7 +51,7 @@ class HabitCard extends StatelessWidget {
         title: Text(
           habit.title,
           style: TextStyle(
-            decoration: habit.completed ? TextDecoration.lineThrough : null,
+            decoration: habit.isCompletedToday ? TextDecoration.lineThrough : null,
           ),
         ),
         subtitle: Column(
@@ -84,7 +84,7 @@ class HabitCard extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Checkbox(value: habit.completed, onChanged: (_) => onToggle()),
+            Checkbox(value: habit.isCompletedToday, onChanged: (_) => onToggle()),
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: onDelete,
