@@ -3,7 +3,10 @@
   "scripts": {
     "seed:quiz": "node scripts/seed_quiz_questions.js",
     "seed:quiz:check": "node scripts/seed_quiz_questions.js --dry-run",
-    "seed:quiz:prune": "node scripts/seed_quiz_questions.js --prune"
+    "seed:quiz:prune": "node scripts/seed_quiz_questions.js --prune",
+    "seed:quotes": "node scripts/seed_daily_quotes.js",
+    "seed:quotes:check": "node scripts/seed_daily_quotes.js --dry-run",
+    "seed:quotes:prune": "node scripts/seed_daily_quotes.js --prune"
   },
   "dependencies": {
     "firebase-admin": "^14.2.0"

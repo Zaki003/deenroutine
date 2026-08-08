@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../services/firestore_service.dart';
+import '../../utils/app_theme.dart';
 import '../../widgets/barakah_circle.dart';
 import '../../widgets/habit_card.dart';
 import '../habits/add_habit_screen.dart';
@@ -93,6 +94,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Center(
               child: BarakahCircle(percentage: habitProvider.completionPercentage),
             ),
+            if (habitProvider.habits.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                '${habitProvider.habits.where((h) => h.completed).length} of '
+                '${habitProvider.habits.length} habits done today',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             _buildPrayerTimesCard(prayerProvider),
             if (_quote != null) _buildQuoteCard(_quote!),
@@ -129,7 +142,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return Padding(
         padding: const EdgeInsets.all(16),
         child: Text('Prayer times unavailable: ${provider.error}',
-            style: const TextStyle(color: Colors.red)),
+            style: TextStyle(color: Theme.of(context).colorScheme.error)),
       );
     }
     final t = provider.timings;
@@ -158,18 +171,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildQuoteCard(DailyQuote quote) {
+    final scheme = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-      color: const Color(0xFFE8F5E9),
+      color: scheme.successContainer,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(quote.text, style: const TextStyle(fontStyle: FontStyle.italic)),
+            Text(
+              quote.text,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: scheme.onSuccessContainer,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text('— ${quote.source}',
-                style: const TextStyle(fontSize: 12, color: Colors.black54)),
+            Text(
+              '— ${quote.source}',
+              style: TextStyle(
+                fontSize: 12,
+                // Same ink as the quote, stepped back so the citation reads as
+                // secondary without dropping out of contrast on either surface.
+                color: scheme.onSuccessContainer.withValues(alpha: 0.75),
+              ),
+            ),
           ],
         ),
       ),

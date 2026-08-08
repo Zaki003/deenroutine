@@ -53,7 +53,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child:
-                      Text(auth.error!, style: const TextStyle(color: Colors.red)),
+                      Text(auth.error!,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error)),
                 ),
               FilledButton(
                 onPressed: auth.isLoading

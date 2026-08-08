@@ -85,13 +85,39 @@ class FirestoreService {
   }
 
   // ---------------- Daily motivation (FR-09) ----------------
+
+  /// The quote of the day, identical for every user.
+  ///
+  /// `scripts/seed_daily_quotes.js` numbers the quotes `dayIndex` 0..n-1, so the
+  /// day's quote is a single lookup rather than a download of the collection.
+  /// The day number is counted in UTC: a local date would hand users in Sydney
+  /// and Los Angeles different quotes at the same moment.
   Future<DailyQuote?> getDailyQuote() async {
-    final snap = await _db.collection('DailyQuotes').limit(50).get();
-    if (snap.docs.isEmpty) return null;
-    final dayIndex = DateTime.now().difference(DateTime(2026, 1, 1)).inDays;
-    final doc = snap.docs[dayIndex % snap.docs.length];
-    return DailyQuote.fromMap(doc.id, doc.data());
+    final col = _db.collection('DailyQuotes');
+
+    final total = (await col.count().get()).count ?? 0;
+    if (total == 0) return null;
+
+    final today = DateTime.now().toUtc();
+    final dayNumber =
+        DateTime.utc(today.year, today.month, today.day).difference(_epoch).inDays;
+    // Dart's % is never negative, so dates before the epoch still map into range.
+    final index = dayNumber % total;
+
+    final snap = await col.where('dayIndex', isEqualTo: index).limit(1).get();
+    if (snap.docs.isNotEmpty) {
+      return DailyQuote.fromMap(snap.docs.first.id, snap.docs.first.data());
+    }
+
+    // No document claims today's index — the collection was edited by hand, or a
+    // seed was interrupted. Fall back to the lowest index rather than showing
+    // nothing; the next seed run renumbers everything and repairs the gap.
+    final fallback = await col.orderBy('dayIndex').limit(1).get();
+    if (fallback.docs.isEmpty) return null;
+    return DailyQuote.fromMap(fallback.docs.first.id, fallback.docs.first.data());
   }
+
+  static final DateTime _epoch = DateTime.utc(2026, 1, 1);
 
   // ---------------- Quiz (FR-10) ----------------
 

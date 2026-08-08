@@ -60,12 +60,14 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 child: CircleAvatar(
                   radius: 20,
                   backgroundColor: selected
-                      ? const Color(0xFF2E7D32)
+                      ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: Text(
                     kWeekdayLetters[index],
                     style: TextStyle(
-                      color: selected ? Colors.white : null,
+                      color: selected
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../utils/app_theme.dart';
 
 /// The dynamic "Barakah Circle" progress ring shown on the Dashboard (FR-06).
 class BarakahCircle extends StatelessWidget {
@@ -14,6 +15,7 @@ class BarakahCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: size,
       height: size,
@@ -22,13 +24,18 @@ class BarakahCircle extends StatelessWidget {
         children: [
           CustomPaint(
             size: Size(size, size),
-            painter: _RingPainter(percentage: percentage),
+            painter: _RingPainter(
+              percentage: percentage,
+              trackColor: scheme.progressTrack,
+              progressColor: scheme.success,
+            ),
           ),
           Text(
             '${(percentage * 100).round()}%',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
+              color: scheme.onSurface,
             ),
           ),
         ],
@@ -39,7 +46,14 @@ class BarakahCircle extends StatelessWidget {
 
 class _RingPainter extends CustomPainter {
   final double percentage;
-  _RingPainter({required this.percentage});
+  final Color trackColor;
+  final Color progressColor;
+
+  _RingPainter({
+    required this.percentage,
+    required this.trackColor,
+    required this.progressColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -47,13 +61,13 @@ class _RingPainter extends CustomPainter {
     final radius = min(size.width, size.height) / 2 - 10;
 
     final backgroundPaint = Paint()
-      ..color = Colors.grey.shade200
+      ..color = trackColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14
       ..strokeCap = StrokeCap.round;
 
     final progressPaint = Paint()
-      ..color = const Color(0xFF2E7D32) // Barakah green
+      ..color = progressColor // Barakah green
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14
       ..strokeCap = StrokeCap.round;
@@ -72,5 +86,7 @@ class _RingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _RingPainter oldDelegate) =>
-      oldDelegate.percentage != percentage;
+      oldDelegate.percentage != percentage ||
+      oldDelegate.trackColor != trackColor ||
+      oldDelegate.progressColor != progressColor;
 }

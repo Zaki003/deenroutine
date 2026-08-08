@@ -1,0 +1,722 @@
+[
+  {
+    "id": "dq001",
+    "text": "So remember Me; I will remember you. And be thankful to Me, and do not be ungrateful.",
+    "source": "Qur'an 2:152",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq002",
+    "text": "O you who believe, seek help through patience and prayer. Indeed, Allah is with the patient.",
+    "source": "Qur'an 2:153",
+    "category": "Patience"
+  },
+  {
+    "id": "dq003",
+    "text": "Allah does not burden a soul with more than it can bear.",
+    "source": "Qur'an 2:286",
+    "category": "Hope"
+  },
+  {
+    "id": "dq004",
+    "text": "Truly, it is in the remembrance of Allah that hearts find rest.",
+    "source": "Qur'an 13:28",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq005",
+    "text": "If you are grateful, I will certainly give you more.",
+    "source": "Qur'an 14:7",
+    "category": "Gratitude"
+  },
+  {
+    "id": "dq006",
+    "text": "Whoever is mindful of Allah, He will make a way out for him, and provide for him from where he never expected.",
+    "source": "Qur'an 65:2-3",
+    "category": "Trust in Allah"
+  },
+  {
+    "id": "dq007",
+    "text": "So, surely with hardship comes ease. Surely with hardship comes ease.",
+    "source": "Qur'an 94:5-6",
+    "category": "Hope"
+  },
+  {
+    "id": "dq008",
+    "text": "Those who strive for Our sake, We will surely guide them to Our paths.",
+    "source": "Qur'an 29:69",
+    "category": "Striving"
+  },
+  {
+    "id": "dq009",
+    "text": "And establish the prayer for My remembrance.",
+    "source": "Qur'an 20:14",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq010",
+    "text": "Indeed, the prayer restrains one from indecency and wrongdoing.",
+    "source": "Qur'an 29:45",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq011",
+    "text": "Indeed, the prayer has been prescribed for the believers at fixed times.",
+    "source": "Qur'an 4:103",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq012",
+    "text": "Successful indeed are the believers — those who humble themselves in their prayer.",
+    "source": "Qur'an 23:1-2",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq013",
+    "text": "Seek help through patience and prayer. It is indeed hard, except for the humble.",
+    "source": "Qur'an 2:45",
+    "category": "Patience"
+  },
+  {
+    "id": "dq014",
+    "text": "By time — humanity is surely in loss, except those who believe, do righteous deeds, and counsel one another to truth and to patience.",
+    "source": "Qur'an 103:1-3",
+    "category": "Time"
+  },
+  {
+    "id": "dq015",
+    "text": "In the creation of the heavens and the earth, and the alternation of night and day, there are signs for people of understanding.",
+    "source": "Qur'an 3:190",
+    "category": "Reflection"
+  },
+  {
+    "id": "dq016",
+    "text": "I did not create jinn and humankind except to worship Me.",
+    "source": "Qur'an 51:56",
+    "category": "Purpose"
+  },
+  {
+    "id": "dq017",
+    "text": "When My servants ask you about Me — I am near. I answer the call of the caller when he calls on Me.",
+    "source": "Qur'an 2:186",
+    "category": "Supplication"
+  },
+  {
+    "id": "dq018",
+    "text": "Your Lord has said: Call upon Me, and I will respond to you.",
+    "source": "Qur'an 40:60",
+    "category": "Supplication"
+  },
+  {
+    "id": "dq019",
+    "text": "Eat and drink, but do not be excessive. Indeed, He does not love those who are excessive.",
+    "source": "Qur'an 7:31",
+    "category": "Health"
+  },
+  {
+    "id": "dq020",
+    "text": "The servants of the Most Merciful are those who walk upon the earth in humility, and when the ignorant address them, they respond with peace.",
+    "source": "Qur'an 25:63",
+    "category": "Character"
+  },
+  {
+    "id": "dq021",
+    "text": "The most honoured of you in the sight of Allah is the most mindful of Him.",
+    "source": "Qur'an 49:13",
+    "category": "Character"
+  },
+  {
+    "id": "dq022",
+    "text": "Your Lord has decreed that you worship none but Him, and that you be good to your parents.",
+    "source": "Qur'an 17:23",
+    "category": "Family"
+  },
+  {
+    "id": "dq023",
+    "text": "Whatever good you send forward for yourselves, you will find it with Allah.",
+    "source": "Qur'an 2:110",
+    "category": "Good Deeds"
+  },
+  {
+    "id": "dq024",
+    "text": "And once you have made a decision, put your trust in Allah.",
+    "source": "Qur'an 3:159",
+    "category": "Trust in Allah"
+  },
+  {
+    "id": "dq025",
+    "text": "Whoever puts his trust in Allah — He is sufficient for him.",
+    "source": "Qur'an 65:3",
+    "category": "Trust in Allah"
+  },
+  {
+    "id": "dq026",
+    "text": "Indeed, Allah loves those who turn to Him in repentance, and He loves those who keep themselves pure.",
+    "source": "Qur'an 2:222",
+    "category": "Repentance"
+  },
+  {
+    "id": "dq027",
+    "text": "Do not despair of Allah's mercy. Indeed, Allah forgives all sins.",
+    "source": "Qur'an 39:53",
+    "category": "Repentance"
+  },
+  {
+    "id": "dq028",
+    "text": "Whoever does righteousness, male or female, while being a believer — We will surely grant them a good life.",
+    "source": "Qur'an 16:97",
+    "category": "Good Deeds"
+  },
+  {
+    "id": "dq029",
+    "text": "Whoever does an atom's weight of good will see it, and whoever does an atom's weight of evil will see it.",
+    "source": "Qur'an 99:7-8",
+    "category": "Accountability"
+  },
+  {
+    "id": "dq030",
+    "text": "Is the reward for goodness anything but goodness?",
+    "source": "Qur'an 55:60",
+    "category": "Good Deeds"
+  },
+  {
+    "id": "dq031",
+    "text": "O my son, establish the prayer, encourage what is good, forbid what is wrong, and be patient with whatever befalls you.",
+    "source": "Qur'an 31:17",
+    "category": "Patience"
+  },
+  {
+    "id": "dq032",
+    "text": "And in part of the night, pray with it as an extra offering for you; perhaps your Lord will raise you to a praiseworthy station.",
+    "source": "Qur'an 17:79",
+    "category": "Night Prayer"
+  },
+  {
+    "id": "dq033",
+    "text": "And remember the name of your Lord morning and evening.",
+    "source": "Qur'an 76:25",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq034",
+    "text": "O you who believe, remember Allah with much remembrance, and glorify Him morning and evening.",
+    "source": "Qur'an 33:41-42",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq035",
+    "text": "And say: My Lord, increase me in knowledge.",
+    "source": "Qur'an 20:114",
+    "category": "Knowledge"
+  },
+  {
+    "id": "dq036",
+    "text": "Allah will raise in rank those of you who believe and those who are given knowledge.",
+    "source": "Qur'an 58:11",
+    "category": "Knowledge"
+  },
+  {
+    "id": "dq037",
+    "text": "Cooperate with one another in righteousness and mindfulness of Allah, and do not cooperate in sin and transgression.",
+    "source": "Qur'an 5:2",
+    "category": "Community"
+  },
+  {
+    "id": "dq038",
+    "text": "When you are greeted with a greeting, respond with something better, or at least return it.",
+    "source": "Qur'an 4:86",
+    "category": "Character"
+  },
+  {
+    "id": "dq039",
+    "text": "Avoid much suspicion — some suspicion is sin. And do not spy, nor backbite one another.",
+    "source": "Qur'an 49:12",
+    "category": "Character"
+  },
+  {
+    "id": "dq040",
+    "text": "Let them pardon and overlook. Would you not love that Allah should forgive you?",
+    "source": "Qur'an 24:22",
+    "category": "Forgiveness"
+  },
+  {
+    "id": "dq041",
+    "text": "Repel evil with what is better, and the one you had enmity with will become like a close friend.",
+    "source": "Qur'an 41:34",
+    "category": "Character"
+  },
+  {
+    "id": "dq042",
+    "text": "We made your sleep a means of rest, made the night a covering, and made the day for earning a living.",
+    "source": "Qur'an 78:9-11",
+    "category": "Routine"
+  },
+  {
+    "id": "dq043",
+    "text": "Among His signs is your sleep by night and by day, and your seeking of His bounty.",
+    "source": "Qur'an 30:23",
+    "category": "Routine"
+  },
+  {
+    "id": "dq044",
+    "text": "When the prayer is over, disperse through the land and seek Allah's bounty, and remember Allah often, so that you may succeed.",
+    "source": "Qur'an 62:10",
+    "category": "Work"
+  },
+  {
+    "id": "dq045",
+    "text": "O you who believe, eat from the good things We have provided you, and give thanks to Allah.",
+    "source": "Qur'an 2:172",
+    "category": "Gratitude"
+  },
+  {
+    "id": "dq046",
+    "text": "Do not squander your wealth wastefully. The wasteful are the brothers of devils.",
+    "source": "Qur'an 17:26-27",
+    "category": "Moderation"
+  },
+  {
+    "id": "dq047",
+    "text": "And your Lord is going to give you, and you will be well pleased.",
+    "source": "Qur'an 93:5",
+    "category": "Hope"
+  },
+  {
+    "id": "dq048",
+    "text": "So when you have finished your task, devote yourself to worship, and turn to your Lord with longing.",
+    "source": "Qur'an 94:7-8",
+    "category": "Routine"
+  },
+  {
+    "id": "dq049",
+    "text": "Allah intends ease for you, and does not intend hardship for you.",
+    "source": "Qur'an 2:185",
+    "category": "Hope"
+  },
+  {
+    "id": "dq050",
+    "text": "O you who believe, be patient, outdo others in patience, remain steadfast, and be mindful of Allah, so that you may succeed.",
+    "source": "Qur'an 3:200",
+    "category": "Patience"
+  },
+  {
+    "id": "dq051",
+    "text": "If you support Allah's cause, He will support you and make your footsteps firm.",
+    "source": "Qur'an 47:7",
+    "category": "Striving"
+  },
+  {
+    "id": "dq052",
+    "text": "Whoever is patient and forgives — that is truly a matter of firm resolve.",
+    "source": "Qur'an 42:43",
+    "category": "Forgiveness"
+  },
+  {
+    "id": "dq053",
+    "text": "And do good — indeed, Allah loves those who do good.",
+    "source": "Qur'an 2:195",
+    "category": "Good Deeds"
+  },
+  {
+    "id": "dq054",
+    "text": "O you who believe, be mindful of Allah and stand with those who are truthful.",
+    "source": "Qur'an 9:119",
+    "category": "Truthfulness"
+  },
+  {
+    "id": "dq055",
+    "text": "The believers are only those whose hearts tremble when Allah is mentioned, and whose faith increases when His verses are recited to them.",
+    "source": "Qur'an 8:2",
+    "category": "Faith"
+  },
+  {
+    "id": "dq056",
+    "text": "Recite what is easy for you of the Qur'an.",
+    "source": "Qur'an 73:20",
+    "category": "Qur'an"
+  },
+  {
+    "id": "dq057",
+    "text": "This is a blessed Book We have revealed to you, so that they may reflect on its verses.",
+    "source": "Qur'an 38:29",
+    "category": "Qur'an"
+  },
+  {
+    "id": "dq058",
+    "text": "Take provision, and the best provision is mindfulness of Allah.",
+    "source": "Qur'an 2:197",
+    "category": "Faith"
+  },
+  {
+    "id": "dq059",
+    "text": "Race one another towards forgiveness from your Lord.",
+    "source": "Qur'an 57:21",
+    "category": "Striving"
+  },
+  {
+    "id": "dq060",
+    "text": "Allah does not change the condition of a people until they change what is in themselves.",
+    "source": "Qur'an 13:11",
+    "category": "Change"
+  },
+  {
+    "id": "dq061",
+    "text": "The deeds most beloved to Allah are those done consistently, even if they are few.",
+    "source": "Sahih al-Bukhari 6464; Sahih Muslim 783",
+    "category": "Consistency"
+  },
+  {
+    "id": "dq062",
+    "text": "Actions are judged by intentions, and every person will have what they intended.",
+    "source": "Sahih al-Bukhari 1; Sahih Muslim 1907",
+    "category": "Intention"
+  },
+  {
+    "id": "dq063",
+    "text": "The first thing a servant will be held accountable for on the Day of Judgement is the prayer.",
+    "source": "Sunan al-Tirmidhi 413 (authentic)",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq064",
+    "text": "Purity is half of faith.",
+    "source": "Sahih Muslim 223",
+    "category": "Purity"
+  },
+  {
+    "id": "dq065",
+    "text": "Whoever believes in Allah and the Last Day, let him speak good or stay silent.",
+    "source": "Sahih al-Bukhari 6018; Sahih Muslim 47",
+    "category": "Speech"
+  },
+  {
+    "id": "dq066",
+    "text": "None of you truly believes until he loves for his brother what he loves for himself.",
+    "source": "Sahih al-Bukhari 13; Sahih Muslim 45",
+    "category": "Community"
+  },
+  {
+    "id": "dq067",
+    "text": "The strong believer is better and more beloved to Allah than the weak believer, though there is good in both. Strive for what benefits you, seek Allah's help, and do not give up.",
+    "source": "Sahih Muslim 2664",
+    "category": "Striving"
+  },
+  {
+    "id": "dq068",
+    "text": "Take advantage of five before five: your youth before your old age, your health before your illness, your wealth before your poverty, your free time before your busyness, and your life before your death.",
+    "source": "Narrated by al-Hakim (graded authentic)",
+    "category": "Time"
+  },
+  {
+    "id": "dq069",
+    "text": "There are two blessings that many people are deceived about: good health and free time.",
+    "source": "Sahih al-Bukhari 6412",
+    "category": "Time"
+  },
+  {
+    "id": "dq070",
+    "text": "Whoever travels a path seeking knowledge, Allah will make easy for him a path to Paradise.",
+    "source": "Sahih Muslim 2699",
+    "category": "Knowledge"
+  },
+  {
+    "id": "dq071",
+    "text": "The best of you are those who learn the Qur'an and teach it.",
+    "source": "Sahih al-Bukhari 5027",
+    "category": "Qur'an"
+  },
+  {
+    "id": "dq072",
+    "text": "Whoever recites a single letter from the Book of Allah earns a good deed, and each good deed is multiplied by ten.",
+    "source": "Sunan al-Tirmidhi 2910",
+    "category": "Qur'an"
+  },
+  {
+    "id": "dq073",
+    "text": "Two words light on the tongue, heavy on the scale, beloved to the Most Merciful: SubhanAllahi wa bihamdih, SubhanAllahil-'Azeem.",
+    "source": "Sahih al-Bukhari 6682; Sahih Muslim 2694",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq074",
+    "text": "Whoever says 'SubhanAllahi wa bihamdih' one hundred times a day will have his sins forgiven, even if they were like the foam of the sea.",
+    "source": "Sahih al-Bukhari 6405; Sahih Muslim 2691",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq075",
+    "text": "Allah is beautiful and loves beauty.",
+    "source": "Sahih Muslim 91",
+    "category": "Character"
+  },
+  {
+    "id": "dq076",
+    "text": "Smiling in the face of your brother is an act of charity.",
+    "source": "Sunan al-Tirmidhi 1956",
+    "category": "Charity"
+  },
+  {
+    "id": "dq077",
+    "text": "The best of you is the one who is best to his family, and I am the best of you to my family.",
+    "source": "Sunan al-Tirmidhi 3895",
+    "category": "Family"
+  },
+  {
+    "id": "dq078",
+    "text": "He is not one of us who shows no mercy to our young and no respect to our elders.",
+    "source": "Sunan al-Tirmidhi 1919",
+    "category": "Family"
+  },
+  {
+    "id": "dq079",
+    "text": "Be mindful of Allah wherever you are; follow a bad deed with a good one and it will erase it; and treat people with good character.",
+    "source": "Sunan al-Tirmidhi 1987",
+    "category": "Character"
+  },
+  {
+    "id": "dq080",
+    "text": "Charity does not decrease wealth.",
+    "source": "Sahih Muslim 2588",
+    "category": "Charity"
+  },
+  {
+    "id": "dq081",
+    "text": "A person's feet will not move on the Day of Judgement until he is asked about his life and how he spent it, his knowledge and what he did with it, his wealth — how he earned it and how he spent it, and his body and how he used it.",
+    "source": "Sunan al-Tirmidhi 2417",
+    "category": "Accountability"
+  },
+  {
+    "id": "dq082",
+    "text": "No vessel is filled worse than the stomach. A few morsels are enough to keep a person's back straight. If more is needed, then a third for food, a third for drink, and a third for breath.",
+    "source": "Sunan al-Tirmidhi 2380",
+    "category": "Health"
+  },
+  {
+    "id": "dq083",
+    "text": "Whoever prays Fajr is under the protection of Allah.",
+    "source": "Sahih Muslim 657",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq084",
+    "text": "Whoever prays the two cool prayers — Fajr and Asr — will enter Paradise.",
+    "source": "Sahih al-Bukhari 574; Sahih Muslim 635",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq085",
+    "text": "The two units of prayer before Fajr are better than the world and everything in it.",
+    "source": "Sahih Muslim 725",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq086",
+    "text": "Our Lord descends to the lowest heaven in the last third of every night, saying: Who is calling on Me, that I may answer him? Who is asking of Me, that I may give him?",
+    "source": "Sahih al-Bukhari 1145; Sahih Muslim 758",
+    "category": "Night Prayer"
+  },
+  {
+    "id": "dq087",
+    "text": "The closest a servant is to his Lord is while prostrating, so make plenty of supplication then.",
+    "source": "Sahih Muslim 482",
+    "category": "Supplication"
+  },
+  {
+    "id": "dq088",
+    "text": "Supplication is worship itself.",
+    "source": "Sunan Abi Dawud 1479; Sunan al-Tirmidhi 2969",
+    "category": "Supplication"
+  },
+  {
+    "id": "dq089",
+    "text": "Whoever holds fast to seeking forgiveness, Allah will grant him relief from every worry, a way out of every hardship, and provision from where he never expected.",
+    "source": "Sunan Abi Dawud 1518; Sunan Ibn Majah 3819",
+    "category": "Repentance"
+  },
+  {
+    "id": "dq090",
+    "text": "Do deeds properly and moderately, and know that none of you will enter Paradise by his deeds alone.",
+    "source": "Sahih al-Bukhari 6463; Sahih Muslim 2816",
+    "category": "Moderation"
+  },
+  {
+    "id": "dq091",
+    "text": "Make things easy and do not make them difficult; give glad tidings and do not drive people away.",
+    "source": "Sahih al-Bukhari 69; Sahih Muslim 1734",
+    "category": "Character"
+  },
+  {
+    "id": "dq092",
+    "text": "Whoever relieves a believer of a hardship in this world, Allah will relieve him of a hardship on the Day of Resurrection.",
+    "source": "Sahih Muslim 2699",
+    "category": "Community"
+  },
+  {
+    "id": "dq093",
+    "text": "O Allah, bless my nation in its early mornings.",
+    "source": "Sunan al-Tirmidhi 1212; Sunan Abi Dawud 2606",
+    "category": "Routine"
+  },
+  {
+    "id": "dq094",
+    "text": "The believer who mixes with people and bears their harm patiently has a greater reward than the believer who does not.",
+    "source": "Sunan al-Tirmidhi 2507; Sunan Ibn Majah 4032",
+    "category": "Community"
+  },
+  {
+    "id": "dq095",
+    "text": "Whoever wakes up secure in his home, healthy in body, with enough food for the day, it is as though the whole world has been given to him.",
+    "source": "Sunan al-Tirmidhi 2346; Sunan Ibn Majah 4141",
+    "category": "Gratitude"
+  },
+  {
+    "id": "dq096",
+    "text": "Richness is not having many possessions; true richness is contentment of the soul.",
+    "source": "Sahih al-Bukhari 6446; Sahih Muslim 1051",
+    "category": "Contentment"
+  },
+  {
+    "id": "dq097",
+    "text": "Whoever is not grateful to people is not grateful to Allah.",
+    "source": "Sunan Abi Dawud 4811; Sunan al-Tirmidhi 1954",
+    "category": "Gratitude"
+  },
+  {
+    "id": "dq098",
+    "text": "The Prophet was asked which deed is best. He said: The prayer at its proper time. Then what? He said: Kindness to parents.",
+    "source": "Sahih al-Bukhari 527; Sahih Muslim 85",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq099",
+    "text": "A good word is charity.",
+    "source": "Sahih al-Bukhari 2989; Sahih Muslim 1009",
+    "category": "Charity"
+  },
+  {
+    "id": "dq100",
+    "text": "Removing something harmful from the road is charity.",
+    "source": "Sahih al-Bukhari 2989; Sahih Muslim 1009",
+    "category": "Charity"
+  },
+  {
+    "id": "dq101",
+    "text": "Truthfulness leads to righteousness, and righteousness leads to Paradise.",
+    "source": "Sahih al-Bukhari 6094; Sahih Muslim 2607",
+    "category": "Truthfulness"
+  },
+  {
+    "id": "dq102",
+    "text": "Faith has over seventy branches. The highest is saying 'there is no god but Allah', the lowest is removing something harmful from the road, and modesty is a branch of faith.",
+    "source": "Sahih al-Bukhari 9; Sahih Muslim 35",
+    "category": "Faith"
+  },
+  {
+    "id": "dq103",
+    "text": "Whoever guides someone to good will have a reward like the one who does it.",
+    "source": "Sahih Muslim 1893",
+    "category": "Good Deeds"
+  },
+  {
+    "id": "dq104",
+    "text": "When a person dies, their deeds end except three: ongoing charity, knowledge others benefit from, and a righteous child who prays for them.",
+    "source": "Sahih Muslim 1631",
+    "category": "Legacy"
+  },
+  {
+    "id": "dq105",
+    "text": "Seeking knowledge is an obligation upon every Muslim.",
+    "source": "Sunan Ibn Majah 224 (authentic)",
+    "category": "Knowledge"
+  },
+  {
+    "id": "dq106",
+    "text": "Whoever prays Isha in congregation is as though he prayed half the night, and whoever prays Fajr in congregation is as though he prayed the whole night.",
+    "source": "Sahih Muslim 656",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq107",
+    "text": "Be mindful of Allah and He will protect you. Be mindful of Allah and you will find Him before you.",
+    "source": "Sunan al-Tirmidhi 2516",
+    "category": "Trust in Allah"
+  },
+  {
+    "id": "dq108",
+    "text": "Tie your camel first, then put your trust in Allah.",
+    "source": "Sunan al-Tirmidhi 2517",
+    "category": "Trust in Allah"
+  },
+  {
+    "id": "dq109",
+    "text": "Whoever would love for his provision to be increased and his life extended, let him keep good ties with his relatives.",
+    "source": "Sahih al-Bukhari 5986; Sahih Muslim 2557",
+    "category": "Family"
+  },
+  {
+    "id": "dq110",
+    "text": "Prayer in congregation is twenty-seven times better than prayer offered alone.",
+    "source": "Sahih al-Bukhari 645; Sahih Muslim 650",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq111",
+    "text": "A man asked the Prophet for advice. He said: Do not become angry. The man repeated his request, and he said: Do not become angry.",
+    "source": "Sahih al-Bukhari 6116",
+    "category": "Character"
+  },
+  {
+    "id": "dq112",
+    "text": "No fatigue, illness, worry, grief, harm or sadness afflicts a Muslim — even a thorn that pricks him — without Allah wiping away some of his sins by it.",
+    "source": "Sahih al-Bukhari 5641; Sahih Muslim 2573",
+    "category": "Patience"
+  },
+  {
+    "id": "dq113",
+    "text": "How wonderful is the affair of the believer — all of it is good. If something good happens he is grateful, and that is good for him; if hardship strikes he is patient, and that is good for him.",
+    "source": "Sahih Muslim 2999",
+    "category": "Contentment"
+  },
+  {
+    "id": "dq114",
+    "text": "Whoever sends blessings upon me once, Allah will send blessings upon him ten times.",
+    "source": "Sahih Muslim 408",
+    "category": "Remembrance"
+  },
+  {
+    "id": "dq115",
+    "text": "The best charity is what you give while healthy and tight-fisted, hoping for wealth and fearing poverty.",
+    "source": "Sahih al-Bukhari 1419; Sahih Muslim 1032",
+    "category": "Charity"
+  },
+  {
+    "id": "dq116",
+    "text": "Whoever performs ablution well, his sins leave his body, even from beneath his fingernails.",
+    "source": "Sahih Muslim 245",
+    "category": "Purity"
+  },
+  {
+    "id": "dq117",
+    "text": "Whoever fasts Ramadan out of faith and hoping for reward will have his previous sins forgiven.",
+    "source": "Sahih al-Bukhari 38; Sahih Muslim 760",
+    "category": "Fasting"
+  },
+  {
+    "id": "dq118",
+    "text": "Whoever does not give up false speech and acting upon it, Allah has no need of him giving up his food and drink.",
+    "source": "Sahih al-Bukhari 1903",
+    "category": "Fasting"
+  },
+  {
+    "id": "dq119",
+    "text": "The most beloved places to Allah are the mosques, and the most disliked places to Allah are the markets.",
+    "source": "Sahih Muslim 671",
+    "category": "Prayer"
+  },
+  {
+    "id": "dq120",
+    "text": "Whoever seeks to be chaste, Allah will keep him chaste; whoever seeks to be self-sufficient, Allah will make him self-sufficient; and whoever is patient, Allah will grant him patience.",
+    "source": "Sahih al-Bukhari 1469; Sahih Muslim 1053",
+    "category": "Patience"
+  }
+]

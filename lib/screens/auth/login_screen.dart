@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../utils/app_theme.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(Icons.mosque, size: 64, color: Color(0xFF2E7D32)),
+                Icon(Icons.mosque,
+                    size: 64, color: Theme.of(context).colorScheme.success),
                 const SizedBox(height: 12),
                 const Text(
                   'DeenRoutine',
@@ -57,7 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Text(auth.error!,
-                        style: const TextStyle(color: Colors.red)),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error)),
                   ),
                 FilledButton(
                   onPressed: auth.isLoading

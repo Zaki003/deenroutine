@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/habit.dart';
+import '../providers/habit_provider.dart';
+import '../utils/app_theme.dart';
 
 class HabitCard extends StatelessWidget {
   final Habit habit;
@@ -13,16 +16,16 @@ class HabitCard extends StatelessWidget {
     required this.onDelete,
   });
 
-  Color _categoryColor() {
+  Color _categoryColor(ColorScheme scheme) {
     switch (habit.category) {
       case HabitCategory.islam:
-        return const Color(0xFF2E7D32);
+        return scheme.success;
       case HabitCategory.lifestyle:
-        return Colors.orange;
+        return scheme.accentAmber;
       case HabitCategory.learn:
-        return Colors.blue;
+        return scheme.accentBlue;
       case HabitCategory.work:
-        return Colors.purple;
+        return scheme.accentPurple;
     }
   }
 
@@ -37,12 +40,13 @@ class HabitCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final categoryColor = _categoryColor(Theme.of(context).colorScheme);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: _categoryColor().withValues(alpha: 0.15),
-          child: Icon(Icons.circle, size: 12, color: _categoryColor()),
+          backgroundColor: categoryColor.withValues(alpha: 0.15),
+          child: Icon(Icons.circle, size: 12, color: categoryColor),
         ),
         title: Text(
           habit.title,
@@ -50,7 +54,33 @@ class HabitCard extends StatelessWidget {
             decoration: habit.completed ? TextDecoration.lineThrough : null,
           ),
         ),
-        subtitle: Text('${habit.category.name} • ${_frequencyLabel()}'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('${habit.category.name} • ${_frequencyLabel()}'),
+            FutureBuilder<int>(
+              // Re-fetched on every rebuild (e.g. right after toggling), which
+              // is exactly when the streak needs to be fresh.
+              future: context.read<HabitProvider>().streakFor(habit.habitId),
+              builder: (context, snapshot) {
+                final streak = snapshot.data ?? 0;
+                if (streak < 1) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    '🔥 $streak day streak',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: categoryColor,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

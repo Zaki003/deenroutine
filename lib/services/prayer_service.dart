@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,8 +28,7 @@ class PrayerService {
 
     try {
       return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium,
-        timeLimit: const Duration(seconds: 12),
+        locationSettings: _locationSettings(),
       );
     } catch (_) {
       // Emulators often have no GPS fix ready. Fall back to the last known
@@ -36,6 +36,31 @@ class PrayerService {
       final last = await Geolocator.getLastKnownPosition();
       if (last != null) return last;
       rethrow;
+    }
+  }
+
+  /// On Android, `forceLocationManager` reads the OS's raw `LocationManager`
+  /// GPS provider directly. Without it, Geolocator goes through Google Play
+  /// Services' Fused Location Provider, whose per-app "last location" cache
+  /// starts empty on a fresh app run — on an emulator with no continuous GPS
+  /// feed, that leaves nothing for Fused to return before the time limit,
+  /// even once a fix has been pushed to the emulator's GPS.
+  LocationSettings _locationSettings() {
+    const accuracy = LocationAccuracy.medium;
+    const timeLimit = Duration(seconds: 12);
+    if (kIsWeb) return const LocationSettings(accuracy: accuracy, timeLimit: timeLimit);
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return AndroidSettings(
+          accuracy: accuracy,
+          timeLimit: timeLimit,
+          forceLocationManager: true,
+        );
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return AppleSettings(accuracy: accuracy, timeLimit: timeLimit);
+      default:
+        return const LocationSettings(accuracy: accuracy, timeLimit: timeLimit);
     }
   }
 

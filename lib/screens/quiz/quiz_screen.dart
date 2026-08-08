@@ -5,6 +5,7 @@ import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/firestore_service.dart';
+import '../../utils/app_theme.dart';
 import 'quiz_result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -148,8 +149,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               ? Icons.check_circle_rounded
                               : Icons.cancel_rounded,
                           color: _selectedOption == q.correctAnswer
-                              ? Colors.green
-                              : Colors.red,
+                              ? theme.colorScheme.success
+                              : theme.colorScheme.error,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -209,14 +210,14 @@ class _OptionTile extends StatelessWidget {
 
     if (answered) {
       if (isCorrectAnswer) {
-        background = Colors.green.withOpacity(0.18);
-        foreground = Colors.green.shade800;
-        borderColor = Colors.green;
+        background = theme.colorScheme.successContainer;
+        foreground = theme.colorScheme.onSuccessContainer;
+        borderColor = theme.colorScheme.success;
         trailingIcon = Icons.check_circle_rounded;
       } else if (isSelected) {
-        background = Colors.red.withOpacity(0.15);
-        foreground = Colors.red.shade800;
-        borderColor = Colors.red;
+        background = theme.colorScheme.errorSurface;
+        foreground = theme.colorScheme.onErrorContainer;
+        borderColor = theme.colorScheme.error;
         trailingIcon = Icons.cancel_rounded;
       } else {
         background = theme.colorScheme.surfaceContainerHighest;
@@ -256,8 +257,12 @@ class _OptionTile extends StatelessWidget {
                   ),
                 ),
                 if (trailingIcon != null)
-                  Icon(trailingIcon,
-                      color: isCorrectAnswer ? Colors.green : Colors.red),
+                  Icon(
+                    trailingIcon,
+                    color: isCorrectAnswer
+                        ? theme.colorScheme.success
+                        : theme.colorScheme.error,
+                  ),
               ],
             ),
           ),

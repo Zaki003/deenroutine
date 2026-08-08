@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../utils/app_theme.dart';
 import 'quiz_screen.dart';
 
 /// Beautified results page shown after finishing a quiz (FR-10).
@@ -10,26 +11,28 @@ class QuizResultScreen extends StatelessWidget {
 
   double get _percentage => total == 0 ? 0 : score / total;
 
-  ({IconData icon, Color color, String title, String message}) get _outcome {
+  ({IconData icon, Color color, String title, String message}) _outcome(
+    ColorScheme scheme,
+  ) {
     final pct = _percentage;
     if (pct >= 0.8) {
       return (
         icon: Icons.emoji_events_rounded,
-        color: const Color(0xFFFFB300),
+        color: scheme.accentAmber,
         title: 'Excellent!',
         message: 'MashaAllah, your knowledge really shines. Keep it up!',
       );
     } else if (pct >= 0.5) {
       return (
         icon: Icons.thumb_up_rounded,
-        color: const Color(0xFF2E7D32),
+        color: scheme.success,
         title: 'Well Done!',
         message: 'Good effort! A little more practice and you\'ll master it.',
       );
     }
     return (
       icon: Icons.menu_book_rounded,
-      color: const Color(0xFF6D4C41),
+      color: scheme.accentBrown,
       title: 'Keep Learning',
       message: 'Every attempt is a step forward. Review and try again!',
     );
@@ -38,7 +41,7 @@ class QuizResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final outcome = _outcome;
+    final outcome = _outcome(theme.colorScheme);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Quiz Results')),
