@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../models/habit.dart';
 import '../providers/habit_provider.dart';
 import '../utils/app_theme.dart';
@@ -29,17 +30,43 @@ class HabitCard extends StatelessWidget {
     }
   }
 
-  String _frequencyLabel() {
+  Future<void> _confirmDelete(BuildContext context, AppLocalizations l10n) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteHabitTitle),
+        content: Text(l10n.deleteHabitContent(habit.title)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancelButton),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              l10n.deleteButton,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) onDelete();
+  }
+
+  String _frequencyLabel(AppLocalizations l10n) {
     if (habit.frequency == HabitFrequency.specificDays) {
-      if (habit.selectedDays.isEmpty) return 'specificDays';
+      if (habit.selectedDays.isEmpty) return habit.frequency.label(l10n);
       final sorted = [...habit.selectedDays]..sort();
-      return sorted.map((d) => kWeekdayShortNames[d]).join(', ');
+      final names = weekdayShortNames(l10n);
+      return sorted.map((d) => names[d]).join(', ');
     }
-    return habit.frequency.name;
+    return habit.frequency.label(l10n);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final categoryColor = _categoryColor(Theme.of(context).colorScheme);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -58,7 +85,7 @@ class HabitCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('${habit.category.name} • ${_frequencyLabel()}'),
+            Text('${habit.category.label(l10n)} • ${_frequencyLabel(l10n)}'),
             FutureBuilder<int>(
               // Re-fetched on every rebuild (e.g. right after toggling), which
               // is exactly when the streak needs to be fresh.
@@ -69,7 +96,7 @@ class HabitCard extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
-                    '🔥 $streak day streak',
+                    l10n.habitStreakDays(streak),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -87,7 +114,7 @@ class HabitCard extends StatelessWidget {
             Checkbox(value: habit.isCompletedToday, onChanged: (_) => onToggle()),
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              onPressed: onDelete,
+              onPressed: () => _confirmDelete(context, l10n),
             ),
           ],
         ),

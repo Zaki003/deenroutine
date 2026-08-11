@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/habit.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../services/notification_service.dart';
+import '../../utils/habit_error_messages.dart';
 
 class AddHabitScreen extends StatefulWidget {
   const AddHabitScreen({super.key});
@@ -21,7 +23,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   bool _saving = false;
 
   /// Selected day indices for HabitFrequency.specificDays, using the
-  /// S M T W T F S order (0=Sun ... 6=Sat) defined in kWeekdayLetters.
+  /// S M T W T F S order (0=Sun ... 6=Sat) from [weekdayShortNames].
   final Set<int> _selectedDays = {};
   String? _dayPickerError;
 
@@ -33,13 +35,14 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     if (picked != null) setState(() => _reminderTime = picked);
   }
 
-  Widget _buildDayPicker() {
+  Widget _buildDayPicker(AppLocalizations l10n) {
+    final names = weekdayShortNames(l10n);
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Repeat on', style: TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.repeatOnLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,7 +66,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: Text(
-                    kWeekdayLetters[index],
+                    names[index].substring(0, 1),
                     style: TextStyle(
                       color: selected
                           ? Theme.of(context).colorScheme.onPrimary
@@ -94,9 +97,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   @override
   Widget build(BuildContext context) {
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('New Habit')),
+      appBar: AppBar(title: Text(l10n.newHabitTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -106,10 +110,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
             children: [
               TextFormField(
                 controller: _titleCtrl,
-                decoration: const InputDecoration(labelText: 'Habit title'),
+                decoration: InputDecoration(labelText: l10n.habitTitleLabel),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a habit title';
+                    return l10n.habitTitleValidatorError;
                   }
                   return null;
                 },
@@ -117,18 +121,18 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               const SizedBox(height: 16),
               DropdownButtonFormField<HabitCategory>(
                 initialValue: _category,
-                decoration: const InputDecoration(labelText: 'Category'),
+                decoration: InputDecoration(labelText: l10n.categoryLabel),
                 items: HabitCategory.values
-                    .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c.label(l10n))))
                     .toList(),
                 onChanged: (v) => setState(() => _category = v!),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<HabitFrequency>(
                 initialValue: _frequency,
-                decoration: const InputDecoration(labelText: 'Frequency'),
+                decoration: InputDecoration(labelText: l10n.frequencyLabel),
                 items: HabitFrequency.values
-                    .map((f) => DropdownMenuItem(value: f, child: Text(f.name)))
+                    .map((f) => DropdownMenuItem(value: f, child: Text(f.label(l10n))))
                     .toList(),
                 onChanged: (v) => setState(() {
                   _frequency = v!;
@@ -138,16 +142,16 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   }
                 }),
               ),
-              if (_frequency == HabitFrequency.specificDays) _buildDayPicker(),
+              if (_frequency == HabitFrequency.specificDays) _buildDayPicker(l10n),
               const SizedBox(height: 16),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.notifications_outlined),
-                title: const Text('Daily reminder'),
+                title: Text(l10n.dailyReminderTitle),
                 subtitle: Text(
                   _reminderTime == null
-                      ? 'Off — tap to set a time'
-                      : 'At ${_reminderTime!.format(context)}',
+                      ? l10n.reminderOffSubtitle
+                      : l10n.reminderAtTime(_reminderTime!.format(context)),
                 ),
                 trailing: _reminderTime == null
                     ? null
@@ -167,27 +171,46 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                         if (_frequency == HabitFrequency.specificDays &&
                             _selectedDays.isEmpty) {
                           setState(() {
-                            _dayPickerError = 'Select at least one day';
+                            _dayPickerError = l10n.selectAtLeastOneDay;
                           });
                           return;
                         }
 
                         setState(() => _saving = true);
                         final title = _titleCtrl.text.trim();
+                        final habitProvider = context.read<HabitProvider>();
 
-                        await context.read<HabitProvider>().addHabit(
-                              uid: uid,
-                              title: title,
-                              category: _category,
-                              frequency: _frequency,
-                              selectedDays: _selectedDays.toList()..sort(),
-                            );
+                        final added = await habitProvider.addHabit(
+                          uid: uid,
+                          title: title,
+                          category: _category,
+                          frequency: _frequency,
+                          selectedDays: _selectedDays.toList()..sort(),
+                        );
+
+                        if (!added) {
+                          if (!mounted) return;
+                          setState(() => _saving = false);
+                          final errorType = habitProvider.errorType;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                errorType != null
+                                    ? habitErrorMessage(
+                                        l10n, errorType, habitProvider.errorDetail)
+                                    : l10n.habitSaveFailedGeneric,
+                              ),
+                            ),
+                          );
+                          habitProvider.clearError();
+                          return;
+                        }
 
                         if (_reminderTime != null) {
                           await NotificationService().scheduleDailyReminder(
                             id: title.hashCode,
-                            title: 'DeenRoutine reminder',
-                            body: 'Time for: $title',
+                            title: l10n.reminderNotificationTitle,
+                            body: l10n.reminderNotificationBody(title),
                             hour: _reminderTime!.hour,
                             minute: _reminderTime!.minute,
                           );
@@ -201,7 +224,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Save Habit'),
+                    : Text(l10n.saveHabitButton),
               ),
             ],
           ),

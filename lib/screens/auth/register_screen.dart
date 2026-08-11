@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
+import '../../utils/auth_error_messages.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -18,9 +20,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Account')),
+      appBar: AppBar(title: Text(l10n.createAccountTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -30,30 +33,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               TextFormField(
                 controller: _nameCtrl,
-                decoration: const InputDecoration(labelText: 'Full name'),
-                validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                decoration: InputDecoration(labelText: l10n.fullNameLabel),
+                validator: (v) => (v == null || v.isEmpty) ? l10n.requiredValidatorError : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _emailCtrl,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: l10n.emailLabel),
                 validator: (v) =>
-                    (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
+                    (v == null || !v.contains('@')) ? l10n.emailValidatorError : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _passwordCtrl,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(labelText: l10n.passwordLabel),
                 obscureText: true,
                 validator: (v) =>
-                    (v == null || v.length < 6) ? 'Min 6 characters' : null,
+                    (v == null || v.length < 6) ? l10n.passwordValidatorError : null,
               ),
               const SizedBox(height: 24),
-              if (auth.error != null)
+              if (auth.errorCode != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child:
-                      Text(auth.error!,
+                      Text(authErrorMessage(l10n, auth.errorCode),
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.error)),
                 ),
@@ -69,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         );
                         if (ok && mounted) Navigator.pop(context);
                       },
-                child: const Text('Register'),
+                child: Text(l10n.registerButton),
               ),
             ],
           ),

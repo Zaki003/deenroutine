@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/locale_provider.dart';
 import '../../services/firestore_service.dart';
 import '../../utils/app_theme.dart';
 import 'quiz_result_screen.dart';
@@ -75,8 +77,10 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final isBangla = context.watch<LocaleProvider>().isBangla;
     return Scaffold(
-      appBar: AppBar(title: const Text('Islamic Knowledge Quiz')),
+      appBar: AppBar(title: Text(l10n.quizAppBarTitle)),
       body: FutureBuilder<List<QuizQuestion>>(
         future: _questionsFuture,
         builder: (context, snapshot) {
@@ -85,10 +89,12 @@ class _QuizScreenState extends State<QuizScreen> {
           }
           final questions = snapshot.data!;
           if (questions.isEmpty) {
-            return const Center(child: Text('No quiz questions available yet.'));
+            return Center(child: Text(l10n.quizNoQuestions));
           }
 
           final q = questions[_index];
+          final options = q.options;
+          final displayOptions = q.displayOptions(isBangla);
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -104,7 +110,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Question ${_index + 1} of ${questions.length}',
+                  l10n.quizQuestionProgress(_index + 1, questions.length),
                   style: theme.textTheme.labelLarge
                       ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                 ),
@@ -117,7 +123,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    q.questionText,
+                    q.displayQuestionText(isBangla),
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: theme.colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.w600,
@@ -128,13 +134,13 @@ class _QuizScreenState extends State<QuizScreen> {
                 Expanded(
                   child: ListView(
                     children: [
-                      for (final option in q.options)
+                      for (var i = 0; i < options.length; i++)
                         _OptionTile(
-                          option: option,
-                          isSelected: _selectedOption == option,
-                          isCorrectAnswer: option == q.correctAnswer,
+                          option: displayOptions[i],
+                          isSelected: _selectedOption == options[i],
+                          isCorrectAnswer: options[i] == q.correctAnswer,
                           answered: _answered,
-                          onTap: () => _selectOption(option),
+                          onTap: () => _selectOption(options[i]),
                         ),
                     ],
                   ),
@@ -156,8 +162,9 @@ class _QuizScreenState extends State<QuizScreen> {
                         Expanded(
                           child: Text(
                             _selectedOption == q.correctAnswer
-                                ? 'Correct!'
-                                : 'Correct answer: ${q.correctAnswer}',
+                                ? l10n.quizCorrect
+                                : l10n.quizCorrectAnswer(
+                                    displayOptions[options.indexOf(q.correctAnswer)]),
                             style: theme.textTheme.bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.w600),
                           ),
@@ -171,8 +178,10 @@ class _QuizScreenState extends State<QuizScreen> {
                       : () => _next(questions),
                   child: Text(
                     !_answered
-                        ? 'Check Answer'
-                        : (_index < questions.length - 1 ? 'Next Question' : 'See Results'),
+                        ? l10n.quizCheckAnswer
+                        : (_index < questions.length - 1
+                            ? l10n.quizNextQuestion
+                            : l10n.quizSeeResults),
                   ),
                 ),
               ],

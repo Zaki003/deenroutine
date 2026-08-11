@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/daily_quote.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
+import '../../providers/locale_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../services/firestore_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/habit_error_messages.dart';
+import '../../utils/prayer_error_messages.dart';
+import '../../utils/prayer_labels.dart';
 import '../../widgets/barakah_circle.dart';
 import '../../widgets/habit_card.dart';
 import '../habits/add_habit_screen.dart';
@@ -40,12 +45,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final habitProvider = context.watch<HabitProvider>();
     final prayerProvider = context.watch<PrayerProvider>();
+    final isBangla = context.watch<LocaleProvider>().isBangla;
+    final l10n = AppLocalizations.of(context)!;
 
-    if (habitProvider.error != null) {
+    if (habitProvider.hasError) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(habitProvider.error!)),
+          SnackBar(
+            content: Text(habitErrorMessage(
+                l10n, habitProvider.errorType!, habitProvider.errorDetail)),
+          ),
         );
         habitProvider.clearError();
       });
@@ -53,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DeenRoutine'),
+        title: Text(l10n.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.quiz_outlined),
@@ -81,10 +91,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.only(bottom: 24),
           children: [
             const SizedBox(height: 16),
-            const Text(
-              'Barakah Circle',
+            Text(
+              l10n.barakahCircleTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.3,
@@ -97,8 +107,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (habitProvider.habits.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
-                '${habitProvider.habits.where((h) => h.isCompletedToday).length} of '
-                '${habitProvider.habits.length} habits done today',
+                l10n.habitsDoneToday(
+                  habitProvider.habits.where((h) => h.isCompletedToday).length,
+                  habitProvider.habits.length,
+                ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -107,17 +119,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
             const SizedBox(height: 16),
-            _buildPrayerTimesCard(prayerProvider),
-            if (_quote != null) _buildQuoteCard(_quote!),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
-              child: Text('Today\'s Habits',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            _buildPrayerTimesCard(prayerProvider, l10n),
+            if (_quote != null) _buildQuoteCard(_quote!, isBangla),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+              child: Text(l10n.todaysHabitsTitle,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             if (habitProvider.habits.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(24),
-                child: Text('No habits yet. Tap + to add your first one.'),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(l10n.noHabitsYet),
               ),
             for (final habit in habitProvider.habits)
               HabitCard(
@@ -131,22 +143,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildPrayerTimesCard(PrayerProvider provider) {
+  Widget _buildPrayerTimesCard(PrayerProvider provider, AppLocalizations l10n) {
     if (provider.isLoading) {
       return const Padding(
         padding: EdgeInsets.all(16),
         child: Center(child: CircularProgressIndicator()),
       );
     }
-    if (provider.error != null) {
+    if (provider.hasError) {
       return Padding(
         padding: const EdgeInsets.all(16),
-        child: Text('Prayer times unavailable: ${provider.error}',
-            style: TextStyle(color: Theme.of(context).colorScheme.error)),
+        child: Text(
+          l10n.prayerTimesUnavailable(
+              prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail)),
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
       );
     }
-    final t = provider.timings;
-    if (t.isEmpty) return const SizedBox.shrink();
+    final ordered = provider.orderedTimings;
+    if (ordered.isEmpty) return const SizedBox.shrink();
+
+    final scheme = Theme.of(context).colorScheme;
+    final nextPrayer = provider.nextPrayerName;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -154,23 +172,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.all(12),
         child: Wrap(
           alignment: WrapAlignment.spaceBetween,
-          children: t.entries
-              .map((e) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Column(
-                      children: [
-                        Text(e.key, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Text(e.value),
-                      ],
+          children: ordered.map((e) {
+            final isNext = e.key == nextPrayer;
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: isNext ? scheme.successContainer : null,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    prayerNameLabel(l10n, e.key),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isNext ? scheme.onSuccessContainer : null,
                     ),
-                  ))
-              .toList(),
+                  ),
+                  Text(
+                    e.value,
+                    style: TextStyle(
+                      color: isNext ? scheme.onSuccessContainer : null,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
   }
 
-  Widget _buildQuoteCard(DailyQuote quote) {
+  Widget _buildQuoteCard(DailyQuote quote, bool isBangla) {
     final scheme = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -181,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              quote.text,
+              quote.displayText(isBangla),
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: scheme.onSuccessContainer,

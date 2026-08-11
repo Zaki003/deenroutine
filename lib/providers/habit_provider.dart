@@ -4,6 +4,11 @@ import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
 import '../services/firestore_service.dart';
 
+/// Kinds of error [HabitProvider] can surface. Kept as a type rather than a
+/// pre-formatted English sentence so the UI layer can localize the message
+/// (providers stay `BuildContext`/`AppLocalizations`-free).
+enum HabitErrorType { syncFailed, duplicateTitle, updateFailed, deleteFailed }
+
 class HabitProvider extends ChangeNotifier {
   final FirestoreService _service = FirestoreService();
   final _uuid = const Uuid();
@@ -14,10 +19,21 @@ class HabitProvider extends ChangeNotifier {
   List<Habit> _habits = [];
   List<Habit> get habits => _habits;
 
-  String? _error;
-  String? get error => _error;
+  HabitErrorType? _errorType;
+  String? _errorDetail;
+  HabitErrorType? get errorType => _errorType;
+  String? get errorDetail => _errorDetail;
+  bool get hasError => _errorType != null;
+
   void clearError() {
-    _error = null;
+    _errorType = null;
+    _errorDetail = null;
+    notifyListeners();
+  }
+
+  void _setError(HabitErrorType type, String detail) {
+    _errorType = type;
+    _errorDetail = detail;
     notifyListeners();
   }
 
@@ -38,7 +54,8 @@ class HabitProvider extends ChangeNotifier {
     _habitsSub = _service.watchHabits(uid).listen(
       (habits) {
         _habits = habits;
-        _error = null;
+        _errorType = null;
+        _errorDetail = null;
         notifyListeners();
       },
       onError: (Object e) {
@@ -48,8 +65,7 @@ class HabitProvider extends ChangeNotifier {
         // killed the subscription with no feedback. Now it's surfaced, and
         // we retry so a transient error (e.g. brief connectivity loss)
         // recovers on its own instead of requiring an app restart.
-        _error = 'Habit sync error: $e';
-        notifyListeners();
+        _setError(HabitErrorType.syncFailed, e.toString());
 
         _habitsSub?.cancel();
         _habitsSub = null;
@@ -69,13 +85,26 @@ class HabitProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> addHabit({
+  /// Returns false without writing anything if [uid] already has a habit
+  /// with the same title (case-insensitive, ignoring surrounding whitespace).
+  /// Firestore has no unique-field constraint, so this is the only place
+  /// duplicate titles are prevented.
+  Future<bool> addHabit({
     required String uid,
     required String title,
     required HabitCategory category,
     required HabitFrequency frequency,
     List<int> selectedDays = const [],
-  }) {
+  }) async {
+    final normalizedTitle = title.trim().toLowerCase();
+    final isDuplicate = _habits.any(
+      (h) => h.uid == uid && h.title.trim().toLowerCase() == normalizedTitle,
+    );
+    if (isDuplicate) {
+      _setError(HabitErrorType.duplicateTitle, title.trim());
+      return false;
+    }
+
     final habit = Habit(
       habitId: _uuid.v4(),
       uid: uid,
@@ -84,15 +113,15 @@ class HabitProvider extends ChangeNotifier {
       frequency: frequency,
       selectedDays: selectedDays,
     );
-    return _service.addHabit(habit);
+    await _service.addHabit(habit);
+    return true;
   }
 
   Future<void> toggleComplete(Habit habit) async {
     try {
       await _service.markHabitComplete(habit, !habit.isCompletedToday);
     } catch (e) {
-      _error = 'Could not update habit: $e';
-      notifyListeners();
+      _setError(HabitErrorType.updateFailed, e.toString());
     }
   }
 
@@ -100,8 +129,7 @@ class HabitProvider extends ChangeNotifier {
     try {
       await _service.deleteHabit(habitId);
     } catch (e) {
-      _error = 'Could not delete habit: $e';
-      notifyListeners();
+      _setError(HabitErrorType.deleteFailed, e.toString());
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/app_localizations.dart';
 
 enum HabitCategory { islam, lifestyle, learn, work }
 
@@ -93,9 +94,42 @@ class Habit {
   }
 }
 
-/// Shared day-of-week labels/order used by the add-habit day picker and
-/// habit card subtitle: S M T W T F S starting on Sunday.
-const List<String> kWeekdayLetters = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-const List<String> kWeekdayShortNames = [
-  'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
-];
+extension HabitCategoryLabel on HabitCategory {
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case HabitCategory.islam:
+        return l10n.categoryIslam;
+      case HabitCategory.lifestyle:
+        return l10n.categoryLifestyle;
+      case HabitCategory.learn:
+        return l10n.categoryLearn;
+      case HabitCategory.work:
+        return l10n.categoryWork;
+    }
+  }
+}
+
+extension HabitFrequencyLabel on HabitFrequency {
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case HabitFrequency.daily:
+        return l10n.frequencyDaily;
+      case HabitFrequency.weekly:
+        return l10n.frequencyWeekly;
+      case HabitFrequency.specificDays:
+        return l10n.frequencySpecificDays;
+    }
+  }
+}
+
+/// Day-of-week short names/order used by the add-habit day picker and habit
+/// card subtitle: S M T W T F S starting on Sunday.
+List<String> weekdayShortNames(AppLocalizations l10n) => [
+      l10n.weekdaySun,
+      l10n.weekdayMon,
+      l10n.weekdayTue,
+      l10n.weekdayWed,
+      l10n.weekdayThu,
+      l10n.weekdayFri,
+      l10n.weekdaySat,
+    ];

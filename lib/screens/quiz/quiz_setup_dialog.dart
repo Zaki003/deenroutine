@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import 'quiz_screen.dart';
 
 const List<int> kQuizQuestionCountOptions = [5, 10, 15, 20];
@@ -24,6 +25,7 @@ class _QuizSetupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
@@ -34,12 +36,12 @@ class _QuizSetupDialog extends StatelessWidget {
             Icon(Icons.quiz_rounded, size: 40, color: theme.colorScheme.primary),
             const SizedBox(height: 12),
             Text(
-              'How many questions?',
+              l10n.quizQuestionCountTitle,
               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(
-              'Choose how many questions you\'d like to practice.',
+              l10n.quizQuestionCountSubtitle,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
@@ -57,7 +59,7 @@ class _QuizSetupDialog extends StatelessWidget {
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancelButton),
             ),
           ],
         ),

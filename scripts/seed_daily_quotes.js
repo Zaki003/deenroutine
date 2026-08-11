@@ -63,6 +63,11 @@ function loadQuotes() {
     if (!q.category || typeof q.category !== 'string' || !q.category.trim()) {
       errors.push(`${where}: missing "category".`);
     }
+    // Bangla translation is optional — the app falls back to English text
+    // until a translation is added — but if present it must be a string.
+    if (q.textBn !== undefined && typeof q.textBn !== 'string') {
+      errors.push(`${where}: "textBn" must be a string if present.`);
+    }
   });
 
   if (errors.length) {
@@ -203,6 +208,7 @@ async function main() {
       text: q.text,
       source: q.source,
       category: q.category,
+      textBn: q.textBn || '',
       dayIndex: q.dayIndex,
       updatedAt: FieldValue.serverTimestamp(),
     });

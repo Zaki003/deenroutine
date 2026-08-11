@@ -9,7 +9,7 @@ class AuthProvider extends ChangeNotifier {
   User? _firebaseUser;
   AppUser? _appUser;
   bool _loading = false;
-  String? _error;
+  String? _errorCode;
 
   AuthProvider() {
     _authService.authStateChanges.listen(_onAuthChanged);
@@ -18,7 +18,10 @@ class AuthProvider extends ChangeNotifier {
   User? get firebaseUser => _firebaseUser;
   AppUser? get appUser => _appUser;
   bool get isLoading => _loading;
-  String? get error => _error;
+
+  /// A [FirebaseAuthException.code] (e.g. `'wrong-password'`), not a
+  /// display string — map it through `authErrorMessage` before showing it.
+  String? get errorCode => _errorCode;
   bool get isLoggedIn => _firebaseUser != null;
 
   Future<void> _onAuthChanged(User? user) async {
@@ -39,10 +42,10 @@ class AuthProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
-      _error = null;
+      _errorCode = null;
       return true;
     } on FirebaseAuthException catch (e) {
-      _error = e.message;
+      _errorCode = e.code;
       return false;
     } finally {
       _setLoading(false);
@@ -53,10 +56,10 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(true);
     try {
       await _authService.login(email: email, password: password);
-      _error = null;
+      _errorCode = null;
       return true;
     } on FirebaseAuthException catch (e) {
-      _error = e.message;
+      _errorCode = e.code;
       return false;
     } finally {
       _setLoading(false);

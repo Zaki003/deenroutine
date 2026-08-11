@@ -1,0 +1,166 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "DeenRoutine",
+
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "emailValidatorError": "Enter a valid email",
+  "passwordValidatorError": "Min 6 characters",
+  "requiredValidatorError": "Required",
+  "loginButton": "Login",
+  "registerPrompt": "Don't have an account? Register",
+  "createAccountTitle": "Create Account",
+  "fullNameLabel": "Full name",
+  "registerButton": "Register",
+
+  "barakahCircleTitle": "Barakah Circle",
+  "habitsDoneToday": "{done} of {total} habits done today",
+  "@habitsDoneToday": {
+    "placeholders": { "done": {}, "total": {} }
+  },
+  "todaysHabitsTitle": "Today's Habits",
+  "noHabitsYet": "No habits yet. Tap + to add your first one.",
+  "prayerTimesUnavailable": "Prayer times unavailable: {error}",
+  "@prayerTimesUnavailable": {
+    "placeholders": { "error": {} }
+  },
+
+  "prayerErrorLocationDisabled": "Location services are disabled.",
+  "prayerErrorPermissionDenied": "Location permission denied.",
+  "prayerErrorPermissionDeniedForever": "Location permission permanently denied.",
+  "prayerErrorFetchFailed": "Failed to fetch prayer times ({statusCode})",
+  "@prayerErrorFetchFailed": {
+    "placeholders": { "statusCode": {} }
+  },
+  "prayerErrorUnknown": "Something went wrong while loading prayer times.",
+
+  "prayerFajr": "Fajr",
+  "prayerDhuhr": "Dhuhr",
+  "prayerAsr": "Asr",
+  "prayerMaghrib": "Maghrib",
+  "prayerIsha": "Isha",
+
+  "newHabitTitle": "New Habit",
+  "habitTitleLabel": "Habit title",
+  "habitTitleValidatorError": "Please enter a habit title",
+  "categoryLabel": "Category",
+  "frequencyLabel": "Frequency",
+  "repeatOnLabel": "Repeat on",
+  "selectAtLeastOneDay": "Select at least one day",
+  "dailyReminderTitle": "Daily reminder",
+  "reminderOffSubtitle": "Off — tap to set a time",
+  "reminderAtTime": "At {time}",
+  "@reminderAtTime": {
+    "placeholders": { "time": {} }
+  },
+  "saveHabitButton": "Save Habit",
+
+  "categoryIslam": "Islam",
+  "categoryLifestyle": "Lifestyle",
+  "categoryLearn": "Learn",
+  "categoryWork": "Work",
+  "frequencyDaily": "Daily",
+  "frequencyWeekly": "Weekly",
+  "frequencySpecificDays": "Specific days",
+
+  "weekdaySun": "Sun",
+  "weekdayMon": "Mon",
+  "weekdayTue": "Tue",
+  "weekdayWed": "Wed",
+  "weekdayThu": "Thu",
+  "weekdayFri": "Fri",
+  "weekdaySat": "Sat",
+
+  "habitStreakDays": "🔥 {streak} day streak",
+  "@habitStreakDays": {
+    "placeholders": { "streak": {} }
+  },
+
+  "deleteHabitTitle": "Delete habit?",
+  "deleteHabitContent": "This will permanently delete \"{title}\" and its streak history.",
+  "@deleteHabitContent": {
+    "placeholders": { "title": {} }
+  },
+  "cancelButton": "Cancel",
+  "deleteButton": "Delete",
+
+  "habitSyncError": "Habit sync error: {error}",
+  "@habitSyncError": {
+    "placeholders": { "error": {} }
+  },
+  "habitDuplicateTitle": "You already have a habit named \"{title}\".",
+  "@habitDuplicateTitle": {
+    "placeholders": { "title": {} }
+  },
+  "habitUpdateFailed": "Could not update habit: {error}",
+  "@habitUpdateFailed": {
+    "placeholders": { "error": {} }
+  },
+  "habitDeleteFailed": "Could not delete habit: {error}",
+  "@habitDeleteFailed": {
+    "placeholders": { "error": {} }
+  },
+  "habitSaveFailedGeneric": "Could not save habit.",
+
+  "reminderNotificationTitle": "DeenRoutine reminder",
+  "reminderNotificationBody": "Time for: {title}",
+  "@reminderNotificationBody": {
+    "placeholders": { "title": {} }
+  },
+
+  "quizQuestionCountTitle": "How many questions?",
+  "quizQuestionCountSubtitle": "Choose how many questions you'd like to practice.",
+  "quizAppBarTitle": "Islamic Knowledge Quiz",
+  "quizNoQuestions": "No quiz questions available yet.",
+  "quizQuestionProgress": "Question {current} of {total}",
+  "@quizQuestionProgress": {
+    "placeholders": { "current": {}, "total": {} }
+  },
+  "quizCorrect": "Correct!",
+  "quizCorrectAnswer": "Correct answer: {answer}",
+  "@quizCorrectAnswer": {
+    "placeholders": { "answer": {} }
+  },
+  "quizCheckAnswer": "Check Answer",
+  "quizNextQuestion": "Next Question",
+  "quizSeeResults": "See Results",
+
+  "quizResultsAppBarTitle": "Quiz Results",
+  "quizOutcomeExcellentTitle": "Excellent!",
+  "quizOutcomeExcellentMessage": "MashaAllah, your knowledge really shines. Keep it up!",
+  "quizOutcomeWellDoneTitle": "Well Done!",
+  "quizOutcomeWellDoneMessage": "Good effort! A little more practice and you'll master it.",
+  "quizOutcomeKeepLearningTitle": "Keep Learning",
+  "quizOutcomeKeepLearningMessage": "Every attempt is a step forward. Review and try again!",
+  "quizScoreOfTotal": "{score} / {total}",
+  "@quizScoreOfTotal": {
+    "placeholders": { "score": {}, "total": {} }
+  },
+  "quizBestScore": "Your best score: {score}/{total} ({pct}%)",
+  "@quizBestScore": {
+    "placeholders": { "score": {}, "total": {}, "pct": {} }
+  },
+  "quizTryAgain": "Try Again",
+  "quizBackToHome": "Back to Home",
+
+  "profileAppBarTitle": "Profile",
+  "darkModeTitle": "Dark mode",
+  "darkModeFollowingSystem": "Following system setting",
+  "onLabel": "On",
+  "offLabel": "Off",
+  "useSystemTheme": "Use system theme",
+  "prayerMethodTitle": "Prayer calculation method",
+  "prayerMethodSubtitle": "MWL (default)",
+  "logoutButton": "Log out",
+  "languageTitle": "Language",
+  "languageEnglish": "English",
+  "languageBangla": "বাংলা",
+
+  "authErrorWrongPassword": "Incorrect password. Please try again.",
+  "authErrorUserNotFound": "No account found with this email.",
+  "authErrorInvalidEmail": "That email address looks invalid.",
+  "authErrorEmailInUse": "An account already exists with this email.",
+  "authErrorWeakPassword": "Password is too weak — use at least 6 characters.",
+  "authErrorGeneric": "Something went wrong. Please try again."
+}

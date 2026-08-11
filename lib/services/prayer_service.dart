@@ -4,6 +4,23 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Kinds of error [PrayerService] can raise. Kept as a type (rather than a
+/// pre-formatted English `Exception` message) so the UI layer can localize
+/// it — services/providers stay `BuildContext`/`AppLocalizations`-free.
+enum PrayerErrorType {
+  locationServicesDisabled,
+  permissionDenied,
+  permissionDeniedForever,
+  fetchFailed,
+  unknown,
+}
+
+class PrayerException implements Exception {
+  final PrayerErrorType type;
+  final String? detail;
+  PrayerException(this.type, [this.detail]);
+}
+
 /// FR-07: Prayer time retrieval via Aladhan REST API, with Firestore
 /// caching to support offline access (PrayerCache collection).
 class PrayerService {
@@ -12,18 +29,18 @@ class PrayerService {
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
+      throw PrayerException(PrayerErrorType.locationServicesDisabled);
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Location permission denied.');
+        throw PrayerException(PrayerErrorType.permissionDenied);
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      throw Exception('Location permission permanently denied.');
+      throw PrayerException(PrayerErrorType.permissionDeniedForever);
     }
 
     try {
@@ -79,7 +96,17 @@ class PrayerService {
     // 1. Try cache first (offline-friendly, NFR-REL-01 support).
     final cached = await _db.collection('PrayerCache').doc(cacheKey).get();
     if (cached.exists) {
-      return Map<String, String>.from(cached.data()!['timings']);
+      // Firestore doesn't preserve map field key order, so the cached
+      // timings must be rebuilt in canonical order (matching the live-fetch
+      // path below) for PrayerProvider's rotation logic to work correctly.
+      final raw = Map<String, dynamic>.from(cached.data()!['timings']);
+      return <String, String>{
+        'Fajr': raw['Fajr'],
+        'Dhuhr': raw['Dhuhr'],
+        'Asr': raw['Asr'],
+        'Maghrib': raw['Maghrib'],
+        'Isha': raw['Isha'],
+      };
     }
 
     // 2. Fetch live from Aladhan.
@@ -90,7 +117,7 @@ class PrayerService {
     final response = await http.get(url);
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to fetch prayer times (${response.statusCode})');
+      throw PrayerException(PrayerErrorType.fetchFailed, '${response.statusCode}');
     }
 
     final data = jsonDecode(response.body);

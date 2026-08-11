@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/auth_error_messages.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -33,32 +36,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icon(Icons.mosque,
                     size: 64, color: Theme.of(context).colorScheme.success),
                 const SizedBox(height: 12),
-                const Text(
-                  'DeenRoutine',
+                Text(
+                  l10n.appTitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
                   controller: _emailCtrl,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(labelText: l10n.emailLabel),
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) =>
-                      (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
+                      (v == null || !v.contains('@')) ? l10n.emailValidatorError : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _passwordCtrl,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(labelText: l10n.passwordLabel),
                   obscureText: true,
                   validator: (v) =>
-                      (v == null || v.length < 6) ? 'Min 6 characters' : null,
+                      (v == null || v.length < 6) ? l10n.passwordValidatorError : null,
                 ),
                 const SizedBox(height: 24),
-                if (auth.error != null)
+                if (auth.errorCode != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(auth.error!,
+                    child: Text(authErrorMessage(l10n, auth.errorCode),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.error)),
                   ),
@@ -75,14 +78,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 18,
                           width: 18,
                           child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('Login'),
+                      : Text(l10n.loginButton),
                 ),
                 TextButton(
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const RegisterScreen()),
                   ),
-                  child: const Text("Don't have an account? Register"),
+                  child: Text(l10n.registerPrompt),
                 ),
               ],
             ),

@@ -72,6 +72,19 @@ function loadQuestions() {
           `      options: ${JSON.stringify(q.options)}`
       );
     }
+    // Bangla translations are optional — the app falls back to the English
+    // question/options until translations are added — but if given, options
+    // must translate 1:1 with "options" so the app can match them by index.
+    if (q.questionBn !== undefined && (typeof q.questionBn !== 'string' || !q.questionBn.trim())) {
+      errors.push(`${where}: "questionBn" must be a non-empty string if present.`);
+    }
+    if (q.optionsBn !== undefined) {
+      if (!Array.isArray(q.optionsBn) || q.optionsBn.length !== q.options.length) {
+        errors.push(`${where}: "optionsBn" must have exactly as many entries as "options".`);
+      } else if (q.optionsBn.some((o) => typeof o !== 'string' || !o.trim())) {
+        errors.push(`${where}: every "optionsBn" entry must be a non-empty string.`);
+      }
+    }
   });
 
   if (errors.length) {
@@ -113,6 +126,18 @@ function shuffled(items) {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+/// Shuffles `options` and applies the same permutation to `optionsBn`, so a
+/// Bangla translation stays aligned with its English option by index (the
+/// app matches `correctAnswer` against `options`, then reads the same index
+/// out of `optionsBn` for display).
+function shuffledOptionsPaired(options, optionsBn) {
+  const order = shuffled(options.map((_, i) => i));
+  return {
+    options: order.map((i) => options[i]),
+    optionsBn: optionsBn && optionsBn.length === options.length ? order.map((i) => optionsBn[i]) : [],
+  };
 }
 
 /**
@@ -171,14 +196,18 @@ async function main() {
   }
 
   await commitInBatches(db, withRandomKeys(questions), (batch, q) => {
+    // Stored shuffled so the answer isn't sitting in the same slot for
+    // every question. The app reshuffles again on each attempt. optionsBn
+    // is shuffled the same way so it stays aligned by index with options.
+    const { options, optionsBn } = shuffledOptionsPaired(q.options, q.optionsBn);
     batch.set(db.collection(COLLECTION).doc(q.id), {
       questionText: q.question,
-      // Stored shuffled so the answer isn't sitting in the same slot for
-      // every question. The app reshuffles again on each attempt.
-      options: shuffled(q.options),
+      options,
       correctAnswer: q.answer,
       category: q.category ?? 'General',
       random: q.random,
+      questionTextBn: q.questionBn || '',
+      optionsBn,
       updatedAt: FieldValue.serverTimestamp(),
     });
   });

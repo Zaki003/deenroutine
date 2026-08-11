@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/firestore_service.dart';
@@ -17,39 +18,41 @@ class QuizResultScreen extends StatelessWidget {
 
   ({IconData icon, Color color, String title, String message}) _outcome(
     ColorScheme scheme,
+    AppLocalizations l10n,
   ) {
     final pct = _percentage;
     if (pct >= 0.8) {
       return (
         icon: Icons.emoji_events_rounded,
         color: scheme.accentAmber,
-        title: 'Excellent!',
-        message: 'MashaAllah, your knowledge really shines. Keep it up!',
+        title: l10n.quizOutcomeExcellentTitle,
+        message: l10n.quizOutcomeExcellentMessage,
       );
     } else if (pct >= 0.5) {
       return (
         icon: Icons.thumb_up_rounded,
         color: scheme.success,
-        title: 'Well Done!',
-        message: 'Good effort! A little more practice and you\'ll master it.',
+        title: l10n.quizOutcomeWellDoneTitle,
+        message: l10n.quizOutcomeWellDoneMessage,
       );
     }
     return (
       icon: Icons.menu_book_rounded,
       color: scheme.accentBrown,
-      title: 'Keep Learning',
-      message: 'Every attempt is a step forward. Review and try again!',
+      title: l10n.quizOutcomeKeepLearningTitle,
+      message: l10n.quizOutcomeKeepLearningMessage,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final outcome = _outcome(theme.colorScheme);
+    final l10n = AppLocalizations.of(context)!;
+    final outcome = _outcome(theme.colorScheme, l10n);
     final uid = context.read<AuthProvider>().firebaseUser?.uid;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Quiz Results')),
+      appBar: AppBar(title: Text(l10n.quizResultsAppBarTitle)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -117,7 +120,7 @@ class QuizResultScreen extends StatelessWidget {
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '$score / $total',
+                            l10n.quizScoreOfTotal(score, total),
                             style: theme.textTheme.bodyMedium
                                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                           ),
@@ -138,7 +141,7 @@ class QuizResultScreen extends StatelessWidget {
                     }
                     final bestPct = (best.score / best.totalQuestions * 100).round();
                     return Text(
-                      'Your best score: ${best.score}/${best.totalQuestions} ($bestPct%)',
+                      l10n.quizBestScore(best.score, best.totalQuestions, bestPct),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                         fontWeight: FontWeight.w600,
@@ -152,7 +155,7 @@ class QuizResultScreen extends StatelessWidget {
                 width: double.infinity,
                 child: FilledButton.icon(
                   icon: const Icon(Icons.refresh_rounded),
-                  label: const Text('Try Again'),
+                  label: Text(l10n.quizTryAgain),
                   onPressed: () => Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (_) => QuizScreen(questionCount: total),
@@ -165,7 +168,7 @@ class QuizResultScreen extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.home_rounded),
-                  label: const Text('Back to Home'),
+                  label: Text(l10n.quizBackToHome),
                   onPressed: () =>
                       Navigator.of(context).popUntil((route) => route.isFirst),
                 ),

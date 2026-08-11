@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.6
 
   # Firebase
@@ -31,7 +33,7 @@ dependencies:
 
   # Utilities
   uuid: ^4.5.1
-  intl: ^0.20.3
+  intl: ^0.20.2
   shared_preferences: ^2.3.2
 
 dev_dependencies:
@@ -42,3 +44,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
