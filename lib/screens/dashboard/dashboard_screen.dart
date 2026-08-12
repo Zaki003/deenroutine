@@ -136,6 +136,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 habit: habit,
                 onToggle: () => habitProvider.toggleComplete(habit),
                 onDelete: () => habitProvider.deleteHabit(habit.habitId),
+                onEdit: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AddHabitScreen(editingHabit: habit),
+                  ),
+                ),
               ),
           ],
         ),

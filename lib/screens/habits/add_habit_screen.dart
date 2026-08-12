@@ -8,7 +8,11 @@ import '../../services/notification_service.dart';
 import '../../utils/habit_error_messages.dart';
 
 class AddHabitScreen extends StatefulWidget {
-  const AddHabitScreen({super.key});
+  /// When set, the form opens pre-filled with this habit's values and saves
+  /// via an update instead of creating a new habit.
+  final Habit? editingHabit;
+
+  const AddHabitScreen({super.key, this.editingHabit});
 
   @override
   State<AddHabitScreen> createState() => _AddHabitScreenState();
@@ -26,6 +30,24 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   /// S M T W T F S order (0=Sun ... 6=Sat) from [weekdayShortNames].
   final Set<int> _selectedDays = {};
   String? _dayPickerError;
+
+  bool get _isEditing => widget.editingHabit != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final habit = widget.editingHabit;
+    if (habit != null) {
+      _titleCtrl.text = habit.title;
+      _category = habit.category;
+      _frequency = habit.frequency;
+      _selectedDays.addAll(habit.selectedDays);
+      if (habit.reminderHour != null && habit.reminderMinute != null) {
+        _reminderTime =
+            TimeOfDay(hour: habit.reminderHour!, minute: habit.reminderMinute!);
+      }
+    }
+  }
 
   Future<void> _pickReminderTime() async {
     final picked = await showTimePicker(
@@ -100,7 +122,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.newHabitTitle)),
+      appBar: AppBar(title: Text(_isEditing ? l10n.editHabitTitle : l10n.newHabitTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -179,16 +201,29 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                         setState(() => _saving = true);
                         final title = _titleCtrl.text.trim();
                         final habitProvider = context.read<HabitProvider>();
+                        final selectedDays = _selectedDays.toList()..sort();
 
-                        final added = await habitProvider.addHabit(
-                          uid: uid,
-                          title: title,
-                          category: _category,
-                          frequency: _frequency,
-                          selectedDays: _selectedDays.toList()..sort(),
-                        );
+                        final saved = _isEditing
+                            ? await habitProvider.updateHabit(
+                                original: widget.editingHabit!,
+                                title: title,
+                                category: _category,
+                                frequency: _frequency,
+                                selectedDays: selectedDays,
+                                reminderHour: _reminderTime?.hour,
+                                reminderMinute: _reminderTime?.minute,
+                              )
+                            : await habitProvider.addHabit(
+                                uid: uid,
+                                title: title,
+                                category: _category,
+                                frequency: _frequency,
+                                selectedDays: selectedDays,
+                                reminderHour: _reminderTime?.hour,
+                                reminderMinute: _reminderTime?.minute,
+                              );
 
-                        if (!added) {
+                        if (!saved) {
                           if (!mounted) return;
                           setState(() => _saving = false);
                           final errorType = habitProvider.errorType;
@@ -206,14 +241,32 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                           return;
                         }
 
-                        if (_reminderTime != null) {
-                          await NotificationService().scheduleDailyReminder(
-                            id: title.hashCode,
-                            title: l10n.reminderNotificationTitle,
-                            body: l10n.reminderNotificationBody(title),
-                            hour: _reminderTime!.hour,
-                            minute: _reminderTime!.minute,
-                          );
+                        // Notification scheduling is best-effort: the habit
+                        // itself is already saved at this point, so a
+                        // failure here (e.g. missing exact-alarm permission
+                        // on Android 12+) must not trap the user on this
+                        // screen with a spinner that never resolves.
+                        try {
+                          // The old title's notification id must be
+                          // cancelled separately since a rename changes the
+                          // id (it's derived from the title's hashCode).
+                          if (_isEditing) {
+                            await NotificationService().cancelReminder(
+                                widget.editingHabit!.title.hashCode);
+                          }
+                          if (_reminderTime != null) {
+                            await NotificationService().scheduleDailyReminder(
+                              id: title.hashCode,
+                              title: l10n.reminderNotificationTitle,
+                              body: l10n.reminderNotificationBody(title),
+                              hour: _reminderTime!.hour,
+                              minute: _reminderTime!.minute,
+                            );
+                          }
+                        } catch (_) {
+                          // Ignored: the habit saved successfully, which is
+                          // what the user is waiting on. The reminder just
+                          // won't fire until they reopen and re-save it.
                         }
 
                         if (mounted) Navigator.pop(context);
@@ -224,7 +277,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(l10n.saveHabitButton),
+                    : Text(_isEditing ? l10n.saveChangesButton : l10n.saveHabitButton),
               ),
             ],
           ),

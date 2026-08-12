@@ -9,12 +9,14 @@ class HabitCard extends StatelessWidget {
   final Habit habit;
   final VoidCallback onToggle;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   const HabitCard({
     super.key,
     required this.habit,
     required this.onToggle,
     required this.onDelete,
+    required this.onEdit,
   });
 
   Color _categoryColor(ColorScheme scheme) {
@@ -71,6 +73,7 @@ class HabitCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: ListTile(
+        onTap: onEdit,
         leading: CircleAvatar(
           backgroundColor: categoryColor.withValues(alpha: 0.15),
           child: Icon(Icons.circle, size: 12, color: categoryColor),

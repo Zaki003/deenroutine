@@ -33,6 +33,7 @@
   "prayerIsha": "এশা",
 
   "newHabitTitle": "নতুন অভ্যাস",
+  "editHabitTitle": "অভ্যাস সম্পাদনা করুন",
   "habitTitleLabel": "অভ্যাসের নাম",
   "habitTitleValidatorError": "অভ্যাসের নাম লিখুন",
   "categoryLabel": "বিভাগ",
@@ -43,6 +44,7 @@
   "reminderOffSubtitle": "বন্ধ — সময় নির্ধারণ করতে চাপুন",
   "reminderAtTime": "{time} টায়",
   "saveHabitButton": "অভ্যাস সংরক্ষণ করুন",
+  "saveChangesButton": "পরিবর্তন সংরক্ষণ করুন",
 
   "categoryIslam": "ইসলাম",
   "categoryLifestyle": "জীবনযাপন",

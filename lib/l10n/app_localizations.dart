@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// **'New Habit'**
   String get newHabitTitle;
 
+  /// No description provided for @editHabitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Habit'**
+  String get editHabitTitle;
+
   /// No description provided for @habitTitleLabel.
   ///
   /// In en, this message translates to:
@@ -319,6 +325,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Habit'**
   String get saveHabitButton;
+
+  /// No description provided for @saveChangesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChangesButton;
 
   /// No description provided for @categoryIslam.
   ///

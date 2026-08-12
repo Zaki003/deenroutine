@@ -24,6 +24,11 @@ class Habit {
   /// 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat.
   final List<int> selectedDays;
 
+  /// Time of day the daily reminder notification fires, or null if this
+  /// habit has no reminder set.
+  final int? reminderHour;
+  final int? reminderMinute;
+
   Habit({
     required this.habitId,
     required this.uid,
@@ -33,6 +38,8 @@ class Habit {
     this.completed = false,
     this.lastCompletedDate,
     this.selectedDays = const [],
+    this.reminderHour,
+    this.reminderMinute,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -55,6 +62,8 @@ class Habit {
       'lastCompletedDate':
           lastCompletedDate != null ? Timestamp.fromDate(lastCompletedDate!) : null,
       'selectedDays': selectedDays,
+      'reminderHour': reminderHour,
+      'reminderMinute': reminderMinute,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
@@ -75,6 +84,8 @@ class Habit {
       completed: map['completed'] ?? false,
       lastCompletedDate: (map['lastCompletedDate'] as Timestamp?)?.toDate(),
       selectedDays: List<int>.from(map['selectedDays'] ?? const []),
+      reminderHour: map['reminderHour'] as int?,
+      reminderMinute: map['reminderMinute'] as int?,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }

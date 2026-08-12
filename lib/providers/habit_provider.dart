@@ -95,6 +95,8 @@ class HabitProvider extends ChangeNotifier {
     required HabitCategory category,
     required HabitFrequency frequency,
     List<int> selectedDays = const [],
+    int? reminderHour,
+    int? reminderMinute,
   }) async {
     final normalizedTitle = title.trim().toLowerCase();
     final isDuplicate = _habits.any(
@@ -112,9 +114,58 @@ class HabitProvider extends ChangeNotifier {
       category: category,
       frequency: frequency,
       selectedDays: selectedDays,
+      reminderHour: reminderHour,
+      reminderMinute: reminderMinute,
     );
     await _service.addHabit(habit);
     return true;
+  }
+
+  /// Saves edits to an existing habit, keeping its id, completion state, and
+  /// creation date. [original] must be the habit as currently loaded, so
+  /// unrelated in-flight state (e.g. today's completion) isn't clobbered.
+  Future<bool> updateHabit({
+    required Habit original,
+    required String title,
+    required HabitCategory category,
+    required HabitFrequency frequency,
+    List<int> selectedDays = const [],
+    int? reminderHour,
+    int? reminderMinute,
+  }) async {
+    final normalizedTitle = title.trim().toLowerCase();
+    final isDuplicate = _habits.any(
+      (h) =>
+          h.uid == original.uid &&
+          h.habitId != original.habitId &&
+          h.title.trim().toLowerCase() == normalizedTitle,
+    );
+    if (isDuplicate) {
+      _setError(HabitErrorType.duplicateTitle, title.trim());
+      return false;
+    }
+
+    final updated = Habit(
+      habitId: original.habitId,
+      uid: original.uid,
+      title: title,
+      category: category,
+      frequency: frequency,
+      completed: original.completed,
+      lastCompletedDate: original.lastCompletedDate,
+      selectedDays: selectedDays,
+      reminderHour: reminderHour,
+      reminderMinute: reminderMinute,
+      createdAt: original.createdAt,
+    );
+
+    try {
+      await _service.updateHabit(updated);
+      return true;
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+      return false;
+    }
   }
 
   Future<void> toggleComplete(Habit habit) async {

@@ -98,6 +98,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newHabitTitle => 'New Habit';
 
   @override
+  String get editHabitTitle => 'Edit Habit';
+
+  @override
   String get habitTitleLabel => 'Habit title';
 
   @override
@@ -128,6 +131,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveHabitButton => 'Save Habit';
+
+  @override
+  String get saveChangesButton => 'Save Changes';
 
   @override
   String get categoryIslam => 'Islam';
