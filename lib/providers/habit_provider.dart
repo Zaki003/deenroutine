@@ -188,4 +188,10 @@ class HabitProvider extends ChangeNotifier {
     final logs = await _service.watchHabitLogs(habitId).first;
     return _service.calculateStreak(logs);
   }
+
+  /// This week's completion, one bool per day (Mon..Sun).
+  Future<List<bool>> weekFor(String habitId) async {
+    final logs = await _service.watchHabitLogs(habitId).first;
+    return _service.weekCompletion(logs);
+  }
 }

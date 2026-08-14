@@ -95,6 +95,20 @@ class FirestoreService {
     return streak;
   }
 
+  /// Completion for the current Mon–Sun week, one bool per day in that
+  /// order. Used by the Habits screen's week-picker; days after today are
+  /// simply not-yet-done rather than distinguished as "future".
+  List<bool> weekCompletion(List<HabitLog> logs) {
+    final byDate = {
+      for (final l in logs) DateTime(l.date.year, l.date.month, l.date.day): l.status,
+    };
+    final today = DateTime.now();
+    final todayMidnight = DateTime(today.year, today.month, today.day);
+    // DateTime.weekday is 1=Mon..7=Sun.
+    final monday = todayMidnight.subtract(Duration(days: todayMidnight.weekday - 1));
+    return List.generate(7, (i) => byDate[monday.add(Duration(days: i))] == true);
+  }
+
   // ---------------- Daily motivation (FR-09) ----------------
 
   /// The quote of the day, identical for every user.

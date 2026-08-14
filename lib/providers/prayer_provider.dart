@@ -31,6 +31,22 @@ class PrayerProvider extends ChangeNotifier {
   String? get nextPrayerName =>
       orderedTimings.isEmpty ? null : orderedTimings.first.key;
 
+  /// Raw time-of-day string (e.g. `'4:37 PM'`) for the next prayer, or null
+  /// if timings aren't loaded yet.
+  String? get nextPrayerTime =>
+      orderedTimings.isEmpty ? null : orderedTimings.first.value;
+
+  /// Time remaining until the next prayer. If every prayer today has
+  /// already passed, this is measured against Fajr tomorrow, so it's always
+  /// non-negative once timings are loaded.
+  Duration? get timeUntilNextPrayer {
+    if (orderedTimings.isEmpty) return null;
+    final now = DateTime.now();
+    var target = _parseTimeToday(orderedTimings.first.value);
+    if (target.isBefore(now)) target = target.add(const Duration(days: 1));
+    return target.difference(now);
+  }
+
   int _nextPrayerIndex(List<MapEntry<String, String>> entries) {
     final now = DateTime.now();
     for (var i = 0; i < entries.length; i++) {

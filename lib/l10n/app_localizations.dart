@@ -194,6 +194,121 @@ abstract class AppLocalizations {
   /// **'Prayer times unavailable: {error}'**
   String prayerTimesUnavailable(Object error);
 
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'Habits'**
+  String get navHabits;
+
+  /// No description provided for @navPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer'**
+  String get navPrayer;
+
+  /// No description provided for @navQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get navQuiz;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @assalamuAlaikumGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'ASSALAMU ALAIKUM'**
+  String get assalamuAlaikumGreeting;
+
+  /// No description provided for @todayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get todayLabel;
+
+  /// No description provided for @nextPrayerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NEXT PRAYER'**
+  String get nextPrayerLabel;
+
+  /// No description provided for @barakahSummaryRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} habits complete today — {remaining} to go before {prayer}.'**
+  String barakahSummaryRemaining(
+      Object done, Object total, Object remaining, Object prayer);
+
+  /// No description provided for @barakahSummaryComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'All {total} habits complete today. Well done!'**
+  String barakahSummaryComplete(Object total);
+
+  /// No description provided for @prayerScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Times'**
+  String get prayerScreenTitle;
+
+  /// No description provided for @prayerMethodFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Muslim World League'**
+  String get prayerMethodFullName;
+
+  /// No description provided for @prayerRemainingLong.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} remaining'**
+  String prayerRemainingLong(Object time);
+
+  /// No description provided for @prayerRemainingShort.
+  ///
+  /// In en, this message translates to:
+  /// **'in {time}'**
+  String prayerRemainingShort(Object time);
+
+  /// No description provided for @quizTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get quizTabTitle;
+
+  /// No description provided for @quizChooseLengthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your length'**
+  String get quizChooseLengthLabel;
+
+  /// No description provided for @quizStartButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Quiz'**
+  String get quizStartButton;
+
+  /// No description provided for @quizNoAttemptsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Take your first quiz to set a personal best.'**
+  String get quizNoAttemptsYet;
+
+  /// No description provided for @quizMinutesEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'~{minutes} min'**
+  String quizMinutesEstimate(Object minutes);
+
   /// No description provided for @prayerErrorLocationDisabled.
   ///
   /// In en, this message translates to:
@@ -553,6 +668,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quiz Results'**
   String get quizResultsAppBarTitle;
+
+  /// No description provided for @quizResultQuestionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {number}'**
+  String quizResultQuestionLabel(Object number);
 
   /// No description provided for @quizOutcomeExcellentTitle.
   ///

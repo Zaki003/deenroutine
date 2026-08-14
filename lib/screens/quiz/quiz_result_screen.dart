@@ -11,8 +11,14 @@ import 'quiz_screen.dart';
 class QuizResultScreen extends StatelessWidget {
   final int score;
   final int total;
+  final List<bool> answerResults;
 
-  const QuizResultScreen({super.key, required this.score, required this.total});
+  const QuizResultScreen({
+    super.key,
+    required this.score,
+    required this.total,
+    this.answerResults = const [],
+  });
 
   double get _percentage => total == 0 ? 0 : score / total;
 
@@ -130,6 +136,22 @@ class QuizResultScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              if (answerResults.isNotEmpty) ...[
+                const SizedBox(height: 28),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var i = 0; i < answerResults.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: _StaggerIn(
+                          index: i,
+                          child: _QuestionResultRow(index: i, correct: answerResults[i]),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
               if (uid != null) ...[
                 const SizedBox(height: 16),
                 FutureBuilder<QuizResult?>(
@@ -176,6 +198,87 @@ class QuizResultScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// One row of the per-question breakdown: correct/wrong mark + question
+/// number. Wrapped in [_StaggerIn] by the caller for the staggered reveal.
+class _QuestionResultRow extends StatelessWidget {
+  final int index;
+  final bool correct;
+
+  const _QuestionResultRow({required this.index, required this.correct});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final color = correct ? theme.colorScheme.success : theme.colorScheme.error;
+    final background = correct ? theme.colorScheme.successContainer : theme.colorScheme.errorSurface;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(correct ? Icons.check_circle_rounded : Icons.cancel_rounded, size: 18, color: color),
+          const SizedBox(width: 10),
+          Text(
+            l10n.quizResultQuestionLabel(index + 1),
+            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Delays [child]'s entrance by `index`-scaled steps so a list of rows
+/// reveals one after another instead of all popping in at once.
+class _StaggerIn extends StatefulWidget {
+  final int index;
+  final Widget child;
+
+  const _StaggerIn({required this.index, required this.child});
+
+  @override
+  State<_StaggerIn> createState() => _StaggerInState();
+}
+
+class _StaggerInState extends State<_StaggerIn> {
+  bool _visible = false;
+  bool _scheduled = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_scheduled) return;
+    _scheduled = true;
+    if (MediaQuery.of(context).disableAnimations) {
+      _visible = true;
+      return;
+    }
+    Future.delayed(Duration(milliseconds: 550 + widget.index * 90), () {
+      if (mounted) setState(() => _visible = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSlide(
+      offset: _visible ? Offset.zero : const Offset(0.06, 0),
+      duration: const Duration(milliseconds: 420),
+      curve: Curves.easeOutCubic,
+      child: AnimatedOpacity(
+        opacity: _visible ? 1 : 0,
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeOut,
+        child: widget.child,
       ),
     );
   }

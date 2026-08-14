@@ -61,6 +61,74 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get navHome => 'হোম';
+
+  @override
+  String get navHabits => 'অভ্যাস';
+
+  @override
+  String get navPrayer => 'নামাজ';
+
+  @override
+  String get navQuiz => 'কুইজ';
+
+  @override
+  String get navProfile => 'প্রোফাইল';
+
+  @override
+  String get assalamuAlaikumGreeting => 'আসসালামু আলাইকুম';
+
+  @override
+  String get todayLabel => 'আজ';
+
+  @override
+  String get nextPrayerLabel => 'পরবর্তী নামাজ';
+
+  @override
+  String barakahSummaryRemaining(
+      Object done, Object total, Object remaining, Object prayer) {
+    return '$total টির মধ্যে $done টি অভ্যাস আজ সম্পন্ন — $prayer-এর আগে আরও $remaining টি বাকি।';
+  }
+
+  @override
+  String barakahSummaryComplete(Object total) {
+    return 'আজকের সব $total টি অভ্যাস সম্পন্ন হয়েছে। চমৎকার!';
+  }
+
+  @override
+  String get prayerScreenTitle => 'নামাজের সময়';
+
+  @override
+  String get prayerMethodFullName => 'মুসলিম ওয়ার্ল্ড লীগ';
+
+  @override
+  String prayerRemainingLong(Object time) {
+    return '$time বাকি';
+  }
+
+  @override
+  String prayerRemainingShort(Object time) {
+    return '$time পরে';
+  }
+
+  @override
+  String get quizTabTitle => 'কুইজ';
+
+  @override
+  String get quizChooseLengthLabel => 'দৈর্ঘ্য বেছে নিন';
+
+  @override
+  String get quizStartButton => 'কুইজ শুরু করুন';
+
+  @override
+  String get quizNoAttemptsYet => 'ব্যক্তিগত সেরা রেকর্ড করতে প্রথম কুইজ দিন।';
+
+  @override
+  String quizMinutesEstimate(Object minutes) {
+    return '~$minutes মিনিট';
+  }
+
+  @override
   String get prayerErrorLocationDisabled => 'লোকেশন সার্ভিস বন্ধ আছে।';
 
   @override
@@ -264,6 +332,11 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get quizResultsAppBarTitle => 'কুইজের ফলাফল';
+
+  @override
+  String quizResultQuestionLabel(Object number) {
+    return 'প্রশ্ন $number';
+  }
 
   @override
   String get quizOutcomeExcellentTitle => 'চমৎকার!';

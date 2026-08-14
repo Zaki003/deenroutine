@@ -1,21 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../theme/deen_colors.dart';
 
 const Color kBrandGreen = Color(0xFF2E7D32);
 
 class AppTheme {
-  static ThemeData get light => ThemeData(
-        colorSchemeSeed: kBrandGreen,
-        brightness: Brightness.light,
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF7FAF7),
-      );
+  static ThemeData get light => _build(Brightness.light);
+  static ThemeData get dark => _build(Brightness.dark);
 
-  static ThemeData get dark => ThemeData(
-        colorSchemeSeed: kBrandGreen,
-        brightness: Brightness.dark,
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFF121212),
-      );
+  static ThemeData _build(Brightness brightness) {
+    final isDark = brightness == Brightness.dark;
+    final base = ColorScheme.fromSeed(
+      seedColor: DeenColors.primary,
+      brightness: brightness,
+    ).copyWith(
+      primary: DeenColors.primary,
+      secondary: DeenColors.gold,
+      error: DeenColors.rust,
+      surface: isDark ? DeenColors.inkSoft : DeenColors.paper,
+    );
+    final textTheme = GoogleFonts.manropeTextTheme(
+      isDark ? ThemeData(brightness: Brightness.dark).textTheme : ThemeData().textTheme,
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      colorScheme: base,
+      scaffoldBackgroundColor: isDark ? DeenColors.ink : DeenColors.cream,
+      textTheme: textTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: isDark ? DeenColors.ink : DeenColors.cream,
+        foregroundColor: DeenColors.primaryText(isDark),
+        elevation: 0,
+      ),
+      cardTheme: CardThemeData(
+        color: DeenColors.cardBackground(isDark),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: DeenColors.cardBorder(isDark)),
+        ),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: isDark ? DeenColors.ink : DeenColors.cream,
+        selectedItemColor: DeenColors.gold,
+        unselectedItemColor: DeenColors.textMuted,
+        type: BottomNavigationBarType.fixed,
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: DeenColors.primary,
+          foregroundColor: Colors.white,
+        ),
+      ),
+    );
+  }
 }
 
 /// Accent colours the generated [ColorScheme] does not provide: a "success"
@@ -34,7 +74,7 @@ extension AppSemanticColors on ColorScheme {
   bool get _isDark => brightness == Brightness.dark;
 
   /// Positive / completed / correct.
-  Color get success => _isDark ? const Color(0xFF81C995) : const Color(0xFF1B5E20);
+  Color get success => _isDark ? const Color(0xFF81C995) : DeenColors.green;
 
   /// Tinted surface for the daily-quote card and the "correct answer" tile.
   Color get successContainer =>

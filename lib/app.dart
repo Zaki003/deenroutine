@@ -7,7 +7,7 @@ import 'providers/locale_provider.dart';
 import 'providers/prayer_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/auth/login_screen.dart';
-import 'screens/dashboard/dashboard_screen.dart';
+import 'screens/main/main_nav_screen.dart';
 import 'utils/app_theme.dart';
 
 class DeenRoutineApp extends StatelessWidget {
@@ -50,7 +50,7 @@ class _AuthGate extends StatelessWidget {
     return Consumer<AuthProvider>(
       builder: (context, auth, _) {
         if (auth.isLoggedIn) {
-          return const DashboardScreen();
+          return const MainNavScreen();
         }
         return const LoginScreen();
       },

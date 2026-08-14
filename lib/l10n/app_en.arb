@@ -26,6 +26,44 @@
     "placeholders": { "error": {} }
   },
 
+  "navHome": "Home",
+  "navHabits": "Habits",
+  "navPrayer": "Prayer",
+  "navQuiz": "Quiz",
+  "navProfile": "Profile",
+
+  "assalamuAlaikumGreeting": "ASSALAMU ALAIKUM",
+  "todayLabel": "TODAY",
+  "nextPrayerLabel": "NEXT PRAYER",
+  "barakahSummaryRemaining": "{done} of {total} habits complete today — {remaining} to go before {prayer}.",
+  "@barakahSummaryRemaining": {
+    "placeholders": { "done": {}, "total": {}, "remaining": {}, "prayer": {} }
+  },
+  "barakahSummaryComplete": "All {total} habits complete today. Well done!",
+  "@barakahSummaryComplete": {
+    "placeholders": { "total": {} }
+  },
+
+  "prayerScreenTitle": "Prayer Times",
+  "prayerMethodFullName": "Muslim World League",
+  "prayerRemainingLong": "{time} remaining",
+  "@prayerRemainingLong": {
+    "placeholders": { "time": {} }
+  },
+  "prayerRemainingShort": "in {time}",
+  "@prayerRemainingShort": {
+    "placeholders": { "time": {} }
+  },
+
+  "quizTabTitle": "Quiz",
+  "quizChooseLengthLabel": "Choose your length",
+  "quizStartButton": "Start Quiz",
+  "quizNoAttemptsYet": "Take your first quiz to set a personal best.",
+  "quizMinutesEstimate": "~{minutes} min",
+  "@quizMinutesEstimate": {
+    "placeholders": { "minutes": {} }
+  },
+
   "prayerErrorLocationDisabled": "Location services are disabled.",
   "prayerErrorPermissionDenied": "Location permission denied.",
   "prayerErrorPermissionDeniedForever": "Location permission permanently denied.",
@@ -129,6 +167,10 @@
   "quizSeeResults": "See Results",
 
   "quizResultsAppBarTitle": "Quiz Results",
+  "quizResultQuestionLabel": "Question {number}",
+  "@quizResultQuestionLabel": {
+    "placeholders": { "number": {} }
+  },
   "quizOutcomeExcellentTitle": "Excellent!",
   "quizOutcomeExcellentMessage": "MashaAllah, your knowledge really shines. Keep it up!",
   "quizOutcomeWellDoneTitle": "Well Done!",

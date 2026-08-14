@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/text_format.dart';
 
 /// FR-03: Profile management, and Settings collection (theme, prayer method).
 class ProfileScreen extends StatelessWidget {
@@ -33,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Text(user?.name ?? '', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+          Text(capitalizeFirst(user?.name ?? ''), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
           Text(user?.email ?? '',
               textAlign: TextAlign.center,
               style: TextStyle(color: scheme.onSurfaceVariant)),

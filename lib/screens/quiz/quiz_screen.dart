@@ -26,6 +26,7 @@ class _QuizScreenState extends State<QuizScreen> {
   int _score = 0;
   String? _selectedOption;
   bool _answered = false;
+  final List<bool> _answerResults = [];
 
   @override
   void initState() {
@@ -52,7 +53,9 @@ class _QuizScreenState extends State<QuizScreen> {
   void _checkAnswer(QuizQuestion q) {
     setState(() {
       _answered = true;
-      if (_selectedOption == q.correctAnswer) _score++;
+      final correct = _selectedOption == q.correctAnswer;
+      if (correct) _score++;
+      _answerResults.add(correct);
     });
   }
 
@@ -68,7 +71,11 @@ class _QuizScreenState extends State<QuizScreen> {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => QuizResultScreen(score: _score, total: questions.length),
+          builder: (_) => QuizResultScreen(
+            score: _score,
+            total: questions.length,
+            answerResults: _answerResults,
+          ),
         ),
       );
     }

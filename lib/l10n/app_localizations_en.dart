@@ -61,6 +61,75 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get navHome => 'Home';
+
+  @override
+  String get navHabits => 'Habits';
+
+  @override
+  String get navPrayer => 'Prayer';
+
+  @override
+  String get navQuiz => 'Quiz';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get assalamuAlaikumGreeting => 'ASSALAMU ALAIKUM';
+
+  @override
+  String get todayLabel => 'TODAY';
+
+  @override
+  String get nextPrayerLabel => 'NEXT PRAYER';
+
+  @override
+  String barakahSummaryRemaining(
+      Object done, Object total, Object remaining, Object prayer) {
+    return '$done of $total habits complete today — $remaining to go before $prayer.';
+  }
+
+  @override
+  String barakahSummaryComplete(Object total) {
+    return 'All $total habits complete today. Well done!';
+  }
+
+  @override
+  String get prayerScreenTitle => 'Prayer Times';
+
+  @override
+  String get prayerMethodFullName => 'Muslim World League';
+
+  @override
+  String prayerRemainingLong(Object time) {
+    return '$time remaining';
+  }
+
+  @override
+  String prayerRemainingShort(Object time) {
+    return 'in $time';
+  }
+
+  @override
+  String get quizTabTitle => 'Quiz';
+
+  @override
+  String get quizChooseLengthLabel => 'Choose your length';
+
+  @override
+  String get quizStartButton => 'Start Quiz';
+
+  @override
+  String get quizNoAttemptsYet =>
+      'Take your first quiz to set a personal best.';
+
+  @override
+  String quizMinutesEstimate(Object minutes) {
+    return '~$minutes min';
+  }
+
+  @override
   String get prayerErrorLocationDisabled => 'Location services are disabled.';
 
   @override
@@ -264,6 +333,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quizResultsAppBarTitle => 'Quiz Results';
+
+  @override
+  String quizResultQuestionLabel(Object number) {
+    return 'Question $number';
+  }
 
   @override
   String get quizOutcomeExcellentTitle => 'Excellent!';

@@ -20,6 +20,29 @@
   "noHabitsYet": "এখনো কোনো অভ্যাস নেই। প্রথমটি যোগ করতে + চাপুন।",
   "prayerTimesUnavailable": "নামাজের সময় পাওয়া যায়নি: {error}",
 
+  "navHome": "হোম",
+  "navHabits": "অভ্যাস",
+  "navPrayer": "নামাজ",
+  "navQuiz": "কুইজ",
+  "navProfile": "প্রোফাইল",
+
+  "assalamuAlaikumGreeting": "আসসালামু আলাইকুম",
+  "todayLabel": "আজ",
+  "nextPrayerLabel": "পরবর্তী নামাজ",
+  "barakahSummaryRemaining": "{total} টির মধ্যে {done} টি অভ্যাস আজ সম্পন্ন — {prayer}-এর আগে আরও {remaining} টি বাকি।",
+  "barakahSummaryComplete": "আজকের সব {total} টি অভ্যাস সম্পন্ন হয়েছে। চমৎকার!",
+
+  "prayerScreenTitle": "নামাজের সময়",
+  "prayerMethodFullName": "মুসলিম ওয়ার্ল্ড লীগ",
+  "prayerRemainingLong": "{time} বাকি",
+  "prayerRemainingShort": "{time} পরে",
+
+  "quizTabTitle": "কুইজ",
+  "quizChooseLengthLabel": "দৈর্ঘ্য বেছে নিন",
+  "quizStartButton": "কুইজ শুরু করুন",
+  "quizNoAttemptsYet": "ব্যক্তিগত সেরা রেকর্ড করতে প্রথম কুইজ দিন।",
+  "quizMinutesEstimate": "~{minutes} মিনিট",
+
   "prayerErrorLocationDisabled": "লোকেশন সার্ভিস বন্ধ আছে।",
   "prayerErrorPermissionDenied": "লোকেশনের অনুমতি প্রত্যাখ্যান করা হয়েছে।",
   "prayerErrorPermissionDeniedForever": "লোকেশনের অনুমতি স্থায়ীভাবে প্রত্যাখ্যান করা হয়েছে।",
@@ -90,6 +113,7 @@
   "quizSeeResults": "ফলাফল দেখুন",
 
   "quizResultsAppBarTitle": "কুইজের ফলাফল",
+  "quizResultQuestionLabel": "প্রশ্ন {number}",
   "quizOutcomeExcellentTitle": "চমৎকার!",
   "quizOutcomeExcellentMessage": "মাশাআল্লাহ, আপনার জ্ঞান সত্যিই উজ্জ্বল। এভাবেই চালিয়ে যান!",
   "quizOutcomeWellDoneTitle": "সুন্দর হয়েছে!",
