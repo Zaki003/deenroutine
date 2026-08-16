@@ -3,12 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class HabitLog {
   final String logId;
   final String habitId;
+  final String uid;
   final DateTime date;
   final bool status;
 
   HabitLog({
     required this.logId,
     required this.habitId,
+    required this.uid,
     required this.date,
     required this.status,
   });
@@ -16,6 +18,7 @@ class HabitLog {
   Map<String, dynamic> toMap() {
     return {
       'habitId': habitId,
+      'uid': uid,
       'date': Timestamp.fromDate(date),
       'status': status,
     };
@@ -25,6 +28,7 @@ class HabitLog {
     return HabitLog(
       logId: id,
       habitId: map['habitId'] ?? '',
+      uid: map['uid'] ?? '',
       date: (map['date'] as Timestamp).toDate(),
       status: map['status'] ?? false,
     );

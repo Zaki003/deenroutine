@@ -20,7 +20,7 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation(deviceTimezone));
 
     const androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@drawable/ic_notification');
     const iosSettings = DarwinInitializationSettings();
     const initSettings = InitializationSettings(
       android: androidSettings,

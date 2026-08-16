@@ -52,6 +52,7 @@ class FirestoreService {
     final log = HabitLog(
       logId: logId,
       habitId: habit.habitId,
+      uid: habit.uid,
       date: DateTime(today.year, today.month, today.day),
       status: status,
     );

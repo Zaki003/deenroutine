@@ -17,11 +17,15 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid;
     }
 
-    // HabitLogs: readable/writable only if the parent habit belongs to the user.
+    // HabitLogs: owner-only access, same pattern as Habits.
     match /HabitLogs/{logId} {
-      allow read, write: if request.auth != null;
-      // For stricter enforcement, store `uid` directly on each log document
-      // and check request.resource.data.uid == request.auth.uid instead.
+      allow read, delete: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid;
     }
 
     // QuizQuestions: public read (content library), writes restricted to admins.

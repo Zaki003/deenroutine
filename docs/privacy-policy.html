@@ -1,0 +1,476 @@
+<title>DeenRoutine Privacy Policy</title>
+<style>
+  :root {
+    --bg: #FFFDF8;
+    --bg-alt: #F6F1E4;
+    --panel: #EFE7D2;
+    --surface: #FFFDF8;
+    --heading: #0E2B29;
+    --text: #16302B;
+    --text-muted: #4F6C64;
+    --accent: #146356;
+    --accent-strong: #0E2B29;
+    --gold: #8A6B24;
+    --gold-bright: #C9A24B;
+    --border: rgba(20, 99, 86, 0.14);
+    --border-strong: rgba(20, 99, 86, 0.28);
+    --rust: #A8522F;
+    --shadow: 0 1px 2px rgba(14, 43, 41, 0.04), 0 8px 24px rgba(14, 43, 41, 0.05);
+
+    --font-display: Georgia, "Noto Serif", "Times New Roman", serif;
+    --font-body: Georgia, "Noto Serif", "Times New Roman", serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E2B29;
+      --bg-alt: #153F3C;
+      --panel: #1B4B47;
+      --surface: #153F3C;
+      --heading: #FFFDF8;
+      --text: #F6F1E4;
+      --text-muted: #A9C4BC;
+      --accent: #4FB79B;
+      --accent-strong: #EFE7D2;
+      --gold: #E4CD8C;
+      --gold-bright: #E4CD8C;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.2);
+      --rust: #D08F6E;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0E2B29;
+    --bg-alt: #153F3C;
+    --panel: #1B4B47;
+    --surface: #153F3C;
+    --heading: #FFFDF8;
+    --text: #F6F1E4;
+    --text-muted: #A9C4BC;
+    --accent: #4FB79B;
+    --accent-strong: #EFE7D2;
+    --gold: #E4CD8C;
+    --gold-bright: #E4CD8C;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --rust: #D08F6E;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.6em 1em;
+    z-index: 100;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+  }
+  .skip-link:focus { left: 1rem; top: 1rem; }
+
+  /* ---------- Header ---------- */
+
+  header.masthead {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+  }
+
+  .star-field {
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpolygon points='13,4.16 15.18,10.00 21.41,10.27 16.53,14.15 18.20,20.15 13,16.71 7.80,20.15 9.47,14.15 4.59,10.27 10.82,10.00' fill='%23C9A24B' fill-opacity='0.16'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .masthead-inner {
+    position: relative;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 3.2rem 1.75rem 2.6rem;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--accent-strong);
+    letter-spacing: 0.02em;
+  }
+
+  .wordmark .mark {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex: none;
+  }
+
+  .eyebrow {
+    margin: 1.6rem 0 0.6rem;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  h1.title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 1.55rem + 2vw, 3.1rem);
+    line-height: 1.12;
+    color: var(--heading);
+    text-wrap: balance;
+  }
+
+  .gold-rule {
+    width: 3.25rem;
+    height: 3px;
+    margin: 1.15rem 0 1.3rem;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    border-radius: 2px;
+  }
+
+  .meta-line {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .summary-box {
+    margin-top: 1.9rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 62ch;
+  }
+
+  .summary-box strong { color: var(--heading); }
+
+  /* ---------- Layout ---------- */
+
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 2.75rem 1.75rem 5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .page {
+      grid-template-columns: 190px minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  /* ---------- TOC ---------- */
+
+  nav.toc {
+    font-family: var(--font-ui);
+  }
+
+  @media (min-width: 900px) {
+    nav.toc {
+      position: sticky;
+      top: 2rem;
+    }
+  }
+
+  nav.toc .toc-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    border-left: 1px solid var(--border);
+  }
+
+  nav.toc a {
+    display: block;
+    padding: 0.4rem 0 0.4rem 0.85rem;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  nav.toc a:hover,
+  nav.toc a:focus-visible {
+    color: var(--accent);
+    border-left-color: var(--gold);
+  }
+
+  nav.toc .toc-num {
+    font-variant-numeric: tabular-nums;
+    color: var(--gold);
+    margin-right: 0.4em;
+  }
+
+  /* ---------- Sections ---------- */
+
+  main {
+    min-width: 0;
+  }
+
+  section.policy-section {
+    max-width: 66ch;
+    padding-top: 2.4rem;
+    border-top: 1px solid var(--border);
+  }
+
+  section.policy-section:first-of-type { padding-top: 0; border-top: none; }
+  section.policy-section + section.policy-section { margin-top: 0; }
+
+  section.policy-section h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.45rem;
+    color: var(--heading);
+    margin: 0 0 0.95rem;
+    scroll-margin-top: 1.5rem;
+  }
+
+  section.policy-section h2 .num {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  section.policy-section p,
+  section.policy-section li {
+    font-size: 1.02rem;
+    line-height: 1.72;
+    color: var(--text);
+  }
+
+  section.policy-section p { margin: 0 0 1rem; }
+
+  section.policy-section ul {
+    margin: 0 0 1rem;
+    padding-left: 1.2rem;
+  }
+  section.policy-section li { margin-bottom: 0.55rem; }
+  section.policy-section li:last-child { margin-bottom: 0; }
+  section.policy-section li strong,
+  section.policy-section p strong { color: var(--heading); }
+
+  section.policy-section a { text-underline-offset: 3px; }
+
+  .permission-note {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1.05rem;
+    background: var(--bg-alt);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ---------- Footer ---------- */
+
+  footer.policy-footer {
+    max-width: 66ch;
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+  }
+
+  footer.policy-footer a { color: var(--text-muted); }
+  footer.policy-footer a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+
+<a class="skip-link" href="#main-content">Skip to policy content</a>
+
+<header class="masthead">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="masthead-inner">
+    <div class="wordmark">
+      <svg class="mark" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="13,3.2 16.1,9.6 23.4,9.9 17.7,14.9 19.9,22.6 13,18.2 6.1,22.6 8.3,14.9 2.6,9.9 9.9,9.6"
+          fill="var(--gold-bright)" />
+      </svg>
+      DeenRoutine
+    </div>
+    <p class="eyebrow">Privacy Policy</p>
+    <h1 class="title">How DeenRoutine handles your information</h1>
+    <div class="gold-rule" aria-hidden="true"></div>
+    <p class="meta-line">Effective August 15, 2026 &nbsp;·&nbsp; Applies to the DeenRoutine Android app</p>
+    <div class="summary-box">
+      <strong>In plain English:</strong> DeenRoutine stores your habits, quiz scores, and account info (name + email) in a private database tied to your account. It uses your approximate location only to calculate accurate prayer times, and never sells your data or shows you ads.
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <nav class="toc" aria-label="Policy sections">
+    <div class="toc-label">On this page</div>
+    <ol>
+      <li><a href="#overview"><span class="toc-num">01</span>Overview</a></li>
+      <li><a href="#information"><span class="toc-num">02</span>Information we collect</a></li>
+      <li><a href="#use"><span class="toc-num">03</span>How we use it</a></li>
+      <li><a href="#location"><span class="toc-num">04</span>Location &amp; prayer times</a></li>
+      <li><a href="#third-party"><span class="toc-num">05</span>Third-party services</a></li>
+      <li><a href="#security"><span class="toc-num">06</span>Storage &amp; security</a></li>
+      <li><a href="#retention"><span class="toc-num">07</span>Data retention</a></li>
+      <li><a href="#rights"><span class="toc-num">08</span>Your rights</a></li>
+      <li><a href="#children"><span class="toc-num">09</span>Children's privacy</a></li>
+      <li><a href="#changes"><span class="toc-num">10</span>Changes</a></li>
+      <li><a href="#contact"><span class="toc-num">11</span>Contact</a></li>
+    </ol>
+  </nav>
+
+  <main id="main-content">
+    <section class="policy-section" id="overview">
+      <h2><span class="num">01</span>Overview</h2>
+      <p>DeenRoutine ("the app," "we," "us") is a personal habit and spirituality tracker built by an independent developer. This policy explains what information the app collects when you use it, why, and how it's protected. It covers every feature currently in the app: account creation, habit tracking, prayer times, the daily quote, the Islamic-knowledge quiz, and reminder notifications.</p>
+    </section>
+
+    <section class="policy-section" id="information">
+      <h2><span class="num">02</span>Information we collect</h2>
+      <ul>
+        <li><strong>Account information</strong> — when you create an account, we collect your name, email address, and password. Your password is handled entirely by Firebase Authentication (a Google service); DeenRoutine never sees or stores it directly.</li>
+        <li><strong>Habit data</strong> — the habits you create (titles, category, frequency, reminder times) and your daily completion history, used to calculate streaks and show your progress.</li>
+        <li><strong>Quiz results</strong> — your scores and completion dates for the Islamic-knowledge quiz, so you can see your best score over time.</li>
+        <li><strong>Approximate location</strong> — with your permission, your device's approximate GPS coordinates, used only to calculate accurate prayer times for your area (see Section 4).</li>
+        <li><strong>App preferences</strong> — your chosen theme and language, stored locally on your device.</li>
+      </ul>
+      <p>We do not collect payment information, government ID numbers, contacts, photos, or browsing history. DeenRoutine has no advertising and no analytics or tracking SDKs.</p>
+    </section>
+
+    <section class="policy-section" id="use">
+      <h2><span class="num">03</span>How we use it</h2>
+      <p>We use the information above only to run the app's own features:</p>
+      <ul>
+        <li>To create and secure your account, and let you log in from your device.</li>
+        <li>To save and sync your habits, streaks, and quiz results so they're there the next time you open the app.</li>
+        <li>To calculate prayer times for your current location.</li>
+        <li>To schedule the habit reminder notifications you set — these are scheduled entirely on your device and never leave it.</li>
+      </ul>
+      <p>We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
+    </section>
+
+    <section class="policy-section" id="location">
+      <h2><span class="num">04</span>Location &amp; prayer times</h2>
+      <p>DeenRoutine asks for location permission so it can show correct prayer times for where you are:</p>
+      <ul>
+        <li>Your coordinates are rounded to roughly 1.1&nbsp;km precision (2 decimal places) before being used.</li>
+        <li>They're sent to <a href="https://aladhan.com" target="_blank" rel="noopener">Aladhan</a>, a free public prayer-time calculation API, along with the date — nothing that identifies you personally.</li>
+        <li>The result is cached in our database, keyed only by the rounded coordinates and date, so the app doesn't have to re-request the same day's times for the same area. This cache isn't tied to your account.</li>
+      </ul>
+      <div class="permission-note">You can deny or revoke location permission at any time in Android's app settings — prayer times just won't be available until it's granted again.</div>
+    </section>
+
+    <section class="policy-section" id="third-party">
+      <h2><span class="num">05</span>Third-party services</h2>
+      <ul>
+        <li><strong>Firebase (Google)</strong> — Authentication and Cloud Firestore database. Firebase stores your account info, habits, quiz results, and cached prayer times. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
+        <li><strong>Aladhan API</strong> — receives approximate coordinates and a date to return prayer times. See their terms at aladhan.com.</li>
+      </ul>
+      <p>We don't use Google, Facebook, or Apple sign-in, so no login data is shared with those platforms — DeenRoutine accounts are email-and-password only.</p>
+    </section>
+
+    <section class="policy-section" id="security">
+      <h2><span class="num">06</span>Storage &amp; security</h2>
+      <p>Your data is stored in Cloud Firestore and protected by security rules that restrict access so only you can read or write your own habits, logs, quiz results, and profile — enforced on Google's servers, not just in the app. Data is encrypted in transit (HTTPS/TLS) and at rest by Firebase's infrastructure.</p>
+    </section>
+
+    <section class="policy-section" id="retention">
+      <h2><span class="num">07</span>Data retention</h2>
+      <p>We retain your account and habit data for as long as your account exists. If you'd like your account and associated data deleted, contact us (Section 11) and we'll delete it within 30 days.</p>
+    </section>
+
+    <section class="policy-section" id="rights">
+      <h2><span class="num">08</span>Your rights</h2>
+      <ul>
+        <li>You can edit or delete individual habits at any time within the app.</li>
+        <li>You can request a copy of your data, or request that your account and all associated data be permanently deleted, by emailing us at the address below.</li>
+        <li>You can revoke location or notification permissions at any time from your device's system settings.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section" id="children">
+      <h2><span class="num">09</span>Children's privacy</h2>
+      <p>DeenRoutine is not directed at children under 13, and we don't knowingly collect personal information from children under 13. If you believe a child has created an account, contact us and we'll delete it.</p>
+    </section>
+
+    <section class="policy-section" id="changes">
+      <h2><span class="num">10</span>Changes to this policy</h2>
+      <p>If we make material changes to this policy, we'll update the effective date above. Continued use of the app after a change means you accept the revised policy.</p>
+    </section>
+
+    <section class="policy-section" id="contact">
+      <h2><span class="num">11</span>Contact us</h2>
+      <p>Questions about this policy or your data? Email <a href="mailto:zakifaiazchy@gmail.com">zakifaiazchy@gmail.com</a>.</p>
+    </section>
+
+    <footer class="policy-footer">
+      <span>© 2026 DeenRoutine</span>
+      <span>zakifaiazchy@gmail.com</span>
+    </footer>
+  </main>
+</div>
