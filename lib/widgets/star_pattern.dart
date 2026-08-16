@@ -15,7 +15,9 @@ class StarPattern extends StatelessWidget {
       child: IgnorePointer(
         child: Opacity(
           opacity: opacity,
-          child: CustomPaint(painter: _StarPatternPainter(color: color)),
+          child: ClipRect(
+            child: CustomPaint(painter: _StarPatternPainter(color: color)),
+          ),
         ),
       ),
     );
@@ -53,11 +55,16 @@ class _StarPatternPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.fill;
 
-    final cols = (size.width / _tile).ceil() + 1;
-    final rows = (size.height / _tile).ceil() + 1;
-    for (var row = 0; row < rows; row++) {
-      for (var col = 0; col < cols; col++) {
-        final center = Offset(col * _tile + _tile / 2, row * _tile + _tile / 2);
+    // Tile outward from the canvas center rather than the top-left corner,
+    // so the pattern is symmetric around the center instead of being
+    // clipped unevenly on the trailing edges.
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+    final colsEachSide = (size.width / 2 / _tile).ceil() + 1;
+    final rowsEachSide = (size.height / 2 / _tile).ceil() + 1;
+    for (var row = -rowsEachSide; row <= rowsEachSide; row++) {
+      for (var col = -colsEachSide; col <= colsEachSide; col++) {
+        final center = Offset(centerX + col * _tile, centerY + row * _tile);
         canvas.drawPath(_starPath(center, _tile * 0.34), paint);
       }
     }

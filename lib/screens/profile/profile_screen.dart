@@ -34,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Text(capitalizeFirst(user?.name ?? ''), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+          Text(capitalizeWords(user?.name ?? ''), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
           Text(user?.email ?? '',
               textAlign: TextAlign.center,
               style: TextStyle(color: scheme.onSurfaceVariant)),

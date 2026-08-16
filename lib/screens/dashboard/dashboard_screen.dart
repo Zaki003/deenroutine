@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final isBangla = context.watch<LocaleProvider>().isBangla;
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final name = capitalizeFirst(context.watch<AuthProvider>().appUser?.name ?? '');
+    final name = capitalizeWords(context.watch<AuthProvider>().appUser?.name ?? '');
 
     if (habitProvider.hasError) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

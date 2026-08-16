@@ -59,144 +59,163 @@ class QuizResultScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.quizResultsAppBarTitle)),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: 1),
-                duration: const Duration(milliseconds: 700),
-                curve: Curves.elasticOut,
-                builder: (context, value, child) => Transform.scale(
-                  scale: value,
-                  child: child,
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: outcome.color.withValues(alpha: 0.15),
-                  ),
-                  child: Icon(outcome.icon, size: 72, color: outcome.color),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                outcome.title,
-                style: theme.textTheme.headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.bold, color: outcome.color),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                outcome.message,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: 160,
-                height: 160,
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: _percentage),
-                  duration: const Duration(milliseconds: 1000),
-                  curve: Curves.easeOutCubic,
-                  builder: (context, value, _) => Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 160,
-                        height: 160,
-                        child: CircularProgressIndicator(
-                          value: value,
-                          strokeWidth: 12,
-                          strokeCap: StrokeCap.round,
-                          backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                          valueColor: AlwaysStoppedAnimation<Color>(outcome.color),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 32, 24, 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: 1),
+                      duration: const Duration(milliseconds: 700),
+                      curve: Curves.elasticOut,
+                      builder: (context, value, child) => Transform.scale(
+                        scale: value,
+                        child: child,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: outcome.color.withValues(alpha: 0.15),
+                        ),
+                        child:
+                            Icon(outcome.icon, size: 72, color: outcome.color),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      outcome.title,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold, color: outcome.color),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      outcome.message,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: _percentage),
+                        duration: const Duration(milliseconds: 1000),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, value, _) => Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 160,
+                              height: 160,
+                              child: CircularProgressIndicator(
+                                value: value,
+                                strokeWidth: 12,
+                                strokeCap: StrokeCap.round,
+                                backgroundColor:
+                                    theme.colorScheme.surfaceContainerHighest,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    outcome.color),
+                              ),
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '${(value * 100).round()}%',
+                                  style: theme.textTheme.headlineMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  l10n.quizScoreOfTotal(score, total),
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                      color:
+                                          theme.colorScheme.onSurfaceVariant),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
+                    ),
+                    if (answerResults.isNotEmpty) ...[
+                      const SizedBox(height: 28),
                       Column(
-                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            '${(value * 100).round()}%',
-                            style: theme.textTheme.headlineMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            l10n.quizScoreOfTotal(score, total),
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                          ),
+                          for (var i = 0; i < answerResults.length; i++)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: _StaggerIn(
+                                index: i,
+                                child: _QuestionResultRow(
+                                    index: i, correct: answerResults[i]),
+                              ),
+                            ),
                         ],
                       ),
                     ],
-                  ),
-                ),
-              ),
-              if (answerResults.isNotEmpty) ...[
-                const SizedBox(height: 28),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (var i = 0; i < answerResults.length; i++)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: _StaggerIn(
-                          index: i,
-                          child: _QuestionResultRow(index: i, correct: answerResults[i]),
-                        ),
+                    if (uid != null) ...[
+                      const SizedBox(height: 16),
+                      FutureBuilder<QuizResult?>(
+                        future: FirestoreService().getBestQuizResult(uid),
+                        builder: (context, snapshot) {
+                          final best = snapshot.data;
+                          if (best == null || best.totalQuestions == 0) {
+                            return const SizedBox.shrink();
+                          }
+                          final bestPct =
+                              (best.score / best.totalQuestions * 100).round();
+                          return Text(
+                            l10n.quizBestScore(
+                                best.score, best.totalQuestions, bestPct),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          );
+                        },
                       ),
+                    ],
                   ],
                 ),
-              ],
-              if (uid != null) ...[
-                const SizedBox(height: 16),
-                FutureBuilder<QuizResult?>(
-                  future: FirestoreService().getBestQuizResult(uid),
-                  builder: (context, snapshot) {
-                    final best = snapshot.data;
-                    if (best == null || best.totalQuestions == 0) {
-                      return const SizedBox.shrink();
-                    }
-                    final bestPct = (best.score / best.totalQuestions * 100).round();
-                    return Text(
-                      l10n.quizBestScore(best.score, best.totalQuestions, bestPct),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      icon: const Icon(Icons.refresh_rounded),
+                      label: Text(l10n.quizTryAgain),
+                      onPressed: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => QuizScreen(questionCount: total),
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ],
-              const SizedBox(height: 40),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: Text(l10n.quizTryAgain),
-                  onPressed: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => QuizScreen(questionCount: total),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.home_rounded),
+                      label: Text(l10n.quizBackToHome),
+                      onPressed: () => Navigator.of(context)
+                          .popUntil((route) => route.isFirst),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.home_rounded),
-                  label: Text(l10n.quizBackToHome),
-                  onPressed: () =>
-                      Navigator.of(context).popUntil((route) => route.isFirst),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -216,7 +235,9 @@ class _QuestionResultRow extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final color = correct ? theme.colorScheme.success : theme.colorScheme.error;
-    final background = correct ? theme.colorScheme.successContainer : theme.colorScheme.errorSurface;
+    final background = correct
+        ? theme.colorScheme.successContainer
+        : theme.colorScheme.errorSurface;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -226,11 +247,13 @@ class _QuestionResultRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(correct ? Icons.check_circle_rounded : Icons.cancel_rounded, size: 18, color: color),
+          Icon(correct ? Icons.check_circle_rounded : Icons.cancel_rounded,
+              size: 18, color: color),
           const SizedBox(width: 10),
           Text(
             l10n.quizResultQuestionLabel(index + 1),
-            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: theme.textTheme.bodyMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
