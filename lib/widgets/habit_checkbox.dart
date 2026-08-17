@@ -14,7 +14,7 @@ class HabitCheckbox extends StatefulWidget {
     required this.done,
     required this.dark,
     required this.onTap,
-    this.size = 22,
+    this.size = 38,
   });
 
   @override
@@ -103,10 +103,14 @@ class _CheckboxPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2;
+    // Scaled off the original 22px design so the ring/tick stay
+    // proportionally the same weight at any [size], not just thin hairlines
+    // once the box is enlarged for a bigger tap target.
+    final strokeWidth = size.shortestSide / 11;
 
     final borderPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
+      ..strokeWidth = strokeWidth
       ..color = Color.lerp(trackColor, fillColor, fillT)!;
     canvas.drawCircle(center, radius - 1, borderPaint);
 
@@ -125,7 +129,7 @@ class _CheckboxPainter extends CustomPainter {
       final extracted = metrics.extractPath(0, metrics.length * tickT);
       final tickPaint = Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2
+        ..strokeWidth = strokeWidth
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
         ..color = tickColor;

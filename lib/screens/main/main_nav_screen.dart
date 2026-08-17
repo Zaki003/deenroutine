@@ -38,7 +38,11 @@ class _MainNavScreenState extends State<MainNavScreen> {
     final dark = Theme.of(context).brightness == Brightness.dark;
 
     final tabs = [
-      (icon: Icons.home_rounded, label: l10n.navHome, screen: const DashboardScreen()),
+      (
+        icon: Icons.home_rounded,
+        label: l10n.navHome,
+        screen: DashboardScreen(onSeeAllHabits: () => setState(() => _index = 1)),
+      ),
       (icon: Icons.checklist_rounded, label: l10n.navHabits, screen: const HabitsScreen()),
       (icon: Icons.access_time_rounded, label: l10n.navPrayer, screen: const PrayerScreen()),
       (icon: Icons.menu_book_rounded, label: l10n.navQuiz, screen: const QuizHomeScreen()),

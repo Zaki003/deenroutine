@@ -5,12 +5,13 @@ import '../../models/habit.dart';
 import '../../providers/habit_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../widgets/deen_card.dart';
+import '../../widgets/habit_actions_menu.dart';
 import '../../widgets/streak_badge.dart';
 import '../../widgets/week_picker.dart';
 import 'add_habit_screen.dart';
 
 /// Dedicated Habits tab: every habit with its streak and this week's
-/// completion, tap to edit, long-press to delete.
+/// completion; tap a card for edit/delete options.
 class HabitsScreen extends StatelessWidget {
   const HabitsScreen({super.key});
 
@@ -86,42 +87,11 @@ class _HabitRow extends StatelessWidget {
 
   const _HabitRow({required this.habit, required this.dark, required this.monFirstLetters});
 
-  Future<void> _confirmDelete(BuildContext context, AppLocalizations l10n) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.deleteHabitTitle),
-        content: Text(l10n.deleteHabitContent(habit.title)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancelButton),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(
-              l10n.deleteButton,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-        ],
-      ),
-    );
-    if (confirmed == true && context.mounted) {
-      context.read<HabitProvider>().deleteHabit(habit.habitId);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => AddHabitScreen(editingHabit: habit)),
-      ),
-      onLongPress: () => _confirmDelete(context, l10n),
+    final done = habit.isCompletedToday;
+    return HabitActionsMenu(
+      habit: habit,
       child: DeenCard(
         dark: dark,
         child: Column(
@@ -137,6 +107,8 @@ class _HabitRow extends StatelessWidget {
                       fontSize: 13.5,
                       fontWeight: FontWeight.w500,
                       color: DeenColors.primaryText(dark),
+                      decoration: done ? TextDecoration.lineThrough : null,
+                      decorationColor: DeenColors.primaryText(dark).withValues(alpha: 0.6),
                     ),
                   ),
                 ),

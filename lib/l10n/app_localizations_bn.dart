@@ -56,6 +56,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noHabitsYet => 'এখনো কোনো অভ্যাস নেই। প্রথমটি যোগ করতে + চাপুন।';
 
   @override
+  String seeAllHabits(Object count) {
+    return 'সব $count টি অভ্যাস দেখুন';
+  }
+
+  @override
   String prayerTimesUnavailable(Object error) {
     return 'নামাজের সময় পাওয়া যায়নি: $error';
   }
@@ -263,6 +268,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get deleteButton => 'মুছুন';
+
+  @override
+  String get editButton => 'সম্পাদনা';
 
   @override
   String habitSyncError(Object error) {

@@ -16,6 +16,7 @@ import '../../utils/text_format.dart';
 import '../../widgets/barakah_circle.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/gradient_hero_card.dart';
+import '../../widgets/habit_actions_menu.dart';
 import '../../widgets/habit_checkbox.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
@@ -24,11 +25,20 @@ import '../habits/add_habit_screen.dart';
 /// FR-06: Dashboard displaying the greeting, a daily Ayah/Hadith, the
 /// next-prayer countdown, the Barakah Circle, and today's habits.
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  /// Switches the bottom nav to the Habits tab. Used by the "see all"
+  /// link once the today list is capped (see [_maxVisibleHabits]).
+  final VoidCallback onSeeAllHabits;
+
+  const DashboardScreen({super.key, required this.onSeeAllHabits});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
+
+/// Above this many habits, the dashboard shows only the top ones (incomplete
+/// first) plus a link to the full list, instead of growing into a second
+/// copy of the Habits tab as someone adds more habits.
+const _maxVisibleHabits = 5;
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final _firestoreService = FirestoreService();
@@ -66,6 +76,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final done = habitProvider.habits.where((h) => h.isCompletedToday).length;
     final total = habitProvider.habits.length;
+
+    // Incomplete habits float to the top — those are the ones that still
+    // need action today — and the list is capped so the dashboard stays a
+    // glanceable summary instead of growing into a duplicate of the Habits
+    // tab as someone adds more habits.
+    final orderedHabits = [
+      ...habitProvider.habits.where((h) => !h.isCompletedToday),
+      ...habitProvider.habits.where((h) => h.isCompletedToday),
+    ];
+    final visibleHabits = orderedHabits.take(_maxVisibleHabits).toList();
+    final hiddenHabitCount = orderedHabits.length - visibleHabits.length;
 
     return ColoredBox(
       color: DeenColors.surface(dark),
@@ -135,13 +156,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Text(
-              l10n.todaysHabitsTitle,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: DeenColors.primaryText(dark),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.todaysHabitsTitle,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: DeenColors.primaryText(dark),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AddHabitScreen()),
+                  ),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: DeenColors.gold,
+                    ),
+                    child: const Icon(Icons.add, size: 18, color: DeenColors.ink),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             if (habitProvider.habits.isEmpty)
@@ -150,16 +192,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Text(l10n.noHabitsYet,
                     style: const TextStyle(color: DeenColors.textMuted)),
               ),
-            for (final habit in habitProvider.habits)
+            for (final habit in visibleHabits)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: _DashboardHabitRow(
                   habit: habit,
                   dark: dark,
                   onToggle: () => habitProvider.toggleComplete(habit),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => AddHabitScreen(editingHabit: habit)),
+                ),
+              ),
+            if (hiddenHabitCount > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, bottom: 8),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: widget.onSeeAllHabits,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          l10n.seeAllHabits(total),
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w600,
+                            color: DeenColors.gold,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.arrow_forward_rounded, size: 14, color: DeenColors.gold),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -257,21 +321,18 @@ class _DashboardHabitRow extends StatelessWidget {
   final Habit habit;
   final bool dark;
   final VoidCallback onToggle;
-  final VoidCallback onTap;
 
   const _DashboardHabitRow({
     required this.habit,
     required this.dark,
     required this.onToggle,
-    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final done = habit.isCompletedToday;
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
+    return HabitActionsMenu(
+      habit: habit,
       child: DeenCard(
         dark: dark,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

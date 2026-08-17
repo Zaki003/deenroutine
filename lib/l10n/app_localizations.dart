@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'No habits yet. Tap + to add your first one.'**
   String get noHabitsYet;
 
+  /// No description provided for @seeAllHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'See all {count} habits'**
+  String seeAllHabits(Object count);
+
   /// No description provided for @prayerTimesUnavailable.
   ///
   /// In en, this message translates to:
@@ -560,6 +566,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get deleteButton;
+
+  /// No description provided for @editButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get editButton;
 
   /// No description provided for @habitSyncError.
   ///

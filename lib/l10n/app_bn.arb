@@ -18,6 +18,7 @@
   "habitsDoneToday": "{total} টির মধ্যে {done} টি অভ্যাস আজ সম্পন্ন হয়েছে",
   "todaysHabitsTitle": "আজকের অভ্যাস",
   "noHabitsYet": "এখনো কোনো অভ্যাস নেই। প্রথমটি যোগ করতে + চাপুন।",
+  "seeAllHabits": "সব {count} টি অভ্যাস দেখুন",
   "prayerTimesUnavailable": "নামাজের সময় পাওয়া যায়নি: {error}",
 
   "navHome": "হোম",
@@ -91,6 +92,7 @@
   "deleteHabitContent": "এটি \"{title}\" এবং এর ধারাবাহিকতার ইতিহাস স্থায়ীভাবে মুছে ফেলবে।",
   "cancelButton": "বাতিল",
   "deleteButton": "মুছুন",
+  "editButton": "সম্পাদনা",
 
   "habitSyncError": "অভ্যাস সিঙ্ক করতে সমস্যা: {error}",
   "habitDuplicateTitle": "\"{title}\" নামে আপনার আগে থেকেই একটি অভ্যাস আছে।",

@@ -56,6 +56,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noHabitsYet => 'No habits yet. Tap + to add your first one.';
 
   @override
+  String seeAllHabits(Object count) {
+    return 'See all $count habits';
+  }
+
+  @override
   String prayerTimesUnavailable(Object error) {
     return 'Prayer times unavailable: $error';
   }
@@ -264,6 +269,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteButton => 'Delete';
+
+  @override
+  String get editButton => 'Edit';
 
   @override
   String habitSyncError(Object error) {

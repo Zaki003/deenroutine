@@ -21,6 +21,10 @@
   },
   "todaysHabitsTitle": "Today's Habits",
   "noHabitsYet": "No habits yet. Tap + to add your first one.",
+  "seeAllHabits": "See all {count} habits",
+  "@seeAllHabits": {
+    "placeholders": { "count": {} }
+  },
   "prayerTimesUnavailable": "Prayer times unavailable: {error}",
   "@prayerTimesUnavailable": {
     "placeholders": { "error": {} }
@@ -124,6 +128,7 @@
   },
   "cancelButton": "Cancel",
   "deleteButton": "Delete",
+  "editButton": "Edit",
 
   "habitSyncError": "Habit sync error: {error}",
   "@habitSyncError": {
