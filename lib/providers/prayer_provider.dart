@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../services/prayer_service.dart';
 
@@ -8,6 +9,27 @@ class PrayerProvider extends ChangeNotifier {
   bool _loading = false;
   PrayerErrorType? _errorType;
   String? _errorDetail;
+
+  /// Nothing else drives a rebuild as time passes, so without this the
+  /// dashboard's prayer card and the Prayer tab only refresh their
+  /// countdown whenever something unrelated happens to rebuild that
+  /// particular screen (e.g. toggling a habit) — since both screens stay
+  /// mounted at once (IndexedStack), they'd drift out of sync with each
+  /// other and each show a stale, different-looking countdown. Ticking
+  /// here keeps every listener refreshing off the same clock.
+  Timer? _countdownTicker;
+
+  PrayerProvider() {
+    _countdownTicker = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (_timings.isNotEmpty) notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _countdownTicker?.cancel();
+    super.dispose();
+  }
 
   Map<String, String> get timings => _timings;
   bool get isLoading => _loading;
