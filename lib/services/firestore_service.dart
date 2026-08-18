@@ -217,11 +217,15 @@ class FirestoreService {
     return _db.collection('QuizResults').doc(result.resultId).set(result.toMap());
   }
 
-  /// The single highest-scoring attempt on record for [uid].
-  Future<QuizResult?> getBestQuizResult(String uid) async {
+  /// The single highest-scoring attempt on record for [uid] at exactly
+  /// [totalQuestions] questions — a 20-question best is meaningless as a
+  /// "personal best" for someone picking the 5-question quiz, so this is
+  /// always scoped to one length rather than the best across all of them.
+  Future<QuizResult?> getBestQuizResult(String uid, int totalQuestions) async {
     final snap = await _db
         .collection('QuizResults')
         .where('uid', isEqualTo: uid)
+        .where('totalQuestions', isEqualTo: totalQuestions)
         .orderBy('score', descending: true)
         .limit(1)
         .get();

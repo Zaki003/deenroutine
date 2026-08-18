@@ -62,7 +62,10 @@
   "quizTabTitle": "Quiz",
   "quizChooseLengthLabel": "Choose your length",
   "quizStartButton": "Start Quiz",
-  "quizNoAttemptsYet": "Take your first quiz to set a personal best.",
+  "quizNoAttemptsYet": "Take your first {count}-question quiz to set a personal best.",
+  "@quizNoAttemptsYet": {
+    "placeholders": { "count": {} }
+  },
   "quizMinutesEstimate": "~{minutes} min",
   "@quizMinutesEstimate": {
     "placeholders": { "minutes": {} }

@@ -306,8 +306,8 @@ abstract class AppLocalizations {
   /// No description provided for @quizNoAttemptsYet.
   ///
   /// In en, this message translates to:
-  /// **'Take your first quiz to set a personal best.'**
-  String get quizNoAttemptsYet;
+  /// **'Take your first {count}-question quiz to set a personal best.'**
+  String quizNoAttemptsYet(Object count);
 
   /// No description provided for @quizMinutesEstimate.
   ///

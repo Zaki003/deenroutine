@@ -40,7 +40,13 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          if (uid != null) _BestScoreBanner(uid: uid, dark: dark, l10n: l10n),
+          if (uid != null)
+            _BestScoreBanner(
+              uid: uid,
+              questionCount: _selectedCount,
+              dark: dark,
+              l10n: l10n,
+            ),
           const SizedBox(height: 20),
           Text(
             l10n.quizChooseLengthLabel,
@@ -83,10 +89,16 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
 
 class _BestScoreBanner extends StatelessWidget {
   final String uid;
+  final int questionCount;
   final bool dark;
   final AppLocalizations l10n;
 
-  const _BestScoreBanner({required this.uid, required this.dark, required this.l10n});
+  const _BestScoreBanner({
+    required this.uid,
+    required this.questionCount,
+    required this.dark,
+    required this.l10n,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +113,7 @@ class _BestScoreBanner extends StatelessWidget {
         children: [
           StarPattern(opacity: dark ? 0.07 : 0.09, color: DeenColors.gold),
           FutureBuilder<QuizResult?>(
-            future: FirestoreService().getBestQuizResult(uid),
+            future: FirestoreService().getBestQuizResult(uid, questionCount),
             builder: (context, snapshot) {
               final best = snapshot.data;
               return Row(
@@ -111,7 +123,7 @@ class _BestScoreBanner extends StatelessWidget {
                   Expanded(
                     child: (best == null || best.totalQuestions == 0)
                         ? Text(
-                            l10n.quizNoAttemptsYet,
+                            l10n.quizNoAttemptsYet(questionCount),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,

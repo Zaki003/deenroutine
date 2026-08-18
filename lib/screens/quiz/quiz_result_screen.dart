@@ -163,7 +163,7 @@ class QuizResultScreen extends StatelessWidget {
                     if (uid != null) ...[
                       const SizedBox(height: 16),
                       FutureBuilder<QuizResult?>(
-                        future: FirestoreService().getBestQuizResult(uid),
+                        future: FirestoreService().getBestQuizResult(uid, total),
                         builder: (context, snapshot) {
                           final best = snapshot.data;
                           if (best == null || best.totalQuestions == 0) {

@@ -126,8 +126,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizStartButton => 'Start Quiz';
 
   @override
-  String get quizNoAttemptsYet =>
-      'Take your first quiz to set a personal best.';
+  String quizNoAttemptsYet(Object count) {
+    return 'Take your first $count-question quiz to set a personal best.';
+  }
 
   @override
   String quizMinutesEstimate(Object minutes) {

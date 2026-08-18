@@ -41,7 +41,7 @@
   "quizTabTitle": "কুইজ",
   "quizChooseLengthLabel": "দৈর্ঘ্য বেছে নিন",
   "quizStartButton": "কুইজ শুরু করুন",
-  "quizNoAttemptsYet": "ব্যক্তিগত সেরা রেকর্ড করতে প্রথম কুইজ দিন।",
+  "quizNoAttemptsYet": "ব্যক্তিগত সেরা রেকর্ড করতে {count} টি প্রশ্নের প্রথম কুইজ দিন।",
   "quizMinutesEstimate": "~{minutes} মিনিট",
 
   "prayerErrorLocationDisabled": "লোকেশন সার্ভিস বন্ধ আছে।",

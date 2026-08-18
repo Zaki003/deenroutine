@@ -126,7 +126,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get quizStartButton => 'কুইজ শুরু করুন';
 
   @override
-  String get quizNoAttemptsYet => 'ব্যক্তিগত সেরা রেকর্ড করতে প্রথম কুইজ দিন।';
+  String quizNoAttemptsYet(Object count) {
+    return 'ব্যক্তিগত সেরা রেকর্ড করতে $count টি প্রশ্নের প্রথম কুইজ দিন।';
+  }
 
   @override
   String quizMinutesEstimate(Object minutes) {
