@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/habit.dart';
+import '../../models/habit_template.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../services/notification_service.dart';
@@ -12,7 +13,12 @@ class AddHabitScreen extends StatefulWidget {
   /// via an update instead of creating a new habit.
   final Habit? editingHabit;
 
-  const AddHabitScreen({super.key, this.editingHabit});
+  /// When set (and [editingHabit] isn't), the form opens pre-filled from this
+  /// template but still saves as a new habit — picking a template is just a
+  /// head start, not a locked-in choice.
+  final HabitTemplate? template;
+
+  const AddHabitScreen({super.key, this.editingHabit, this.template});
 
   @override
   State<AddHabitScreen> createState() => _AddHabitScreenState();
@@ -37,6 +43,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   void initState() {
     super.initState();
     final habit = widget.editingHabit;
+    final template = widget.template;
     if (habit != null) {
       _titleCtrl.text = habit.title;
       _category = habit.category;
@@ -46,6 +53,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         _reminderTime =
             TimeOfDay(hour: habit.reminderHour!, minute: habit.reminderMinute!);
       }
+    } else if (template != null) {
+      _titleCtrl.text = template.title;
+      _category = template.category;
+      _frequency = template.frequency;
     }
   }
 

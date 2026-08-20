@@ -6,9 +6,9 @@ import '../../providers/habit_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/habit_actions_menu.dart';
+import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/streak_badge.dart';
 import '../../widgets/week_picker.dart';
-import 'add_habit_screen.dart';
 
 /// Dedicated Habits tab: every habit with its streak and this week's
 /// completion; tap a card for edit/delete options.
@@ -19,7 +19,7 @@ class HabitsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final habits = context.watch<HabitProvider>().habits;
+    final habits = _sortedByCategory(context.watch<HabitProvider>().habits);
 
     // Reorders the Sun-first weekday names to Mon-first single letters,
     // matching the week picker's display order.
@@ -45,10 +45,7 @@ class HabitsScreen extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AddHabitScreen()),
-                ),
+                onTap: () => showHabitTemplateSheet(context),
                 child: Container(
                   width: 30,
                   height: 30,
@@ -79,6 +76,14 @@ class HabitsScreen extends StatelessWidget {
     );
   }
 }
+
+/// Groups habits by category — in [HabitCategory]'s declared order (Islam,
+/// Lifestyle, Learn, Work) — while keeping each category's habits in their
+/// existing relative order.
+List<Habit> _sortedByCategory(List<Habit> habits) => [
+      for (final category in HabitCategory.values)
+        ...habits.where((h) => h.category == category),
+    ];
 
 class _HabitRow extends StatelessWidget {
   final Habit habit;
