@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/deen_colors.dart';
 import 'star_pattern.dart';
 
@@ -12,6 +13,7 @@ class GradientHeroCard extends StatelessWidget {
   final String timeLabel;
   final String remainingLabel;
   final bool compact;
+  final VoidCallback? onUpdateLocation;
 
   const GradientHeroCard({
     super.key,
@@ -20,6 +22,7 @@ class GradientHeroCard extends StatelessWidget {
     required this.timeLabel,
     required this.remainingLabel,
     this.compact = false,
+    this.onUpdateLocation,
   });
 
   @override
@@ -34,9 +37,25 @@ class GradientHeroCard extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           StarPattern(opacity: 0.10, color: DeenColors.gold),
           compact ? _compactContent() : _largeContent(),
+          if (onUpdateLocation != null)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: onUpdateLocation,
+                icon: const Icon(Icons.edit_location_alt_outlined),
+                iconSize: compact ? 14 : 18,
+                color: DeenColors.goldSoft,
+                padding: const EdgeInsets.all(4),
+                constraints: const BoxConstraints(),
+                visualDensity: VisualDensity.compact,
+                tooltip: AppLocalizations.of(context)!.updateLocationTooltip,
+              ),
+            ),
         ],
       ),
     );

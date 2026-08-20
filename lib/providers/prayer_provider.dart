@@ -1,9 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/prayer_service.dart';
 
 class PrayerProvider extends ChangeNotifier {
   final PrayerService _service = PrayerService();
+
+  // Local, on-device cache. Prayer times only need recomputing once a
+  // calendar day, and the location barely ever changes between launches —
+  // so the common case (same day, same place) should cost zero GPS fixes
+  // and zero network calls, not repeat both on every app start.
+  static const _prefsDateKey = 'prayer_cache_date';
+  static const _prefsTimingsKey = 'prayer_cache_timings';
+  static const _prefsLatKey = 'prayer_last_lat';
+  static const _prefsLngKey = 'prayer_last_lng';
 
   Map<String, String> _timings = {};
   bool _loading = false;
@@ -90,17 +101,44 @@ class PrayerProvider extends ChangeNotifier {
     );
   }
 
+  /// Loads today's timings the cheapest way available: same-day local
+  /// cache first (no GPS, no network), else the last-known location (no
+  /// GPS) against the service's own Firestore/Aladhan chain, and only
+  /// asks for a fresh GPS fix if this device has never resolved a
+  /// location before. Use [updateLocation] to force a fresh GPS read.
   Future<void> loadPrayerTimes() async {
     _loading = true;
     _errorType = null;
     _errorDetail = null;
     notifyListeners();
     try {
-      final position = await _service.getCurrentLocation();
-      _timings = await _service.fetchPrayerTimes(
-        latitude: position.latitude,
-        longitude: position.longitude,
-      );
+      final prefs = await SharedPreferences.getInstance();
+      final todayKey = _todayKey();
+
+      if (prefs.getString(_prefsDateKey) == todayKey) {
+        final cached = _readCachedTimings(prefs);
+        if (cached != null) {
+          _timings = cached;
+          return;
+        }
+      }
+
+      final savedLat = prefs.getDouble(_prefsLatKey);
+      final savedLng = prefs.getDouble(_prefsLngKey);
+      double latitude;
+      double longitude;
+      if (savedLat != null && savedLng != null) {
+        latitude = savedLat;
+        longitude = savedLng;
+      } else {
+        final position = await _service.getCurrentLocation();
+        latitude = position.latitude;
+        longitude = position.longitude;
+        await prefs.setDouble(_prefsLatKey, latitude);
+        await prefs.setDouble(_prefsLngKey, longitude);
+      }
+
+      await _fetchAndCache(prefs, latitude, longitude, todayKey);
     } on PrayerException catch (e) {
       _errorType = e.type;
       _errorDetail = e.detail;
@@ -111,5 +149,68 @@ class PrayerProvider extends ChangeNotifier {
       _loading = false;
       notifyListeners();
     }
+  }
+
+  /// Explicit "I've travelled" override: re-reads the device's current GPS
+  /// location (ignoring whatever was saved), makes it the new sticky
+  /// location for future [loadPrayerTimes] calls, and refreshes today's
+  /// timings for it. Returns whether it succeeded, for the caller to show
+  /// a result message.
+  Future<bool> updateLocation() async {
+    _loading = true;
+    _errorType = null;
+    _errorDetail = null;
+    notifyListeners();
+    try {
+      final position = await _service.getCurrentLocation();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble(_prefsLatKey, position.latitude);
+      await prefs.setDouble(_prefsLngKey, position.longitude);
+      await _fetchAndCache(prefs, position.latitude, position.longitude, _todayKey());
+      return true;
+    } on PrayerException catch (e) {
+      _errorType = e.type;
+      _errorDetail = e.detail;
+      return false;
+    } catch (e) {
+      _errorType = PrayerErrorType.unknown;
+      _errorDetail = e.toString();
+      return false;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _fetchAndCache(
+    SharedPreferences prefs,
+    double latitude,
+    double longitude,
+    String todayKey,
+  ) async {
+    _timings = await _service.fetchPrayerTimes(latitude: latitude, longitude: longitude);
+    await prefs.setString(_prefsDateKey, todayKey);
+    await prefs.setString(_prefsTimingsKey, jsonEncode(_timings));
+  }
+
+  /// Rebuilds the map in canonical key order explicitly, rather than
+  /// trusting json round-tripping to preserve it, matching the defensive
+  /// approach [PrayerService] already takes with Firestore's map fields.
+  Map<String, String>? _readCachedTimings(SharedPreferences prefs) {
+    final raw = prefs.getString(_prefsTimingsKey);
+    if (raw == null) return null;
+    final decoded = Map<String, dynamic>.from(jsonDecode(raw));
+    return <String, String>{
+      'Fajr': decoded['Fajr'],
+      'Dhuhr': decoded['Dhuhr'],
+      'Asr': decoded['Asr'],
+      'Maghrib': decoded['Maghrib'],
+      'Isha': decoded['Isha'],
+    };
+  }
+
+  String _todayKey() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month}-${now.day}';
   }
 }

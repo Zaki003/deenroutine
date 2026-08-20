@@ -7,6 +7,7 @@ import '../../utils/duration_format.dart';
 import '../../utils/prayer_error_messages.dart';
 import '../../utils/prayer_labels.dart';
 import '../../widgets/gradient_hero_card.dart';
+import '../../widgets/update_location_action.dart';
 
 /// Dedicated Prayer Times tab: a day-progress bar between Fajr and Isha,
 /// the next-prayer hero, and the remaining prayers for today.
@@ -70,6 +71,7 @@ class PrayerScreen extends StatelessWidget {
                 remainingLabel: provider.timeUntilNextPrayer != null
                     ? l10n.prayerRemainingLong(formatCountdown(provider.timeUntilNextPrayer!))
                     : '',
+                onUpdateLocation: () => confirmUpdateLocation(context),
               ),
               const SizedBox(height: 16),
               for (final entry in _otherPrayers(provider))
