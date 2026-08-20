@@ -29,7 +29,14 @@ class _MainNavScreenState extends State<MainNavScreen> {
     super.initState();
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     context.read<HabitProvider>().listenToHabits(uid);
-    context.read<PrayerProvider>().loadPrayerTimes();
+    // loadPrayerTimes() notifies synchronously before its first await (to
+    // flip on isLoading immediately for pull-to-refresh callers), which
+    // would hit "setState() called during build" if invoked directly from
+    // initState. Defer to after the first frame instead.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<PrayerProvider>().loadPrayerTimes();
+    });
   }
 
   @override
