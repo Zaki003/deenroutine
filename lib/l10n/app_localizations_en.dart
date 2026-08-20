@@ -117,6 +117,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get updateLocationTooltip => 'Update location';
+
+  @override
+  String get updateLocationTitle => 'Update location';
+
+  @override
+  String get updateLocationBody =>
+      'Refresh today\'s prayer times using your device\'s current location?';
+
+  @override
+  String get updateLocationConfirm => 'Use current location';
+
+  @override
+  String get updateLocationSuccess => 'Location updated';
+
+  @override
   String get quizTabTitle => 'Quiz';
 
   @override
@@ -230,6 +246,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get frequencySpecificDays => 'Specific days';
+
+  @override
+  String get createYourOwnHabit => 'Create your own habit';
+
+  @override
+  String get templatePrayFiveTimes => 'Pray 5 times daily';
+
+  @override
+  String get templateReadQuran => 'Read Qur\'an';
+
+  @override
+  String get templateDhikrAfterPrayer => 'Dhikr after prayer';
+
+  @override
+  String get templateDrinkWater => 'Drink water';
+
+  @override
+  String get templateSleepEarly => 'Sleep by 11pm';
+
+  @override
+  String get templateShortWalk => '10-minute walk';
+
+  @override
+  String get templateReadPages => 'Read 20 pages';
+
+  @override
+  String get templateLearnNewWord => 'Learn a new word';
+
+  @override
+  String get templateWatchEducationalVideo => 'Watch an educational video';
+
+  @override
+  String get templateDeepWorkBlock => 'Deep work block';
+
+  @override
+  String get templateInboxZero => 'Inbox zero';
+
+  @override
+  String get templatePlanTomorrow => 'Plan tomorrow';
 
   @override
   String get weekdaySun => 'Sun';
@@ -386,22 +441,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizBackToHome => 'Back to Home';
 
   @override
-  String get profileAppBarTitle => 'Profile';
+  String get profilePreferencesLabel => 'PREFERENCES';
 
   @override
-  String get darkModeTitle => 'Dark mode';
+  String get profileAccountLabel => 'ACCOUNT';
 
   @override
-  String get darkModeFollowingSystem => 'Following system setting';
+  String get appearanceTitle => 'Appearance';
 
   @override
-  String get onLabel => 'On';
+  String get appearanceLight => 'Light';
 
   @override
-  String get offLabel => 'Off';
+  String get appearanceDark => 'Dark';
 
   @override
-  String get useSystemTheme => 'Use system theme';
+  String get appearanceSystem => 'System';
+
+  @override
+  String get notificationsTitle => 'Notifications';
 
   @override
   String get prayerMethodTitle => 'Prayer calculation method';

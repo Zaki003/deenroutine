@@ -117,6 +117,22 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get updateLocationTooltip => 'অবস্থান আপডেট করুন';
+
+  @override
+  String get updateLocationTitle => 'অবস্থান আপডেট করুন';
+
+  @override
+  String get updateLocationBody =>
+      'আপনার ডিভাইসের বর্তমান অবস্থান ব্যবহার করে আজকের নামাজের সময় রিফ্রেশ করবেন?';
+
+  @override
+  String get updateLocationConfirm => 'বর্তমান অবস্থান ব্যবহার করুন';
+
+  @override
+  String get updateLocationSuccess => 'অবস্থান আপডেট হয়েছে';
+
+  @override
   String get quizTabTitle => 'কুইজ';
 
   @override
@@ -230,6 +246,45 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get frequencySpecificDays => 'নির্দিষ্ট দিন';
+
+  @override
+  String get createYourOwnHabit => 'নিজের অভ্যাস তৈরি করুন';
+
+  @override
+  String get templatePrayFiveTimes => 'প্রতিদিন ৫ ওয়াক্ত নামাজ পড়ুন';
+
+  @override
+  String get templateReadQuran => 'কুরআন তিলাওয়াত করুন';
+
+  @override
+  String get templateDhikrAfterPrayer => 'নামাজের পর জিকির করুন';
+
+  @override
+  String get templateDrinkWater => 'পানি পান করুন';
+
+  @override
+  String get templateSleepEarly => 'রাত ১১টার মধ্যে ঘুমান';
+
+  @override
+  String get templateShortWalk => '১০ মিনিট হাঁটুন';
+
+  @override
+  String get templateReadPages => '২০ পৃষ্ঠা পড়ুন';
+
+  @override
+  String get templateLearnNewWord => 'একটি নতুন শব্দ শিখুন';
+
+  @override
+  String get templateWatchEducationalVideo => 'একটি শিক্ষামূলক ভিডিও দেখুন';
+
+  @override
+  String get templateDeepWorkBlock => 'গভীর মনোযোগে কাজ করুন';
+
+  @override
+  String get templateInboxZero => 'ইনবক্স খালি করুন';
+
+  @override
+  String get templatePlanTomorrow => 'আগামীকালের পরিকল্পনা করুন';
 
   @override
   String get weekdaySun => 'রবি';
@@ -386,22 +441,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get quizBackToHome => 'হোমে ফিরে যান';
 
   @override
-  String get profileAppBarTitle => 'প্রোফাইল';
+  String get profilePreferencesLabel => 'পছন্দসমূহ';
 
   @override
-  String get darkModeTitle => 'ডার্ক মোড';
+  String get profileAccountLabel => 'অ্যাকাউন্ট';
 
   @override
-  String get darkModeFollowingSystem => 'সিস্টেম সেটিং অনুসরণ করছে';
+  String get appearanceTitle => 'থিম';
 
   @override
-  String get onLabel => 'চালু';
+  String get appearanceLight => 'লাইট';
 
   @override
-  String get offLabel => 'বন্ধ';
+  String get appearanceDark => 'ডার্ক';
 
   @override
-  String get useSystemTheme => 'সিস্টেম থিম ব্যবহার করুন';
+  String get appearanceSystem => 'সিস্টেম';
+
+  @override
+  String get notificationsTitle => 'নোটিফিকেশন';
 
   @override
   String get prayerMethodTitle => 'নামাজের সময় গণনার পদ্ধতি';

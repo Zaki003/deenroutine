@@ -285,6 +285,36 @@ abstract class AppLocalizations {
   /// **'in {time}'**
   String prayerRemainingShort(Object time);
 
+  /// No description provided for @updateLocationTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Update location'**
+  String get updateLocationTooltip;
+
+  /// No description provided for @updateLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update location'**
+  String get updateLocationTitle;
+
+  /// No description provided for @updateLocationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh today\'s prayer times using your device\'s current location?'**
+  String get updateLocationBody;
+
+  /// No description provided for @updateLocationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Use current location'**
+  String get updateLocationConfirm;
+
+  /// No description provided for @updateLocationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Location updated'**
+  String get updateLocationSuccess;
+
   /// No description provided for @quizTabTitle.
   ///
   /// In en, this message translates to:
@@ -494,6 +524,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Specific days'**
   String get frequencySpecificDays;
+
+  /// No description provided for @createYourOwnHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your own habit'**
+  String get createYourOwnHabit;
+
+  /// No description provided for @templatePrayFiveTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Pray 5 times daily'**
+  String get templatePrayFiveTimes;
+
+  /// No description provided for @templateReadQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Qur\'an'**
+  String get templateReadQuran;
+
+  /// No description provided for @templateDhikrAfterPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr after prayer'**
+  String get templateDhikrAfterPrayer;
+
+  /// No description provided for @templateDrinkWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink water'**
+  String get templateDrinkWater;
+
+  /// No description provided for @templateSleepEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep by 11pm'**
+  String get templateSleepEarly;
+
+  /// No description provided for @templateShortWalk.
+  ///
+  /// In en, this message translates to:
+  /// **'10-minute walk'**
+  String get templateShortWalk;
+
+  /// No description provided for @templateReadPages.
+  ///
+  /// In en, this message translates to:
+  /// **'Read 20 pages'**
+  String get templateReadPages;
+
+  /// No description provided for @templateLearnNewWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn a new word'**
+  String get templateLearnNewWord;
+
+  /// No description provided for @templateWatchEducationalVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an educational video'**
+  String get templateWatchEducationalVideo;
+
+  /// No description provided for @templateDeepWorkBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep work block'**
+  String get templateDeepWorkBlock;
+
+  /// No description provided for @templateInboxZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox zero'**
+  String get templateInboxZero;
+
+  /// No description provided for @templatePlanTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan tomorrow'**
+  String get templatePlanTomorrow;
 
   /// No description provided for @weekdaySun.
   ///
@@ -747,41 +855,47 @@ abstract class AppLocalizations {
   /// **'Back to Home'**
   String get quizBackToHome;
 
-  /// No description provided for @profileAppBarTitle.
+  /// No description provided for @profilePreferencesLabel.
   ///
   /// In en, this message translates to:
-  /// **'Profile'**
-  String get profileAppBarTitle;
+  /// **'PREFERENCES'**
+  String get profilePreferencesLabel;
 
-  /// No description provided for @darkModeTitle.
+  /// No description provided for @profileAccountLabel.
   ///
   /// In en, this message translates to:
-  /// **'Dark mode'**
-  String get darkModeTitle;
+  /// **'ACCOUNT'**
+  String get profileAccountLabel;
 
-  /// No description provided for @darkModeFollowingSystem.
+  /// No description provided for @appearanceTitle.
   ///
   /// In en, this message translates to:
-  /// **'Following system setting'**
-  String get darkModeFollowingSystem;
+  /// **'Appearance'**
+  String get appearanceTitle;
 
-  /// No description provided for @onLabel.
+  /// No description provided for @appearanceLight.
   ///
   /// In en, this message translates to:
-  /// **'On'**
-  String get onLabel;
+  /// **'Light'**
+  String get appearanceLight;
 
-  /// No description provided for @offLabel.
+  /// No description provided for @appearanceDark.
   ///
   /// In en, this message translates to:
-  /// **'Off'**
-  String get offLabel;
+  /// **'Dark'**
+  String get appearanceDark;
 
-  /// No description provided for @useSystemTheme.
+  /// No description provided for @appearanceSystem.
   ///
   /// In en, this message translates to:
-  /// **'Use system theme'**
-  String get useSystemTheme;
+  /// **'System'**
+  String get appearanceSystem;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
 
   /// No description provided for @prayerMethodTitle.
   ///

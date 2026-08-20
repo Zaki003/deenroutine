@@ -18,9 +18,10 @@ import '../../widgets/deen_card.dart';
 import '../../widgets/gradient_hero_card.dart';
 import '../../widgets/habit_actions_menu.dart';
 import '../../widgets/habit_checkbox.dart';
+import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
-import '../habits/add_habit_screen.dart';
+import '../../widgets/update_location_action.dart';
 
 /// FR-06: Dashboard displaying the greeting, a daily Ayah/Hadith, the
 /// next-prayer countdown, the Barakah Circle, and today's habits.
@@ -168,10 +169,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const AddHabitScreen()),
-                  ),
+                  onTap: () => showHabitTemplateSheet(context),
                   child: Container(
                     width: 30,
                     height: 30,
@@ -269,6 +267,7 @@ class _PrayerHero extends StatelessWidget {
       remainingLabel: remaining != null
           ? l10n.prayerRemainingShort(formatCountdown(remaining))
           : '',
+      onUpdateLocation: () => confirmUpdateLocation(context),
     );
   }
 }
