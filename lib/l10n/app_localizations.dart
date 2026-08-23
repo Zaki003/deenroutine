@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'No habits yet. Tap + to add your first one.'**
   String get noHabitsYet;
 
+  /// No description provided for @noHabitsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing scheduled for today. Tap + to add a habit.'**
+  String get noHabitsToday;
+
   /// No description provided for @seeAllHabits.
   ///
   /// In en, this message translates to:

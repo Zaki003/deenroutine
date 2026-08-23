@@ -52,6 +52,16 @@ class Habit {
     return d.year == now.year && d.month == now.month && d.day == now.day;
   }
 
+  /// Whether this habit is scheduled for today. Daily and weekly habits are
+  /// always due; a [HabitFrequency.specificDays] habit is due only when
+  /// today's weekday is one of [selectedDays].
+  bool get isDueToday {
+    if (frequency != HabitFrequency.specificDays) return true;
+    // Dart's DateTime.weekday is Mon=1..Sun=7; selectedDays uses Sun=0..Sat=6.
+    final todayIndex = DateTime.now().weekday % 7;
+    return selectedDays.contains(todayIndex);
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,

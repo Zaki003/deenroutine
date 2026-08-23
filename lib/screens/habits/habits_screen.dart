@@ -95,44 +95,51 @@ class _HabitRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final done = habit.isCompletedToday;
-    return HabitActionsMenu(
-      habit: habit,
-      child: DeenCard(
-        dark: dark,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    habit.title,
-                    style: TextStyle(
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w500,
-                      color: DeenColors.primaryText(dark),
-                      decoration: done ? TextDecoration.lineThrough : null,
-                      decorationColor: DeenColors.primaryText(dark).withValues(alpha: 0.6),
+    // Habits not scheduled for today (specificDays that don't include today)
+    // stay in the list — this is the full-management view — but read as
+    // muted so it's clear at a glance they're not due. Edit/delete stay
+    // reachable since Opacity doesn't affect hit-testing.
+    return Opacity(
+      opacity: habit.isDueToday ? 1 : 0.45,
+      child: HabitActionsMenu(
+        habit: habit,
+        child: DeenCard(
+          dark: dark,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      habit.title,
+                      style: TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w500,
+                        color: DeenColors.primaryText(dark),
+                        decoration: done ? TextDecoration.lineThrough : null,
+                        decorationColor: DeenColors.primaryText(dark).withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
-                ),
-                FutureBuilder<int>(
-                  future: context.read<HabitProvider>().streakFor(habit.habitId),
-                  builder: (context, snapshot) =>
-                      StreakBadge(streak: snapshot.data ?? 0, dark: dark),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            FutureBuilder<List<bool>>(
-              future: context.read<HabitProvider>().weekFor(habit.habitId),
-              builder: (context, snapshot) {
-                final days = snapshot.data ?? List.filled(7, false);
-                return WeekPicker(days: days, labels: monFirstLetters, dark: dark);
-              },
-            ),
-          ],
+                  FutureBuilder<int>(
+                    future: context.read<HabitProvider>().streakFor(habit),
+                    builder: (context, snapshot) =>
+                        StreakBadge(streak: snapshot.data ?? 0, dark: dark),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              FutureBuilder<List<bool>>(
+                future: context.read<HabitProvider>().weekFor(habit.habitId),
+                builder: (context, snapshot) {
+                  final days = snapshot.data ?? List.filled(7, false);
+                  return WeekPicker(days: days, labels: monFirstLetters, dark: dark);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

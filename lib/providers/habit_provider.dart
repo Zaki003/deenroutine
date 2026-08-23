@@ -184,9 +184,13 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> streakFor(String habitId) async {
-    final logs = await _service.watchHabitLogs(habitId).first;
-    return _service.calculateStreak(logs);
+  Future<int> streakFor(Habit habit) async {
+    final logs = await _service.watchHabitLogs(habit.habitId).first;
+    return _service.calculateStreak(
+      logs,
+      frequency: habit.frequency,
+      selectedDays: habit.selectedDays,
+    );
   }
 
   /// This week's completion, one bool per day (Mon..Sun).

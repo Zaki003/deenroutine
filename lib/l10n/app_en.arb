@@ -21,6 +21,7 @@
   },
   "todaysHabitsTitle": "Today's Habits",
   "noHabitsYet": "No habits yet. Tap + to add your first one.",
+  "noHabitsToday": "Nothing scheduled for today. Tap + to add a habit.",
   "seeAllHabits": "See all {count} habits",
   "@seeAllHabits": {
     "placeholders": { "count": {} }

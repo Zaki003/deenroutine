@@ -75,16 +75,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     }
 
-    final done = habitProvider.habits.where((h) => h.isCompletedToday).length;
-    final total = habitProvider.habits.length;
+    // Only habits actually scheduled for today — daily/weekly habits always
+    // qualify, a specificDays habit only when today is one of its
+    // selectedDays. The Habits tab is still the place to see every habit
+    // regardless of day.
+    final todaysHabits = habitProvider.habits.where((h) => h.isDueToday).toList();
+    final done = todaysHabits.where((h) => h.isCompletedToday).length;
+    final total = todaysHabits.length;
 
     // Incomplete habits float to the top — those are the ones that still
     // need action today — and the list is capped so the dashboard stays a
     // glanceable summary instead of growing into a duplicate of the Habits
     // tab as someone adds more habits.
     final orderedHabits = [
-      ...habitProvider.habits.where((h) => !h.isCompletedToday),
-      ...habitProvider.habits.where((h) => h.isCompletedToday),
+      ...todaysHabits.where((h) => !h.isCompletedToday),
+      ...todaysHabits.where((h) => h.isCompletedToday),
     ];
     final visibleHabits = orderedHabits.take(_maxVisibleHabits).toList();
     final hiddenHabitCount = orderedHabits.length - visibleHabits.length;
@@ -189,6 +194,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(l10n.noHabitsYet,
                     style: const TextStyle(color: DeenColors.textMuted)),
+              )
+            else if (todaysHabits.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(l10n.noHabitsToday,
+                    style: const TextStyle(color: DeenColors.textMuted)),
               ),
             for (final habit in visibleHabits)
               Padding(
@@ -211,7 +222,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          l10n.seeAllHabits(total),
+                          l10n.seeAllHabits(habitProvider.habits.length),
                           style: const TextStyle(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w600,
@@ -351,7 +362,7 @@ class _DashboardHabitRow extends StatelessWidget {
               ),
             ),
             FutureBuilder<int>(
-              future: context.read<HabitProvider>().streakFor(habit.habitId),
+              future: context.read<HabitProvider>().streakFor(habit),
               builder: (context, snapshot) => StreakBadge(streak: snapshot.data ?? 0, dark: dark),
             ),
           ],

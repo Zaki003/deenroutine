@@ -72,8 +72,18 @@ class FirestoreService {
             snap.docs.map((d) => HabitLog.fromMap(d.id, d.data())).toList());
   }
 
-  /// Computes a simple consecutive-day streak from recent logs.
-  int calculateStreak(List<HabitLog> logs) {
+  /// Computes a simple consecutive-day streak from recent logs. A
+  /// [HabitFrequency.specificDays] habit only counts its scheduled weekdays
+  /// toward "consecutive" — a day it was never due is skipped rather than
+  /// treated as a miss.
+  int calculateStreak(
+    List<HabitLog> logs, {
+    HabitFrequency frequency = HabitFrequency.daily,
+    List<int> selectedDays = const [],
+  }) {
+    bool isScheduled(DateTime day) =>
+        frequency != HabitFrequency.specificDays || selectedDays.contains(day.weekday % 7);
+
     int streak = 0;
     DateTime cursor = DateTime.now();
     cursor = DateTime(cursor.year, cursor.month, cursor.day);
@@ -83,13 +93,22 @@ class FirestoreService {
     };
 
     // Not having done today's habit yet doesn't break an in-progress streak —
-    // only a fully missed day does. Anchor on today only once it's done;
+    // only a fully missed scheduled day does. Skip today, without breaking
+    // anything, whenever it isn't itself a completed scheduled day;
     // otherwise start the walk from yesterday so the streak still shows.
-    if (byDate[cursor] != true) {
+    if (!isScheduled(cursor) || byDate[cursor] != true) {
       cursor = cursor.subtract(const Duration(days: 1));
     }
 
-    while (byDate[cursor] == true) {
+    // Bounded a bit beyond the fetched log window so a corrupt/empty
+    // selectedDays (never produced by the app's own day picker, but not
+    // guaranteed for data edited directly in Firestore) can't spin forever.
+    for (var i = 0; i < 400; i++) {
+      if (!isScheduled(cursor)) {
+        cursor = cursor.subtract(const Duration(days: 1));
+        continue;
+      }
+      if (byDate[cursor] != true) break;
       streak++;
       cursor = cursor.subtract(const Duration(days: 1));
     }

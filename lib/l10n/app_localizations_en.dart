@@ -56,6 +56,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noHabitsYet => 'No habits yet. Tap + to add your first one.';
 
   @override
+  String get noHabitsToday =>
+      'Nothing scheduled for today. Tap + to add a habit.';
+
+  @override
   String seeAllHabits(Object count) {
     return 'See all $count habits';
   }

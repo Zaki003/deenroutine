@@ -56,6 +56,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noHabitsYet => 'এখনো কোনো অভ্যাস নেই। প্রথমটি যোগ করতে + চাপুন।';
 
   @override
+  String get noHabitsToday =>
+      'আজকের জন্য কোনো অভ্যাস নির্ধারিত নেই। একটি যোগ করতে + চাপুন।';
+
+  @override
   String seeAllHabits(Object count) {
     return 'সব $count টি অভ্যাস দেখুন';
   }
