@@ -1,9 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 
 enum HabitCategory { islam, lifestyle, learn, work }
 
 enum HabitFrequency { daily, weekly, specificDays }
+
+/// How a habit's daily completion is logged. [yesNo] is the original,
+/// still-default behavior; the others each pair with their own config
+/// fields below (only the ones matching a habit's [Habit.trackingType] are
+/// meaningful — the rest just sit at their default).
+enum HabitTrackingType { yesNo, numeric, timer, checklist, rating, avoidance }
 
 class Habit {
   final String habitId;
@@ -29,6 +36,35 @@ class Habit {
   final int? reminderHour;
   final int? reminderMinute;
 
+  final HabitTrackingType trackingType;
+
+  /// [HabitTrackingType.numeric] only: the day's target count (e.g. 10 pages).
+  final int numericTarget;
+  /// [HabitTrackingType.numeric] only: unit label shown next to the count.
+  final String numericUnit;
+  /// [HabitTrackingType.timer] only: the day's target duration.
+  final int timerTargetMinutes;
+  /// [HabitTrackingType.checklist] only: the fixed set of items a day's log
+  /// checks off.
+  final List<String> checklistItems;
+  /// [HabitTrackingType.rating] only: the scale's upper bound (e.g. 5 for
+  /// "out of 5").
+  final int ratingScale;
+
+  /// Denormalized snapshot of today's raw progress (numeric count, or timer
+  /// elapsed seconds) — written alongside [completed] so a dashboard row can
+  /// render e.g. "6/10 pages" without a separate query. Meaningful only
+  /// when [hasProgressToday] is true.
+  final int todayProgressValue;
+
+  /// [HabitTrackingType.checklist] only: which of [checklistItems] are
+  /// checked off today. Same denormalization idea as [todayProgressValue] —
+  /// meaningful only when [hasProgressToday] is true.
+  final List<String> todayChecklistDone;
+  /// [HabitTrackingType.rating] only: today's rating, or null if not rated
+  /// yet. Meaningful only when [hasProgressToday] is true.
+  final int? todayRatingValue;
+
   Habit({
     required this.habitId,
     required this.uid,
@@ -40,17 +76,32 @@ class Habit {
     this.selectedDays = const [],
     this.reminderHour,
     this.reminderMinute,
+    this.trackingType = HabitTrackingType.yesNo,
+    this.numericTarget = 1,
+    this.numericUnit = '',
+    this.timerTargetMinutes = 10,
+    this.checklistItems = const [],
+    this.ratingScale = 5,
+    this.todayProgressValue = 0,
+    this.todayChecklistDone = const [],
+    this.todayRatingValue,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
-  /// Whether [completed] reflects today, rather than a stale value carried
-  /// over from a previous day the habit was checked off.
-  bool get isCompletedToday {
-    if (!completed || lastCompletedDate == null) return false;
+  /// Whether the day's denormalized progress fields reflect today, rather
+  /// than a stale value carried over from a previous day. Independent of
+  /// [completed] — a numeric habit sitting at 6/10 has this true while
+  /// [isCompletedToday] is still false.
+  bool get hasProgressToday {
+    if (lastCompletedDate == null) return false;
     final now = DateTime.now();
     final d = lastCompletedDate!;
     return d.year == now.year && d.month == now.month && d.day == now.day;
   }
+
+  /// Whether [completed] reflects today, rather than a stale value carried
+  /// over from a previous day the habit was checked off.
+  bool get isCompletedToday => completed && hasProgressToday;
 
   /// Whether this habit is scheduled for today. Daily and weekly habits are
   /// always due; a [HabitFrequency.specificDays] habit is due only when
@@ -74,6 +125,15 @@ class Habit {
       'selectedDays': selectedDays,
       'reminderHour': reminderHour,
       'reminderMinute': reminderMinute,
+      'trackingType': trackingType.name,
+      'numericTarget': numericTarget,
+      'numericUnit': numericUnit,
+      'timerTargetMinutes': timerTargetMinutes,
+      'checklistItems': checklistItems,
+      'ratingScale': ratingScale,
+      'todayProgressValue': todayProgressValue,
+      'todayChecklistDone': todayChecklistDone,
+      'todayRatingValue': todayRatingValue,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
@@ -96,6 +156,18 @@ class Habit {
       selectedDays: List<int>.from(map['selectedDays'] ?? const []),
       reminderHour: map['reminderHour'] as int?,
       reminderMinute: map['reminderMinute'] as int?,
+      trackingType: HabitTrackingType.values.firstWhere(
+        (e) => e.name == map['trackingType'],
+        orElse: () => HabitTrackingType.yesNo,
+      ),
+      numericTarget: map['numericTarget'] as int? ?? 1,
+      numericUnit: map['numericUnit'] as String? ?? '',
+      timerTargetMinutes: map['timerTargetMinutes'] as int? ?? 10,
+      checklistItems: List<String>.from(map['checklistItems'] ?? const []),
+      ratingScale: map['ratingScale'] as int? ?? 5,
+      todayProgressValue: map['todayProgressValue'] as int? ?? 0,
+      todayChecklistDone: List<String>.from(map['todayChecklistDone'] ?? const []),
+      todayRatingValue: map['todayRatingValue'] as int?,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
@@ -139,6 +211,59 @@ extension HabitFrequencyLabel on HabitFrequency {
         return l10n.frequencyWeekly;
       case HabitFrequency.specificDays:
         return l10n.frequencySpecificDays;
+    }
+  }
+}
+
+extension HabitTrackingTypeLabel on HabitTrackingType {
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case HabitTrackingType.yesNo:
+        return l10n.trackingTypeYesNoLabel;
+      case HabitTrackingType.numeric:
+        return l10n.trackingTypeNumericLabel;
+      case HabitTrackingType.timer:
+        return l10n.trackingTypeTimerLabel;
+      case HabitTrackingType.checklist:
+        return l10n.trackingTypeChecklistLabel;
+      case HabitTrackingType.rating:
+        return l10n.trackingTypeRatingLabel;
+      case HabitTrackingType.avoidance:
+        return l10n.trackingTypeAvoidanceLabel;
+    }
+  }
+
+  String blurb(AppLocalizations l10n) {
+    switch (this) {
+      case HabitTrackingType.yesNo:
+        return l10n.trackingTypeYesNoBlurb;
+      case HabitTrackingType.numeric:
+        return l10n.trackingTypeNumericBlurb;
+      case HabitTrackingType.timer:
+        return l10n.trackingTypeTimerBlurb;
+      case HabitTrackingType.checklist:
+        return l10n.trackingTypeChecklistBlurb;
+      case HabitTrackingType.rating:
+        return l10n.trackingTypeRatingBlurb;
+      case HabitTrackingType.avoidance:
+        return l10n.trackingTypeAvoidanceBlurb;
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case HabitTrackingType.yesNo:
+        return Icons.check_circle_outline;
+      case HabitTrackingType.numeric:
+        return Icons.numbers;
+      case HabitTrackingType.timer:
+        return Icons.timer_outlined;
+      case HabitTrackingType.checklist:
+        return Icons.checklist;
+      case HabitTrackingType.rating:
+        return Icons.star_outline;
+      case HabitTrackingType.avoidance:
+        return Icons.flag_outlined;
     }
   }
 }

@@ -8,3 +8,13 @@ String formatCountdown(Duration d) {
   if (minutes > 0) return '${minutes}m';
   return '<1m';
 }
+
+/// Formats a duration as `m:ss` (e.g. `'3:12'`), used by the timer habit
+/// control where seconds-level precision matters — [formatCountdown] is
+/// too coarse (drops seconds entirely) for that.
+String formatMmSs(Duration d) {
+  final clamped = d.isNegative ? Duration.zero : d;
+  final minutes = clamped.inMinutes;
+  final seconds = clamped.inSeconds.remainder(60);
+  return '$minutes:${seconds.toString().padLeft(2, '0')}';
+}

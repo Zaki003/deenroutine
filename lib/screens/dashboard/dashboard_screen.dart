@@ -9,8 +9,10 @@ import '../../providers/locale_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../services/firestore_service.dart';
 import '../../theme/deen_colors.dart';
+import '../../utils/app_theme.dart';
 import '../../utils/duration_format.dart';
 import '../../utils/habit_error_messages.dart';
+import '../../utils/habit_progress_subtitle.dart';
 import '../../utils/prayer_labels.dart';
 import '../../utils/text_format.dart';
 import '../../widgets/barakah_circle.dart';
@@ -18,7 +20,9 @@ import '../../widgets/deen_card.dart';
 import '../../widgets/gradient_hero_card.dart';
 import '../../widgets/habit_actions_menu.dart';
 import '../../widgets/habit_checkbox.dart';
+import '../../widgets/habit_progress_ring.dart';
 import '../../widgets/habit_template_sheet.dart';
+import '../../widgets/habit_timer_control.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
 import '../../widgets/update_location_action.dart';
@@ -204,11 +208,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             for (final habit in visibleHabits)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: _DashboardHabitRow(
-                  habit: habit,
-                  dark: dark,
-                  onToggle: () => habitProvider.toggleComplete(habit),
-                ),
+                child: _DashboardHabitRow(habit: habit, dark: dark),
               ),
             if (hiddenHabitCount > 0)
               Padding(
@@ -327,47 +327,336 @@ class _QuoteCard extends StatelessWidget {
   }
 }
 
-class _DashboardHabitRow extends StatelessWidget {
+class _DashboardHabitRow extends StatefulWidget {
   final Habit habit;
   final bool dark;
-  final VoidCallback onToggle;
 
-  const _DashboardHabitRow({
-    required this.habit,
-    required this.dark,
-    required this.onToggle,
-  });
+  const _DashboardHabitRow({required this.habit, required this.dark});
+
+  @override
+  State<_DashboardHabitRow> createState() => _DashboardHabitRowState();
+}
+
+class _DashboardHabitRowState extends State<_DashboardHabitRow> {
+  /// Checklist item list, or rating star picker — whichever the habit's
+  /// tracking type uses. Purely local UI state, never persisted; collapses
+  /// again on its own tap, not automatically on completion.
+  bool _expanded = false;
+
+  /// Avoidance only: whether the "log a slip?" confirm bar is open. Kept
+  /// separate from [_expanded] since it's a confirm gate, not a picker.
+  bool _confirmingSlip = false;
+
+  Habit get habit => widget.habit;
+  bool get dark => widget.dark;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final done = habit.isCompletedToday;
+    final subtitle = habitProgressSubtitle(l10n, habit);
+    final showRatingPicker = habit.trackingType == HabitTrackingType.rating && _expanded;
+    final isAvoidance = habit.trackingType == HabitTrackingType.avoidance;
+
     return HabitActionsMenu(
       habit: habit,
       child: DeenCard(
         dark: dark,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HabitCheckbox(done: done, dark: dark, onTap: onToggle),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                habit.title,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: DeenColors.primaryText(dark),
-                  decoration: done ? TextDecoration.lineThrough : null,
-                  decorationColor: DeenColors.primaryText(dark).withValues(alpha: 0.6),
+            Row(
+              children: [
+                _leadingControl(context, done),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        habit.title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: DeenColors.primaryText(dark),
+                          decoration: done ? TextDecoration.lineThrough : null,
+                          decorationColor: DeenColors.primaryText(dark).withValues(alpha: 0.6),
+                        ),
+                      ),
+                      if (showRatingPicker)
+                        _ratingStarsRow(context)
+                      else if (isAvoidance)
+                        _avoidanceStatusLine(context)
+                      else if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle,
+                          style: const TextStyle(fontSize: 11, color: DeenColors.textMuted),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
+                FutureBuilder<int>(
+                  future: context.read<HabitProvider>().streakFor(habit),
+                  builder: (context, snapshot) => StreakBadge(streak: snapshot.data ?? 0, dark: dark),
+                ),
+              ],
             ),
-            FutureBuilder<int>(
-              future: context.read<HabitProvider>().streakFor(habit),
-              builder: (context, snapshot) => StreakBadge(streak: snapshot.data ?? 0, dark: dark),
-            ),
+            if (habit.trackingType == HabitTrackingType.checklist && _expanded)
+              _checklistItemsSection(context),
+            if (isAvoidance && _confirmingSlip) _avoidanceConfirmSection(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _leadingControl(BuildContext context, bool done) {
+    switch (habit.trackingType) {
+      case HabitTrackingType.numeric:
+        final current = habit.hasProgressToday ? habit.todayProgressValue : 0;
+        return HabitProgressRing(
+          progress: habit.numericTarget == 0 ? 0 : current / habit.numericTarget,
+          done: done,
+          dark: dark,
+          onTap: () => context.read<HabitProvider>().logNumericProgress(habit),
+          centerGlyph: Text(
+            '$current',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: DeenColors.primaryText(dark),
+            ),
+          ),
+        );
+      case HabitTrackingType.timer:
+        return HabitTimerControl(habit: habit, dark: dark);
+      case HabitTrackingType.checklist:
+        final total = habit.checklistItems.length;
+        final doneItems = habit.hasProgressToday ? habit.todayChecklistDone : const <String>[];
+        final doneCount = doneItems.where(habit.checklistItems.contains).length;
+        return HabitProgressRing(
+          progress: total == 0 ? 0 : doneCount / total,
+          done: done,
+          dark: dark,
+          onTap: () => setState(() => _expanded = !_expanded),
+          centerGlyph: Text(
+            '$doneCount',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: DeenColors.primaryText(dark),
+            ),
+          ),
+        );
+      case HabitTrackingType.rating:
+        // No arc — rating is unrated/rated, never partial — so the ring
+        // just shows an empty track until it converges on the same solid
+        // tick every other type uses once rated.
+        return HabitProgressRing(
+          progress: 0,
+          done: done,
+          dark: dark,
+          onTap: () => setState(() => _expanded = !_expanded),
+          centerGlyph: Icon(Icons.star_outline, size: 15, color: DeenColors.textMuted),
+        );
+      case HabitTrackingType.yesNo:
+        return HabitCheckbox(
+          done: done,
+          dark: dark,
+          onTap: () => context.read<HabitProvider>().toggleComplete(habit),
+        );
+      case HabitTrackingType.avoidance:
+        // Deliberately not a tap target: avoidance's only write is a slip
+        // (see logAvoidanceSlip), so a naive toggle here would create a
+        // HabitLogs doc on a plain tap and silently break the streak — the
+        // flag is a status indicator only, the ghost-link below is the one
+        // real trigger.
+        final slipLoggedToday = habit.hasProgressToday;
+        return SizedBox(
+          width: 38,
+          height: 38,
+          child: Icon(
+            slipLoggedToday ? Icons.flag : Icons.flag_outlined,
+            size: 20,
+            color: slipLoggedToday ? DeenColors.rust : DeenColors.textMuted,
+          ),
+        );
+    }
+  }
+
+  Widget _avoidanceStatusLine(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (habit.hasProgressToday) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 2),
+        child: Text(
+          l10n.avoidanceSlipLoggedToday,
+          style: const TextStyle(fontSize: 11, color: DeenColors.rust),
+        ),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: InkWell(
+        onTap: () => setState(() => _confirmingSlip = true),
+        child: Text(
+          l10n.avoidanceLogSlipLink,
+          style: const TextStyle(
+            fontSize: 11,
+            color: DeenColors.textMuted,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _avoidanceConfirmSection(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.errorSurface,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              l10n.avoidanceConfirmTitle,
+              style: TextStyle(fontSize: 11.5, color: DeenColors.primaryText(dark)),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => setState(() => _confirmingSlip = false),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Text(
+                l10n.cancelButton,
+                style: const TextStyle(fontSize: 11.5, color: DeenColors.textMuted),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              context.read<HabitProvider>().logAvoidanceSlip(habit);
+              setState(() => _confirmingSlip = false);
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: DeenColors.rust,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                l10n.avoidanceConfirmButton,
+                style: const TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _checklistItemsSection(BuildContext context) {
+    final doneItems =
+        (habit.hasProgressToday ? habit.todayChecklistDone : const <String>[]).toSet();
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final item in habit.checklistItems)
+            InkWell(
+              onTap: () {
+                final updated = Set<String>.from(doneItems);
+                if (updated.contains(item)) {
+                  updated.remove(item);
+                } else {
+                  updated.add(item);
+                }
+                context.read<HabitProvider>().logChecklistProgress(
+                      habit,
+                      habit.checklistItems.where(updated.contains).toList(),
+                    );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 48, top: 5, bottom: 5),
+                child: Row(
+                  children: [
+                    _ChecklistDot(done: doneItems.contains(item), dark: dark),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        item,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: doneItems.contains(item)
+                              ? DeenColors.textMuted
+                              : DeenColors.primaryText(dark),
+                          decoration: doneItems.contains(item) ? TextDecoration.lineThrough : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _ratingStarsRow(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        children: [
+          for (var value = 1; value <= habit.ratingScale; value++)
+            InkWell(
+              borderRadius: BorderRadius.circular(999),
+              onTap: () {
+                context.read<HabitProvider>().logRating(habit, value);
+                setState(() => _expanded = false);
+              },
+              child: Icon(Icons.star_outline, size: 18, color: DeenColors.gold),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Small filled/outline circle used for an individual checklist item — the
+/// same idea as [HabitCheckbox] at a much smaller size, no animation.
+class _ChecklistDot extends StatelessWidget {
+  final bool done;
+  final bool dark;
+
+  const _ChecklistDot({required this.done, required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 16,
+      height: 16,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: done ? DeenColors.primary : Colors.transparent,
+        border: Border.all(color: done ? DeenColors.primary : DeenColors.outlineFaint(dark)),
+      ),
+      child: done ? const Icon(Icons.check, size: 11, color: Colors.white) : null,
     );
   }
 }

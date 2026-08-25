@@ -97,6 +97,12 @@ class HabitProvider extends ChangeNotifier {
     List<int> selectedDays = const [],
     int? reminderHour,
     int? reminderMinute,
+    HabitTrackingType trackingType = HabitTrackingType.yesNo,
+    int numericTarget = 1,
+    String numericUnit = '',
+    int timerTargetMinutes = 10,
+    List<String> checklistItems = const [],
+    int ratingScale = 5,
   }) async {
     final normalizedTitle = title.trim().toLowerCase();
     final isDuplicate = _habits.any(
@@ -116,6 +122,12 @@ class HabitProvider extends ChangeNotifier {
       selectedDays: selectedDays,
       reminderHour: reminderHour,
       reminderMinute: reminderMinute,
+      trackingType: trackingType,
+      numericTarget: numericTarget,
+      numericUnit: numericUnit,
+      timerTargetMinutes: timerTargetMinutes,
+      checklistItems: checklistItems,
+      ratingScale: ratingScale,
     );
     await _service.addHabit(habit);
     return true;
@@ -132,6 +144,12 @@ class HabitProvider extends ChangeNotifier {
     List<int> selectedDays = const [],
     int? reminderHour,
     int? reminderMinute,
+    HabitTrackingType trackingType = HabitTrackingType.yesNo,
+    int numericTarget = 1,
+    String numericUnit = '',
+    int timerTargetMinutes = 10,
+    List<String> checklistItems = const [],
+    int ratingScale = 5,
   }) async {
     final normalizedTitle = title.trim().toLowerCase();
     final isDuplicate = _habits.any(
@@ -156,6 +174,13 @@ class HabitProvider extends ChangeNotifier {
       selectedDays: selectedDays,
       reminderHour: reminderHour,
       reminderMinute: reminderMinute,
+      trackingType: trackingType,
+      numericTarget: numericTarget,
+      numericUnit: numericUnit,
+      timerTargetMinutes: timerTargetMinutes,
+      checklistItems: checklistItems,
+      ratingScale: ratingScale,
+      todayProgressValue: original.todayProgressValue,
       createdAt: original.createdAt,
     );
 
@@ -168,9 +193,77 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
+  /// Yes/No logging, and the Milestone-1 stopgap for checklist/rating.
   Future<void> toggleComplete(Habit habit) async {
     try {
-      await _service.markHabitComplete(habit, !habit.isCompletedToday);
+      await _service.logProgress(habit, status: !habit.isCompletedToday);
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+    }
+  }
+
+  /// Numeric tracking: +1 per tap, persisted as the new running total.
+  /// Satisfied once the count reaches [Habit.numericTarget].
+  Future<void> logNumericProgress(Habit habit) async {
+    final current = habit.hasProgressToday ? habit.todayProgressValue : 0;
+    final next = current + 1;
+    try {
+      await _service.logProgress(
+        habit,
+        status: next >= habit.numericTarget,
+        numericValue: next,
+      );
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+    }
+  }
+
+  /// Timer tracking: persists an absolute elapsed-seconds checkpoint.
+  /// Satisfied once elapsed reaches [Habit.timerTargetMinutes].
+  Future<void> logTimerProgress(Habit habit, {required int elapsedSeconds}) async {
+    final targetSeconds = habit.timerTargetMinutes * 60;
+    try {
+      await _service.logProgress(
+        habit,
+        status: elapsedSeconds >= targetSeconds,
+        timerElapsedSeconds: elapsedSeconds,
+      );
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+    }
+  }
+
+  /// Rating tracking: any tap commits immediately and completes the day,
+  /// matching the app's one-tap completion model elsewhere.
+  Future<void> logRating(Habit habit, int value) async {
+    try {
+      await _service.logProgress(habit, status: true, ratingValue: value);
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+    }
+  }
+
+  /// Checklist tracking: records which items are checked off; satisfied
+  /// once every item in [Habit.checklistItems] is present in [doneItems].
+  Future<void> logChecklistProgress(Habit habit, List<String> doneItems) async {
+    try {
+      await _service.logProgress(
+        habit,
+        status: habit.checklistItems.isNotEmpty &&
+            doneItems.toSet().containsAll(habit.checklistItems),
+        checklistDone: doneItems,
+      );
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+    }
+  }
+
+  /// Avoidance tracking: records a slip. This is the *only* write an
+  /// avoidance habit ever makes — silence (no call at all) is what keeps
+  /// its streak going, so this always logs `status: false`.
+  Future<void> logAvoidanceSlip(Habit habit) async {
+    try {
+      await _service.logProgress(habit, status: false);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -190,12 +283,13 @@ class HabitProvider extends ChangeNotifier {
       logs,
       frequency: habit.frequency,
       selectedDays: habit.selectedDays,
+      trackingType: habit.trackingType,
     );
   }
 
   /// This week's completion, one bool per day (Mon..Sun).
-  Future<List<bool>> weekFor(String habitId) async {
-    final logs = await _service.watchHabitLogs(habitId).first;
-    return _service.weekCompletion(logs);
+  Future<List<bool>> weekFor(Habit habit) async {
+    final logs = await _service.watchHabitLogs(habit.habitId).first;
+    return _service.weekCompletion(logs, trackingType: habit.trackingType);
   }
 }

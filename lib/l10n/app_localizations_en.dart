@@ -252,6 +252,137 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frequencySpecificDays => 'Specific days';
 
   @override
+  String get trackingTypeSectionLabel => 'Tracking type';
+
+  @override
+  String get trackingTypeYesNoLabel => 'Yes / No';
+
+  @override
+  String get trackingTypeYesNoBlurb => 'One tap to mark done';
+
+  @override
+  String get trackingTypeNumericLabel => 'Numeric';
+
+  @override
+  String get trackingTypeNumericBlurb => 'Log a count vs. a target';
+
+  @override
+  String get trackingTypeTimerLabel => 'Timer';
+
+  @override
+  String get trackingTypeTimerBlurb => 'Track minutes spent';
+
+  @override
+  String get trackingTypeChecklistLabel => 'Checklist';
+
+  @override
+  String get trackingTypeChecklistBlurb => 'Multiple steps, one habit';
+
+  @override
+  String get trackingTypeRatingLabel => 'Rating';
+
+  @override
+  String get trackingTypeRatingBlurb => 'Rate how it went';
+
+  @override
+  String get trackingTypeAvoidanceLabel => 'Avoidance';
+
+  @override
+  String get trackingTypeAvoidanceBlurb => 'Success is staying at zero';
+
+  @override
+  String get yesNoInfoNote =>
+      'Marked complete with a single tap on the habit card — no extra input needed.';
+
+  @override
+  String get avoidanceInfoNote =>
+      'Check in once a day to confirm you stayed clear of it. The streak only breaks on a day you log a slip.';
+
+  @override
+  String get avoidanceLogSlipLink => 'Log a slip';
+
+  @override
+  String get avoidanceSlipLoggedToday => 'Slip logged today';
+
+  @override
+  String get avoidanceConfirmTitle => 'Log a slip for today?';
+
+  @override
+  String get avoidanceConfirmButton => 'Log it';
+
+  @override
+  String get numericTargetLabel => 'Daily target';
+
+  @override
+  String get numericUnitLabel => 'Unit';
+
+  @override
+  String get numericUnitPagesChip => 'pages';
+
+  @override
+  String get numericUnitGlassesChip => 'glasses';
+
+  @override
+  String get numericUnitRakahsChip => 'rakahs';
+
+  @override
+  String get numericUnitKmChip => 'km';
+
+  @override
+  String get numericUnitCustomHint => 'Custom unit';
+
+  @override
+  String get numericUnitDefault => 'times';
+
+  @override
+  String numericProgressSubtitle(Object current, Object target, Object unit) {
+    return '$current/$target $unit';
+  }
+
+  @override
+  String get timerTargetLabel => 'Target duration';
+
+  @override
+  String timerMinutesChip(Object minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get timerCustomMinutesLabel => 'Custom (minutes)';
+
+  @override
+  String timerProgressSubtitle(Object remaining) {
+    return '$remaining left';
+  }
+
+  @override
+  String get checklistItemsLabel => 'Checklist items';
+
+  @override
+  String get checklistItemInputHint => 'e.g. Istighfar 100x';
+
+  @override
+  String get checklistEmptyError => 'Add at least one item';
+
+  @override
+  String checklistProgressSubtitle(Object done, Object total) {
+    return '$done/$total items';
+  }
+
+  @override
+  String get ratingScaleLabel => 'Scale';
+
+  @override
+  String ratingOutOfOption(Object n) {
+    return 'out of $n';
+  }
+
+  @override
+  String ratingProgressSubtitle(Object value, Object scale) {
+    return '$value/$scale tonight';
+  }
+
+  @override
   String get createYourOwnHabit => 'Create your own habit';
 
   @override

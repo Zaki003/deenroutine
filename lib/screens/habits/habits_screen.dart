@@ -132,7 +132,7 @@ class _HabitRow extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               FutureBuilder<List<bool>>(
-                future: context.read<HabitProvider>().weekFor(habit.habitId),
+                future: context.read<HabitProvider>().weekFor(habit),
                 builder: (context, snapshot) {
                   final days = snapshot.data ?? List.filled(7, false);
                   return WeekPicker(days: days, labels: monFirstLetters, dark: dark);

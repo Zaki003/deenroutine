@@ -117,6 +117,68 @@
   "frequencyWeekly": "Weekly",
   "frequencySpecificDays": "Specific days",
 
+  "trackingTypeSectionLabel": "Tracking type",
+  "trackingTypeYesNoLabel": "Yes / No",
+  "trackingTypeYesNoBlurb": "One tap to mark done",
+  "trackingTypeNumericLabel": "Numeric",
+  "trackingTypeNumericBlurb": "Log a count vs. a target",
+  "trackingTypeTimerLabel": "Timer",
+  "trackingTypeTimerBlurb": "Track minutes spent",
+  "trackingTypeChecklistLabel": "Checklist",
+  "trackingTypeChecklistBlurb": "Multiple steps, one habit",
+  "trackingTypeRatingLabel": "Rating",
+  "trackingTypeRatingBlurb": "Rate how it went",
+  "trackingTypeAvoidanceLabel": "Avoidance",
+  "trackingTypeAvoidanceBlurb": "Success is staying at zero",
+  "yesNoInfoNote": "Marked complete with a single tap on the habit card — no extra input needed.",
+  "avoidanceInfoNote": "Check in once a day to confirm you stayed clear of it. The streak only breaks on a day you log a slip.",
+  "avoidanceLogSlipLink": "Log a slip",
+  "avoidanceSlipLoggedToday": "Slip logged today",
+  "avoidanceConfirmTitle": "Log a slip for today?",
+  "avoidanceConfirmButton": "Log it",
+
+  "numericTargetLabel": "Daily target",
+  "numericUnitLabel": "Unit",
+  "numericUnitPagesChip": "pages",
+  "numericUnitGlassesChip": "glasses",
+  "numericUnitRakahsChip": "rakahs",
+  "numericUnitKmChip": "km",
+  "numericUnitCustomHint": "Custom unit",
+  "numericUnitDefault": "times",
+  "numericProgressSubtitle": "{current}/{target} {unit}",
+  "@numericProgressSubtitle": {
+    "placeholders": { "current": {}, "target": {}, "unit": {} }
+  },
+
+  "timerTargetLabel": "Target duration",
+  "timerMinutesChip": "{minutes} min",
+  "@timerMinutesChip": {
+    "placeholders": { "minutes": {} }
+  },
+  "timerCustomMinutesLabel": "Custom (minutes)",
+  "timerProgressSubtitle": "{remaining} left",
+  "@timerProgressSubtitle": {
+    "placeholders": { "remaining": {} }
+  },
+
+  "checklistItemsLabel": "Checklist items",
+  "checklistItemInputHint": "e.g. Istighfar 100x",
+  "checklistEmptyError": "Add at least one item",
+  "checklistProgressSubtitle": "{done}/{total} items",
+  "@checklistProgressSubtitle": {
+    "placeholders": { "done": {}, "total": {} }
+  },
+
+  "ratingScaleLabel": "Scale",
+  "ratingOutOfOption": "out of {n}",
+  "@ratingOutOfOption": {
+    "placeholders": { "n": {} }
+  },
+  "ratingProgressSubtitle": "{value}/{scale} tonight",
+  "@ratingProgressSubtitle": {
+    "placeholders": { "value": {}, "scale": {} }
+  },
+
   "createYourOwnHabit": "Create your own habit",
   "templatePrayFiveTimes": "Pray 5 times daily",
   "templateReadQuran": "Read Qur'an",

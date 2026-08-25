@@ -7,6 +7,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../services/notification_service.dart';
 import '../../utils/habit_error_messages.dart';
+import '../../widgets/tracking_type_section.dart';
 
 class AddHabitScreen extends StatefulWidget {
   /// When set, the form opens pre-filled with this habit's values and saves
@@ -37,6 +38,16 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   final Set<int> _selectedDays = {};
   String? _dayPickerError;
 
+  HabitTrackingType _trackingType = HabitTrackingType.yesNo;
+  int _numericTarget = 1;
+  String _numericUnit = '';
+  final _numericUnitCtrl = TextEditingController();
+  int _timerTargetMinutes = 10;
+  final List<String> _checklistItems = [];
+  final _checklistItemCtrl = TextEditingController();
+  String? _checklistError;
+  int _ratingScale = 5;
+
   bool get _isEditing => widget.editingHabit != null;
 
   @override
@@ -53,11 +64,41 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         _reminderTime =
             TimeOfDay(hour: habit.reminderHour!, minute: habit.reminderMinute!);
       }
+      _trackingType = habit.trackingType;
+      _numericTarget = habit.numericTarget;
+      _numericUnit = habit.numericUnit;
+      // Only show the custom field's text when the saved unit isn't one of
+      // the preset chips — a preset match should just light up its chip,
+      // not also echo into the "custom" field.
+      if (!NumericConfigPanel.presetUnits.contains(habit.numericUnit)) {
+        _numericUnitCtrl.text = habit.numericUnit;
+      }
+      _timerTargetMinutes = habit.timerTargetMinutes;
+      _checklistItems.addAll(habit.checklistItems);
+      _ratingScale = habit.ratingScale;
     } else if (template != null) {
       _titleCtrl.text = template.title;
       _category = template.category;
       _frequency = template.frequency;
     }
+  }
+
+  @override
+  void dispose() {
+    _titleCtrl.dispose();
+    _numericUnitCtrl.dispose();
+    _checklistItemCtrl.dispose();
+    super.dispose();
+  }
+
+  void _addChecklistItem() {
+    final text = _checklistItemCtrl.text.trim();
+    if (text.isEmpty) return;
+    setState(() {
+      _checklistItems.add(text);
+      _checklistItemCtrl.clear();
+      _checklistError = null;
+    });
   }
 
   Future<void> _pickReminderTime() async {
@@ -134,7 +175,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(_isEditing ? l10n.editHabitTitle : l10n.newHabitTitle)),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(
           key: _formKey,
@@ -177,6 +218,42 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               ),
               if (_frequency == HabitFrequency.specificDays) _buildDayPicker(l10n),
               const SizedBox(height: 16),
+              TrackingTypePicker(
+                selected: _trackingType,
+                onChanged: (t) => setState(() {
+                  _trackingType = t;
+                  _checklistError = null;
+                }),
+              ),
+              switch (_trackingType) {
+                HabitTrackingType.numeric => NumericConfigPanel(
+                    target: _numericTarget,
+                    onTargetChanged: (v) => setState(() => _numericTarget = v),
+                    unit: _numericUnit,
+                    onUnitChanged: (v) => setState(() => _numericUnit = v),
+                    unitController: _numericUnitCtrl,
+                  ),
+                HabitTrackingType.timer => TimerConfigPanel(
+                    targetMinutes: _timerTargetMinutes,
+                    onTargetMinutesChanged: (v) => setState(() => _timerTargetMinutes = v),
+                  ),
+                HabitTrackingType.checklist => ChecklistConfigPanel(
+                    items: _checklistItems,
+                    itemController: _checklistItemCtrl,
+                    error: _checklistError,
+                    onAdd: _addChecklistItem,
+                    onRemoveAt: (i) => setState(() => _checklistItems.removeAt(i)),
+                  ),
+                HabitTrackingType.rating => RatingConfigPanel(
+                    scale: _ratingScale,
+                    onScaleChanged: (v) => setState(() => _ratingScale = v),
+                  ),
+                HabitTrackingType.yesNo =>
+                  TrackingTypeInfoNote(text: l10n.yesNoInfoNote),
+                HabitTrackingType.avoidance =>
+                  TrackingTypeInfoNote(text: l10n.avoidanceInfoNote),
+              },
+              const SizedBox(height: 16),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.notifications_outlined),
@@ -209,6 +286,14 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                           return;
                         }
 
+                        if (_trackingType == HabitTrackingType.checklist &&
+                            _checklistItems.isEmpty) {
+                          setState(() {
+                            _checklistError = l10n.checklistEmptyError;
+                          });
+                          return;
+                        }
+
                         setState(() => _saving = true);
                         final title = _titleCtrl.text.trim();
                         final habitProvider = context.read<HabitProvider>();
@@ -223,6 +308,12 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                 selectedDays: selectedDays,
                                 reminderHour: _reminderTime?.hour,
                                 reminderMinute: _reminderTime?.minute,
+                                trackingType: _trackingType,
+                                numericTarget: _numericTarget,
+                                numericUnit: _numericUnit.trim(),
+                                timerTargetMinutes: _timerTargetMinutes,
+                                checklistItems: List.of(_checklistItems),
+                                ratingScale: _ratingScale,
                               )
                             : await habitProvider.addHabit(
                                 uid: uid,
@@ -232,6 +323,12 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                 selectedDays: selectedDays,
                                 reminderHour: _reminderTime?.hour,
                                 reminderMinute: _reminderTime?.minute,
+                                trackingType: _trackingType,
+                                numericTarget: _numericTarget,
+                                numericUnit: _numericUnit.trim(),
+                                timerTargetMinutes: _timerTargetMinutes,
+                                checklistItems: List.of(_checklistItems),
+                                ratingScale: _ratingScale,
                               );
 
                         if (!saved) {

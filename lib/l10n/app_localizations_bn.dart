@@ -252,6 +252,137 @@ class AppLocalizationsBn extends AppLocalizations {
   String get frequencySpecificDays => 'নির্দিষ্ট দিন';
 
   @override
+  String get trackingTypeSectionLabel => 'ট্র্যাকিং ধরন';
+
+  @override
+  String get trackingTypeYesNoLabel => 'হ্যাঁ / না';
+
+  @override
+  String get trackingTypeYesNoBlurb => 'একবার চাপলেই সম্পন্ন';
+
+  @override
+  String get trackingTypeNumericLabel => 'সংখ্যা';
+
+  @override
+  String get trackingTypeNumericBlurb => 'লক্ষ্যের বিপরীতে গণনা লগ করুন';
+
+  @override
+  String get trackingTypeTimerLabel => 'টাইমার';
+
+  @override
+  String get trackingTypeTimerBlurb => 'কত মিনিট ব্যয় হলো তা ট্র্যাক করুন';
+
+  @override
+  String get trackingTypeChecklistLabel => 'চেকলিস্ট';
+
+  @override
+  String get trackingTypeChecklistBlurb => 'একই অভ্যাসে একাধিক ধাপ';
+
+  @override
+  String get trackingTypeRatingLabel => 'রেটিং';
+
+  @override
+  String get trackingTypeRatingBlurb => 'কেমন হলো তার রেটিং দিন';
+
+  @override
+  String get trackingTypeAvoidanceLabel => 'পরিহার';
+
+  @override
+  String get trackingTypeAvoidanceBlurb => 'শূন্যে থাকাই সাফল্য';
+
+  @override
+  String get yesNoInfoNote =>
+      'হ্যাবিট কার্ডে একবার চাপলেই সম্পন্ন হিসেবে চিহ্নিত হবে — অতিরিক্ত কিছু লেখার দরকার নেই।';
+
+  @override
+  String get avoidanceInfoNote =>
+      'প্রতিদিন একবার নিশ্চিত করুন যে আপনি এটি থেকে বিরত ছিলেন। যেদিন আপনি একটি স্খলন লগ করবেন, শুধু সেদিনই ধারাবাহিকতা ভাঙবে।';
+
+  @override
+  String get avoidanceLogSlipLink => 'একটি স্খলন লগ করুন';
+
+  @override
+  String get avoidanceSlipLoggedToday => 'আজ স্খলন লগ করা হয়েছে';
+
+  @override
+  String get avoidanceConfirmTitle => 'আজকের জন্য একটি স্খলন লগ করবেন?';
+
+  @override
+  String get avoidanceConfirmButton => 'লগ করুন';
+
+  @override
+  String get numericTargetLabel => 'দৈনিক লক্ষ্য';
+
+  @override
+  String get numericUnitLabel => 'একক';
+
+  @override
+  String get numericUnitPagesChip => 'পৃষ্ঠা';
+
+  @override
+  String get numericUnitGlassesChip => 'গ্লাস';
+
+  @override
+  String get numericUnitRakahsChip => 'রাকাত';
+
+  @override
+  String get numericUnitKmChip => 'কিমি';
+
+  @override
+  String get numericUnitCustomHint => 'নিজস্ব একক';
+
+  @override
+  String get numericUnitDefault => 'বার';
+
+  @override
+  String numericProgressSubtitle(Object current, Object target, Object unit) {
+    return '$target এর মধ্যে $current $unit';
+  }
+
+  @override
+  String get timerTargetLabel => 'লক্ষ্য সময়কাল';
+
+  @override
+  String timerMinutesChip(Object minutes) {
+    return '$minutes মিনিট';
+  }
+
+  @override
+  String get timerCustomMinutesLabel => 'নিজস্ব (মিনিট)';
+
+  @override
+  String timerProgressSubtitle(Object remaining) {
+    return '$remaining বাকি';
+  }
+
+  @override
+  String get checklistItemsLabel => 'চেকলিস্ট আইটেম';
+
+  @override
+  String get checklistItemInputHint => 'যেমন: ইস্তিগফার ১০০ বার';
+
+  @override
+  String get checklistEmptyError => 'কমপক্ষে একটি আইটেম যোগ করুন';
+
+  @override
+  String checklistProgressSubtitle(Object done, Object total) {
+    return '$total টির মধ্যে $done টি';
+  }
+
+  @override
+  String get ratingScaleLabel => 'স্কেল';
+
+  @override
+  String ratingOutOfOption(Object n) {
+    return '$n এর মধ্যে';
+  }
+
+  @override
+  String ratingProgressSubtitle(Object value, Object scale) {
+    return 'আজ রাতে $scale এর মধ্যে $value';
+  }
+
+  @override
   String get createYourOwnHabit => 'নিজের অভ্যাস তৈরি করুন';
 
   @override

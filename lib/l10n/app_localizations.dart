@@ -531,6 +531,240 @@ abstract class AppLocalizations {
   /// **'Specific days'**
   String get frequencySpecificDays;
 
+  /// No description provided for @trackingTypeSectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking type'**
+  String get trackingTypeSectionLabel;
+
+  /// No description provided for @trackingTypeYesNoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes / No'**
+  String get trackingTypeYesNoLabel;
+
+  /// No description provided for @trackingTypeYesNoBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'One tap to mark done'**
+  String get trackingTypeYesNoBlurb;
+
+  /// No description provided for @trackingTypeNumericLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Numeric'**
+  String get trackingTypeNumericLabel;
+
+  /// No description provided for @trackingTypeNumericBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a count vs. a target'**
+  String get trackingTypeNumericBlurb;
+
+  /// No description provided for @trackingTypeTimerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get trackingTypeTimerLabel;
+
+  /// No description provided for @trackingTypeTimerBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Track minutes spent'**
+  String get trackingTypeTimerBlurb;
+
+  /// No description provided for @trackingTypeChecklistLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist'**
+  String get trackingTypeChecklistLabel;
+
+  /// No description provided for @trackingTypeChecklistBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple steps, one habit'**
+  String get trackingTypeChecklistBlurb;
+
+  /// No description provided for @trackingTypeRatingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get trackingTypeRatingLabel;
+
+  /// No description provided for @trackingTypeRatingBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate how it went'**
+  String get trackingTypeRatingBlurb;
+
+  /// No description provided for @trackingTypeAvoidanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avoidance'**
+  String get trackingTypeAvoidanceLabel;
+
+  /// No description provided for @trackingTypeAvoidanceBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Success is staying at zero'**
+  String get trackingTypeAvoidanceBlurb;
+
+  /// No description provided for @yesNoInfoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked complete with a single tap on the habit card — no extra input needed.'**
+  String get yesNoInfoNote;
+
+  /// No description provided for @avoidanceInfoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in once a day to confirm you stayed clear of it. The streak only breaks on a day you log a slip.'**
+  String get avoidanceInfoNote;
+
+  /// No description provided for @avoidanceLogSlipLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a slip'**
+  String get avoidanceLogSlipLink;
+
+  /// No description provided for @avoidanceSlipLoggedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Slip logged today'**
+  String get avoidanceSlipLoggedToday;
+
+  /// No description provided for @avoidanceConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a slip for today?'**
+  String get avoidanceConfirmTitle;
+
+  /// No description provided for @avoidanceConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Log it'**
+  String get avoidanceConfirmButton;
+
+  /// No description provided for @numericTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily target'**
+  String get numericTargetLabel;
+
+  /// No description provided for @numericUnitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get numericUnitLabel;
+
+  /// No description provided for @numericUnitPagesChip.
+  ///
+  /// In en, this message translates to:
+  /// **'pages'**
+  String get numericUnitPagesChip;
+
+  /// No description provided for @numericUnitGlassesChip.
+  ///
+  /// In en, this message translates to:
+  /// **'glasses'**
+  String get numericUnitGlassesChip;
+
+  /// No description provided for @numericUnitRakahsChip.
+  ///
+  /// In en, this message translates to:
+  /// **'rakahs'**
+  String get numericUnitRakahsChip;
+
+  /// No description provided for @numericUnitKmChip.
+  ///
+  /// In en, this message translates to:
+  /// **'km'**
+  String get numericUnitKmChip;
+
+  /// No description provided for @numericUnitCustomHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom unit'**
+  String get numericUnitCustomHint;
+
+  /// No description provided for @numericUnitDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'times'**
+  String get numericUnitDefault;
+
+  /// No description provided for @numericProgressSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{current}/{target} {unit}'**
+  String numericProgressSubtitle(Object current, Object target, Object unit);
+
+  /// No description provided for @timerTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Target duration'**
+  String get timerTargetLabel;
+
+  /// No description provided for @timerMinutesChip.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String timerMinutesChip(Object minutes);
+
+  /// No description provided for @timerCustomMinutesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom (minutes)'**
+  String get timerCustomMinutesLabel;
+
+  /// No description provided for @timerProgressSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining} left'**
+  String timerProgressSubtitle(Object remaining);
+
+  /// No description provided for @checklistItemsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist items'**
+  String get checklistItemsLabel;
+
+  /// No description provided for @checklistItemInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Istighfar 100x'**
+  String get checklistItemInputHint;
+
+  /// No description provided for @checklistEmptyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one item'**
+  String get checklistEmptyError;
+
+  /// No description provided for @checklistProgressSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{done}/{total} items'**
+  String checklistProgressSubtitle(Object done, Object total);
+
+  /// No description provided for @ratingScaleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get ratingScaleLabel;
+
+  /// No description provided for @ratingOutOfOption.
+  ///
+  /// In en, this message translates to:
+  /// **'out of {n}'**
+  String ratingOutOfOption(Object n);
+
+  /// No description provided for @ratingProgressSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}/{scale} tonight'**
+  String ratingProgressSubtitle(Object value, Object scale);
+
   /// No description provided for @createYourOwnHabit.
   ///
   /// In en, this message translates to:

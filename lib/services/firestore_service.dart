@@ -36,15 +36,31 @@ class FirestoreService {
   }
 
   // ---------------- Habit completion + logs (FR-05, FR-11) ----------------
-  Future<void> markHabitComplete(Habit habit, bool status) async {
+
+  /// Writes today's progress for [habit]: updates the Habits doc's
+  /// denormalized completed/lastCompletedDate/todayProgressValue fields and
+  /// upserts today's HabitLogs doc, atomically. [status] is the
+  /// caller-computed "did today satisfy the habit" decision — this method
+  /// does no target/scale comparison itself.
+  Future<void> logProgress(
+    Habit habit, {
+    required bool status,
+    int? numericValue,
+    int? timerElapsedSeconds,
+    List<String>? checklistDone,
+    int? ratingValue,
+  }) async {
     final batch = _db.batch();
 
     final today = DateTime.now();
+    final todayMidnight = DateTime(today.year, today.month, today.day);
     final habitRef = _db.collection('Habits').doc(habit.habitId);
     batch.update(habitRef, {
       'completed': status,
-      'lastCompletedDate':
-          Timestamp.fromDate(DateTime(today.year, today.month, today.day)),
+      'lastCompletedDate': Timestamp.fromDate(todayMidnight),
+      'todayProgressValue': numericValue ?? timerElapsedSeconds ?? 0,
+      'todayChecklistDone': checklistDone ?? [],
+      'todayRatingValue': ratingValue,
     });
 
     final logId = '${habit.habitId}_${today.year}-${today.month}-${today.day}';
@@ -53,8 +69,12 @@ class FirestoreService {
       logId: logId,
       habitId: habit.habitId,
       uid: habit.uid,
-      date: DateTime(today.year, today.month, today.day),
+      date: todayMidnight,
       status: status,
+      numericValue: numericValue,
+      timerElapsedSeconds: timerElapsedSeconds,
+      checklistDone: checklistDone,
+      ratingValue: ratingValue,
     );
     batch.set(logRef, log.toMap());
 
@@ -76,27 +96,42 @@ class FirestoreService {
   /// [HabitFrequency.specificDays] habit only counts its scheduled weekdays
   /// toward "consecutive" — a day it was never due is skipped rather than
   /// treated as a miss.
+  ///
+  /// [trackingType] flips the meaning of "a day succeeded" for
+  /// [HabitTrackingType.avoidance]: every other type succeeds when a log
+  /// says so (`status == true`); avoidance succeeds on *silence* — a slip is
+  /// the only thing ever logged for it, so a day with no log at all is the
+  /// win, and a logged day is the break.
   int calculateStreak(
     List<HabitLog> logs, {
     HabitFrequency frequency = HabitFrequency.daily,
     List<int> selectedDays = const [],
+    HabitTrackingType trackingType = HabitTrackingType.yesNo,
   }) {
     bool isScheduled(DateTime day) =>
         frequency != HabitFrequency.specificDays || selectedDays.contains(day.weekday % 7);
+
+    final byDate = {
+      for (final l in logs) DateTime(l.date.year, l.date.month, l.date.day): l.status,
+    };
+    bool daySucceeded(DateTime day) => trackingType == HabitTrackingType.avoidance
+        ? !byDate.containsKey(day)
+        : byDate[day] == true;
 
     int streak = 0;
     DateTime cursor = DateTime.now();
     cursor = DateTime(cursor.year, cursor.month, cursor.day);
 
-    final byDate = {
-      for (final l in logs) DateTime(l.date.year, l.date.month, l.date.day): l.status,
-    };
-
     // Not having done today's habit yet doesn't break an in-progress streak —
     // only a fully missed scheduled day does. Skip today, without breaking
     // anything, whenever it isn't itself a completed scheduled day;
     // otherwise start the walk from yesterday so the streak still shows.
-    if (!isScheduled(cursor) || byDate[cursor] != true) {
+    // Avoidance has no "not yet logged" ambiguity (silence already reads as
+    // success), so it only needs the schedule check here, not daySucceeded.
+    final skipToday = trackingType == HabitTrackingType.avoidance
+        ? !isScheduled(cursor)
+        : (!isScheduled(cursor) || !daySucceeded(cursor));
+    if (skipToday) {
       cursor = cursor.subtract(const Duration(days: 1));
     }
 
@@ -108,7 +143,7 @@ class FirestoreService {
         cursor = cursor.subtract(const Duration(days: 1));
         continue;
       }
-      if (byDate[cursor] != true) break;
+      if (!daySucceeded(cursor)) break;
       streak++;
       cursor = cursor.subtract(const Duration(days: 1));
     }
@@ -118,7 +153,15 @@ class FirestoreService {
   /// Completion for the current Mon–Sun week, one bool per day in that
   /// order. Used by the Habits screen's week-picker; days after today are
   /// simply not-yet-done rather than distinguished as "future".
-  List<bool> weekCompletion(List<HabitLog> logs) {
+  ///
+  /// For [HabitTrackingType.avoidance] (see [calculateStreak]), a day with
+  /// no log reads as a success — except a day later in the current week
+  /// that hasn't happened yet, which must still read as not-done rather
+  /// than a false "success" just because nothing's been logged for it.
+  List<bool> weekCompletion(
+    List<HabitLog> logs, {
+    HabitTrackingType trackingType = HabitTrackingType.yesNo,
+  }) {
     final byDate = {
       for (final l in logs) DateTime(l.date.year, l.date.month, l.date.day): l.status,
     };
@@ -126,7 +169,13 @@ class FirestoreService {
     final todayMidnight = DateTime(today.year, today.month, today.day);
     // DateTime.weekday is 1=Mon..7=Sun.
     final monday = todayMidnight.subtract(Duration(days: todayMidnight.weekday - 1));
-    return List.generate(7, (i) => byDate[monday.add(Duration(days: i))] == true);
+    return List.generate(7, (i) {
+      final day = monday.add(Duration(days: i));
+      if (trackingType == HabitTrackingType.avoidance) {
+        return !day.isAfter(todayMidnight) && !byDate.containsKey(day);
+      }
+      return byDate[day] == true;
+    });
   }
 
   // ---------------- Daily motivation (FR-09) ----------------
