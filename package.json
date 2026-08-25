@@ -6,9 +6,13 @@
     "seed:quiz:prune": "node scripts/seed_quiz_questions.js --prune",
     "seed:quotes": "node scripts/seed_daily_quotes.js",
     "seed:quotes:check": "node scripts/seed_daily_quotes.js --dry-run",
-    "seed:quotes:prune": "node scripts/seed_daily_quotes.js --prune"
+    "seed:quotes:prune": "node scripts/seed_daily_quotes.js --prune",
+    "test:rules": "firebase emulators:exec --only firestore \"node scripts/test_firestore_rules.js\""
   },
   "dependencies": {
     "firebase-admin": "^14.2.0"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2"
   }
 }

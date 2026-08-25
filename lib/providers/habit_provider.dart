@@ -278,7 +278,7 @@ class HabitProvider extends ChangeNotifier {
   }
 
   Future<int> streakFor(Habit habit) async {
-    final logs = await _service.watchHabitLogs(habit.habitId).first;
+    final logs = await _service.watchHabitLogs(habit.uid, habit.habitId).first;
     return _service.calculateStreak(
       logs,
       frequency: habit.frequency,
@@ -289,7 +289,7 @@ class HabitProvider extends ChangeNotifier {
 
   /// This week's completion, one bool per day (Mon..Sun).
   Future<List<bool>> weekFor(Habit habit) async {
-    final logs = await _service.watchHabitLogs(habit.habitId).first;
+    final logs = await _service.watchHabitLogs(habit.uid, habit.habitId).first;
     return _service.weekCompletion(logs, trackingType: habit.trackingType);
   }
 }

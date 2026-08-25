@@ -81,9 +81,15 @@ class FirestoreService {
     await batch.commit();
   }
 
-  Stream<List<HabitLog>> watchHabitLogs(String habitId) {
+  /// [uid] must match the caller's own auth uid — Firestore rejects a list
+  /// query outright (not a silent per-doc filter) unless every field the
+  /// security rule checks is also pinned by an equality clause in the query
+  /// itself, so this can't be scoped by [habitId] alone under the owner-only
+  /// HabitLogs rule.
+  Stream<List<HabitLog>> watchHabitLogs(String uid, String habitId) {
     return _db
         .collection('HabitLogs')
+        .where('uid', isEqualTo: uid)
         .where('habitId', isEqualTo: habitId)
         .orderBy('date', descending: true)
         .limit(60)

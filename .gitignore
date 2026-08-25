@@ -37,6 +37,12 @@ ios/.symlinks/
 # Node (content seeding scripts)
 node_modules/
 
+# Firebase emulator (scripts/test_firestore_rules.js)
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+
 # Service account key for scripts/seed_quiz_questions.js — NEVER commit this,
 # it grants full admin access to the Firebase project.
 scripts/serviceAccountKey.json
