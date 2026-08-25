@@ -12,11 +12,25 @@ class HabitTemplate {
   final HabitFrequency frequency;
   final IconData icon;
 
+  /// Tracking config a habit created from this template starts with. Left at
+  /// the [Habit] defaults (yesNo, empty/1/10) for templates whose title
+  /// doesn't spell out a specific count, duration, or item list.
+  final HabitTrackingType trackingType;
+  final List<String> checklistItems;
+  final int numericTarget;
+  final String numericUnit;
+  final int timerTargetMinutes;
+
   const HabitTemplate({
     required this.title,
     required this.category,
     required this.frequency,
     required this.icon,
+    this.trackingType = HabitTrackingType.yesNo,
+    this.checklistItems = const [],
+    this.numericTarget = 1,
+    this.numericUnit = '',
+    this.timerTargetMinutes = 10,
   });
 }
 
@@ -29,6 +43,14 @@ List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
         category: HabitCategory.islam,
         frequency: HabitFrequency.daily,
         icon: Icons.nights_stay_outlined,
+        trackingType: HabitTrackingType.checklist,
+        checklistItems: [
+          l10n.prayerFajr,
+          l10n.prayerDhuhr,
+          l10n.prayerAsr,
+          l10n.prayerMaghrib,
+          l10n.prayerIsha,
+        ],
       ),
       HabitTemplate(
         title: l10n.templateReadQuran,
@@ -59,12 +81,17 @@ List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
         category: HabitCategory.lifestyle,
         frequency: HabitFrequency.daily,
         icon: Icons.directions_walk_outlined,
+        trackingType: HabitTrackingType.timer,
+        timerTargetMinutes: 10,
       ),
       HabitTemplate(
         title: l10n.templateReadPages,
         category: HabitCategory.learn,
         frequency: HabitFrequency.daily,
         icon: Icons.auto_stories_outlined,
+        trackingType: HabitTrackingType.numeric,
+        numericTarget: 20,
+        numericUnit: 'pages',
       ),
       HabitTemplate(
         title: l10n.templateLearnNewWord,

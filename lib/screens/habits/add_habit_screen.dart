@@ -80,6 +80,14 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       _titleCtrl.text = template.title;
       _category = template.category;
       _frequency = template.frequency;
+      _trackingType = template.trackingType;
+      _numericTarget = template.numericTarget;
+      _numericUnit = template.numericUnit;
+      if (!NumericConfigPanel.presetUnits.contains(template.numericUnit)) {
+        _numericUnitCtrl.text = template.numericUnit;
+      }
+      _timerTargetMinutes = template.timerTargetMinutes;
+      _checklistItems.addAll(template.checklistItems);
     }
   }
 
