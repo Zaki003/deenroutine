@@ -296,19 +296,19 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get avoidanceInfoNote =>
-      'প্রতিদিন একবার নিশ্চিত করুন যে আপনি এটি থেকে বিরত ছিলেন। যেদিন আপনি একটি স্খলন লগ করবেন, শুধু সেদিনই ধারাবাহিকতা ভাঙবে।';
+      'প্রতিদিন একবার নিশ্চিত করুন যে আপনি এটি থেকে বিরত ছিলেন। যেদিন আপনার ভুল হয়ে যাবে, শুধু সেদিনই ধারাবাহিকতা ভাঙবে।';
 
   @override
-  String get avoidanceLogSlipLink => 'একটি স্খলন লগ করুন';
+  String get avoidanceLogSlipLink => 'আজ ভুল হয়েছে?';
 
   @override
-  String get avoidanceSlipLoggedToday => 'আজ স্খলন লগ করা হয়েছে';
+  String get avoidanceSlipLoggedToday => 'আজ ভুল হয়ে গেছে';
 
   @override
-  String get avoidanceConfirmTitle => 'আজকের জন্য একটি স্খলন লগ করবেন?';
+  String get avoidanceConfirmTitle => 'আজ সত্যিই ভুল হয়ে গেছে?';
 
   @override
-  String get avoidanceConfirmButton => 'লগ করুন';
+  String get avoidanceConfirmButton => 'হ্যাঁ, হয়েছে';
 
   @override
   String get numericTargetLabel => 'দৈনিক লক্ষ্য';
