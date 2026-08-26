@@ -61,9 +61,21 @@
   },
   "updateLocationTooltip": "Update location",
   "updateLocationTitle": "Update location",
-  "updateLocationBody": "Refresh today's prayer times using your device's current location?",
   "updateLocationConfirm": "Use current location",
   "updateLocationSuccess": "Location updated",
+  "currentLocationGps": "Currently using GPS",
+  "currentLocationCity": "Currently: {city}",
+  "@currentLocationCity": {
+    "placeholders": { "city": {} }
+  },
+  "useCurrentLocationSubtitle": "Uses your device's GPS",
+  "enterCityTitle": "Enter a city",
+  "enterCitySubtitle": "No location permission needed",
+  "chooseCityTitle": "Choose your city",
+  "searchCityHint": "Search for a city",
+  "citySearchPrivacyNote": "Searching happens on your device — nothing is sent until you pick a city.",
+  "citySearchEmptyHint": "Start typing to search for a city",
+  "citySearchNoResults": "No matching cities found",
 
   "quizTabTitle": "Quiz",
   "quizChooseLengthLabel": "Choose your length",

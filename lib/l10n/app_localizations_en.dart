@@ -127,14 +127,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateLocationTitle => 'Update location';
 
   @override
-  String get updateLocationBody =>
-      'Refresh today\'s prayer times using your device\'s current location?';
-
-  @override
   String get updateLocationConfirm => 'Use current location';
 
   @override
   String get updateLocationSuccess => 'Location updated';
+
+  @override
+  String get currentLocationGps => 'Currently using GPS';
+
+  @override
+  String currentLocationCity(Object city) {
+    return 'Currently: $city';
+  }
+
+  @override
+  String get useCurrentLocationSubtitle => 'Uses your device\'s GPS';
+
+  @override
+  String get enterCityTitle => 'Enter a city';
+
+  @override
+  String get enterCitySubtitle => 'No location permission needed';
+
+  @override
+  String get chooseCityTitle => 'Choose your city';
+
+  @override
+  String get searchCityHint => 'Search for a city';
+
+  @override
+  String get citySearchPrivacyNote =>
+      'Searching happens on your device — nothing is sent until you pick a city.';
+
+  @override
+  String get citySearchEmptyHint => 'Start typing to search for a city';
+
+  @override
+  String get citySearchNoResults => 'No matching cities found';
 
   @override
   String get quizTabTitle => 'Quiz';

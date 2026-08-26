@@ -40,9 +40,21 @@
   "prayerRemainingShort": "{time} পরে",
   "updateLocationTooltip": "অবস্থান আপডেট করুন",
   "updateLocationTitle": "অবস্থান আপডেট করুন",
-  "updateLocationBody": "আপনার ডিভাইসের বর্তমান অবস্থান ব্যবহার করে আজকের নামাজের সময় রিফ্রেশ করবেন?",
   "updateLocationConfirm": "বর্তমান অবস্থান ব্যবহার করুন",
   "updateLocationSuccess": "অবস্থান আপডেট হয়েছে",
+  "currentLocationGps": "বর্তমানে ডিভাইসের অবস্থান ব্যবহার করা হচ্ছে",
+  "currentLocationCity": "বর্তমান অবস্থান: {city}",
+  "@currentLocationCity": {
+    "placeholders": { "city": {} }
+  },
+  "useCurrentLocationSubtitle": "আপনার ডিভাইসের অবস্থান ব্যবহার করে",
+  "enterCityTitle": "শহরের নাম লিখুন",
+  "enterCitySubtitle": "অবস্থানের অনুমতির প্রয়োজন নেই",
+  "chooseCityTitle": "আপনার শহর বেছে নিন",
+  "searchCityHint": "শহর খুঁজুন",
+  "citySearchPrivacyNote": "খোঁজা আপনার ডিভাইসেই হয় — শহর বেছে নেওয়ার আগে কিছুই পাঠানো হয় না।",
+  "citySearchEmptyHint": "শহর খুঁজতে টাইপ করা শুরু করুন",
+  "citySearchNoResults": "কোনো মিলযুক্ত শহর পাওয়া যায়নি",
 
   "quizTabTitle": "কুইজ",
   "quizChooseLengthLabel": "দৈর্ঘ্য বেছে নিন",

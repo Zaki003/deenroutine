@@ -49,6 +49,10 @@ scripts/serviceAccountKey.json
 **/*serviceAccountKey*.json
 **/*-firebase-adminsdk-*.json
 
+# Raw GeoNames dumps for scripts/build_cities_asset.js — large source files,
+# not needed at runtime (only their trimmed output, assets/cities.json, is).
+scripts/.geonames-raw/
+
 # Firebase (do NOT commit real credentials — regenerate locally via
 # `flutterfire configure` instead; see the implementation guide, Step 3)
 # lib/firebase_options.dart is intentionally kept OUT of this ignore list —

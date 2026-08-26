@@ -303,12 +303,6 @@ abstract class AppLocalizations {
   /// **'Update location'**
   String get updateLocationTitle;
 
-  /// No description provided for @updateLocationBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh today\'s prayer times using your device\'s current location?'**
-  String get updateLocationBody;
-
   /// No description provided for @updateLocationConfirm.
   ///
   /// In en, this message translates to:
@@ -320,6 +314,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location updated'**
   String get updateLocationSuccess;
+
+  /// No description provided for @currentLocationGps.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently using GPS'**
+  String get currentLocationGps;
+
+  /// No description provided for @currentLocationCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently: {city}'**
+  String currentLocationCity(Object city);
+
+  /// No description provided for @useCurrentLocationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your device\'s GPS'**
+  String get useCurrentLocationSubtitle;
+
+  /// No description provided for @enterCityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a city'**
+  String get enterCityTitle;
+
+  /// No description provided for @enterCitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No location permission needed'**
+  String get enterCitySubtitle;
+
+  /// No description provided for @chooseCityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your city'**
+  String get chooseCityTitle;
+
+  /// No description provided for @searchCityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a city'**
+  String get searchCityHint;
+
+  /// No description provided for @citySearchPrivacyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching happens on your device — nothing is sent until you pick a city.'**
+  String get citySearchPrivacyNote;
+
+  /// No description provided for @citySearchEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Start typing to search for a city'**
+  String get citySearchEmptyHint;
+
+  /// No description provided for @citySearchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching cities found'**
+  String get citySearchNoResults;
 
   /// No description provided for @quizTabTitle.
   ///

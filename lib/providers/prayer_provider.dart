@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/city.dart';
 import '../services/prayer_service.dart';
 
 class PrayerProvider extends ChangeNotifier {
@@ -16,10 +17,17 @@ class PrayerProvider extends ChangeNotifier {
   static const _prefsLatKey = 'prayer_last_lat';
   static const _prefsLngKey = 'prayer_last_lng';
 
+  /// Whether [_prefsLatKey]/[_prefsLngKey] came from a manually picked city
+  /// rather than GPS, and that city's display label — e.g. "Cairo, Egypt".
+  /// Purely for showing "what location are we using" in the UI;
+  /// [loadPrayerTimes] doesn't care how the saved coordinates got there.
+  static const _prefsManualLabelKey = 'prayer_manual_city_label';
+
   Map<String, String> _timings = {};
   bool _loading = false;
   PrayerErrorType? _errorType;
   String? _errorDetail;
+  String? _manualCityLabel;
 
   /// Nothing else drives a rebuild as time passes, so without this the
   /// dashboard's prayer card and the Prayer tab only refresh their
@@ -47,6 +55,12 @@ class PrayerProvider extends ChangeNotifier {
   PrayerErrorType? get errorType => _errorType;
   String? get errorDetail => _errorDetail;
   bool get hasError => _errorType != null;
+
+  /// Whether the saved lat/lng came from a manually picked city rather than
+  /// GPS, and that city's label (e.g. "Cairo, Egypt") for display. Both are
+  /// null until the first [loadPrayerTimes] populates them from prefs.
+  bool get isManualLocation => _manualCityLabel != null;
+  String? get manualCityLabel => _manualCityLabel;
 
   /// Timings reordered so the next upcoming prayer is first, followed by
   /// the rest in their normal daily order (wrapping past ones to the end).
@@ -114,6 +128,7 @@ class PrayerProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final todayKey = _todayKey();
+      _manualCityLabel = prefs.getString(_prefsManualLabelKey);
 
       if (prefs.getString(_prefsDateKey) == todayKey) {
         final cached = _readCachedTimings(prefs);
@@ -152,10 +167,10 @@ class PrayerProvider extends ChangeNotifier {
   }
 
   /// Explicit "I've travelled" override: re-reads the device's current GPS
-  /// location (ignoring whatever was saved), makes it the new sticky
-  /// location for future [loadPrayerTimes] calls, and refreshes today's
-  /// timings for it. Returns whether it succeeded, for the caller to show
-  /// a result message.
+  /// location (ignoring whatever was saved, including a previously picked
+  /// manual city), makes it the new sticky location for future
+  /// [loadPrayerTimes] calls, and refreshes today's timings for it. Returns
+  /// whether it succeeded, for the caller to show a result message.
   Future<bool> updateLocation() async {
     _loading = true;
     _errorType = null;
@@ -166,7 +181,39 @@ class PrayerProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setDouble(_prefsLatKey, position.latitude);
       await prefs.setDouble(_prefsLngKey, position.longitude);
+      await prefs.remove(_prefsManualLabelKey);
+      _manualCityLabel = null;
       await _fetchAndCache(prefs, position.latitude, position.longitude, _todayKey());
+      return true;
+    } on PrayerException catch (e) {
+      _errorType = e.type;
+      _errorDetail = e.detail;
+      return false;
+    } catch (e) {
+      _errorType = PrayerErrorType.unknown;
+      _errorDetail = e.toString();
+      return false;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Sets [city] as the sticky location for future [loadPrayerTimes] calls
+  /// (no GPS fix involved) and refreshes today's timings for it. Returns
+  /// whether it succeeded, for the caller to show a result message.
+  Future<bool> setManualCity(City city) async {
+    _loading = true;
+    _errorType = null;
+    _errorDetail = null;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble(_prefsLatKey, city.latitude);
+      await prefs.setDouble(_prefsLngKey, city.longitude);
+      await prefs.setString(_prefsManualLabelKey, city.displayLabel);
+      _manualCityLabel = city.displayLabel;
+      await _fetchAndCache(prefs, city.latitude, city.longitude, _todayKey());
       return true;
     } on PrayerException catch (e) {
       _errorType = e.type;

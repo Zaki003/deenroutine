@@ -127,14 +127,44 @@ class AppLocalizationsBn extends AppLocalizations {
   String get updateLocationTitle => 'অবস্থান আপডেট করুন';
 
   @override
-  String get updateLocationBody =>
-      'আপনার ডিভাইসের বর্তমান অবস্থান ব্যবহার করে আজকের নামাজের সময় রিফ্রেশ করবেন?';
-
-  @override
   String get updateLocationConfirm => 'বর্তমান অবস্থান ব্যবহার করুন';
 
   @override
   String get updateLocationSuccess => 'অবস্থান আপডেট হয়েছে';
+
+  @override
+  String get currentLocationGps =>
+      'বর্তমানে ডিভাইসের অবস্থান ব্যবহার করা হচ্ছে';
+
+  @override
+  String currentLocationCity(Object city) {
+    return 'বর্তমান অবস্থান: $city';
+  }
+
+  @override
+  String get useCurrentLocationSubtitle => 'আপনার ডিভাইসের অবস্থান ব্যবহার করে';
+
+  @override
+  String get enterCityTitle => 'শহরের নাম লিখুন';
+
+  @override
+  String get enterCitySubtitle => 'অবস্থানের অনুমতির প্রয়োজন নেই';
+
+  @override
+  String get chooseCityTitle => 'আপনার শহর বেছে নিন';
+
+  @override
+  String get searchCityHint => 'শহর খুঁজুন';
+
+  @override
+  String get citySearchPrivacyNote =>
+      'খোঁজা আপনার ডিভাইসেই হয় — শহর বেছে নেওয়ার আগে কিছুই পাঠানো হয় না।';
+
+  @override
+  String get citySearchEmptyHint => 'শহর খুঁজতে টাইপ করা শুরু করুন';
+
+  @override
+  String get citySearchNoResults => 'কোনো মিলযুক্ত শহর পাওয়া যায়নি';
 
   @override
   String get quizTabTitle => 'কুইজ';
