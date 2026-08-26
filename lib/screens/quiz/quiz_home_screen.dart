@@ -187,7 +187,7 @@ class _LengthChip extends StatelessWidget {
           style: TextStyle(
             fontSize: 11.5,
             fontWeight: FontWeight.w600,
-            color: selected ? Colors.white : DeenColors.textMuted,
+            color: selected ? Colors.white : DeenColors.textMuted(dark),
           ),
         ),
       ),

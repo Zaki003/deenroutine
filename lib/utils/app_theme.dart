@@ -45,7 +45,7 @@ class AppTheme {
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: isDark ? DeenColors.ink : DeenColors.cream,
         selectedItemColor: DeenColors.gold,
-        unselectedItemColor: DeenColors.textMuted,
+        unselectedItemColor: DeenColors.textMuted(isDark),
         type: BottomNavigationBarType.fixed,
       ),
       filledButtonTheme: FilledButtonThemeData(

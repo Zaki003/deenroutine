@@ -17,7 +17,7 @@ class DeenColors {
   static const cream = Color(0xFFF6F1E4);
   static const paper = Color(0xFFFFFDF8);
   static const textDark = Color(0xFF16302B);
-  static const textMuted = Color(0xFF6B857D);
+  static Color textMuted(bool dark) => dark ? const Color(0xFF96ACA5) : const Color(0xFF4A5E57);
   static const rust = Color(0xFFA8522F);
   static const green = Color(0xFF3F9142);
 

@@ -64,7 +64,7 @@ class HabitsScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(l10n.noHabitsYet,
-                  style: const TextStyle(color: DeenColors.textMuted)),
+                  style: TextStyle(color: DeenColors.textMuted(dark))),
             ),
           for (final habit in habits)
             Padding(

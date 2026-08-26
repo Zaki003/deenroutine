@@ -77,7 +77,7 @@ class _HabitTemplateSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Icon(Icons.chevron_right, color: DeenColors.textMuted),
+                      Icon(Icons.chevron_right, color: DeenColors.textMuted(dark)),
                     ],
                   ),
                 ),
@@ -124,7 +124,7 @@ class _CategorySection extends StatelessWidget {
         children: [
           Text(
             category.label(l10n),
-            style: const TextStyle(fontSize: 12, color: DeenColors.textMuted),
+            style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
           ),
           const SizedBox(height: 8),
           IntrinsicHeight(
@@ -173,7 +173,7 @@ class _TemplateChip extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(template.icon, size: 18, color: DeenColors.textMuted),
+              Icon(template.icon, size: 18, color: DeenColors.textMuted(dark)),
               const SizedBox(height: 8),
               Text(
                 template.title,

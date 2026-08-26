@@ -38,10 +38,10 @@ class PrayerScreen extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.public_rounded, size: 12, color: DeenColors.textMuted),
+                Icon(Icons.public_rounded, size: 12, color: DeenColors.textMuted(dark)),
                 const SizedBox(width: 4),
                 Text(l10n.prayerMethodFullName,
-                    style: const TextStyle(fontSize: 11.5, color: DeenColors.textMuted)),
+                    style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark))),
               ],
             ),
             const SizedBox(height: 20),
@@ -98,7 +98,7 @@ class PrayerScreen extends StatelessWidget {
                           ),
                         ),
                         Text(entry.value,
-                            style: const TextStyle(fontSize: 13, color: DeenColors.textMuted)),
+                            style: TextStyle(fontSize: 13, color: DeenColors.textMuted(dark))),
                       ],
                     ),
                   ),
@@ -168,7 +168,7 @@ class _DayProgress extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 9,
                               fontWeight: i == nextIndex ? FontWeight.bold : FontWeight.w500,
-                              color: i == nextIndex ? DeenColors.gold : DeenColors.textMuted,
+                              color: i == nextIndex ? DeenColors.gold : DeenColors.textMuted(dark),
                             ),
                           ),
                         ],

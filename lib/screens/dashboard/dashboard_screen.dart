@@ -157,7 +157,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SizedBox(height: 4),
                         Text(
                           _summary(l10n, done, total, prayerProvider.nextPrayerName),
-                          style: const TextStyle(fontSize: 12, color: DeenColors.textMuted),
+                          style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
                         ),
                       ],
                     ),
@@ -197,13 +197,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(l10n.noHabitsYet,
-                    style: const TextStyle(color: DeenColors.textMuted)),
+                    style: TextStyle(color: DeenColors.textMuted(dark))),
               )
             else if (todaysHabits.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(l10n.noHabitsToday,
-                    style: const TextStyle(color: DeenColors.textMuted)),
+                    style: TextStyle(color: DeenColors.textMuted(dark))),
               ),
             for (final habit in visibleHabits)
               Padding(
@@ -317,7 +317,7 @@ class _QuoteCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 quote.source,
-                style: const TextStyle(fontSize: 11, color: DeenColors.textMuted),
+                style: TextStyle(fontSize: 11, color: DeenColors.textMuted(dark)),
               ),
             ],
           ),
@@ -391,7 +391,7 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
                         const SizedBox(height: 2),
                         Text(
                           subtitle,
-                          style: const TextStyle(fontSize: 11, color: DeenColors.textMuted),
+                          style: TextStyle(fontSize: 11, color: DeenColors.textMuted(dark)),
                         ),
                       ],
                     ],
@@ -459,7 +459,7 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           done: done,
           dark: dark,
           onTap: () => setState(() => _expanded = !_expanded),
-          centerGlyph: Icon(Icons.star_outline, size: 15, color: DeenColors.textMuted),
+          centerGlyph: Icon(Icons.star_outline, size: 15, color: DeenColors.textMuted(dark)),
         );
       case HabitTrackingType.yesNo:
         return HabitCheckbox(
@@ -480,7 +480,7 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           child: Icon(
             slipLoggedToday ? Icons.flag : Icons.flag_outlined,
             size: 20,
-            color: slipLoggedToday ? DeenColors.rust : DeenColors.textMuted,
+            color: slipLoggedToday ? DeenColors.rust : DeenColors.textMuted(dark),
           ),
         );
     }
@@ -503,9 +503,9 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
         onTap: () => setState(() => _confirmingSlip = true),
         child: Text(
           l10n.avoidanceLogSlipLink,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
-            color: DeenColors.textMuted,
+            color: DeenColors.textMuted(dark),
             decoration: TextDecoration.underline,
           ),
         ),
@@ -536,7 +536,7 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Text(
                 l10n.cancelButton,
-                style: const TextStyle(fontSize: 11.5, color: DeenColors.textMuted),
+                style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
               ),
             ),
           ),
@@ -600,7 +600,7 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
                         style: TextStyle(
                           fontSize: 12,
                           color: doneItems.contains(item)
-                              ? DeenColors.textMuted
+                              ? DeenColors.textMuted(dark)
                               : DeenColors.primaryText(dark),
                           decoration: doneItems.contains(item) ? TextDecoration.lineThrough : null,
                         ),

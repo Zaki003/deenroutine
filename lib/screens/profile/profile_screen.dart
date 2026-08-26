@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     user?.email ?? '',
-                    style: const TextStyle(fontSize: 11.5, color: DeenColors.textMuted),
+                    style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
                   ),
                 ],
               ),
@@ -190,13 +190,14 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.5,
-        color: DeenColors.textMuted,
+        color: DeenColors.textMuted(dark),
       ),
     );
   }
@@ -220,6 +221,7 @@ class _AppearanceOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -233,13 +235,13 @@ class _AppearanceOption extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 14, color: selected ? Colors.white : DeenColors.textMuted),
+              Icon(icon, size: 14, color: selected ? Colors.white : DeenColors.textMuted(dark)),
               const SizedBox(width: 4),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 12,
-                  color: selected ? Colors.white : DeenColors.textMuted,
+                  color: selected ? Colors.white : DeenColors.textMuted(dark),
                 ),
               ),
             ],
@@ -313,7 +315,7 @@ class _AccountRow extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 16, color: color ?? DeenColors.textMuted),
+                Icon(icon, size: 16, color: color ?? DeenColors.textMuted(dark)),
                 const SizedBox(width: 10),
                 Text(
                   label,
@@ -322,9 +324,9 @@ class _AccountRow extends StatelessWidget {
               ],
             ),
             if (trailingText != null)
-              Text(trailingText!, style: const TextStyle(fontSize: 12, color: DeenColors.textMuted))
+              Text(trailingText!, style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)))
             else if (color == null)
-              const Icon(Icons.chevron_right_rounded, size: 18, color: DeenColors.textMuted),
+              Icon(Icons.chevron_right_rounded, size: 18, color: DeenColors.textMuted(dark)),
           ],
         ),
       ),

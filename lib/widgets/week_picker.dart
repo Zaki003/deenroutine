@@ -75,7 +75,7 @@ class _WeekPickerState extends State<WeekPicker> with TickerProviderStateMixin {
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w500,
-                  color: done ? Colors.white : DeenColors.textMuted,
+                  color: done ? Colors.white : DeenColors.textMuted(widget.dark),
                 ),
               ),
             ),
