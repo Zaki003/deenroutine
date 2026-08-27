@@ -16,6 +16,12 @@
  * just for other users' data. Each check below sets up its own data as an
  * unauthenticated admin context, then asserts what an authenticated client
  * context may do — see the `assertSucceeds`/`assertFails` calls.
+ *
+ * Also covers the owner-delete rules on Users/QuizResults added for account
+ * deletion (Play Store data-deletion requirement) — these are new enough
+ * (no prior `delete` permission existed on either collection) that a wrong
+ * rule could either silently break self-service deletion or, worse, let
+ * one account delete another's profile/results.
  */
 
 const assert = require('node:assert/strict');
@@ -31,6 +37,7 @@ const OWNER_UID = 'owner-uid';
 const OTHER_UID = 'other-uid';
 const HABIT_ID = 'habit-1';
 const LOG_ID = 'log-1';
+const QUIZ_RESULT_ID = 'quiz-result-1';
 
 const results = [];
 
@@ -53,6 +60,26 @@ async function seedOwnerLog(testEnv) {
       .collection('HabitLogs')
       .doc(LOG_ID)
       .set({ habitId: HABIT_ID, uid: OWNER_UID, date: new Date(), status: true });
+  });
+}
+
+async function seedOwnerUser(testEnv) {
+  await testEnv.withSecurityRulesDisabled(async (adminCtx) => {
+    await adminCtx
+      .firestore()
+      .collection('Users')
+      .doc(OWNER_UID)
+      .set({ name: 'Owner', email: 'owner@example.com', createdAt: new Date() });
+  });
+}
+
+async function seedOwnerQuizResult(testEnv) {
+  await testEnv.withSecurityRulesDisabled(async (adminCtx) => {
+    await adminCtx
+      .firestore()
+      .collection('QuizResults')
+      .doc(QUIZ_RESULT_ID)
+      .set({ uid: OWNER_UID, score: 4, totalQuestions: 5, completedAt: new Date() });
   });
 }
 
@@ -129,6 +156,30 @@ async function main() {
         .doc('spoofed-log')
         .set({ habitId: HABIT_ID, uid: OTHER_UID, date: new Date(), status: true })
     );
+  });
+
+  await check('owner can delete their own Users doc', async () => {
+    await seedOwnerUser(testEnv);
+    const owner = testEnv.authenticatedContext(OWNER_UID);
+    await assertSucceeds(owner.firestore().collection('Users').doc(OWNER_UID).delete());
+  });
+
+  await check('another authenticated user cannot delete someone else\'s Users doc', async () => {
+    await seedOwnerUser(testEnv);
+    const other = testEnv.authenticatedContext(OTHER_UID);
+    await assertFails(other.firestore().collection('Users').doc(OWNER_UID).delete());
+  });
+
+  await check('owner can delete their own QuizResults doc', async () => {
+    await seedOwnerQuizResult(testEnv);
+    const owner = testEnv.authenticatedContext(OWNER_UID);
+    await assertSucceeds(owner.firestore().collection('QuizResults').doc(QUIZ_RESULT_ID).delete());
+  });
+
+  await check('another authenticated user cannot delete someone else\'s QuizResults doc', async () => {
+    await seedOwnerQuizResult(testEnv);
+    const other = testEnv.authenticatedContext(OTHER_UID);
+    await assertFails(other.firestore().collection('QuizResults').doc(QUIZ_RESULT_ID).delete());
   });
 
   await testEnv.cleanup();

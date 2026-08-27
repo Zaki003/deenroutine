@@ -5,7 +5,7 @@ service cloud.firestore {
 
     // Users can only read/write their own profile document.
     match /Users/{userId} {
-      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId;
     }
 
@@ -36,7 +36,7 @@ service cloud.firestore {
 
     // QuizResults: owner-only.
     match /QuizResults/{resultId} {
-      allow read: if request.auth != null
+      allow read, delete: if request.auth != null
         && resource.data.uid == request.auth.uid;
       allow create: if request.auth != null
         && request.resource.data.uid == request.auth.uid;
