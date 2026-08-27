@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/app_user.dart';
+import 'firestore_service.dart';
 
 /// FR-01 / FR-02: Registration and Login
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirestoreService _firestoreService = FirestoreService();
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
@@ -50,5 +52,31 @@ class AuthService {
     final doc = await _db.collection('Users').doc(uid).get();
     if (!doc.exists) return null;
     return AppUser.fromMap(uid, doc.data()!);
+  }
+
+  /// Re-authenticates the signed-in user with their password — Firebase Auth
+  /// requires a fresh session for security-sensitive ops like [deleteAccount].
+  Future<void> reauthenticate(String password) async {
+    final user = _auth.currentUser;
+    if (user == null || user.email == null) {
+      throw FirebaseAuthException(code: 'user-mismatch');
+    }
+    final credential = EmailAuthProvider.credential(email: user.email!, password: password);
+    await user.reauthenticateWithCredential(credential);
+  }
+
+  /// Play Store data-deletion requirement. Wipes all Firestore data via
+  /// [FirestoreService.deleteAllUserData], then deletes the Firebase Auth
+  /// user. Irreversible. Always reauthenticates first — a stale session
+  /// makes the final `user.delete()` throw `requires-recent-login` anyway,
+  /// so checking here means the Firestore wipe never fires on a doomed
+  /// attempt. Ordering after that matters: the wipe must finish while the
+  /// uid is still `request.auth.uid`, so it runs before `user.delete()`.
+  Future<void> deleteAccount(String password) async {
+    final user = _auth.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'user-mismatch');
+    await reauthenticate(password);
+    await _firestoreService.deleteAllUserData(user.uid);
+    await user.delete();
   }
 }

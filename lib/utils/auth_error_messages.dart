@@ -16,6 +16,8 @@ String authErrorMessage(AppLocalizations l10n, String? code) {
       return l10n.authErrorEmailInUse;
     case 'weak-password':
       return l10n.authErrorWeakPassword;
+    case 'requires-recent-login':
+      return l10n.authErrorRequiresRecentLogin;
     default:
       return l10n.authErrorGeneric;
   }

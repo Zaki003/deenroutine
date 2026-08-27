@@ -168,6 +168,10 @@
   "deleteHabitContent": "এটি \"{title}\" এবং এর ধারাবাহিকতার ইতিহাস স্থায়ীভাবে মুছে ফেলবে।",
   "cancelButton": "বাতিল",
   "deleteButton": "মুছুন",
+  "deleteAccountButton": "অ্যাকাউন্ট মুছুন",
+  "deleteAccountTitle": "আপনার অ্যাকাউন্ট মুছে ফেলবেন?",
+  "deleteAccountWarning": "এটি আপনার অভ্যাস, ধারাবাহিকতা, কুইজ ফলাফল এবং প্রোফাইল স্থায়ীভাবে মুছে ফেলবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।",
+  "deleteAccountPasswordPrompt": "নিশ্চিত করতে আপনার পাসওয়ার্ড লিখুন।",
   "editButton": "সম্পাদনা",
 
   "habitSyncError": "অভ্যাস সিঙ্ক করতে সমস্যা: {error}",
@@ -222,5 +226,6 @@
   "authErrorInvalidEmail": "ইমেইল ঠিকানাটি সঠিক মনে হচ্ছে না।",
   "authErrorEmailInUse": "এই ইমেইল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।",
   "authErrorWeakPassword": "পাসওয়ার্ড খুবই দুর্বল — কমপক্ষে ৬ অক্ষর ব্যবহার করুন।",
-  "authErrorGeneric": "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।"
+  "authErrorGeneric": "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+  "authErrorRequiresRecentLogin": "নিরাপত্তার জন্য, লগ আউট করে আবার লগইন করুন এবং আবার চেষ্টা করুন।"
 }

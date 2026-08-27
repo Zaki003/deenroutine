@@ -492,6 +492,20 @@ class AppLocalizationsBn extends AppLocalizations {
   String get deleteButton => 'মুছুন';
 
   @override
+  String get deleteAccountButton => 'অ্যাকাউন্ট মুছুন';
+
+  @override
+  String get deleteAccountTitle => 'আপনার অ্যাকাউন্ট মুছে ফেলবেন?';
+
+  @override
+  String get deleteAccountWarning =>
+      'এটি আপনার অভ্যাস, ধারাবাহিকতা, কুইজ ফলাফল এবং প্রোফাইল স্থায়ীভাবে মুছে ফেলবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।';
+
+  @override
+  String get deleteAccountPasswordPrompt =>
+      'নিশ্চিত করতে আপনার পাসওয়ার্ড লিখুন।';
+
+  @override
   String get editButton => 'সম্পাদনা';
 
   @override
@@ -664,4 +678,8 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get authErrorGeneric => 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+
+  @override
+  String get authErrorRequiresRecentLogin =>
+      'নিরাপত্তার জন্য, লগ আউট করে আবার লগইন করুন এবং আবার চেষ্টা করুন।';
 }

@@ -969,6 +969,30 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get deleteButton;
 
+  /// No description provided for @deleteAccountButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountButton;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your habits, streaks, quiz results, and profile. This can\'t be undone.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @deleteAccountPasswordPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm.'**
+  String get deleteAccountPasswordPrompt;
+
   /// No description provided for @editButton.
   ///
   /// In en, this message translates to:
@@ -1262,6 +1286,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get authErrorGeneric;
+
+  /// No description provided for @authErrorRequiresRecentLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'For your security, please log out and back in, then try again.'**
+  String get authErrorRequiresRecentLogin;
 }
 
 class _AppLocalizationsDelegate

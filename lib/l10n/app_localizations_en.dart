@@ -491,6 +491,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteButton => 'Delete';
 
   @override
+  String get deleteAccountButton => 'Delete Account';
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountWarning =>
+      'This permanently deletes your habits, streaks, quiz results, and profile. This can\'t be undone.';
+
+  @override
+  String get deleteAccountPasswordPrompt => 'Enter your password to confirm.';
+
+  @override
   String get editButton => 'Edit';
 
   @override
@@ -662,4 +675,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get authErrorRequiresRecentLogin =>
+      'For your security, please log out and back in, then try again.';
 }

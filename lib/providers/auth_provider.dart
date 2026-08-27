@@ -68,6 +68,29 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> logout() => _authService.logout();
 
+  /// Play Store data-deletion requirement: re-authenticates with [password],
+  /// then permanently deletes the signed-in user's Firestore data and
+  /// Firebase Auth account. Mirrors [login]/[register]'s _setLoading/
+  /// errorCode shape.
+  ///
+  /// No explicit navigation here — deleting the Firebase Auth user tears
+  /// down the local session itself, which fires [authStateChanges] with a
+  /// null user, the same mechanism [logout] relies on to flip the app back
+  /// to LoginScreen.
+  Future<bool> deleteAccount(String password) async {
+    _setLoading(true);
+    try {
+      await _authService.deleteAccount(password);
+      _errorCode = null;
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _errorCode = e.code;
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   void _setLoading(bool value) {
     _loading = value;
     notifyListeners();

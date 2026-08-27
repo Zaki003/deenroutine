@@ -7,6 +7,7 @@ import '../../providers/theme_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/text_format.dart';
 import '../../widgets/deen_card.dart';
+import '../../widgets/delete_account_dialog.dart';
 
 /// FR-03: Profile management, and Settings collection (theme, prayer method).
 class ProfileScreen extends StatelessWidget {
@@ -170,6 +171,22 @@ class ProfileScreen extends StatelessWidget {
                   onTap: () async {
                     await context.read<AuthProvider>().logout();
                     if (context.mounted) {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    }
+                  },
+                ),
+                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
+                _AccountRow(
+                  icon: Icons.delete_outline_rounded,
+                  label: l10n.deleteAccountButton,
+                  dark: dark,
+                  color: DeenColors.rust,
+                  onTap: () async {
+                    final deleted = await showDialog<bool>(
+                      context: context,
+                      builder: (_) => const DeleteAccountDialog(),
+                    );
+                    if (deleted == true && context.mounted) {
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     }
                   },

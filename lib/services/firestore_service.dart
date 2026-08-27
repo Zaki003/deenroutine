@@ -7,7 +7,8 @@ import '../models/quiz_question.dart';
 import '../models/quiz_result.dart';
 import '../models/daily_quote.dart';
 
-/// FR-04 / FR-05 / FR-06 / FR-09 / FR-10 / FR-11 / FR-12
+/// FR-04 / FR-05 / FR-06 / FR-09 / FR-10 / FR-11 / FR-12, plus account
+/// deletion for the Play Store data-deletion requirement.
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   static final Random _random = Random();
@@ -315,5 +316,45 @@ class FirestoreService {
         .snapshots()
         .map((snap) =>
             snap.docs.map((d) => QuizResult.fromMap(d.id, d.data())).toList());
+  }
+
+  // ---------------- Account deletion (Play Store data-deletion requirement) ----------------
+
+  /// Permanently deletes every Firestore document [uid] owns: all
+  /// Habits/HabitLogs/QuizResults/Notifications/Settings docs, then the
+  /// Users/{uid} profile itself. Irreversible — no grace period.
+  ///
+  /// Excludes PrayerCache (shared cache keyed by rounded lat/lng + date, not
+  /// owned by any uid — see docs/privacy-policy.md §4) and QuizQuestions/
+  /// DailyQuotes (public content libraries).
+  ///
+  /// Users is deleted *last*: if this fails partway, leaving Users/{uid} in
+  /// place keeps the account "existing" so the whole wipe is safely
+  /// retryable (re-querying an already-emptied collection is a no-op).
+  ///
+  /// Must run while [uid] is still `request.auth.uid` — the owner-only
+  /// rules need that match, so call this before deleting the Firebase Auth
+  /// user or signing out.
+  Future<void> deleteAllUserData(String uid) async {
+    const ownedCollections = ['Habits', 'HabitLogs', 'QuizResults', 'Notifications', 'Settings'];
+    for (final name in ownedCollections) {
+      await _deleteQueryInChunks(_db.collection(name).where('uid', isEqualTo: uid));
+    }
+    await _db.collection('Users').doc(uid).delete();
+  }
+
+  /// Deletes every document [query] matches, in batches of at most 500
+  /// writes (Firestore's per-batch cap). This app's per-user volumes are
+  /// small, so a single batch is the normal case — chunking is defensive.
+  Future<void> _deleteQueryInChunks(Query<Map<String, dynamic>> query) async {
+    const chunkSize = 500;
+    final snap = await query.get();
+    for (var i = 0; i < snap.docs.length; i += chunkSize) {
+      final batch = _db.batch();
+      for (final doc in snap.docs.skip(i).take(chunkSize)) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
   }
 }

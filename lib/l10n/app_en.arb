@@ -225,6 +225,10 @@
   },
   "cancelButton": "Cancel",
   "deleteButton": "Delete",
+  "deleteAccountButton": "Delete Account",
+  "deleteAccountTitle": "Delete your account?",
+  "deleteAccountWarning": "This permanently deletes your habits, streaks, quiz results, and profile. This can't be undone.",
+  "deleteAccountPasswordPrompt": "Enter your password to confirm.",
   "editButton": "Edit",
 
   "habitSyncError": "Habit sync error: {error}",
@@ -309,5 +313,6 @@
   "authErrorInvalidEmail": "That email address looks invalid.",
   "authErrorEmailInUse": "An account already exists with this email.",
   "authErrorWeakPassword": "Password is too weak — use at least 6 characters.",
-  "authErrorGeneric": "Something went wrong. Please try again."
+  "authErrorGeneric": "Something went wrong. Please try again.",
+  "authErrorRequiresRecentLogin": "For your security, please log out and back in, then try again."
 }
