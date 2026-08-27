@@ -81,7 +81,6 @@ bash
 flutter analyze     # static analysis
 flutter test         # run tests
 Roadmap
-In-app + web-based account deletion (Play Store requirement)
 iOS release and wider cross-device testing
 Push notifications via FCM (beyond local scheduling)
 Social/community habit challenges
