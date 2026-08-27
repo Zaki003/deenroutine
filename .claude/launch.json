@@ -6,6 +6,12 @@
       "runtimeExecutable": "flutter",
       "runtimeArgs": ["run", "-d", "web-server", "--web-port", "8765"],
       "port": 8765
+    },
+    {
+      "name": "deenroutine-docs",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "docs"],
+      "port": 8766
     }
   ]
 }

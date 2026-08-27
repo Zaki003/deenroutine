@@ -1,6 +1,6 @@
 # Privacy Policy for DeenRoutine
 
-**Effective date:** August 15, 2026
+**Effective date:** August 27, 2026
 
 **Plain-English summary:** DeenRoutine stores your habits, quiz scores, and account info (name + email) in a private database tied to your account. It uses your approximate location only to calculate accurate prayer times, and never sells your data or shows you ads.
 
@@ -52,7 +52,12 @@ Your data is stored in Cloud Firestore and protected by security rules that rest
 
 ## 7. Data Retention
 
-We retain your account and habit data for as long as your account exists. If you'd like your account and associated data deleted, contact us (Section 11) and we'll delete it within 30 days.
+We retain your account and habit data for as long as your account exists. You can permanently delete your account and all associated data yourself, at any time, with no waiting period:
+
+- **In the app:** go to Profile → Account → Delete Account.
+- **On the web, without installing the app:** visit [https://zaki003.github.io/deenroutine/delete-account.html](https://zaki003.github.io/deenroutine/delete-account.html) and follow the prompts.
+
+Both options delete your data immediately and permanently — there is no 30-day grace period. If you can't use either option (for example, you're locked out of your account), email us (Section 11) and we'll delete it for you.
 
 ## 8. Children's Privacy
 
@@ -61,7 +66,8 @@ DeenRoutine is not directed at children under 13, and we don't knowingly collect
 ## 9. Your Rights & Choices
 
 - You can edit or delete individual habits at any time within the app.
-- You can request a copy of your data, or request that your account and all associated data be permanently deleted, by emailing us at the address below.
+- You can permanently delete your entire account and all associated data yourself, instantly — either in the app (Profile → Account → Delete Account) or on the web at [https://zaki003.github.io/deenroutine/delete-account.html](https://zaki003.github.io/deenroutine/delete-account.html), with no app install required. This cannot be undone.
+- You can also request a copy of your data, or ask us to delete your account by hand, by emailing us at the address below — useful if you're unable to use either self-service option above.
 - You can revoke location or notification permissions at any time from your device's system settings.
 
 ## 10. Changes to This Policy

@@ -1,0 +1,568 @@
+<meta charset="UTF-8" />
+<title>Delete Your DeenRoutine Account</title>
+<style>
+  :root {
+    --bg: #FFFDF8;
+    --bg-alt: #F6F1E4;
+    --panel: #EFE7D2;
+    --surface: #FFFDF8;
+    --heading: #0E2B29;
+    --text: #16302B;
+    --text-muted: #4F6C64;
+    --accent: #146356;
+    --accent-strong: #0E2B29;
+    --gold: #8A6B24;
+    --gold-bright: #C9A24B;
+    --border: rgba(20, 99, 86, 0.14);
+    --border-strong: rgba(20, 99, 86, 0.28);
+    --rust: #A8522F;
+    --rust-contrast: #FFFDF8;
+    --shadow: 0 1px 2px rgba(14, 43, 41, 0.04), 0 8px 24px rgba(14, 43, 41, 0.05);
+
+    --font-display: Georgia, "Noto Serif", "Times New Roman", serif;
+    --font-body: Georgia, "Noto Serif", "Times New Roman", serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E2B29;
+      --bg-alt: #153F3C;
+      --panel: #1B4B47;
+      --surface: #153F3C;
+      --heading: #FFFDF8;
+      --text: #F6F1E4;
+      --text-muted: #A9C4BC;
+      --accent: #4FB79B;
+      --accent-strong: #EFE7D2;
+      --gold: #E4CD8C;
+      --gold-bright: #E4CD8C;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.2);
+      --rust: #D08F6E;
+      --rust-contrast: #0E2B29;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0E2B29;
+    --bg-alt: #153F3C;
+    --panel: #1B4B47;
+    --surface: #153F3C;
+    --heading: #FFFDF8;
+    --text: #F6F1E4;
+    --text-muted: #A9C4BC;
+    --accent: #4FB79B;
+    --accent-strong: #EFE7D2;
+    --gold: #E4CD8C;
+    --gold-bright: #E4CD8C;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --rust: #D08F6E;
+    --rust-contrast: #0E2B29;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.6em 1em;
+    z-index: 100;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+  }
+  .skip-link:focus { left: 1rem; top: 1rem; }
+
+  /* ---------- Header ---------- */
+
+  header.masthead {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+  }
+
+  .star-field {
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpolygon points='13,4.16 15.18,10.00 21.41,10.27 16.53,14.15 18.20,20.15 13,16.71 7.80,20.15 9.47,14.15 4.59,10.27 10.82,10.00' fill='%23C9A24B' fill-opacity='0.16'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .masthead-inner {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3.2rem 1.75rem 2.6rem;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--accent-strong);
+    letter-spacing: 0.02em;
+  }
+
+  .wordmark .mark {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex: none;
+  }
+
+  .eyebrow {
+    margin: 1.6rem 0 0.6rem;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  h1.title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 1.55rem + 2vw, 3.1rem);
+    line-height: 1.12;
+    color: var(--heading);
+    text-wrap: balance;
+  }
+
+  .gold-rule {
+    width: 3.25rem;
+    height: 3px;
+    margin: 1.15rem 0 1.3rem;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    border-radius: 2px;
+  }
+
+  .meta-line {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .summary-box {
+    margin-top: 1.9rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .summary-box strong { color: var(--heading); }
+
+  /* ---------- Layout ---------- */
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2.75rem 1.75rem 5rem;
+  }
+
+  main { min-width: 0; }
+
+  section.block {
+    max-width: 66ch;
+    padding-top: 2.4rem;
+    border-top: 1px solid var(--border);
+  }
+
+  section.block:first-of-type { padding-top: 0; border-top: none; }
+
+  section.block h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: var(--heading);
+    margin: 0 0 0.95rem;
+  }
+
+  section.block p, section.block li {
+    font-size: 1.02rem;
+    line-height: 1.72;
+    color: var(--text);
+  }
+
+  section.block p { margin: 0 0 1rem; }
+  section.block ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+  section.block li { margin-bottom: 0.55rem; }
+  section.block li:last-child { margin-bottom: 0; }
+  section.block li strong { color: var(--heading); }
+
+  .permission-note {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1.05rem;
+    background: var(--bg-alt);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ---------- Form ---------- */
+
+  .delete-panel {
+    padding: 1.6rem 1.6rem 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+
+  .field { margin-bottom: 1.1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .field label {
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .field input[type="email"],
+  .field input[type="password"] {
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+  }
+
+  .field input:disabled { opacity: 0.6; }
+
+  .confirm-row {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    margin: 1.4rem 0;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .confirm-row input[type="checkbox"] {
+    margin-top: 0.2rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: var(--rust);
+    flex: none;
+  }
+
+  .btn-danger {
+    display: block;
+    width: 100%;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--rust);
+    color: var(--rust-contrast);
+    cursor: pointer;
+  }
+
+  .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-danger:not(:disabled):hover { filter: brightness(1.06); }
+
+  #status-region {
+    margin-top: 1rem;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    min-height: 1.3rem;
+  }
+  #status-region[data-state="loading"] { color: var(--text-muted); }
+  #status-region[data-state="success"] { color: var(--accent); font-weight: 600; }
+  #status-region[data-state="error"] { color: var(--rust); }
+
+  .forgot-row {
+    margin-top: 1.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+  }
+
+  .forgot-row button.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  #forgot-status {
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Footer ---------- */
+
+  footer.page-footer {
+    max-width: 66ch;
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+  }
+
+  footer.page-footer a { color: var(--text-muted); }
+  footer.page-footer a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+
+<a class="skip-link" href="#main-content">Skip to account deletion form</a>
+
+<header class="masthead">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="masthead-inner">
+    <div class="wordmark">
+      <svg class="mark" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="13,3.2 16.1,9.6 23.4,9.9 17.7,14.9 19.9,22.6 13,18.2 6.1,22.6 8.3,14.9 2.6,9.9 9.9,9.6"
+          fill="var(--gold-bright)" />
+      </svg>
+      DeenRoutine
+    </div>
+    <p class="eyebrow">Account Deletion</p>
+    <h1 class="title">Delete your DeenRoutine account</h1>
+    <div class="gold-rule" aria-hidden="true"></div>
+    <p class="meta-line">Applies to the DeenRoutine Android app &nbsp;·&nbsp; No app install required</p>
+    <div class="summary-box">
+      <strong>In plain English:</strong> enter your DeenRoutine email and password below to permanently delete your account and everything in it. This happens immediately and there's no waiting period.
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <main id="main-content">
+    <section class="block">
+      <h2>What gets deleted</h2>
+      <ul>
+        <li><strong>Your profile</strong> — name and email.</li>
+        <li><strong>Your habits</strong> — every habit you created, along with its full completion and streak history.</li>
+        <li><strong>Your quiz results</strong> — every Islamic-knowledge quiz score and completion date.</li>
+        <li><strong>Your saved preferences</strong> — notification and settings records tied to your account.</li>
+      </ul>
+      <div class="permission-note">Cached prayer-time data is not deleted — it's a shared cache keyed by rounded location and date, not linked to your account. See the <a href="privacy-policy.html#location">Privacy Policy</a> for details.</div>
+    </section>
+
+    <section class="block">
+      <h2>Delete your account</h2>
+      <div class="delete-panel">
+        <form id="delete-form" novalidate>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required />
+          </div>
+
+          <label class="confirm-row">
+            <input type="checkbox" id="confirm-checkbox" />
+            I understand this permanently deletes my account and cannot be undone.
+          </label>
+
+          <button type="submit" class="btn-danger" id="submit-btn" disabled>Permanently Delete My Account</button>
+
+          <div id="status-region" role="status" aria-live="polite"></div>
+        </form>
+
+        <div class="forgot-row">
+          Forgot your password?
+          <button type="button" class="link-btn" id="forgot-btn">Send a reset link</button>
+          <div id="forgot-status"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>© 2026 DeenRoutine</span>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="mailto:zakifaiazchy@gmail.com">zakifaiazchy@gmail.com</a>
+    </footer>
+  </main>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    deleteUser,
+    sendPasswordResetEmail,
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    getDocs,
+    writeBatch,
+    doc,
+    deleteDoc,
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore-lite.js";
+
+  // Public by design — a Firebase web config only identifies the project.
+  // Access control is enforced entirely by Firestore Security Rules, the
+  // same as the DeenRoutine app itself, not by hiding this config.
+  const firebaseConfig = {
+    apiKey: "AIzaSyB80xvQqvBRRwoM7ezGvGK6v7A8ZI1cu9w",
+    authDomain: "deenroutine-64d95.firebaseapp.com",
+    projectId: "deenroutine-64d95",
+    storageBucket: "deenroutine-64d95.firebasestorage.app",
+    messagingSenderId: "177245132422",
+    appId: "1:177245132422:web:f4ee9ae94ce13489152307",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Same collections, same order, same "Users last" retry-safety reasoning
+  // as FirestoreService.deleteAllUserData in the Flutter app — this page
+  // can't import Dart, so it's a second hand-kept copy of that logic.
+  const OWNED_COLLECTIONS = ["Habits", "HabitLogs", "QuizResults", "Notifications", "Settings"];
+
+  async function deleteAllUserData(uid) {
+    for (const name of OWNED_COLLECTIONS) {
+      const snap = await getDocs(query(collection(db, name), where("uid", "==", uid)));
+      const docs = snap.docs;
+      for (let i = 0; i < docs.length; i += 500) {
+        const batch = writeBatch(db);
+        docs.slice(i, i + 500).forEach((d) => batch.delete(d.ref));
+        await batch.commit();
+      }
+    }
+    await deleteDoc(doc(db, "Users", uid));
+  }
+
+  // The JS SDK namespaces auth error codes ("auth/wrong-password"), unlike
+  // Flutter's firebase_auth which strips the prefix — these are not the
+  // same strings as lib/utils/auth_error_messages.dart.
+  function friendlyError(code) {
+    switch (code) {
+      case "auth/wrong-password":
+      case "auth/invalid-credential":
+        return "That password doesn't match this account.";
+      case "auth/user-not-found":
+        return "No DeenRoutine account exists with that email.";
+      case "auth/invalid-email":
+        return "That email address looks invalid.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please wait a bit and try again.";
+      default:
+        return "Something went wrong. Please try again.";
+    }
+  }
+
+  const form = document.getElementById("delete-form");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const confirmCheckbox = document.getElementById("confirm-checkbox");
+  const submitBtn = document.getElementById("submit-btn");
+  const statusRegion = document.getElementById("status-region");
+
+  function setStatus(state, message) {
+    statusRegion.dataset.state = state;
+    statusRegion.textContent = message;
+  }
+
+  function setFormDisabled(disabled) {
+    emailInput.disabled = disabled;
+    passwordInput.disabled = disabled;
+    confirmCheckbox.disabled = disabled;
+    submitBtn.disabled = disabled || !confirmCheckbox.checked;
+  }
+
+  confirmCheckbox.addEventListener("change", () => {
+    submitBtn.disabled = !confirmCheckbox.checked;
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setFormDisabled(true);
+    setStatus("loading", "Deleting your account…");
+    try {
+      const credential = await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
+      await deleteAllUserData(credential.user.uid);
+      await deleteUser(credential.user);
+      setStatus("success", "Your account and all its data have been permanently deleted.");
+      form.hidden = true;
+    } catch (err) {
+      setStatus("error", friendlyError(err.code));
+      setFormDisabled(false);
+    }
+  });
+
+  const forgotBtn = document.getElementById("forgot-btn");
+  const forgotStatus = document.getElementById("forgot-status");
+
+  forgotBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    if (!email) {
+      forgotStatus.textContent = "Enter your email above first.";
+      return;
+    }
+    forgotBtn.disabled = true;
+    forgotStatus.textContent = "Sending…";
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (err) {
+      // Deliberately ignored — see note below.
+    }
+    // Same message on success or failure: this can't be used to probe
+    // which email addresses have a DeenRoutine account.
+    forgotStatus.textContent = "If that email has a DeenRoutine account, a reset link is on its way.";
+    forgotBtn.disabled = false;
+  });
+</script>
