@@ -20,7 +20,7 @@ plugins {
 android {
     namespace = "com.ZakiFaiaz.deenroutine"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         // Required by flutter_local_notifications for desugaring support.
