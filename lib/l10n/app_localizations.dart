@@ -200,6 +200,18 @@ abstract class AppLocalizations {
   /// **'See all {count} habits'**
   String seeAllHabits(Object count);
 
+  /// No description provided for @retryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryButton;
+
+  /// No description provided for @prayerUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer times unavailable'**
+  String get prayerUnavailableTitle;
+
   /// No description provided for @prayerTimesUnavailable.
   ///
   /// In en, this message translates to:
@@ -1002,8 +1014,8 @@ abstract class AppLocalizations {
   /// No description provided for @habitSyncError.
   ///
   /// In en, this message translates to:
-  /// **'Habit sync error: {error}'**
-  String habitSyncError(Object error);
+  /// **'Couldn\'t sync your habits. Retrying...'**
+  String get habitSyncError;
 
   /// No description provided for @habitDuplicateTitle.
   ///
@@ -1014,14 +1026,14 @@ abstract class AppLocalizations {
   /// No description provided for @habitUpdateFailed.
   ///
   /// In en, this message translates to:
-  /// **'Could not update habit: {error}'**
-  String habitUpdateFailed(Object error);
+  /// **'Couldn\'t update that habit. Try again.'**
+  String get habitUpdateFailed;
 
   /// No description provided for @habitDeleteFailed.
   ///
   /// In en, this message translates to:
-  /// **'Could not delete habit: {error}'**
-  String habitDeleteFailed(Object error);
+  /// **'Couldn\'t delete that habit. Try again.'**
+  String get habitDeleteFailed;
 
   /// No description provided for @habitSaveFailedGeneric.
   ///

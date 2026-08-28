@@ -6,6 +6,7 @@ import '../../theme/deen_colors.dart';
 import '../../utils/duration_format.dart';
 import '../../utils/prayer_error_messages.dart';
 import '../../utils/prayer_labels.dart';
+import '../../widgets/empty_state_card.dart';
 import '../../widgets/gradient_hero_card.dart';
 import '../../widgets/update_location_action.dart';
 
@@ -46,18 +47,22 @@ class PrayerScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             if (provider.isLoading)
-              const Padding(
-                padding: EdgeInsets.all(24),
-                child: Center(child: CircularProgressIndicator()),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Center(
+                  child: CircularProgressIndicator(color: DeenColors.gold),
+                ),
               )
             else if (provider.hasError)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  l10n.prayerTimesUnavailable(
-                      prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail)),
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
+              EmptyStateCard(
+                icon: Icons.cloud_off_rounded,
+                iconColor: DeenColors.rust,
+                title: l10n.prayerUnavailableTitle,
+                message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
+                dark: dark,
+                compact: true,
+                actionLabel: l10n.retryButton,
+                onAction: () => provider.loadPrayerTimes(),
               )
             else if (provider.timings.isEmpty)
               const SizedBox.shrink()

@@ -65,6 +65,12 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get retryButton => 'আবার চেষ্টা করুন';
+
+  @override
+  String get prayerUnavailableTitle => 'নামাজের সময় পাওয়া যায়নি';
+
+  @override
   String prayerTimesUnavailable(Object error) {
     return 'নামাজের সময় পাওয়া যায়নি: $error';
   }
@@ -509,9 +515,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get editButton => 'সম্পাদনা';
 
   @override
-  String habitSyncError(Object error) {
-    return 'অভ্যাস সিঙ্ক করতে সমস্যা: $error';
-  }
+  String get habitSyncError =>
+      'অভ্যাস সিঙ্ক করা যায়নি। আবার চেষ্টা করা হচ্ছে...';
 
   @override
   String habitDuplicateTitle(Object title) {
@@ -519,14 +524,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String habitUpdateFailed(Object error) {
-    return 'অভ্যাস আপডেট করা যায়নি: $error';
-  }
+  String get habitUpdateFailed => 'অভ্যাস আপডেট করা যায়নি। আবার চেষ্টা করুন।';
 
   @override
-  String habitDeleteFailed(Object error) {
-    return 'অভ্যাস মুছে ফেলা যায়নি: $error';
-  }
+  String get habitDeleteFailed => 'অভ্যাস মুছে ফেলা যায়নি। আবার চেষ্টা করুন।';
 
   @override
   String get habitSaveFailedGeneric => 'অভ্যাস সংরক্ষণ করা যায়নি।';

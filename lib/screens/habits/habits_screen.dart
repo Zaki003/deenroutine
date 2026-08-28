@@ -5,6 +5,7 @@ import '../../models/habit.dart';
 import '../../providers/habit_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../widgets/deen_card.dart';
+import '../../widgets/empty_state_card.dart';
 import '../../widgets/habit_actions_menu.dart';
 import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/streak_badge.dart';
@@ -61,10 +62,10 @@ class HabitsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           if (habits.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(l10n.noHabitsYet,
-                  style: TextStyle(color: DeenColors.textMuted(dark))),
+            EmptyStateCard(
+              icon: Icons.checklist_rounded,
+              message: l10n.noHabitsYet,
+              dark: dark,
             ),
           for (final habit in habits)
             Padding(

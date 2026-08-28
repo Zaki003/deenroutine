@@ -13,10 +13,12 @@ import '../../utils/app_theme.dart';
 import '../../utils/duration_format.dart';
 import '../../utils/habit_error_messages.dart';
 import '../../utils/habit_progress_subtitle.dart';
+import '../../utils/prayer_error_messages.dart';
 import '../../utils/prayer_labels.dart';
 import '../../utils/text_format.dart';
 import '../../widgets/barakah_circle.dart';
 import '../../widgets/deen_card.dart';
+import '../../widgets/empty_state_card.dart';
 import '../../widgets/gradient_hero_card.dart';
 import '../../widgets/habit_actions_menu.dart';
 import '../../widgets/habit_checkbox.dart';
@@ -71,8 +73,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(habitErrorMessage(
-                l10n, habitProvider.errorType!, habitProvider.errorDetail)),
+            backgroundColor: DeenColors.ink,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            content: Row(
+              children: [
+                const Icon(Icons.info_outline_rounded, size: 18, color: DeenColors.goldSoft),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    habitErrorMessage(l10n, habitProvider.errorType!, habitProvider.errorDetail),
+                    style: const TextStyle(color: DeenColors.paper, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
         habitProvider.clearError();
@@ -194,17 +209,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 8),
             if (habitProvider.habits.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(l10n.noHabitsYet,
-                    style: TextStyle(color: DeenColors.textMuted(dark))),
-              )
+              EmptyStateCard(icon: Icons.checklist_rounded, message: l10n.noHabitsYet, dark: dark)
             else if (todaysHabits.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(l10n.noHabitsToday,
-                    style: TextStyle(color: DeenColors.textMuted(dark))),
-              ),
+              EmptyStateCard(
+                  icon: Icons.event_available_outlined, message: l10n.noHabitsToday, dark: dark),
             for (final habit in visibleHabits)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
@@ -260,13 +268,28 @@ class _PrayerHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
     if (provider.isLoading) {
-      return const SizedBox(
+      return SizedBox(
         height: 64,
-        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        child: Center(
+          child: CircularProgressIndicator(strokeWidth: 2, color: DeenColors.gold),
+        ),
       );
     }
-    if (provider.hasError || provider.nextPrayerName == null) {
+    if (provider.hasError) {
+      return EmptyStateCard(
+        icon: Icons.cloud_off_rounded,
+        iconColor: DeenColors.rust,
+        title: l10n.prayerUnavailableTitle,
+        message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
+        dark: dark,
+        compact: true,
+        actionLabel: l10n.retryButton,
+        onAction: () => provider.loadPrayerTimes(),
+      );
+    }
+    if (provider.nextPrayerName == null) {
       return const SizedBox.shrink();
     }
     final remaining = provider.timeUntilNextPrayer;

@@ -65,6 +65,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get retryButton => 'Retry';
+
+  @override
+  String get prayerUnavailableTitle => 'Prayer times unavailable';
+
+  @override
   String prayerTimesUnavailable(Object error) {
     return 'Prayer times unavailable: $error';
   }
@@ -507,9 +513,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editButton => 'Edit';
 
   @override
-  String habitSyncError(Object error) {
-    return 'Habit sync error: $error';
-  }
+  String get habitSyncError => 'Couldn\'t sync your habits. Retrying...';
 
   @override
   String habitDuplicateTitle(Object title) {
@@ -517,14 +521,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String habitUpdateFailed(Object error) {
-    return 'Could not update habit: $error';
-  }
+  String get habitUpdateFailed => 'Couldn\'t update that habit. Try again.';
 
   @override
-  String habitDeleteFailed(Object error) {
-    return 'Could not delete habit: $error';
-  }
+  String get habitDeleteFailed => 'Couldn\'t delete that habit. Try again.';
 
   @override
   String get habitSaveFailedGeneric => 'Could not save habit.';

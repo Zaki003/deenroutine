@@ -167,7 +167,13 @@ class QuizResultScreen extends StatelessWidget {
                         builder: (context, snapshot) {
                           final best = snapshot.data;
                           if (best == null || best.totalQuestions == 0) {
-                            return const SizedBox.shrink();
+                            return Text(
+                              l10n.quizNoAttemptsYet(total),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            );
                           }
                           final bestPct =
                               (best.score / best.totalQuestions * 100).round();

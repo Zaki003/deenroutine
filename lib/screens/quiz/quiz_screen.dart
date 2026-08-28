@@ -8,6 +8,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../services/firestore_service.dart';
 import '../../utils/app_theme.dart';
+import '../../widgets/empty_state_card.dart';
 import 'quiz_result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -96,7 +97,13 @@ class _QuizScreenState extends State<QuizScreen> {
           }
           final questions = snapshot.data!;
           if (questions.isEmpty) {
-            return Center(child: Text(l10n.quizNoQuestions));
+            return Center(
+              child: EmptyStateCard(
+                icon: Icons.quiz_outlined,
+                message: l10n.quizNoQuestions,
+                dark: theme.brightness == Brightness.dark,
+              ),
+            );
           }
 
           final q = questions[_index];

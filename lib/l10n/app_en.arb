@@ -26,6 +26,8 @@
   "@seeAllHabits": {
     "placeholders": { "count": {} }
   },
+  "retryButton": "Retry",
+  "prayerUnavailableTitle": "Prayer times unavailable",
   "prayerTimesUnavailable": "Prayer times unavailable: {error}",
   "@prayerTimesUnavailable": {
     "placeholders": { "error": {} }
@@ -231,22 +233,13 @@
   "deleteAccountPasswordPrompt": "Enter your password to confirm.",
   "editButton": "Edit",
 
-  "habitSyncError": "Habit sync error: {error}",
-  "@habitSyncError": {
-    "placeholders": { "error": {} }
-  },
+  "habitSyncError": "Couldn't sync your habits. Retrying...",
   "habitDuplicateTitle": "You already have a habit named \"{title}\".",
   "@habitDuplicateTitle": {
     "placeholders": { "title": {} }
   },
-  "habitUpdateFailed": "Could not update habit: {error}",
-  "@habitUpdateFailed": {
-    "placeholders": { "error": {} }
-  },
-  "habitDeleteFailed": "Could not delete habit: {error}",
-  "@habitDeleteFailed": {
-    "placeholders": { "error": {} }
-  },
+  "habitUpdateFailed": "Couldn't update that habit. Try again.",
+  "habitDeleteFailed": "Couldn't delete that habit. Try again.",
   "habitSaveFailedGeneric": "Could not save habit.",
 
   "reminderNotificationTitle": "DeenRoutine reminder",
