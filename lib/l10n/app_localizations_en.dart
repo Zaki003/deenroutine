@@ -42,6 +42,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerButton => 'Register';
 
   @override
+  String get onboardingTagline => 'Make deen your routine.';
+
+  @override
+  String get onboardingWelcomeSubtitle =>
+      '3 quick steps to set up your prayer times and habit reminders.';
+
+  @override
+  String get onboardingGetStartedButton => 'Get started';
+
+  @override
+  String get onboardingLocationHeadline => 'Find your prayer times';
+
+  @override
+  String get onboardingLocationBody =>
+      'DeenRoutine uses your location only to show accurate prayer times for your area. Your coordinates are rounded to about 1km and never sold or shared.';
+
+  @override
+  String get onboardingAllowLocationButton => 'Allow location';
+
+  @override
+  String get onboardingEnterCityManually => 'Enter a city manually instead';
+
+  @override
+  String get onboardingNotificationHeadline => 'Stay on track';
+
+  @override
+  String get onboardingNotificationBody =>
+      'Get a gentle reminder only for the habits you choose to set a time for — nothing else.';
+
+  @override
+  String get onboardingAllowNotificationsButton => 'Allow notifications';
+
+  @override
+  String get onboardingSkipNotificationsButton => 'Skip for now';
+
+  @override
+  String get onboardingExactAlarmHeadline =>
+      'One more step for reminders to actually ring';
+
+  @override
+  String get onboardingExactAlarmBody =>
+      'Android needs \"Alarms & reminders\" turned on for DeenRoutine, or your habit reminders will silently never fire.';
+
+  @override
+  String get onboardingOpenSettingsButton => 'Open settings';
+
+  @override
+  String get onboardingExactAlarmLaterButton => 'I\'ll do this later';
+
+  @override
+  String get onboardingHabitPickerHeadline => 'Add your first habits';
+
+  @override
+  String get onboardingHabitPickerSubtitle =>
+      'Pick a few to get started — you can add more anytime.';
+
+  @override
+  String onboardingAddHabitsButton(Object count) {
+    return 'Add $count habits and finish';
+  }
+
+  @override
+  String get onboardingSkipHabitsButton => 'Skip — I\'ll add my own';
+
+  @override
   String get barakahCircleTitle => 'Barakah Circle';
 
   @override

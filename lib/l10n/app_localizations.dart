@@ -164,6 +164,120 @@ abstract class AppLocalizations {
   /// **'Register'**
   String get registerButton;
 
+  /// No description provided for @onboardingTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Make deen your routine.'**
+  String get onboardingTagline;
+
+  /// No description provided for @onboardingWelcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3 quick steps to set up your prayer times and habit reminders.'**
+  String get onboardingWelcomeSubtitle;
+
+  /// No description provided for @onboardingGetStartedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onboardingGetStartedButton;
+
+  /// No description provided for @onboardingLocationHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your prayer times'**
+  String get onboardingLocationHeadline;
+
+  /// No description provided for @onboardingLocationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'DeenRoutine uses your location only to show accurate prayer times for your area. Your coordinates are rounded to about 1km and never sold or shared.'**
+  String get onboardingLocationBody;
+
+  /// No description provided for @onboardingAllowLocationButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location'**
+  String get onboardingAllowLocationButton;
+
+  /// No description provided for @onboardingEnterCityManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a city manually instead'**
+  String get onboardingEnterCityManually;
+
+  /// No description provided for @onboardingNotificationHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay on track'**
+  String get onboardingNotificationHeadline;
+
+  /// No description provided for @onboardingNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a gentle reminder only for the habits you choose to set a time for — nothing else.'**
+  String get onboardingNotificationBody;
+
+  /// No description provided for @onboardingAllowNotificationsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get onboardingAllowNotificationsButton;
+
+  /// No description provided for @onboardingSkipNotificationsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get onboardingSkipNotificationsButton;
+
+  /// No description provided for @onboardingExactAlarmHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'One more step for reminders to actually ring'**
+  String get onboardingExactAlarmHeadline;
+
+  /// No description provided for @onboardingExactAlarmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Android needs \"Alarms & reminders\" turned on for DeenRoutine, or your habit reminders will silently never fire.'**
+  String get onboardingExactAlarmBody;
+
+  /// No description provided for @onboardingOpenSettingsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get onboardingOpenSettingsButton;
+
+  /// No description provided for @onboardingExactAlarmLaterButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ll do this later'**
+  String get onboardingExactAlarmLaterButton;
+
+  /// No description provided for @onboardingHabitPickerHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first habits'**
+  String get onboardingHabitPickerHeadline;
+
+  /// No description provided for @onboardingHabitPickerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a few to get started — you can add more anytime.'**
+  String get onboardingHabitPickerSubtitle;
+
+  /// No description provided for @onboardingAddHabitsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {count} habits and finish'**
+  String onboardingAddHabitsButton(Object count);
+
+  /// No description provided for @onboardingSkipHabitsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip — I\'ll add my own'**
+  String get onboardingSkipHabitsButton;
+
   /// No description provided for @barakahCircleTitle.
   ///
   /// In en, this message translates to:

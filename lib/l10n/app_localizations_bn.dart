@@ -42,6 +42,71 @@ class AppLocalizationsBn extends AppLocalizations {
   String get registerButton => 'নিবন্ধন করুন';
 
   @override
+  String get onboardingTagline => 'দ্বীনকে করুন আপনার রুটিন।';
+
+  @override
+  String get onboardingWelcomeSubtitle =>
+      'নামাজের সময় ও অভ্যাসের অনুস্মারক চালু করতে মাত্র ৩টি ধাপ।';
+
+  @override
+  String get onboardingGetStartedButton => 'শুরু করুন';
+
+  @override
+  String get onboardingLocationHeadline => 'আপনার নামাজের সময় খুঁজে বের করুন';
+
+  @override
+  String get onboardingLocationBody =>
+      'আপনার এলাকার সঠিক নামাজের সময় দেখাতে DeenRoutine শুধু আপনার অবস্থান ব্যবহার করে। আপনার স্থানাঙ্ক প্রায় ১ কিমি পর্যন্ত গোলাকার করা হয় এবং কখনো বিক্রি বা শেয়ার করা হয় না।';
+
+  @override
+  String get onboardingAllowLocationButton => 'অবস্থানের অনুমতি দিন';
+
+  @override
+  String get onboardingEnterCityManually => 'পরিবর্তে শহরের নাম লিখুন';
+
+  @override
+  String get onboardingNotificationHeadline => 'নিয়মিত থাকুন';
+
+  @override
+  String get onboardingNotificationBody =>
+      'শুধু আপনি বেছে নেওয়া অভ্যাসের জন্যই একটি হালকা অনুস্মারক পাবেন — আর কিছু নয়।';
+
+  @override
+  String get onboardingAllowNotificationsButton => 'নোটিফিকেশনের অনুমতি দিন';
+
+  @override
+  String get onboardingSkipNotificationsButton => 'আপাতত বাদ দিন';
+
+  @override
+  String get onboardingExactAlarmHeadline =>
+      'অনুস্মারক সত্যিই বাজতে আরেকটি ধাপ বাকি';
+
+  @override
+  String get onboardingExactAlarmBody =>
+      'অনুস্মারক কাজ করার জন্য অ্যান্ড্রয়েডে DeenRoutine-এর \"অ্যালার্ম ও অনুস্মারক\" চালু করা দরকার, নয়তো আপনার অভ্যাসের অনুস্মারক নীরবেই বাজবে না।';
+
+  @override
+  String get onboardingOpenSettingsButton => 'সেটিংস খুলুন';
+
+  @override
+  String get onboardingExactAlarmLaterButton => 'পরে করব';
+
+  @override
+  String get onboardingHabitPickerHeadline => 'আপনার প্রথম অভ্যাসগুলো যোগ করুন';
+
+  @override
+  String get onboardingHabitPickerSubtitle =>
+      'শুরু করতে কয়েকটি বেছে নিন — পরেও যোগ করতে পারবেন।';
+
+  @override
+  String onboardingAddHabitsButton(Object count) {
+    return '$count টি অভ্যাস যোগ করে শেষ করুন';
+  }
+
+  @override
+  String get onboardingSkipHabitsButton => 'বাদ দিন — নিজের মতো যোগ করব';
+
+  @override
   String get barakahCircleTitle => 'বারাকাহ বৃত্ত';
 
   @override

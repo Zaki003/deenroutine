@@ -14,6 +14,29 @@
   "fullNameLabel": "Full name",
   "registerButton": "Register",
 
+  "onboardingTagline": "Make deen your routine.",
+  "onboardingWelcomeSubtitle": "3 quick steps to set up your prayer times and habit reminders.",
+  "onboardingGetStartedButton": "Get started",
+  "onboardingLocationHeadline": "Find your prayer times",
+  "onboardingLocationBody": "DeenRoutine uses your location only to show accurate prayer times for your area. Your coordinates are rounded to about 1km and never sold or shared.",
+  "onboardingAllowLocationButton": "Allow location",
+  "onboardingEnterCityManually": "Enter a city manually instead",
+  "onboardingNotificationHeadline": "Stay on track",
+  "onboardingNotificationBody": "Get a gentle reminder only for the habits you choose to set a time for — nothing else.",
+  "onboardingAllowNotificationsButton": "Allow notifications",
+  "onboardingSkipNotificationsButton": "Skip for now",
+  "onboardingExactAlarmHeadline": "One more step for reminders to actually ring",
+  "onboardingExactAlarmBody": "Android needs \"Alarms & reminders\" turned on for DeenRoutine, or your habit reminders will silently never fire.",
+  "onboardingOpenSettingsButton": "Open settings",
+  "onboardingExactAlarmLaterButton": "I'll do this later",
+  "onboardingHabitPickerHeadline": "Add your first habits",
+  "onboardingHabitPickerSubtitle": "Pick a few to get started — you can add more anytime.",
+  "onboardingAddHabitsButton": "Add {count} habits and finish",
+  "@onboardingAddHabitsButton": {
+    "placeholders": { "count": {} }
+  },
+  "onboardingSkipHabitsButton": "Skip — I'll add my own",
+
   "barakahCircleTitle": "Barakah Circle",
   "habitsDoneToday": "{done} of {total} habits done today",
   "@habitsDoneToday": {

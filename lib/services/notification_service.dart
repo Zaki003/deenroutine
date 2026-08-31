@@ -27,9 +27,15 @@ class NotificationService {
       iOS: iosSettings,
     );
     await _plugin.initialize(settings: initSettings);
+  }
 
-    // Android 13+ requires explicit runtime permission.
-    await _plugin
+  /// Android 13+ requires this explicit runtime permission. Split out of
+  /// [init] (which runs in `main()` before `runApp()`) so the OS prompt
+  /// fires when onboarding's notification-priming screen calls this on
+  /// "Allow notifications" — not silently at cold start before the user
+  /// has seen any explanation.
+  Future<bool?>? requestPermission() {
+    return _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();

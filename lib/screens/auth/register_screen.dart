@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/auth_error_messages.dart';
+import '../onboarding/onboarding_welcome_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -70,7 +71,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _emailCtrl.text.trim(),
                           _passwordCtrl.text.trim(),
                         );
-                        if (ok && mounted) Navigator.pop(context);
+                        if (ok && mounted) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) => const OnboardingWelcomeScreen()),
+                          );
+                        }
                       },
                 child: Text(l10n.registerButton),
               ),
