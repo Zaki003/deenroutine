@@ -24,6 +24,19 @@ class AuthProvider extends ChangeNotifier {
   String? get errorCode => _errorCode;
   bool get isLoggedIn => _firebaseUser != null;
 
+  /// True from a successful [register] until [finishOnboarding] is called.
+  /// _AuthGate checks this alongside [isLoggedIn] so MainNavScreen doesn't
+  /// mount (hidden, underneath the onboarding screens) the instant
+  /// [authStateChanges] fires — it would otherwise fire location/notification
+  /// requests itself before onboarding gets to prime the user for them.
+  bool _inOnboarding = false;
+  bool get inOnboarding => _inOnboarding;
+
+  void finishOnboarding() {
+    _inOnboarding = false;
+    notifyListeners();
+  }
+
   Future<void> _onAuthChanged(User? user) async {
     _firebaseUser = user;
     if (user != null) {
@@ -43,6 +56,7 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
       _errorCode = null;
+      _inOnboarding = true;
       return true;
     } on FirebaseAuthException catch (e) {
       _errorCode = e.code;
@@ -57,6 +71,10 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _authService.login(email: email, password: password);
       _errorCode = null;
+      // Defensive: a fresh login must never stay blocked by a previously
+      // abandoned registration's leftover flag (e.g. backed out of
+      // onboarding to LoginScreen without finishing).
+      _inOnboarding = false;
       return true;
     } on FirebaseAuthException catch (e) {
       _errorCode = e.code;

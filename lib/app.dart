@@ -49,7 +49,7 @@ class _AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(
       builder: (context, auth, _) {
-        if (auth.isLoggedIn) {
+        if (auth.isLoggedIn && !auth.inOnboarding) {
           return const MainNavScreen();
         }
         return const LoginScreen();
