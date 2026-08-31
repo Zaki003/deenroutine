@@ -338,9 +338,9 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                 checklistItems: List.of(_checklistItems),
                                 ratingScale: _ratingScale,
                               );
+                        if (!context.mounted) return;
 
                         if (!saved) {
-                          if (!mounted) return;
                           setState(() => _saving = false);
                           final errorType = habitProvider.errorType;
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -385,7 +385,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                           // won't fire until they reopen and re-save it.
                         }
 
-                        if (mounted) Navigator.pop(context);
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
                       },
                 child: _saving
                     ? const SizedBox(

@@ -71,11 +71,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _emailCtrl.text.trim(),
                           _passwordCtrl.text.trim(),
                         );
-                        if (ok && mounted) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) => const OnboardingWelcomeScreen()),
-                          );
-                        }
+                        if (!ok || !context.mounted) return;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => const OnboardingWelcomeScreen()),
+                        );
                       },
                 child: Text(l10n.registerButton),
               ),
