@@ -477,7 +477,9 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           progress: habit.numericTarget == 0 ? 0 : current / habit.numericTarget,
           done: done,
           dark: dark,
-          onTap: () => context.read<HabitProvider>().logNumericProgress(habit),
+          onTap: done
+              ? () => context.read<HabitProvider>().undoCompletion(habit)
+              : () => context.read<HabitProvider>().logNumericProgress(habit),
           centerGlyph: Text(
             '$current',
             style: TextStyle(
@@ -515,7 +517,9 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           progress: 0,
           done: done,
           dark: dark,
-          onTap: () => setState(() => _expanded = !_expanded),
+          onTap: done
+              ? () => context.read<HabitProvider>().undoCompletion(habit)
+              : () => setState(() => _expanded = !_expanded),
           centerGlyph: Icon(Icons.star_outline, size: 15, color: DeenColors.textMuted(dark)),
         );
       case HabitTrackingType.yesNo:

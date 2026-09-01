@@ -40,8 +40,22 @@ class _HabitTimerControlState extends State<HabitTimerControl> {
   }
 
   void _toggleRunning() {
-    if (widget.habit.isCompletedToday) return;
+    if (widget.habit.isCompletedToday) {
+      _undo();
+      return;
+    }
     _running ? _pause() : _start();
+  }
+
+  /// Rolls the local ticker back to just under target along with the
+  /// provider write — [_elapsedSeconds] is this widget's own state, not
+  /// derived from [widget.habit] on every build, so it wouldn't otherwise
+  /// notice the undo until the next stream refresh. Left stale, the ring
+  /// would still read as full after "done" turns false, and the very next
+  /// tap would instantly re-complete it from the old cached value.
+  void _undo() {
+    setState(() => _elapsedSeconds = (_targetSeconds - 1).clamp(0, _targetSeconds));
+    context.read<HabitProvider>().undoCompletion(widget.habit);
   }
 
   void _start() {

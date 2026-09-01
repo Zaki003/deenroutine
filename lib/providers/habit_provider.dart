@@ -344,6 +344,52 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
+  /// Undoes an accidental completion, regardless of tracking type — the
+  /// escape hatch for the common "meant to tap something else" mistake.
+  /// Yes/No already has this via [toggleComplete]'s own toggle, and
+  /// checklist already has a more precise per-item undo (see
+  /// [logChecklistProgress]), but both call sites reach this too (the
+  /// Habits tab's undo indicator is uniform across every type, so it
+  /// doesn't know or care which one it's looking at).
+  ///
+  /// Numeric/timer roll back to just under target rather than to 0, so an
+  /// accidental *extra* tap doesn't wipe real progress; checklist keeps
+  /// whichever items were checked (only [completed] flips, never a bare
+  /// `logProgress` call with no `checklistDone`, which would otherwise
+  /// silently clear it back to an empty list); rating clears back to
+  /// unrated, since there's no earlier value worth restoring.
+  Future<void> undoCompletion(Habit habit) async {
+    try {
+      switch (habit.trackingType) {
+        case HabitTrackingType.numeric:
+          await _service.logProgress(
+            habit,
+            status: false,
+            numericValue: (habit.numericTarget - 1).clamp(0, habit.numericTarget),
+          );
+        case HabitTrackingType.timer:
+          final targetSeconds = habit.timerTargetMinutes * 60;
+          await _service.logProgress(
+            habit,
+            status: false,
+            timerElapsedSeconds: (targetSeconds - 1).clamp(0, targetSeconds),
+          );
+        case HabitTrackingType.checklist:
+          await _service.logProgress(
+            habit,
+            status: false,
+            checklistDone: habit.hasProgressToday ? habit.todayChecklistDone : const [],
+          );
+        case HabitTrackingType.rating:
+        case HabitTrackingType.yesNo:
+        case HabitTrackingType.avoidance:
+          await _service.logProgress(habit, status: false);
+      }
+    } catch (e) {
+      _setError(HabitErrorType.updateFailed, e.toString());
+    }
+  }
+
   /// Avoidance tracking: records a slip. This is the *only* write an
   /// avoidance habit ever makes — silence (no call at all) is what keeps
   /// its streak going, so this always logs `status: false`.

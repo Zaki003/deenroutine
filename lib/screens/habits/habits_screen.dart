@@ -7,6 +7,7 @@ import '../../theme/deen_colors.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/empty_state_card.dart';
 import '../../widgets/habit_actions_menu.dart';
+import '../../widgets/habit_checkbox.dart';
 import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/streak_badge.dart';
 import '../../widgets/week_picker.dart';
@@ -110,8 +111,21 @@ class _HabitRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Read-only until done: this screen isn't a second way to
+                  // complete a habit, only an escape hatch for undoing an
+                  // accidental completion, so an outline circle here is
+                  // just today's status at a glance and doesn't respond to
+                  // a tap — only the filled/tappable done state does.
+                  HabitCheckbox(
+                    done: done,
+                    dark: dark,
+                    size: 24,
+                    onTap: done
+                        ? () => context.read<HabitProvider>().undoCompletion(habit)
+                        : () {},
+                  ),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       habit.title,
