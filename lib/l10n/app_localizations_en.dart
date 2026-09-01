@@ -548,6 +548,46 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get milestoneTitle3 => 'Alhamdulillah!';
+
+  @override
+  String milestoneSubtitle3(Object days, Object habitTitle) {
+    return '$days-day streak — $habitTitle';
+  }
+
+  @override
+  String get milestoneTitle7 => 'Alhamdulillah!';
+
+  @override
+  String milestoneSubtitle7(Object days, Object habitTitle) {
+    return 'A full week — $habitTitle, $days days strong';
+  }
+
+  @override
+  String get milestoneTitle30 => 'Alhamdulillah! 🌙';
+
+  @override
+  String milestoneSubtitle30(Object days, Object habitTitle) {
+    return 'A full month of $habitTitle — $days days';
+  }
+
+  @override
+  String get milestoneTitle100 => 'MashaAllah!';
+
+  @override
+  String milestoneSubtitle100(Object days, Object habitTitle) {
+    return '$days days of $habitTitle — incredible consistency!';
+  }
+
+  @override
+  String get milestoneTitle365 => 'الحمد لله';
+
+  @override
+  String milestoneSubtitle365(Object days, Object habitTitle) {
+    return 'A full year of $habitTitle — $days days. Truly remarkable!';
+  }
+
+  @override
   String get deleteHabitTitle => 'Delete habit?';
 
   @override
@@ -687,6 +727,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileAccountLabel => 'ACCOUNT';
+
+  @override
+  String get profileAboutLabel => 'ABOUT';
+
+  @override
+  String get noAdsTitle => 'No ads, ever';
+
+  @override
+  String get noAdsBody =>
+      'DeenRoutine has no ad network, no analytics, and no tracking. We\'ve never sold or shared your data with anyone.';
+
+  @override
+  String get privacyPolicyLabel => 'Privacy Policy';
+
+  @override
+  String get linkOpenFailed => 'Couldn\'t open that link.';
 
   @override
   String get appearanceTitle => 'Appearance';

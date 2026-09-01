@@ -243,6 +243,32 @@
     "placeholders": { "streak": {} }
   },
 
+  "milestoneTitle3": "Alhamdulillah!",
+  "milestoneSubtitle3": "{days}-day streak — {habitTitle}",
+  "@milestoneSubtitle3": {
+    "placeholders": { "days": {}, "habitTitle": {} }
+  },
+  "milestoneTitle7": "Alhamdulillah!",
+  "milestoneSubtitle7": "A full week — {habitTitle}, {days} days strong",
+  "@milestoneSubtitle7": {
+    "placeholders": { "days": {}, "habitTitle": {} }
+  },
+  "milestoneTitle30": "Alhamdulillah! 🌙",
+  "milestoneSubtitle30": "A full month of {habitTitle} — {days} days",
+  "@milestoneSubtitle30": {
+    "placeholders": { "days": {}, "habitTitle": {} }
+  },
+  "milestoneTitle100": "MashaAllah!",
+  "milestoneSubtitle100": "{days} days of {habitTitle} — incredible consistency!",
+  "@milestoneSubtitle100": {
+    "placeholders": { "days": {}, "habitTitle": {} }
+  },
+  "milestoneTitle365": "الحمد لله",
+  "milestoneSubtitle365": "A full year of {habitTitle} — {days} days. Truly remarkable!",
+  "@milestoneSubtitle365": {
+    "placeholders": { "days": {}, "habitTitle": {} }
+  },
+
   "deleteHabitTitle": "Delete habit?",
   "deleteHabitContent": "This will permanently delete \"{title}\" and its streak history.",
   "@deleteHabitContent": {
@@ -312,6 +338,11 @@
 
   "profilePreferencesLabel": "PREFERENCES",
   "profileAccountLabel": "ACCOUNT",
+  "profileAboutLabel": "ABOUT",
+  "noAdsTitle": "No ads, ever",
+  "noAdsBody": "DeenRoutine has no ad network, no analytics, and no tracking. We've never sold or shared your data with anyone.",
+  "privacyPolicyLabel": "Privacy Policy",
+  "linkOpenFailed": "Couldn't open that link.",
   "appearanceTitle": "Appearance",
   "appearanceLight": "Light",
   "appearanceDark": "Dark",

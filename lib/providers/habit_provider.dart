@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
 import '../services/firestore_service.dart';
@@ -8,6 +9,21 @@ import '../services/firestore_service.dart';
 /// pre-formatted English sentence so the UI layer can localize the message
 /// (providers stay `BuildContext`/`AppLocalizations`-free).
 enum HabitErrorType { syncFailed, duplicateTitle, updateFailed, deleteFailed }
+
+/// Streak lengths a milestone banner celebrates. Ordered ascending —
+/// [HabitProvider._checkMilestone] relies on that to find the highest one
+/// crossed in a single jump.
+const List<int> kMilestoneDays = [3, 7, 30, 100, 365];
+
+/// A just-crossed streak milestone for one habit, queued for the dashboard
+/// to celebrate. [days] is always a value from [kMilestoneDays].
+class MilestoneEvent {
+  final String habitId;
+  final String habitTitle;
+  final int days;
+
+  const MilestoneEvent({required this.habitId, required this.habitTitle, required this.days});
+}
 
 class HabitProvider extends ChangeNotifier {
   final FirestoreService _service = FirestoreService();
@@ -29,6 +45,54 @@ class HabitProvider extends ChangeNotifier {
     _errorType = null;
     _errorDetail = null;
     notifyListeners();
+  }
+
+  // ---------------- Streak milestones ----------------
+
+  /// Queued rather than a single nullable event: [streakFor] is called
+  /// concurrently for every visible habit (Dashboard and Habits tab both
+  /// stay mounted under the bottom nav's `IndexedStack`), so more than one
+  /// habit can cross a milestone in the same frame — most likely right
+  /// after this feature ships, when existing streaks are seen for the
+  /// first time and each celebrates once. The dashboard shows one at a
+  /// time and calls [consumeMilestone] to advance to the next.
+  final List<MilestoneEvent> _milestoneQueue = [];
+  MilestoneEvent? get pendingMilestone => _milestoneQueue.isEmpty ? null : _milestoneQueue.first;
+
+  void consumeMilestone() {
+    if (_milestoneQueue.isEmpty) return;
+    _milestoneQueue.removeAt(0);
+    notifyListeners();
+  }
+
+  /// Compares [streak] against the last streak length seen for [habit],
+  /// persisted locally (device-only, like [ThemeProvider]'s prefs — a
+  /// streak is recomputed from `HabitLogs` on demand rather than stored,
+  /// so there's nowhere server-side to keep a watermark). Queues the
+  /// highest [kMilestoneDays] entry crossed since then, if any.
+  ///
+  /// The watermark defaults to 0 for a habit never seen before, so a habit
+  /// whose streak is already past a milestone the first time this runs
+  /// (e.g. right after this feature ships) celebrates immediately for the
+  /// highest milestone already reached, once — rather than staying silent
+  /// about a streak the user already earned.
+  Future<void> _checkMilestone(Habit habit, int streak) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'streak_watermark_${habit.habitId}';
+    final lastSeen = prefs.getInt(key) ?? 0;
+    if (streak <= lastSeen) return;
+
+    final crossed = kMilestoneDays.where((d) => d > lastSeen && d <= streak);
+    if (crossed.isNotEmpty) {
+      final days = crossed.last;
+      final alreadyQueued =
+          _milestoneQueue.any((m) => m.habitId == habit.habitId && m.days == days);
+      if (!alreadyQueued) {
+        _milestoneQueue.add(MilestoneEvent(habitId: habit.habitId, habitTitle: habit.title, days: days));
+        notifyListeners();
+      }
+    }
+    await prefs.setInt(key, streak);
   }
 
   void _setError(HabitErrorType type, String detail) {
@@ -279,12 +343,14 @@ class HabitProvider extends ChangeNotifier {
 
   Future<int> streakFor(Habit habit) async {
     final logs = await _service.watchHabitLogs(habit.uid, habit.habitId).first;
-    return _service.calculateStreak(
+    final streak = _service.calculateStreak(
       logs,
       frequency: habit.frequency,
       selectedDays: habit.selectedDays,
       trackingType: habit.trackingType,
     );
+    unawaited(_checkMilestone(habit, streak));
+    return streak;
   }
 
   /// This week's completion, one bool per day (Mon..Sun).

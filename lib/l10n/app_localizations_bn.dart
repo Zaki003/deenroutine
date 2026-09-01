@@ -549,6 +549,46 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get milestoneTitle3 => 'আলহামদুলিল্লাহ!';
+
+  @override
+  String milestoneSubtitle3(Object days, Object habitTitle) {
+    return '$days দিনের ধারাবাহিকতা — $habitTitle';
+  }
+
+  @override
+  String get milestoneTitle7 => 'আলহামদুলিল্লাহ!';
+
+  @override
+  String milestoneSubtitle7(Object days, Object habitTitle) {
+    return 'পুরো এক সপ্তাহ — $habitTitle, $days দিন ধরে অবিচল';
+  }
+
+  @override
+  String get milestoneTitle30 => 'আলহামদুলিল্লাহ! 🌙';
+
+  @override
+  String milestoneSubtitle30(Object days, Object habitTitle) {
+    return '$habitTitle-এর পুরো এক মাস — $days দিন';
+  }
+
+  @override
+  String get milestoneTitle100 => 'মাশাআল্লাহ!';
+
+  @override
+  String milestoneSubtitle100(Object days, Object habitTitle) {
+    return '$habitTitle-এর $days দিন — অসাধারণ ধারাবাহিকতা!';
+  }
+
+  @override
+  String get milestoneTitle365 => 'الحمد لله';
+
+  @override
+  String milestoneSubtitle365(Object days, Object habitTitle) {
+    return '$habitTitle-এর পুরো এক বছর — $days দিন। সত্যিই অসাধারণ!';
+  }
+
+  @override
   String get deleteHabitTitle => 'অভ্যাস মুছবেন?';
 
   @override
@@ -690,6 +730,22 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get profileAccountLabel => 'অ্যাকাউন্ট';
+
+  @override
+  String get profileAboutLabel => 'সম্পর্কে';
+
+  @override
+  String get noAdsTitle => 'কোনো বিজ্ঞাপন নেই, কখনোই না';
+
+  @override
+  String get noAdsBody =>
+      'DeenRoutine-এ কোনো বিজ্ঞাপন নেটওয়ার্ক, অ্যানালিটিক্স, বা ট্র্যাকিং নেই। আমরা কখনো আপনার তথ্য কারো কাছে বিক্রি বা শেয়ার করিনি।';
+
+  @override
+  String get privacyPolicyLabel => 'গোপনীয়তা নীতি';
+
+  @override
+  String get linkOpenFailed => 'লিঙ্কটি খোলা যায়নি।';
 
   @override
   String get appearanceTitle => 'থিম';

@@ -25,6 +25,7 @@ import '../../widgets/habit_checkbox.dart';
 import '../../widgets/habit_progress_ring.dart';
 import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/habit_timer_control.dart';
+import '../../widgets/milestone_banner.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
 import '../../widgets/update_location_action.dart';
@@ -112,7 +113,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
     final visibleHabits = orderedHabits.take(_maxVisibleHabits).toList();
     final hiddenHabitCount = orderedHabits.length - visibleHabits.length;
+    final milestone = habitProvider.pendingMilestone;
 
+    return Stack(
+      children: [
+        _dashboardBody(l10n, habitProvider, prayerProvider, dark, isBangla, name, done, total,
+            todaysHabits, visibleHabits, hiddenHabitCount),
+        if (milestone != null)
+          Positioned(
+            top: 10,
+            left: 16,
+            right: 16,
+            child: MilestoneBanner(
+              key: ValueKey('${milestone.habitId}_${milestone.days}'),
+              event: milestone,
+              onDismissed: () => context.read<HabitProvider>().consumeMilestone(),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _dashboardBody(
+    AppLocalizations l10n,
+    HabitProvider habitProvider,
+    PrayerProvider prayerProvider,
+    bool dark,
+    bool isBangla,
+    String name,
+    int done,
+    int total,
+    List<Habit> todaysHabits,
+    List<Habit> visibleHabits,
+    int hiddenHabitCount,
+  ) {
     return ColoredBox(
       color: DeenColors.surface(dark),
       child: RefreshIndicator(

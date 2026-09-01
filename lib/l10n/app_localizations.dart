@@ -1071,6 +1071,66 @@ abstract class AppLocalizations {
   /// **'🔥 {streak} day streak'**
   String habitStreakDays(Object streak);
 
+  /// No description provided for @milestoneTitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah!'**
+  String get milestoneTitle3;
+
+  /// No description provided for @milestoneSubtitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}-day streak — {habitTitle}'**
+  String milestoneSubtitle3(Object days, Object habitTitle);
+
+  /// No description provided for @milestoneTitle7.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah!'**
+  String get milestoneTitle7;
+
+  /// No description provided for @milestoneSubtitle7.
+  ///
+  /// In en, this message translates to:
+  /// **'A full week — {habitTitle}, {days} days strong'**
+  String milestoneSubtitle7(Object days, Object habitTitle);
+
+  /// No description provided for @milestoneTitle30.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah! 🌙'**
+  String get milestoneTitle30;
+
+  /// No description provided for @milestoneSubtitle30.
+  ///
+  /// In en, this message translates to:
+  /// **'A full month of {habitTitle} — {days} days'**
+  String milestoneSubtitle30(Object days, Object habitTitle);
+
+  /// No description provided for @milestoneTitle100.
+  ///
+  /// In en, this message translates to:
+  /// **'MashaAllah!'**
+  String get milestoneTitle100;
+
+  /// No description provided for @milestoneSubtitle100.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days of {habitTitle} — incredible consistency!'**
+  String milestoneSubtitle100(Object days, Object habitTitle);
+
+  /// No description provided for @milestoneTitle365.
+  ///
+  /// In en, this message translates to:
+  /// **'الحمد لله'**
+  String get milestoneTitle365;
+
+  /// No description provided for @milestoneSubtitle365.
+  ///
+  /// In en, this message translates to:
+  /// **'A full year of {habitTitle} — {days} days. Truly remarkable!'**
+  String milestoneSubtitle365(Object days, Object habitTitle);
+
   /// No description provided for @deleteHabitTitle.
   ///
   /// In en, this message translates to:
@@ -1310,6 +1370,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ACCOUNT'**
   String get profileAccountLabel;
+
+  /// No description provided for @profileAboutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ABOUT'**
+  String get profileAboutLabel;
+
+  /// No description provided for @noAdsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads, ever'**
+  String get noAdsTitle;
+
+  /// No description provided for @noAdsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'DeenRoutine has no ad network, no analytics, and no tracking. We\'ve never sold or shared your data with anyone.'**
+  String get noAdsBody;
+
+  /// No description provided for @privacyPolicyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyLabel;
+
+  /// No description provided for @linkOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open that link.'**
+  String get linkOpenFailed;
 
   /// No description provided for @appearanceTitle.
   ///

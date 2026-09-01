@@ -186,6 +186,17 @@
 
   "habitStreakDays": "🔥 {streak} দিনের ধারাবাহিকতা",
 
+  "milestoneTitle3": "আলহামদুলিল্লাহ!",
+  "milestoneSubtitle3": "{days} দিনের ধারাবাহিকতা — {habitTitle}",
+  "milestoneTitle7": "আলহামদুলিল্লাহ!",
+  "milestoneSubtitle7": "পুরো এক সপ্তাহ — {habitTitle}, {days} দিন ধরে অবিচল",
+  "milestoneTitle30": "আলহামদুলিল্লাহ! 🌙",
+  "milestoneSubtitle30": "{habitTitle}-এর পুরো এক মাস — {days} দিন",
+  "milestoneTitle100": "মাশাআল্লাহ!",
+  "milestoneSubtitle100": "{habitTitle}-এর {days} দিন — অসাধারণ ধারাবাহিকতা!",
+  "milestoneTitle365": "الحمد لله",
+  "milestoneSubtitle365": "{habitTitle}-এর পুরো এক বছর — {days} দিন। সত্যিই অসাধারণ!",
+
   "deleteHabitTitle": "অভ্যাস মুছবেন?",
   "deleteHabitContent": "এটি \"{title}\" এবং এর ধারাবাহিকতার ইতিহাস স্থায়ীভাবে মুছে ফেলবে।",
   "cancelButton": "বাতিল",
@@ -231,6 +242,11 @@
 
   "profilePreferencesLabel": "পছন্দসমূহ",
   "profileAccountLabel": "অ্যাকাউন্ট",
+  "profileAboutLabel": "সম্পর্কে",
+  "noAdsTitle": "কোনো বিজ্ঞাপন নেই, কখনোই না",
+  "noAdsBody": "DeenRoutine-এ কোনো বিজ্ঞাপন নেটওয়ার্ক, অ্যানালিটিক্স, বা ট্র্যাকিং নেই। আমরা কখনো আপনার তথ্য কারো কাছে বিক্রি বা শেয়ার করিনি।",
+  "privacyPolicyLabel": "গোপনীয়তা নীতি",
+  "linkOpenFailed": "লিঙ্কটি খোলা যায়নি।",
   "appearanceTitle": "থিম",
   "appearanceLight": "লাইট",
   "appearanceDark": "ডার্ক",
