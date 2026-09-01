@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
+import '../services/analytics_service.dart';
 import '../services/firestore_service.dart';
 
 /// Kinds of error [HabitProvider] can surface. Kept as a type rather than a
@@ -28,6 +29,7 @@ class MilestoneEvent {
 
 class HabitProvider extends ChangeNotifier {
   final FirestoreService _service = FirestoreService();
+  final AnalyticsService _analytics = AnalyticsService();
   final _uuid = const Uuid();
 
   StreamSubscription<List<Habit>>? _habitsSub;
@@ -90,6 +92,7 @@ class HabitProvider extends ChangeNotifier {
           _milestoneQueue.any((m) => m.habitId == habit.habitId && m.days == days);
       if (!alreadyQueued) {
         _milestoneQueue.add(MilestoneEvent(habitId: habit.habitId, habitTitle: habit.title, days: days));
+        _analytics.logStreakMilestone(days: days);
         notifyListeners();
       }
     }
@@ -168,6 +171,7 @@ class HabitProvider extends ChangeNotifier {
     int timerTargetMinutes = 10,
     List<String> checklistItems = const [],
     int ratingScale = 5,
+    String? templateId,
   }) async {
     final normalizedTitle = title.trim().toLowerCase();
     final isDuplicate = _habits.any(
@@ -195,6 +199,11 @@ class HabitProvider extends ChangeNotifier {
       ratingScale: ratingScale,
     );
     await _service.addHabit(habit);
+    _analytics.logHabitCreated(
+      category: category.name,
+      trackingType: trackingType.name,
+      templateId: templateId,
+    );
     return true;
   }
 
@@ -258,14 +267,17 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
-  /// Fires the platform's light haptic the instant a habit's completion
-  /// transitions to done. It's the felt confirmation for the common case —
-  /// finishing one habit, which happens several times a day — kept
-  /// deliberately quieter than the Barakah Circle burst (all done today)
-  /// and the milestone banner (streak thresholds), which are rarer and earn
-  /// a bigger moment.
-  void _confirmCompletion(bool completing) {
-    if (completing) HapticFeedback.lightImpact();
+  /// Fires the platform's light haptic, and logs the (opt-in-only)
+  /// `habit_completed` analytics event, the instant a habit's completion
+  /// transitions to done. The haptic is the felt confirmation for the
+  /// common case — finishing one habit, which happens several times a day —
+  /// kept deliberately quieter than the Barakah Circle burst (all done
+  /// today) and the milestone banner (streak thresholds), which are rarer
+  /// and earn a bigger moment.
+  void _confirmCompletion(bool completing, HabitTrackingType trackingType) {
+    if (!completing) return;
+    HapticFeedback.lightImpact();
+    _analytics.logHabitCompleted(trackingType: trackingType.name);
   }
 
   /// Yes/No logging, and the Milestone-1 stopgap for checklist/rating.
@@ -273,7 +285,7 @@ class HabitProvider extends ChangeNotifier {
     final completing = !habit.isCompletedToday;
     try {
       await _service.logProgress(habit, status: completing);
-      _confirmCompletion(completing);
+      _confirmCompletion(completing, habit.trackingType);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -291,7 +303,7 @@ class HabitProvider extends ChangeNotifier {
         status: completing,
         numericValue: next,
       );
-      _confirmCompletion(completing);
+      _confirmCompletion(completing, habit.trackingType);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -308,7 +320,7 @@ class HabitProvider extends ChangeNotifier {
         status: elapsedSeconds >= targetSeconds,
         timerElapsedSeconds: elapsedSeconds,
       );
-      _confirmCompletion(completing);
+      _confirmCompletion(completing, habit.trackingType);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -320,7 +332,7 @@ class HabitProvider extends ChangeNotifier {
     final completing = !habit.isCompletedToday;
     try {
       await _service.logProgress(habit, status: true, ratingValue: value);
-      _confirmCompletion(completing);
+      _confirmCompletion(completing, habit.trackingType);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -338,7 +350,7 @@ class HabitProvider extends ChangeNotifier {
         status: newStatus,
         checklistDone: doneItems,
       );
-      _confirmCompletion(completing);
+      _confirmCompletion(completing, habit.trackingType);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }

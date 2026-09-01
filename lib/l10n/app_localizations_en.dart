@@ -736,10 +736,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noAdsBody =>
-      'DeenRoutine has no ad network, no analytics, and no tracking. We\'ve never sold or shared your data with anyone.';
+      'DeenRoutine has no ad network and never sells or shares your data. Usage analytics are optional — off unless you turn them on in Preferences.';
 
   @override
   String get privacyPolicyLabel => 'Privacy Policy';
+
+  @override
+  String get usageAnalyticsTitle => 'Usage Analytics';
+
+  @override
+  String get usageAnalyticsBody =>
+      'Help improve DeenRoutine by sharing anonymous usage data — which features get used, never your habit titles or content. Off by default.';
 
   @override
   String get linkOpenFailed => 'Couldn\'t open that link.';

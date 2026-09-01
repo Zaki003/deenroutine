@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/analytics_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
@@ -31,6 +32,7 @@ class ProfileScreen extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
     final themeProvider = context.watch<ThemeProvider>();
     final localeProvider = context.watch<LocaleProvider>();
+    final analyticsProvider = context.watch<AnalyticsProvider>();
     final user = auth.appUser;
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -151,6 +153,42 @@ class ProfileScreen extends StatelessWidget {
                   selected: localeProvider.isBangla,
                   dark: dark,
                   onTap: () => localeProvider.setLocale(const Locale('bn')),
+                ),
+              ],
+            ),
+          ),
+          DeenCard(
+            dark: dark,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.usageAnalyticsTitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: DeenColors.primaryText(dark),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.usageAnalyticsBody,
+                        style: TextStyle(
+                            fontSize: 11.5, height: 1.4, color: DeenColors.textMuted(dark)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Switch(
+                  value: analyticsProvider.enabled,
+                  onChanged: (value) => analyticsProvider.setEnabled(value),
+                  activeThumbColor: DeenColors.primary,
                 ),
               ],
             ),

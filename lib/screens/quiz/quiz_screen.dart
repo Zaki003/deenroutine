@@ -6,6 +6,7 @@ import '../../models/quiz_question.dart';
 import '../../models/quiz_result.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
+import '../../services/analytics_service.dart';
 import '../../services/firestore_service.dart';
 import '../../utils/app_theme.dart';
 import '../../widgets/empty_state_card.dart';
@@ -22,6 +23,7 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   final _service = FirestoreService();
+  final _analytics = AnalyticsService();
   late Future<List<QuizQuestion>> _questionsFuture;
   int _index = 0;
   int _score = 0;
@@ -44,6 +46,10 @@ class _QuizScreenState extends State<QuizScreen> {
       totalQuestions: questions.length,
     );
     await _service.saveQuizResult(result);
+    _analytics.logQuizCompleted(
+      totalQuestions: questions.length,
+      scorePercent: questions.isEmpty ? 0 : (_score * 100 ~/ questions.length),
+    );
   }
 
   void _selectOption(String option) {

@@ -29,7 +29,7 @@ A rotating Qur'anic verse or Hadith greets you each day, plus an Islamic-knowled
 Set a reminder time for any habit — nothing pushy, nothing you didn't ask for.
 
 **No ads. Ever.**
-DeenRoutine has no ad network, no analytics SDK, and no tracking of any kind. We've never sold or shared your data with anyone. Your habit history and prayer data stay yours.
+DeenRoutine has no ad network and never sells or shares your data. Usage analytics are entirely optional — off unless you choose to turn them on. Your habit history and prayer data stay yours.
 
 Available in English and Bangla, with light and dark themes.
 

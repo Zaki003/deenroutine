@@ -739,10 +739,17 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get noAdsBody =>
-      'DeenRoutine-এ কোনো বিজ্ঞাপন নেটওয়ার্ক, অ্যানালিটিক্স, বা ট্র্যাকিং নেই। আমরা কখনো আপনার তথ্য কারো কাছে বিক্রি বা শেয়ার করিনি।';
+      'DeenRoutine-এর কোনো বিজ্ঞাপন নেটওয়ার্ক নেই এবং আমরা কখনো আপনার তথ্য বিক্রি বা শেয়ার করি না। ব্যবহার বিশ্লেষণ ঐচ্ছিক — আপনি প্রেফারেন্সে চালু না করা পর্যন্ত বন্ধ থাকে।';
 
   @override
   String get privacyPolicyLabel => 'গোপনীয়তা নীতি';
+
+  @override
+  String get usageAnalyticsTitle => 'ব্যবহার বিশ্লেষণ';
+
+  @override
+  String get usageAnalyticsBody =>
+      'DeenRoutine উন্নত করতে বেনামী ব্যবহারের তথ্য শেয়ার করে সাহায্য করুন — কোন ফিচার ব্যবহৃত হচ্ছে তা, কখনো আপনার অভ্যাসের শিরোনাম বা বিষয়বস্তু নয়। ডিফল্টভাবে বন্ধ থাকে।';
 
   @override
   String get linkOpenFailed => 'লিঙ্কটি খোলা যায়নি।';

@@ -4,6 +4,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../providers/prayer_provider.dart';
+import '../../services/analytics_service.dart';
 import '../../theme/deen_colors.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../habits/habits_screen.dart';
@@ -21,14 +22,20 @@ class MainNavScreen extends StatefulWidget {
   State<MainNavScreen> createState() => _MainNavScreenState();
 }
 
+// Stable, locale-independent names for screen-view analytics — l10n labels
+// would otherwise report a different value per language for the same tab.
+const _screenNames = ['Dashboard', 'Habits', 'Prayer', 'Quiz', 'Profile'];
+
 class _MainNavScreenState extends State<MainNavScreen> {
   int _index = 0;
+  final _analytics = AnalyticsService();
 
   @override
   void initState() {
     super.initState();
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     context.read<HabitProvider>().listenToHabits(uid);
+    _analytics.logScreenView(_screenNames[_index]);
     // loadPrayerTimes() notifies synchronously before its first await (to
     // flip on isLoading immediately for pull-to-refresh callers), which
     // would hit "setState() called during build" if invoked directly from
@@ -37,6 +44,11 @@ class _MainNavScreenState extends State<MainNavScreen> {
       if (!mounted) return;
       context.read<PrayerProvider>().loadPrayerTimes();
     });
+  }
+
+  void _onTabTap(int i) {
+    setState(() => _index = i);
+    _analytics.logScreenView(_screenNames[i]);
   }
 
   @override
@@ -48,7 +60,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
       (
         icon: Icons.home_rounded,
         label: l10n.navHome,
-        screen: DashboardScreen(onSeeAllHabits: () => setState(() => _index = 1)),
+        screen: DashboardScreen(onSeeAllHabits: () => _onTabTap(1)),
       ),
       (icon: Icons.checklist_rounded, label: l10n.navHabits, screen: const HabitsScreen()),
       (icon: Icons.access_time_rounded, label: l10n.navPrayer, screen: const PrayerScreen()),
@@ -70,7 +82,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
         ),
         child: BottomNavigationBar(
           currentIndex: _index,
-          onTap: (i) => setState(() => _index = i),
+          onTap: _onTabTap,
           items: [
             for (final t in tabs)
               BottomNavigationBarItem(icon: Icon(t.icon), label: t.label),

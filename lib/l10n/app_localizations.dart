@@ -1386,7 +1386,7 @@ abstract class AppLocalizations {
   /// No description provided for @noAdsBody.
   ///
   /// In en, this message translates to:
-  /// **'DeenRoutine has no ad network, no analytics, and no tracking. We\'ve never sold or shared your data with anyone.'**
+  /// **'DeenRoutine has no ad network and never sells or shares your data. Usage analytics are optional — off unless you turn them on in Preferences.'**
   String get noAdsBody;
 
   /// No description provided for @privacyPolicyLabel.
@@ -1394,6 +1394,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get privacyPolicyLabel;
+
+  /// No description provided for @usageAnalyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Analytics'**
+  String get usageAnalyticsTitle;
+
+  /// No description provided for @usageAnalyticsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Help improve DeenRoutine by sharing anonymous usage data — which features get used, never your habit titles or content. Off by default.'**
+  String get usageAnalyticsBody;
 
   /// No description provided for @linkOpenFailed.
   ///

@@ -360,9 +360,9 @@
     <p class="eyebrow">Privacy Policy</p>
     <h1 class="title">How DeenRoutine handles your information</h1>
     <div class="gold-rule" aria-hidden="true"></div>
-    <p class="meta-line">Effective August 27, 2026 &nbsp;·&nbsp; Applies to the DeenRoutine Android app</p>
+    <p class="meta-line">Effective September 1, 2026 &nbsp;·&nbsp; Applies to the DeenRoutine Android app</p>
     <div class="summary-box">
-      <strong>In plain English:</strong> DeenRoutine stores your habits, quiz scores, and account info (name + email) in a private database tied to your account. It uses your approximate location only to calculate accurate prayer times, and never sells your data or shows you ads.
+      <strong>In plain English:</strong> DeenRoutine stores your habits, quiz scores, and account info (name + email) in a private database tied to your account. It uses your approximate location only to calculate accurate prayer times, never shows you ads, and never sells your data. Usage analytics are entirely optional and off unless you turn them on.
     </div>
   </div>
 </header>
@@ -375,13 +375,14 @@
       <li><a href="#information"><span class="toc-num">02</span>Information we collect</a></li>
       <li><a href="#use"><span class="toc-num">03</span>How we use it</a></li>
       <li><a href="#location"><span class="toc-num">04</span>Location &amp; prayer times</a></li>
-      <li><a href="#third-party"><span class="toc-num">05</span>Third-party services</a></li>
-      <li><a href="#security"><span class="toc-num">06</span>Storage &amp; security</a></li>
-      <li><a href="#retention"><span class="toc-num">07</span>Data retention</a></li>
-      <li><a href="#rights"><span class="toc-num">08</span>Your rights</a></li>
-      <li><a href="#children"><span class="toc-num">09</span>Children's privacy</a></li>
-      <li><a href="#changes"><span class="toc-num">10</span>Changes</a></li>
-      <li><a href="#contact"><span class="toc-num">11</span>Contact</a></li>
+      <li><a href="#usage-analytics"><span class="toc-num">05</span>Usage analytics</a></li>
+      <li><a href="#third-party"><span class="toc-num">06</span>Third-party services</a></li>
+      <li><a href="#security"><span class="toc-num">07</span>Storage &amp; security</a></li>
+      <li><a href="#retention"><span class="toc-num">08</span>Data retention</a></li>
+      <li><a href="#rights"><span class="toc-num">09</span>Your rights</a></li>
+      <li><a href="#children"><span class="toc-num">10</span>Children's privacy</a></li>
+      <li><a href="#changes"><span class="toc-num">11</span>Changes</a></li>
+      <li><a href="#contact"><span class="toc-num">12</span>Contact</a></li>
     </ol>
   </nav>
 
@@ -399,8 +400,9 @@
         <li><strong>Quiz results</strong> — your scores and completion dates for the Islamic-knowledge quiz, so you can see your best score over time.</li>
         <li><strong>Approximate location</strong> — with your permission, your device's approximate GPS coordinates, used only to calculate accurate prayer times for your area (see Section 4).</li>
         <li><strong>App preferences</strong> — your chosen theme and language, stored locally on your device.</li>
+        <li><strong>Usage analytics (optional, off by default)</strong> — if you turn this on in Profile → Preferences, DeenRoutine uses Firebase Analytics (a Google service) to record things like which screens you visit, that a habit was created and its category/tracking type, that a quiz was completed and roughly how well you scored, or that a streak reached a milestone. This never includes your habit titles, quiz answers, or anything else you typed — only which feature was used, in general shape.</li>
       </ul>
-      <p>We do not collect payment information, government ID numbers, contacts, photos, or browsing history. DeenRoutine has no advertising and no analytics or tracking SDKs.</p>
+      <p>We do not collect payment information, government ID numbers, contacts, photos, or browsing history. DeenRoutine has no advertising. Analytics are opt-in only — see Section 5.</p>
     </section>
 
     <section class="policy-section" id="use">
@@ -426,52 +428,69 @@
       <div class="permission-note">You can deny or revoke location permission at any time in Android's app settings — prayer times just won't be available until it's granted again.</div>
     </section>
 
+    <section class="policy-section" id="usage-analytics">
+      <h2><span class="num">05</span>Usage analytics</h2>
+      <p>DeenRoutine does not collect usage analytics by default. If you turn it on — Profile → Preferences → Usage Analytics — the app uses Firebase Analytics (Google) to record:</p>
+      <ul>
+        <li>Which screens you visit.</li>
+        <li>That a habit was created, with its category and tracking type — never its title.</li>
+        <li>That a habit was completed, with its tracking type — never which one.</li>
+        <li>That a quiz was completed, with question count and a rough score band — never your answers.</li>
+        <li>That a streak reached a milestone (3/7/30/100/365 days) — never which habit.</li>
+        <li>Which starter template you picked, if any.</li>
+      </ul>
+      <p>We use this only to see which features people actually use, so we can improve the app and design better default habit templates. It's never used to build an advertising profile, and we've turned off Google's data-sharing settings in our Firebase project, so this data isn't used by Google for its own purposes either.</p>
+      <div class="permission-note">Turn it on or off at any time in Profile → Preferences.</div>
+    </section>
+
     <section class="policy-section" id="third-party">
-      <h2><span class="num">05</span>Third-party services</h2>
+      <h2><span class="num">06</span>Third-party services</h2>
       <ul>
         <li><strong>Firebase (Google)</strong> — Authentication and Cloud Firestore database. Firebase stores your account info, habits, quiz results, and cached prayer times. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
+        <li><strong>Firebase Analytics (Google)</strong> — only if you've turned on usage analytics; see Section 5.</li>
         <li><strong>Aladhan API</strong> — receives approximate coordinates and a date to return prayer times. See their terms at aladhan.com.</li>
       </ul>
       <p>We don't use Google, Facebook, or Apple sign-in, so no login data is shared with those platforms — DeenRoutine accounts are email-and-password only.</p>
     </section>
 
     <section class="policy-section" id="security">
-      <h2><span class="num">06</span>Storage &amp; security</h2>
+      <h2><span class="num">07</span>Storage &amp; security</h2>
       <p>Your data is stored in Cloud Firestore and protected by security rules that restrict access so only you can read or write your own habits, logs, quiz results, and profile — enforced on Google's servers, not just in the app. Data is encrypted in transit (HTTPS/TLS) and at rest by Firebase's infrastructure.</p>
     </section>
 
     <section class="policy-section" id="retention">
-      <h2><span class="num">07</span>Data retention</h2>
+      <h2><span class="num">08</span>Data retention</h2>
       <p>We retain your account and habit data for as long as your account exists. You can permanently delete your account and all associated data yourself, at any time, with no waiting period:</p>
       <ul>
         <li><strong>In the app</strong> — go to Profile → Account → Delete Account.</li>
         <li><strong>On the web, without installing the app</strong> — visit <a href="delete-account.html">delete-account.html</a> and follow the prompts.</li>
       </ul>
-      <p>Both options delete your data immediately and permanently — there is no 30-day grace period. If you can't use either option (for example, you're locked out of your account), email us (Section 11) and we'll delete it for you.</p>
+      <p>Both options delete your data immediately and permanently — there is no 30-day grace period. If you can't use either option (for example, you're locked out of your account), email us (Section 12) and we'll delete it for you.</p>
     </section>
 
     <section class="policy-section" id="rights">
-      <h2><span class="num">08</span>Your rights</h2>
+      <h2><span class="num">09</span>Your rights</h2>
       <ul>
         <li>You can edit or delete individual habits at any time within the app.</li>
         <li>You can permanently delete your entire account and all associated data yourself, instantly — either in the app (Profile → Account → Delete Account) or on the web at <a href="delete-account.html">delete-account.html</a>, with no app install required. This cannot be undone.</li>
         <li>You can also request a copy of your data, or ask us to delete your account by hand, by emailing us at the address below — useful if you're unable to use either self-service option above.</li>
         <li>You can revoke location or notification permissions at any time from your device's system settings.</li>
+        <li>You can turn usage analytics on or off at any time in Profile → Preferences.</li>
       </ul>
     </section>
 
     <section class="policy-section" id="children">
-      <h2><span class="num">09</span>Children's privacy</h2>
+      <h2><span class="num">10</span>Children's privacy</h2>
       <p>DeenRoutine is not directed at children under 13, and we don't knowingly collect personal information from children under 13. If you believe a child has created an account, contact us and we'll delete it.</p>
     </section>
 
     <section class="policy-section" id="changes">
-      <h2><span class="num">10</span>Changes to this policy</h2>
+      <h2><span class="num">11</span>Changes to this policy</h2>
       <p>If we make material changes to this policy, we'll update the effective date above. Continued use of the app after a change means you accept the revised policy.</p>
     </section>
 
     <section class="policy-section" id="contact">
-      <h2><span class="num">11</span>Contact us</h2>
+      <h2><span class="num">12</span>Contact us</h2>
       <p>Questions about this policy or your data? Email <a href="mailto:zakifaiazchy@gmail.com">zakifaiazchy@gmail.com</a>.</p>
     </section>
 

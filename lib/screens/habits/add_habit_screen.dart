@@ -337,6 +337,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                 timerTargetMinutes: _timerTargetMinutes,
                                 checklistItems: List.of(_checklistItems),
                                 ratingScale: _ratingScale,
+                                templateId: widget.template?.id,
                               );
                         if (!context.mounted) return;
 

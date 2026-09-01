@@ -7,6 +7,10 @@ import 'habit.dart';
 /// Firestore representation; picking one just pre-fills the add-habit form
 /// the same way editing an existing habit does.
 class HabitTemplate {
+  /// Stable, locale-independent identifier (unlike [title], which is
+  /// localized text) — used only to name which template was picked in
+  /// analytics events.
+  final String id;
   final String title;
   final HabitCategory category;
   final HabitFrequency frequency;
@@ -22,6 +26,7 @@ class HabitTemplate {
   final int timerTargetMinutes;
 
   const HabitTemplate({
+    required this.id,
     required this.title,
     required this.category,
     required this.frequency,
@@ -39,6 +44,7 @@ class HabitTemplate {
 /// entry here — no seed script or content release beyond a normal app build.
 List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
       HabitTemplate(
+        id: 'pray_five_times',
         title: l10n.templatePrayFiveTimes,
         category: HabitCategory.islam,
         frequency: HabitFrequency.daily,
@@ -53,30 +59,35 @@ List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
         ],
       ),
       HabitTemplate(
+        id: 'read_quran',
         title: l10n.templateReadQuran,
         category: HabitCategory.islam,
         frequency: HabitFrequency.daily,
         icon: Icons.menu_book_outlined,
       ),
       HabitTemplate(
+        id: 'dhikr_after_prayer',
         title: l10n.templateDhikrAfterPrayer,
         category: HabitCategory.islam,
         frequency: HabitFrequency.daily,
         icon: Icons.self_improvement,
       ),
       HabitTemplate(
+        id: 'drink_water',
         title: l10n.templateDrinkWater,
         category: HabitCategory.lifestyle,
         frequency: HabitFrequency.daily,
         icon: Icons.water_drop_outlined,
       ),
       HabitTemplate(
+        id: 'sleep_early',
         title: l10n.templateSleepEarly,
         category: HabitCategory.lifestyle,
         frequency: HabitFrequency.daily,
         icon: Icons.bedtime_outlined,
       ),
       HabitTemplate(
+        id: 'short_walk',
         title: l10n.templateShortWalk,
         category: HabitCategory.lifestyle,
         frequency: HabitFrequency.daily,
@@ -85,6 +96,7 @@ List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
         timerTargetMinutes: 10,
       ),
       HabitTemplate(
+        id: 'read_pages',
         title: l10n.templateReadPages,
         category: HabitCategory.learn,
         frequency: HabitFrequency.daily,
@@ -94,30 +106,35 @@ List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
         numericUnit: 'pages',
       ),
       HabitTemplate(
+        id: 'learn_new_word',
         title: l10n.templateLearnNewWord,
         category: HabitCategory.learn,
         frequency: HabitFrequency.daily,
         icon: Icons.translate_outlined,
       ),
       HabitTemplate(
+        id: 'watch_educational_video',
         title: l10n.templateWatchEducationalVideo,
         category: HabitCategory.learn,
         frequency: HabitFrequency.daily,
         icon: Icons.ondemand_video_outlined,
       ),
       HabitTemplate(
+        id: 'deep_work_block',
         title: l10n.templateDeepWorkBlock,
         category: HabitCategory.work,
         frequency: HabitFrequency.daily,
         icon: Icons.work_outline,
       ),
       HabitTemplate(
+        id: 'inbox_zero',
         title: l10n.templateInboxZero,
         category: HabitCategory.work,
         frequency: HabitFrequency.daily,
         icon: Icons.inbox_outlined,
       ),
       HabitTemplate(
+        id: 'plan_tomorrow',
         title: l10n.templatePlanTomorrow,
         category: HabitCategory.work,
         frequency: HabitFrequency.daily,
