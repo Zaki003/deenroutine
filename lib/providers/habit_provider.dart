@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
@@ -257,10 +258,22 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
+  /// Fires the platform's light haptic the instant a habit's completion
+  /// transitions to done. It's the felt confirmation for the common case —
+  /// finishing one habit, which happens several times a day — kept
+  /// deliberately quieter than the Barakah Circle burst (all done today)
+  /// and the milestone banner (streak thresholds), which are rarer and earn
+  /// a bigger moment.
+  void _confirmCompletion(bool completing) {
+    if (completing) HapticFeedback.lightImpact();
+  }
+
   /// Yes/No logging, and the Milestone-1 stopgap for checklist/rating.
   Future<void> toggleComplete(Habit habit) async {
+    final completing = !habit.isCompletedToday;
     try {
-      await _service.logProgress(habit, status: !habit.isCompletedToday);
+      await _service.logProgress(habit, status: completing);
+      _confirmCompletion(completing);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -271,12 +284,14 @@ class HabitProvider extends ChangeNotifier {
   Future<void> logNumericProgress(Habit habit) async {
     final current = habit.hasProgressToday ? habit.todayProgressValue : 0;
     final next = current + 1;
+    final completing = next >= habit.numericTarget;
     try {
       await _service.logProgress(
         habit,
-        status: next >= habit.numericTarget,
+        status: completing,
         numericValue: next,
       );
+      _confirmCompletion(completing);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -286,12 +301,14 @@ class HabitProvider extends ChangeNotifier {
   /// Satisfied once elapsed reaches [Habit.timerTargetMinutes].
   Future<void> logTimerProgress(Habit habit, {required int elapsedSeconds}) async {
     final targetSeconds = habit.timerTargetMinutes * 60;
+    final completing = elapsedSeconds >= targetSeconds && !habit.isCompletedToday;
     try {
       await _service.logProgress(
         habit,
         status: elapsedSeconds >= targetSeconds,
         timerElapsedSeconds: elapsedSeconds,
       );
+      _confirmCompletion(completing);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -300,8 +317,10 @@ class HabitProvider extends ChangeNotifier {
   /// Rating tracking: any tap commits immediately and completes the day,
   /// matching the app's one-tap completion model elsewhere.
   Future<void> logRating(Habit habit, int value) async {
+    final completing = !habit.isCompletedToday;
     try {
       await _service.logProgress(habit, status: true, ratingValue: value);
+      _confirmCompletion(completing);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
@@ -310,13 +329,16 @@ class HabitProvider extends ChangeNotifier {
   /// Checklist tracking: records which items are checked off; satisfied
   /// once every item in [Habit.checklistItems] is present in [doneItems].
   Future<void> logChecklistProgress(Habit habit, List<String> doneItems) async {
+    final newStatus = habit.checklistItems.isNotEmpty &&
+        doneItems.toSet().containsAll(habit.checklistItems);
+    final completing = newStatus && !habit.isCompletedToday;
     try {
       await _service.logProgress(
         habit,
-        status: habit.checklistItems.isNotEmpty &&
-            doneItems.toSet().containsAll(habit.checklistItems),
+        status: newStatus,
         checklistDone: doneItems,
       );
+      _confirmCompletion(completing);
     } catch (e) {
       _setError(HabitErrorType.updateFailed, e.toString());
     }
