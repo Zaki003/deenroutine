@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
@@ -8,6 +9,18 @@ import '../../theme/deen_colors.dart';
 import '../../utils/text_format.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/delete_account_dialog.dart';
+
+const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
+
+Future<void> _openPrivacyPolicy(BuildContext context) async {
+  final opened =
+      await launchUrl(Uri.parse(_privacyPolicyUrl), mode: LaunchMode.externalApplication);
+  if (!opened && context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context)!.linkOpenFailed)),
+    );
+  }
+}
 
 /// FR-03: Profile management, and Settings collection (theme, prayer method).
 class ProfileScreen extends StatelessWidget {
@@ -190,6 +203,38 @@ class ProfileScreen extends StatelessWidget {
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     }
                   },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          _SectionLabel(l10n.profileAboutLabel),
+          const SizedBox(height: 8),
+          DeenCard(
+            dark: dark,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.noAdsTitle,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: DeenColors.primaryText(dark),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.noAdsBody,
+                  style: TextStyle(fontSize: 12, height: 1.4, color: DeenColors.textMuted(dark)),
+                ),
+                const SizedBox(height: 12),
+                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
+                _AccountRow(
+                  icon: Icons.privacy_tip_outlined,
+                  label: l10n.privacyPolicyLabel,
+                  dark: dark,
+                  onTap: () => _openPrivacyPolicy(context),
                 ),
               ],
             ),
