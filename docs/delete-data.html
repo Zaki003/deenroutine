@@ -1,0 +1,272 @@
+<meta charset="UTF-8" />
+<title>Delete Habit Data — DeenRoutine</title>
+<style>
+  :root {
+    --bg: #FFFDF8;
+    --bg-alt: #F6F1E4;
+    --panel: #EFE7D2;
+    --surface: #FFFDF8;
+    --heading: #0E2B29;
+    --text: #16302B;
+    --text-muted: #4F6C64;
+    --accent: #146356;
+    --accent-strong: #0E2B29;
+    --gold: #8A6B24;
+    --gold-bright: #C9A24B;
+    --border: rgba(20, 99, 86, 0.14);
+    --border-strong: rgba(20, 99, 86, 0.28);
+    --shadow: 0 1px 2px rgba(14, 43, 41, 0.04), 0 8px 24px rgba(14, 43, 41, 0.05);
+
+    --font-display: Georgia, "Noto Serif", "Times New Roman", serif;
+    --font-body: Georgia, "Noto Serif", "Times New Roman", serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E2B29;
+      --bg-alt: #153F3C;
+      --panel: #1B4B47;
+      --surface: #153F3C;
+      --heading: #FFFDF8;
+      --text: #F6F1E4;
+      --text-muted: #A9C4BC;
+      --accent: #4FB79B;
+      --accent-strong: #EFE7D2;
+      --gold: #E4CD8C;
+      --gold-bright: #E4CD8C;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.2);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0E2B29;
+    --bg-alt: #153F3C;
+    --panel: #1B4B47;
+    --surface: #153F3C;
+    --heading: #FFFDF8;
+    --text: #F6F1E4;
+    --text-muted: #A9C4BC;
+    --accent: #4FB79B;
+    --accent-strong: #EFE7D2;
+    --gold: #E4CD8C;
+    --gold-bright: #E4CD8C;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.6em 1em;
+    z-index: 100;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+  }
+  .skip-link:focus { left: 1rem; top: 1rem; }
+
+  header.masthead {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+  }
+
+  .star-field {
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpolygon points='13,4.16 15.18,10.00 21.41,10.27 16.53,14.15 18.20,20.15 13,16.71 7.80,20.15 9.47,14.15 4.59,10.27 10.82,10.00' fill='%23C9A24B' fill-opacity='0.16'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .masthead-inner {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3.2rem 1.75rem 2.6rem;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--accent-strong);
+    letter-spacing: 0.02em;
+  }
+
+  .wordmark .mark { width: 1.6rem; height: 1.6rem; flex: none; }
+
+  .eyebrow {
+    margin: 1.6rem 0 0.6rem;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  h1.title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 1.55rem + 2vw, 3.1rem);
+    line-height: 1.12;
+    color: var(--heading);
+    text-wrap: balance;
+  }
+
+  .gold-rule {
+    width: 3.25rem;
+    height: 3px;
+    margin: 1.15rem 0 1.3rem;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    border-radius: 2px;
+  }
+
+  .meta-line { font-family: var(--font-ui); font-size: 0.85rem; color: var(--text-muted); }
+
+  .summary-box {
+    margin-top: 1.9rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .summary-box strong { color: var(--heading); }
+
+  .page { max-width: 680px; margin: 0 auto; padding: 2.75rem 1.75rem 5rem; }
+  main { min-width: 0; }
+
+  section.block { max-width: 66ch; padding-top: 2.4rem; border-top: 1px solid var(--border); }
+  section.block:first-of-type { padding-top: 0; border-top: none; }
+
+  section.block h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: var(--heading);
+    margin: 0 0 0.95rem;
+  }
+
+  section.block p, section.block li { font-size: 1.02rem; line-height: 1.72; color: var(--text); }
+  section.block p { margin: 0 0 1rem; }
+  section.block ul, section.block ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+  section.block li { margin-bottom: 0.55rem; }
+  section.block li:last-child { margin-bottom: 0; }
+  section.block li strong { color: var(--heading); }
+
+  .permission-note {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1.05rem;
+    background: var(--bg-alt);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  footer.page-footer {
+    max-width: 66ch;
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+  }
+
+  footer.page-footer a { color: var(--text-muted); }
+  footer.page-footer a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<a class="skip-link" href="#main-content">Skip to steps</a>
+
+<header class="masthead">
+  <div class="star-field" aria-hidden="true"></div>
+  <div class="masthead-inner">
+    <div class="wordmark">
+      <svg class="mark" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="13,3.2 16.1,9.6 23.4,9.9 17.7,14.9 19.9,22.6 13,18.2 6.1,22.6 8.3,14.9 2.6,9.9 9.9,9.6"
+          fill="var(--gold-bright)" />
+      </svg>
+      DeenRoutine
+    </div>
+    <p class="eyebrow">Data Deletion</p>
+    <h1 class="title">Delete a habit's data</h1>
+    <div class="gold-rule" aria-hidden="true"></div>
+    <p class="meta-line">Applies to the DeenRoutine Android app</p>
+    <div class="summary-box">
+      <strong>In plain English:</strong> you can permanently delete any single habit — and its complete history — without deleting your account, directly inside the app. No form to fill out here; the steps below are all it takes.
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <main id="main-content">
+    <section class="block">
+      <h2>Steps</h2>
+      <ol>
+        <li>Open DeenRoutine and sign in.</li>
+        <li>Go to the <strong>Habits</strong> tab.</li>
+        <li>Tap the habit you want to remove.</li>
+        <li>Tap <strong>Delete</strong> in the menu, then confirm.</li>
+      </ol>
+      <p>The deletion happens immediately — there's no waiting period, and it can't be undone.</p>
+    </section>
+
+    <section class="block">
+      <h2>What gets deleted</h2>
+      <ul>
+        <li><strong>The habit itself</strong> — its title, schedule, and tracking settings.</li>
+        <li><strong>Its full history</strong> — every day it was logged as done (or, for an avoidance habit, every logged slip), and the streak calculated from that history.</li>
+      </ul>
+      <div class="permission-note">Everything else stays exactly as it is: your account, your other habits, your quiz results, and your profile are untouched by deleting a single habit.</div>
+    </section>
+
+    <section class="block">
+      <h2>Want everything gone instead?</h2>
+      <p>To delete your entire account and all associated data — not just one habit — see <a href="delete-account.html">Delete Your DeenRoutine Account</a>.</p>
+    </section>
+
+    <footer class="page-footer">
+      <span>© 2026 DeenRoutine</span>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="mailto:zakifchowdhury.dev@gmail.com">zakifchowdhury.dev@gmail.com</a>
+    </footer>
+  </main>
+</div>
