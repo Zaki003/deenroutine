@@ -755,6 +755,18 @@ class AppLocalizationsBn extends AppLocalizations {
   String get linkOpenFailed => 'লিঙ্কটি খোলা যায়নি।';
 
   @override
+  String get editNameTitle => 'নাম সম্পাদনা করুন';
+
+  @override
+  String get chooseAvatarTitle => 'একটি অবতার বেছে নিন';
+
+  @override
+  String get avatarMaleLabel => 'পুরুষ';
+
+  @override
+  String get avatarFemaleLabel => 'নারী';
+
+  @override
   String get appearanceTitle => 'থিম';
 
   @override

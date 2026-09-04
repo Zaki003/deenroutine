@@ -752,6 +752,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get linkOpenFailed => 'Couldn\'t open that link.';
 
   @override
+  String get editNameTitle => 'Edit name';
+
+  @override
+  String get chooseAvatarTitle => 'Choose an avatar';
+
+  @override
+  String get avatarMaleLabel => 'Male';
+
+  @override
+  String get avatarFemaleLabel => 'Female';
+
+  @override
   String get appearanceTitle => 'Appearance';
 
   @override

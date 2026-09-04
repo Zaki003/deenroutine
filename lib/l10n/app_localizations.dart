@@ -1413,6 +1413,30 @@ abstract class AppLocalizations {
   /// **'Couldn\'t open that link.'**
   String get linkOpenFailed;
 
+  /// No description provided for @editNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get editNameTitle;
+
+  /// No description provided for @chooseAvatarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an avatar'**
+  String get chooseAvatarTitle;
+
+  /// No description provided for @avatarMaleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get avatarMaleLabel;
+
+  /// No description provided for @avatarFemaleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get avatarFemaleLabel;
+
   /// No description provided for @appearanceTitle.
   ///
   /// In en, this message translates to:

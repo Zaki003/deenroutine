@@ -43,9 +43,21 @@ class AuthService {
     return _auth.sendPasswordResetEmail(email: email);
   }
 
-  /// FR-03: Profile management
-  Future<void> updateProfile({required String uid, required String name}) {
-    return _db.collection('Users').doc(uid).update({'name': name});
+  /// FR-03: Profile management. Only the fields passed are touched — a
+  /// name-only change doesn't overwrite the avatar, and vice versa. Keeps
+  /// Firebase Auth's displayName in sync with Firestore's name field, the
+  /// same pair [register] writes to.
+  Future<void> updateProfile({required String uid, String? name, AvatarOption? avatar}) async {
+    final updates = <String, dynamic>{
+      if (name != null) 'name': name,
+      if (avatar != null) 'avatar': avatar.name,
+    };
+    if (updates.isNotEmpty) {
+      await _db.collection('Users').doc(uid).update(updates);
+    }
+    if (name != null) {
+      await _auth.currentUser?.updateDisplayName(name);
+    }
   }
 
   Future<AppUser?> getUserProfile(String uid) async {

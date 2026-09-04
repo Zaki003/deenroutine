@@ -8,8 +8,11 @@ import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/text_format.dart';
+import '../../widgets/avatar_graphic.dart';
+import '../../widgets/avatar_picker_dialog.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/delete_account_dialog.dart';
+import '../../widgets/edit_name_dialog.dart';
 
 const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
 
@@ -45,36 +48,49 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 23,
-                backgroundColor: DeenColors.primary,
-                child: Text(
-                  (name.isNotEmpty ? name[0] : '?').toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+              InkWell(
+                borderRadius: BorderRadius.circular(23),
+                onTap: () => showDialog(context: context, builder: (_) => const AvatarPickerDialog()),
+                child: AvatarGraphic(
+                  avatar: user?.avatar,
+                  initial: (name.isNotEmpty ? name[0] : '?').toUpperCase(),
                 ),
               ),
               const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: DeenColors.primaryText(dark),
-                    ),
+              Expanded(
+                child: InkWell(
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (_) => EditNameDialog(currentName: name),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    user?.email ?? '',
-                    style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              name,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: DeenColors.primaryText(dark),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Icon(Icons.edit_outlined, size: 14, color: DeenColors.textMuted(dark)),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        user?.email ?? '',
+                        style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),

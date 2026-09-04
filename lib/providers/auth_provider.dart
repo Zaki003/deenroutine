@@ -109,6 +109,27 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// FR-03: Profile management. Only the fields passed are updated — see
+  /// [AuthService.updateProfile]. `_errorCode` on failure won't match any
+  /// [FirebaseAuthException] code, so `authErrorMessage` falls through to
+  /// its generic message, same as an unrecognized code always has.
+  Future<bool> updateProfile({String? name, AvatarOption? avatar}) async {
+    if (_appUser == null) return false;
+    _setLoading(true);
+    try {
+      await _authService.updateProfile(uid: _appUser!.uid, name: name, avatar: avatar);
+      _appUser = _appUser!.copyWith(name: name, avatar: avatar);
+      _errorCode = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorCode = e.toString();
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   void _setLoading(bool value) {
     _loading = value;
     notifyListeners();
