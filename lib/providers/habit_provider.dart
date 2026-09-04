@@ -425,6 +425,7 @@ class HabitProvider extends ChangeNotifier {
     final logs = await _service.watchHabitLogs(habit.uid, habit.habitId).first;
     final streak = _service.calculateStreak(
       logs,
+      createdAt: habit.createdAt,
       frequency: habit.frequency,
       selectedDays: habit.selectedDays,
       trackingType: habit.trackingType,

@@ -111,10 +111,12 @@ class FirestoreService {
   /// win, and a logged day is the break.
   int calculateStreak(
     List<HabitLog> logs, {
+    required DateTime createdAt,
     HabitFrequency frequency = HabitFrequency.daily,
     List<int> selectedDays = const [],
     HabitTrackingType trackingType = HabitTrackingType.yesNo,
   }) {
+    final createdMidnight = DateTime(createdAt.year, createdAt.month, createdAt.day);
     bool isScheduled(DateTime day) =>
         frequency != HabitFrequency.specificDays || selectedDays.contains(day.weekday % 7);
 
@@ -142,10 +144,16 @@ class FirestoreService {
       cursor = cursor.subtract(const Duration(days: 1));
     }
 
-    // Bounded a bit beyond the fetched log window so a corrupt/empty
-    // selectedDays (never produced by the app's own day picker, but not
-    // guaranteed for data edited directly in Firestore) can't spin forever.
+    // Also bounded at 400 iterations beyond the createdAt cutoff below, so a
+    // corrupt/empty selectedDays (never produced by the app's own day
+    // picker, but not guaranteed for data edited directly in Firestore)
+    // can't spin forever.
     for (var i = 0; i < 400; i++) {
+      // A habit can't have a streak from before it existed. Without this,
+      // an avoidance habit with zero logs — true of every avoidance habit
+      // right after creation, since silence reads as success — would walk
+      // all the way back to the 400-iteration cap instead of stopping at 0.
+      if (cursor.isBefore(createdMidnight)) break;
       if (!isScheduled(cursor)) {
         cursor = cursor.subtract(const Duration(days: 1));
         continue;
