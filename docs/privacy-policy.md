@@ -94,4 +94,4 @@ If we make material changes to this policy, we'll update the effective date abov
 
 ## 12. Contact Us
 
-Questions about this policy or your data? Email: **zakifaiazchy@gmail.com**
+Questions about this policy or your data? Email: **zakifchowdhury.dev@gmail.com**
