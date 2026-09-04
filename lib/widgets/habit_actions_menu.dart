@@ -37,7 +37,7 @@ class HabitActionsMenu extends StatelessWidget {
       ),
     );
     if (confirmed == true && context.mounted) {
-      context.read<HabitProvider>().deleteHabit(habit.habitId);
+      context.read<HabitProvider>().deleteHabit(habit);
     }
   }
 

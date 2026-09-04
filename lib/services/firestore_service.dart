@@ -22,8 +22,18 @@ class FirestoreService {
     return _db.collection('Habits').doc(habit.habitId).update(habit.toMap());
   }
 
-  Future<void> deleteHabit(String habitId) {
-    return _db.collection('Habits').doc(habitId).delete();
+  /// Deletes the habit and its full HabitLogs history together — the
+  /// delete-habit confirmation promises the history goes with it, and
+  /// leaving it behind would strand data still tagged with the user's uid
+  /// that no UI can ever show again.
+  Future<void> deleteHabit(Habit habit) async {
+    await _db.collection('Habits').doc(habit.habitId).delete();
+    await _deleteQueryInChunks(
+      _db
+          .collection('HabitLogs')
+          .where('uid', isEqualTo: habit.uid)
+          .where('habitId', isEqualTo: habit.habitId),
+    );
   }
 
   Stream<List<Habit>> watchHabits(String uid) {

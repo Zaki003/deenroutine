@@ -413,9 +413,9 @@ class HabitProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteHabit(String habitId) async {
+  Future<void> deleteHabit(Habit habit) async {
     try {
-      await _service.deleteHabit(habitId);
+      await _service.deleteHabit(habit);
     } catch (e) {
       _setError(HabitErrorType.deleteFailed, e.toString());
     }
