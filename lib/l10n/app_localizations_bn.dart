@@ -46,7 +46,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get onboardingWelcomeSubtitle =>
-      'নামাজের সময় ও অভ্যাসের অনুস্মারক চালু করতে মাত্র ৩টি ধাপ।';
+      'নামাজের সময় ও অভ্যাসের নোটিফিকেশন চালু করতে মাত্র ৩টি ধাপ।';
 
   @override
   String get onboardingGetStartedButton => 'শুরু করুন';
@@ -69,7 +69,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get onboardingNotificationBody =>
-      'শুধু আপনি বেছে নেওয়া অভ্যাসের জন্যই একটি হালকা অনুস্মারক পাবেন — আর কিছু নয়।';
+      'শুধু আপনি বেছে নেওয়া অভ্যাসের জন্যই একটি হালকা নোটিফিকেশন পাবেন — আর কিছু নয়।';
 
   @override
   String get onboardingAllowNotificationsButton => 'নোটিফিকেশনের অনুমতি দিন';
@@ -79,11 +79,11 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get onboardingExactAlarmHeadline =>
-      'অনুস্মারক সত্যিই বাজতে আরেকটি ধাপ বাকি';
+      'নোটিফিকেশন সত্যিই বাজতে আরেকটি ধাপ বাকি';
 
   @override
   String get onboardingExactAlarmBody =>
-      'অনুস্মারক কাজ করার জন্য অ্যান্ড্রয়েডে DeenRoutine-এর \"অ্যালার্ম ও অনুস্মারক\" চালু করা দরকার, নয়তো আপনার অভ্যাসের অনুস্মারক নীরবেই বাজবে না।';
+      'নোটিফিকেশন কাজ করার জন্য অ্যান্ড্রয়েডে DeenRoutine-এর \"অ্যালার্ম ও নোটিফিকেশন\" চালু করা দরকার, নয়তো আপনার অভ্যাসের নোটিফিকেশন নীরবেই বাজবে না।';
 
   @override
   String get onboardingOpenSettingsButton => 'সেটিংস খুলুন';
@@ -315,7 +315,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get selectAtLeastOneDay => 'কমপক্ষে একটি দিন নির্বাচন করুন';
 
   @override
-  String get dailyReminderTitle => 'দৈনিক অনুস্মারক';
+  String get dailyReminderTitle => 'দৈনিক নোটিফিকেশন';
 
   @override
   String get reminderOffSubtitle => 'বন্ধ — সময় নির্ধারণ করতে চাপুন';
@@ -600,6 +600,17 @@ class AppLocalizationsBn extends AppLocalizations {
   String get cancelButton => 'বাতিল';
 
   @override
+  String get timerBypassTitle => 'সম্পন্ন করবেন?';
+
+  @override
+  String timerBypassContent(Object title) {
+    return 'এটি \"$title\"-এর আজকের টাইমার এড়িয়ে গিয়ে সরাসরি সম্পন্ন হিসেবে চিহ্নিত করবে।';
+  }
+
+  @override
+  String get markAsDoneButton => 'সম্পন্ন করুন';
+
+  @override
   String get deleteButton => 'মুছুন';
 
   @override
@@ -638,7 +649,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get habitSaveFailedGeneric => 'অভ্যাস সংরক্ষণ করা যায়নি।';
 
   @override
-  String get reminderNotificationTitle => 'DeenRoutine অনুস্মারক';
+  String get reminderNotificationTitle => 'DeenRoutine নোটিফিকেশন';
 
   @override
   String reminderNotificationBody(Object title) {

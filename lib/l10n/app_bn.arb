@@ -200,6 +200,10 @@
   "deleteHabitTitle": "অভ্যাস মুছবেন?",
   "deleteHabitContent": "এটি \"{title}\" এবং এর ধারাবাহিকতার ইতিহাস স্থায়ীভাবে মুছে ফেলবে।",
   "cancelButton": "বাতিল",
+  "timerBypassTitle": "সম্পন্ন করবেন?",
+  "timerBypassContent": "এটি \"{title}\"-এর আজকের টাইমার এড়িয়ে গিয়ে সরাসরি সম্পন্ন হিসেবে চিহ্নিত করবে।",
+  "markAsDoneButton": "সম্পন্ন করুন",
+
   "deleteButton": "মুছুন",
   "deleteAccountButton": "অ্যাকাউন্ট মুছুন",
   "deleteAccountTitle": "আপনার অ্যাকাউন্ট মুছে ফেলবেন?",

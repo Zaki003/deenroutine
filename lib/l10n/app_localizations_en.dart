@@ -599,6 +599,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelButton => 'Cancel';
 
   @override
+  String get timerBypassTitle => 'Mark as done?';
+
+  @override
+  String timerBypassContent(Object title) {
+    return 'This skips today\'s timer for \"$title\" and marks it complete anyway.';
+  }
+
+  @override
+  String get markAsDoneButton => 'Mark as done';
+
+  @override
   String get deleteButton => 'Delete';
 
   @override

@@ -275,6 +275,13 @@
     "placeholders": { "title": {} }
   },
   "cancelButton": "Cancel",
+  "timerBypassTitle": "Mark as done?",
+  "timerBypassContent": "This skips today's timer for \"{title}\" and marks it complete anyway.",
+  "@timerBypassContent": {
+    "placeholders": { "title": {} }
+  },
+  "markAsDoneButton": "Mark as done",
+
   "deleteButton": "Delete",
   "deleteAccountButton": "Delete Account",
   "deleteAccountTitle": "Delete your account?",

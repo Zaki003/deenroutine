@@ -1149,6 +1149,24 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancelButton;
 
+  /// No description provided for @timerBypassTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as done?'**
+  String get timerBypassTitle;
+
+  /// No description provided for @timerBypassContent.
+  ///
+  /// In en, this message translates to:
+  /// **'This skips today\'s timer for \"{title}\" and marks it complete anyway.'**
+  String timerBypassContent(Object title);
+
+  /// No description provided for @markAsDoneButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as done'**
+  String get markAsDoneButton;
+
   /// No description provided for @deleteButton.
   ///
   /// In en, this message translates to:

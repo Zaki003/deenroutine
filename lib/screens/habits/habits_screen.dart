@@ -122,8 +122,34 @@ class _HabitRow extends StatelessWidget {
 
   const _HabitRow({required this.habit, required this.dark, required this.monFirstLetters});
 
+  Future<void> _confirmTimerBypass(BuildContext context, AppLocalizations l10n) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.timerBypassTitle),
+        content: Text(l10n.timerBypassContent(habit.title)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancelButton),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.markAsDoneButton),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && context.mounted) {
+      context
+          .read<HabitProvider>()
+          .logTimerProgress(habit, elapsedSeconds: habit.timerTargetMinutes * 60);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final done = habit.isCompletedToday;
     // Habits not scheduled for today (specificDays that don't include today)
     // stay in the list — this is the full-management view — but read as
@@ -140,18 +166,22 @@ class _HabitRow extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  // Read-only until done: this screen isn't a second way to
-                  // complete a habit, only an escape hatch for undoing an
-                  // accidental completion, so an outline circle here is
-                  // just today's status at a glance and doesn't respond to
-                  // a tap — only the filled/tappable done state does.
+                  // Read-only until done for most types — this screen isn't
+                  // a second way to complete a habit, only an escape hatch
+                  // for undoing an accidental completion. Timer is the one
+                  // exception: there's otherwise no way to mark it done
+                  // without actually running the in-app timer, so its
+                  // not-done state opens a bypass-confirm instead of doing
+                  // nothing.
                   HabitCheckbox(
                     done: done,
                     dark: dark,
                     size: 24,
                     onTap: done
                         ? () => context.read<HabitProvider>().undoCompletion(habit)
-                        : () {},
+                        : habit.trackingType == HabitTrackingType.timer
+                            ? () => _confirmTimerBypass(context, l10n)
+                            : () {},
                   ),
                   const SizedBox(width: 10),
                   Expanded(
