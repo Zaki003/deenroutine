@@ -21,7 +21,7 @@ class HabitsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final habits = _sortedByCategory(context.watch<HabitProvider>().habits);
+    final habits = context.watch<HabitProvider>().habits;
 
     // Reorders the Sun-first weekday names to Mon-first single letters,
     // matching the week picker's display order.
@@ -68,10 +68,13 @@ class HabitsScreen extends StatelessWidget {
               message: l10n.noHabitsYet,
               dark: dark,
             ),
-          for (final habit in habits)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _HabitRow(habit: habit, dark: dark, monFirstLetters: monFirstLetters),
+          for (final category in HabitCategory.values)
+            ..._categorySection(
+              category: category,
+              habits: habits,
+              l10n: l10n,
+              dark: dark,
+              monFirstLetters: monFirstLetters,
             ),
         ],
       ),
@@ -79,13 +82,38 @@ class HabitsScreen extends StatelessWidget {
   }
 }
 
-/// Groups habits by category — in [HabitCategory]'s declared order (Islam,
-/// Lifestyle, Learn, Work) — while keeping each category's habits in their
-/// existing relative order.
-List<Habit> _sortedByCategory(List<Habit> habits) => [
-      for (final category in HabitCategory.values)
-        ...habits.where((h) => h.category == category),
-    ];
+/// A category's section label plus its habits, in existing relative order —
+/// omitted entirely when the category has no habits, so an empty category
+/// never shows a dangling header.
+List<Widget> _categorySection({
+  required HabitCategory category,
+  required List<Habit> habits,
+  required AppLocalizations l10n,
+  required bool dark,
+  required List<String> monFirstLetters,
+}) {
+  final categoryHabits = habits.where((h) => h.category == category).toList();
+  if (categoryHabits.isEmpty) return const [];
+  return [
+    Padding(
+      padding: const EdgeInsets.fromLTRB(4, 4, 0, 8),
+      child: Text(
+        category.label(l10n),
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
+          color: DeenColors.textMuted(dark),
+        ),
+      ),
+    ),
+    for (final habit in categoryHabits)
+      Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: _HabitRow(habit: habit, dark: dark, monFirstLetters: monFirstLetters),
+      ),
+  ];
+}
 
 class _HabitRow extends StatelessWidget {
   final Habit habit;
