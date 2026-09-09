@@ -147,6 +147,29 @@ class HabitProvider extends ChangeNotifier {
     );
   }
 
+  /// Cancels the habit listener and clears its state — call this when the
+  /// signed-in user changes (e.g. on logout; [MainNavScreen] does this from
+  /// its `dispose()`). Without it, a listener left running past its user's
+  /// session gets a permission-denied error the moment Firestore notices,
+  /// and [listenToHabits]'s own onError handler retries it every 3 seconds
+  /// indefinitely — [_listeningUid] never gets cleared, so the retry's
+  /// `_listeningUid == uid` guard keeps passing for as long as nobody else
+  /// happens to log in and overwrite it. Clearing it here breaks that loop
+  /// immediately instead of leaving it to spin until something else does.
+  void stopListening() {
+    _habitsSub?.cancel();
+    _habitsSub = null;
+    _listeningUid = null;
+    _habits = [];
+    _errorType = null;
+    _errorDetail = null;
+    // Deferred: the caller is normally MainNavScreen.dispose(), and the
+    // widget tree is locked mid-teardown at that point - notifying
+    // synchronously here throws "setState() or markNeedsBuild() called when
+    // widget tree was locked". A microtask runs once that lock lifts.
+    Future.microtask(notifyListeners);
+  }
+
   @override
   void dispose() {
     _habitsSub?.cancel();

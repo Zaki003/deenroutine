@@ -29,12 +29,17 @@ const _screenNames = ['Dashboard', 'Habits', 'Prayer', 'Quiz', 'Profile'];
 class _MainNavScreenState extends State<MainNavScreen> {
   int _index = 0;
   final _analytics = AnalyticsService();
+  // Captured in initState rather than read fresh in dispose() - by the time
+  // dispose() runs this context may no longer be able to look up ancestor
+  // providers.
+  late final HabitProvider _habitProvider;
 
   @override
   void initState() {
     super.initState();
+    _habitProvider = context.read<HabitProvider>();
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
-    context.read<HabitProvider>().listenToHabits(uid);
+    _habitProvider.listenToHabits(uid);
     _analytics.logScreenView(_screenNames[_index]);
     // loadPrayerTimes() notifies synchronously before its first await (to
     // flip on isLoading immediately for pull-to-refresh callers), which
@@ -49,6 +54,15 @@ class _MainNavScreenState extends State<MainNavScreen> {
   void _onTabTap(int i) {
     setState(() => _index = i);
     _analytics.logScreenView(_screenNames[i]);
+  }
+
+  @override
+  void dispose() {
+    // _AuthGate unmounts this screen on logout - without this, the habit
+    // listener started in initState keeps trying to reconnect as a user
+    // who's no longer signed in, forever. See HabitProvider.stopListening.
+    _habitProvider.stopListening();
+    super.dispose();
   }
 
   @override
