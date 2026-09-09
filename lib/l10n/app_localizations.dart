@@ -176,6 +176,42 @@ abstract class AppLocalizations {
   /// **'Register'**
   String get registerButton;
 
+  /// No description provided for @forgotPasswordLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordLink;
+
+  /// No description provided for @resetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPasswordTitle;
+
+  /// No description provided for @resetPasswordPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we\'ll send a link to reset your password.'**
+  String get resetPasswordPrompt;
+
+  /// No description provided for @sendResetLinkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset link'**
+  String get sendResetLinkButton;
+
+  /// No description provided for @resetLinkSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email'**
+  String get resetLinkSentTitle;
+
+  /// No description provided for @resetLinkSentMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'If an account exists for {email}, we\'ve sent a link to reset the password.'**
+  String resetLinkSentMessage(Object email);
+
   /// No description provided for @onboardingTagline.
   ///
   /// In en, this message translates to:
@@ -1586,6 +1622,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Maximum of 3 accounts on this device. Log in instead.'**
   String get authErrorDeviceLimit;
+
+  /// No description provided for @authErrorTooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please wait and try again.'**
+  String get authErrorTooManyRequests;
 }
 
 class _AppLocalizationsDelegate

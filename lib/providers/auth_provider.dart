@@ -105,6 +105,39 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> logout() => _authService.logout();
 
+  /// Sends a password-reset email. Deliberately reports success even for
+  /// 'user-not-found': Firebase's email-enumeration protection already hides
+  /// this distinction on sign-in (see 'invalid-credential' in
+  /// auth_error_messages.dart), so surfacing "no account with that email"
+  /// here would reopen the exact leak that protection exists to close.
+  /// Genuine problems (rate limiting, network) still surface normally.
+  Future<bool> resetPassword(String email) async {
+    _setLoading(true);
+    try {
+      await _authService.resetPassword(email);
+      _errorCode = null;
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        _errorCode = null;
+        return true;
+      }
+      _errorCode = e.code;
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Clears a leftover error from whichever auth screen the user was just
+  /// on (e.g. a failed login shouldn't still be showing once they tap
+  /// through to Register or Forgot Password). No notifyListeners() - this
+  /// is meant to be called from a fresh screen's initState, before that
+  /// screen's own first build, so nothing needs to be told to rebuild.
+  void clearError() {
+    _errorCode = null;
+  }
+
   /// Play Store data-deletion requirement: re-authenticates with [password],
   /// then permanently deletes the signed-in user's Firestore data and
   /// Firebase Auth account. Mirrors [login]/[register]'s _setLoading/

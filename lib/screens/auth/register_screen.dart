@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/auth_error_messages.dart';
+import '../../utils/validators.dart';
 import '../onboarding/onboarding_welcome_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -17,6 +18,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Otherwise a failed login's error message is still showing here the
+    // moment this screen opens, before the user has typed anything.
+    context.read<AuthProvider>().clearError();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormField(
                 controller: _emailCtrl,
                 decoration: InputDecoration(labelText: l10n.emailLabel),
-                validator: (v) => (v == null || !v.contains('@'))
+                validator: (v) => (v == null || !isValidEmail(v))
                     ? l10n.emailValidatorError
                     : null,
               ),

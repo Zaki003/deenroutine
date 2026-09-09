@@ -4,6 +4,8 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/auth_error_messages.dart';
+import '../../utils/validators.dart';
+import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailCtrl,
                       decoration: InputDecoration(labelText: l10n.emailLabel),
                       keyboardType: TextInputType.emailAddress,
-                      validator: (v) => (v == null || !v.contains('@'))
+                      validator: (v) => (v == null || !isValidEmail(v))
                           ? l10n.emailValidatorError
                           : null,
                     ),
@@ -64,7 +66,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? l10n.passwordValidatorError
                           : null,
                     ),
-                    const SizedBox(height: 24),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          context.read<AuthProvider>().clearError();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const ForgotPasswordScreen()),
+                          );
+                        },
+                        child: Text(l10n.forgotPasswordLink),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     if (auth.errorCode != null)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),

@@ -15,6 +15,15 @@
   "createAccountTitle": "Create Account",
   "fullNameLabel": "Full name",
   "registerButton": "Register",
+  "forgotPasswordLink": "Forgot password?",
+  "resetPasswordTitle": "Reset password",
+  "resetPasswordPrompt": "Enter your email and we'll send a link to reset your password.",
+  "sendResetLinkButton": "Send reset link",
+  "resetLinkSentTitle": "Check your email",
+  "resetLinkSentMessage": "If an account exists for {email}, we've sent a link to reset the password.",
+  "@resetLinkSentMessage": {
+    "placeholders": { "email": {} }
+  },
 
   "onboardingTagline": "Make deen your routine.",
   "onboardingWelcomeSubtitle": "3 quick steps to set up your prayer times and habit reminders.",
@@ -378,5 +387,6 @@
   "authErrorWeakPassword": "Password is too weak — use at least 6 characters.",
   "authErrorGeneric": "Something went wrong. Please try again.",
   "authErrorRequiresRecentLogin": "For your security, please log out and back in, then try again.",
-  "authErrorDeviceLimit": "Maximum of 3 accounts on this device. Log in instead."
+  "authErrorDeviceLimit": "Maximum of 3 accounts on this device. Log in instead.",
+  "authErrorTooManyRequests": "Too many attempts. Please wait and try again."
 }

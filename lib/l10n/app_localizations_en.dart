@@ -48,6 +48,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerButton => 'Register';
 
   @override
+  String get forgotPasswordLink => 'Forgot password?';
+
+  @override
+  String get resetPasswordTitle => 'Reset password';
+
+  @override
+  String get resetPasswordPrompt =>
+      'Enter your email and we\'ll send a link to reset your password.';
+
+  @override
+  String get sendResetLinkButton => 'Send reset link';
+
+  @override
+  String get resetLinkSentTitle => 'Check your email';
+
+  @override
+  String resetLinkSentMessage(Object email) {
+    return 'If an account exists for $email, we\'ve sent a link to reset the password.';
+  }
+
+  @override
   String get onboardingTagline => 'Make deen your routine.';
 
   @override
@@ -844,4 +865,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authErrorDeviceLimit =>
       'Maximum of 3 accounts on this device. Log in instead.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Too many attempts. Please wait and try again.';
 }

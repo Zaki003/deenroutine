@@ -48,6 +48,27 @@ class AppLocalizationsBn extends AppLocalizations {
   String get registerButton => 'নিবন্ধন করুন';
 
   @override
+  String get forgotPasswordLink => 'পাসওয়ার্ড ভুলে গেছেন?';
+
+  @override
+  String get resetPasswordTitle => 'পাসওয়ার্ড রিসেট করুন';
+
+  @override
+  String get resetPasswordPrompt =>
+      'আপনার ইমেইল দিন, আমরা পাসওয়ার্ড রিসেট করার একটি লিংক পাঠাবো।';
+
+  @override
+  String get sendResetLinkButton => 'রিসেট লিংক পাঠান';
+
+  @override
+  String get resetLinkSentTitle => 'আপনার ইমেইল দেখুন';
+
+  @override
+  String resetLinkSentMessage(Object email) {
+    return '$email-এ অ্যাকাউন্ট থাকলে, আমরা পাসওয়ার্ড রিসেট করার একটি লিংক পাঠিয়েছি।';
+  }
+
+  @override
   String get onboardingTagline => 'দ্বীনকে করুন আপনার রুটিন।';
 
   @override
@@ -848,4 +869,8 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get authErrorDeviceLimit =>
       'এই ডিভাইসে সর্বোচ্চ ৩টি অ্যাকাউন্ট তৈরি হয়েছে। লগইন করুন।';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'অনেকবার চেষ্টা করা হয়েছে। একটু পরে আবার চেষ্টা করুন।';
 }

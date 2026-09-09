@@ -24,6 +24,8 @@ String authErrorMessage(AppLocalizations l10n, String? code) {
       return l10n.authErrorWeakPassword;
     case 'requires-recent-login':
       return l10n.authErrorRequiresRecentLogin;
+    case 'too-many-requests':
+      return l10n.authErrorTooManyRequests;
     case 'device-account-limit':
       // Not a FirebaseAuthException code - synthesized by AuthProvider.register
       // before it ever calls Firebase, see the doc comment there.

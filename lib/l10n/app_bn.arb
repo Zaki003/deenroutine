@@ -15,6 +15,15 @@
   "createAccountTitle": "অ্যাকাউন্ট তৈরি করুন",
   "fullNameLabel": "পূর্ণ নাম",
   "registerButton": "নিবন্ধন করুন",
+  "forgotPasswordLink": "পাসওয়ার্ড ভুলে গেছেন?",
+  "resetPasswordTitle": "পাসওয়ার্ড রিসেট করুন",
+  "resetPasswordPrompt": "আপনার ইমেইল দিন, আমরা পাসওয়ার্ড রিসেট করার একটি লিংক পাঠাবো।",
+  "sendResetLinkButton": "রিসেট লিংক পাঠান",
+  "resetLinkSentTitle": "আপনার ইমেইল দেখুন",
+  "resetLinkSentMessage": "{email}-এ অ্যাকাউন্ট থাকলে, আমরা পাসওয়ার্ড রিসেট করার একটি লিংক পাঠিয়েছি।",
+  "@resetLinkSentMessage": {
+    "placeholders": { "email": {} }
+  },
 
   "onboardingTagline": "দ্বীনকে করুন আপনার রুটিন।",
   "onboardingWelcomeSubtitle": "নামাজের সময় ও অভ্যাসের নোটিফিকেশন চালু করতে মাত্র ৩টি ধাপ।",
@@ -279,5 +288,6 @@
   "authErrorWeakPassword": "পাসওয়ার্ড খুবই দুর্বল — কমপক্ষে ৬ অক্ষর ব্যবহার করুন।",
   "authErrorGeneric": "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
   "authErrorRequiresRecentLogin": "নিরাপত্তার জন্য, লগ আউট করে আবার লগইন করুন এবং আবার চেষ্টা করুন।",
-  "authErrorDeviceLimit": "এই ডিভাইসে সর্বোচ্চ ৩টি অ্যাকাউন্ট তৈরি হয়েছে। লগইন করুন।"
+  "authErrorDeviceLimit": "এই ডিভাইসে সর্বোচ্চ ৩টি অ্যাকাউন্ট তৈরি হয়েছে। লগইন করুন।",
+  "authErrorTooManyRequests": "অনেকবার চেষ্টা করা হয়েছে। একটু পরে আবার চেষ্টা করুন।"
 }
