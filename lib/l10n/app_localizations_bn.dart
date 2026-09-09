@@ -841,4 +841,8 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get authErrorRequiresRecentLogin =>
       'নিরাপত্তার জন্য, লগ আউট করে আবার লগইন করুন এবং আবার চেষ্টা করুন।';
+
+  @override
+  String get authErrorDeviceLimit =>
+      'এই ডিভাইসে সর্বোচ্চ ৩টি অ্যাকাউন্ট তৈরি হয়েছে। লগইন করুন।';
 }

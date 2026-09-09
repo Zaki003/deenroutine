@@ -1574,6 +1574,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For your security, please log out and back in, then try again.'**
   String get authErrorRequiresRecentLogin;
+
+  /// No description provided for @authErrorDeviceLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum of 3 accounts on this device. Log in instead.'**
+  String get authErrorDeviceLimit;
 }
 
 class _AppLocalizationsDelegate

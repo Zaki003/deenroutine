@@ -376,5 +376,6 @@
   "authErrorEmailInUse": "An account already exists with this email.",
   "authErrorWeakPassword": "Password is too weak — use at least 6 characters.",
   "authErrorGeneric": "Something went wrong. Please try again.",
-  "authErrorRequiresRecentLogin": "For your security, please log out and back in, then try again."
+  "authErrorRequiresRecentLogin": "For your security, please log out and back in, then try again.",
+  "authErrorDeviceLimit": "Maximum of 3 accounts on this device. Log in instead."
 }

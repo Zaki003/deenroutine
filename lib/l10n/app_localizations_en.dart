@@ -837,4 +837,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authErrorRequiresRecentLogin =>
       'For your security, please log out and back in, then try again.';
+
+  @override
+  String get authErrorDeviceLimit =>
+      'Maximum of 3 accounts on this device. Log in instead.';
 }

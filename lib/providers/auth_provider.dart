@@ -1,10 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
 import '../models/app_user.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
+
+  static const _deviceAccountCountKey = 'device_account_count';
+
+  /// Registration doesn't verify email addresses, so nothing but this stops
+  /// someone from creating accounts indefinitely on one device - each is a
+  /// real Firebase Auth user plus a Firestore doc, chipping away at the free
+  /// tier for no reason. Deliberately device-local (SharedPreferences, not
+  /// Firestore, mirroring [ThemeProvider]'s reasoning): it only has to stop
+  /// casual repeat taps, not survive a deliberate reinstall, and it must
+  /// never sync across devices or it'd cap the whole userbase together.
+  static const maxAccountsPerDevice = 3;
 
   User? _firebaseUser;
   AppUser? _appUser;
@@ -50,11 +62,18 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> register(String name, String email, String password) async {
     _setLoading(true);
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final count = prefs.getInt(_deviceAccountCountKey) ?? 0;
+      if (count >= maxAccountsPerDevice) {
+        _errorCode = 'device-account-limit';
+        return false;
+      }
       _appUser = await _authService.register(
         name: name,
         email: email,
         password: password,
       );
+      await prefs.setInt(_deviceAccountCountKey, count + 1);
       _errorCode = null;
       _inOnboarding = true;
       return true;
