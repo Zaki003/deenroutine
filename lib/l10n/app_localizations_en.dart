@@ -30,7 +30,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginButton => 'Login';
 
   @override
-  String get registerPrompt => 'Don\'t have an account? Register';
+  String get registerPromptQuestion => 'Don\'t have an account?';
+
+  @override
+  String get registerPromptAction => 'Register';
 
   @override
   String get createAccountTitle => 'Create Account';

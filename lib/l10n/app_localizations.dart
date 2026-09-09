@@ -140,11 +140,17 @@ abstract class AppLocalizations {
   /// **'Login'**
   String get loginButton;
 
-  /// No description provided for @registerPrompt.
+  /// No description provided for @registerPromptQuestion.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t have an account? Register'**
-  String get registerPrompt;
+  /// **'Don\'t have an account?'**
+  String get registerPromptQuestion;
+
+  /// No description provided for @registerPromptAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerPromptAction;
 
   /// No description provided for @createAccountTitle.
   ///

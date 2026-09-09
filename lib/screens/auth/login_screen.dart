@@ -93,7 +93,33 @@ class _LoginScreenState extends State<LoginScreen> {
                         MaterialPageRoute(
                             builder: (_) => const RegisterScreen()),
                       ),
-                      child: Text(l10n.registerPrompt),
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${l10n.registerPromptQuestion} ',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant),
+                            ),
+                            TextSpan(
+                              text: l10n.registerPromptAction,
+                              style: TextStyle(
+                                  // The brand teal only clears WCAG AA against
+                                  // the cream light-mode background (6.3:1) -
+                                  // against the dark scaffold it drops to
+                                  // 2.1:1, so dark mode uses the gold accent
+                                  // (6.3:1 there) instead.
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),

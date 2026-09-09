@@ -30,7 +30,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get loginButton => 'লগইন';
 
   @override
-  String get registerPrompt => 'অ্যাকাউন্ট নেই? নিবন্ধন করুন';
+  String get registerPromptQuestion => 'অ্যাকাউন্ট নেই?';
+
+  @override
+  String get registerPromptAction => 'নিবন্ধন করুন';
 
   @override
   String get createAccountTitle => 'অ্যাকাউন্ট তৈরি করুন';
