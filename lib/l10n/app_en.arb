@@ -8,6 +8,7 @@
   "emailValidatorError": "Enter a valid email",
   "passwordValidatorError": "Min 6 characters",
   "requiredValidatorError": "Required",
+  "fullNameValidatorError": "Enter a valid name",
   "loginButton": "Login",
   "registerPromptQuestion": "Don't have an account?",
   "registerPromptAction": "Register",

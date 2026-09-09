@@ -27,6 +27,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get requiredValidatorError => 'আবশ্যক';
 
   @override
+  String get fullNameValidatorError => 'সঠিক নাম লিখুন';
+
+  @override
   String get loginButton => 'লগইন';
 
   @override

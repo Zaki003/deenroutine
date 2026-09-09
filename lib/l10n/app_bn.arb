@@ -8,6 +8,7 @@
   "emailValidatorError": "সঠিক ইমেইল ঠিকানা দিন",
   "passwordValidatorError": "কমপক্ষে ৬ অক্ষর",
   "requiredValidatorError": "আবশ্যক",
+  "fullNameValidatorError": "সঠিক নাম লিখুন",
   "loginButton": "লগইন",
   "registerPromptQuestion": "অ্যাকাউন্ট নেই?",
   "registerPromptAction": "নিবন্ধন করুন",

@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requiredValidatorError => 'Required';
 
   @override
+  String get fullNameValidatorError => 'Enter a valid name';
+
+  @override
   String get loginButton => 'Login';
 
   @override

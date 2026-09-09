@@ -35,9 +35,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormField(
                 controller: _nameCtrl,
                 decoration: InputDecoration(labelText: l10n.fullNameLabel),
-                validator: (v) => (v == null || v.isEmpty)
-                    ? l10n.requiredValidatorError
-                    : null,
+                validator: (v) {
+                  final name = v?.trim() ?? '';
+                  if (name.isEmpty) return l10n.requiredValidatorError;
+                  // Catches "018"-style nonsense without rejecting real
+                  // names in non-Latin scripts (Bangla, etc.) - \p{L} is
+                  // Unicode "any letter", not just a-z.
+                  if (!RegExp(r'\p{L}', unicode: true).hasMatch(name)) {
+                    return l10n.fullNameValidatorError;
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
               TextFormField(

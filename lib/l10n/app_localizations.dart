@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'Required'**
   String get requiredValidatorError;
 
+  /// No description provided for @fullNameValidatorError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid name'**
+  String get fullNameValidatorError;
+
   /// No description provided for @loginButton.
   ///
   /// In en, this message translates to:
