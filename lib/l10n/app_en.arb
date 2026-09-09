@@ -370,6 +370,7 @@
 
   "authErrorWrongPassword": "Incorrect password. Please try again.",
   "authErrorUserNotFound": "No account found with this email.",
+  "authErrorInvalidCredential": "Incorrect email or password. New here? Sign up below.",
   "authErrorInvalidEmail": "That email address looks invalid.",
   "authErrorEmailInUse": "An account already exists with this email.",
   "authErrorWeakPassword": "Password is too weak — use at least 6 characters.",

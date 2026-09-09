@@ -818,6 +818,10 @@ class AppLocalizationsBn extends AppLocalizations {
       'এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি।';
 
   @override
+  String get authErrorInvalidCredential =>
+      'ইমেইল বা পাসওয়ার্ড ভুল। অ্যাকাউন্ট নেই? নিচে নিবন্ধন করুন।';
+
+  @override
   String get authErrorInvalidEmail => 'ইমেইল ঠিকানাটি সঠিক মনে হচ্ছে না।';
 
   @override

@@ -1533,6 +1533,12 @@ abstract class AppLocalizations {
   /// **'No account found with this email.'**
   String get authErrorUserNotFound;
 
+  /// No description provided for @authErrorInvalidCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password. New here? Sign up below.'**
+  String get authErrorInvalidCredential;
+
   /// No description provided for @authErrorInvalidEmail.
   ///
   /// In en, this message translates to:

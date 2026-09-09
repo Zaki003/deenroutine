@@ -6,8 +6,12 @@ import '../l10n/app_localizations.dart';
 String authErrorMessage(AppLocalizations l10n, String? code) {
   switch (code) {
     case 'wrong-password':
-    case 'invalid-credential':
       return l10n.authErrorWrongPassword;
+    case 'invalid-credential':
+      // Firebase returns this (instead of 'wrong-password'/'user-not-found')
+      // when email enumeration protection is on, so a non-existent account
+      // and a wrong password are indistinguishable here by design.
+      return l10n.authErrorInvalidCredential;
     case 'user-not-found':
       return l10n.authErrorUserNotFound;
     case 'invalid-email':

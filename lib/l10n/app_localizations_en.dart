@@ -814,6 +814,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authErrorUserNotFound => 'No account found with this email.';
 
   @override
+  String get authErrorInvalidCredential =>
+      'Incorrect email or password. New here? Sign up below.';
+
+  @override
   String get authErrorInvalidEmail => 'That email address looks invalid.';
 
   @override
