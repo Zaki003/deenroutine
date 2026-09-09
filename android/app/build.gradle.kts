@@ -60,6 +60,21 @@ android {
             }
         }
     }
+
+    // Play delivers density-specific splits from the AAB by default. The
+    // notification icon is resolved at runtime via Resources.getIdentifier
+    // (flutter_local_notifications has no compile-time reference to it), and
+    // that lookup unreliably misses density-only-qualified resources when
+    // they arrive as a Play-generated density split — confirmed on a real
+    // device (PlatformException: invalid_icon) despite the same drawable
+    // resolving fine in a non-split sideloaded APK. Disabling density
+    // splitting bundles every density variant into the base module instead,
+    // which eliminates the failure at the cost of a few KB of download size.
+    bundle {
+        density {
+            enableSplit = false
+        }
+    }
 }
 
 // Kotlin 2.x on AGP 9 requires the compilerOptions DSL — the old
