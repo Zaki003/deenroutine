@@ -120,7 +120,13 @@ class PrayerProvider extends ChangeNotifier {
   /// GPS) against the service's own Firestore/Aladhan chain, and only
   /// asks for a fresh GPS fix if this device has never resolved a
   /// location before. Use [updateLocation] to force a fresh GPS read.
-  Future<void> loadPrayerTimes() async {
+  ///
+  /// [requestIfDenied] defaults to `true` (this is also how Retry and
+  /// pull-to-refresh call it - both are deliberate taps, so re-prompting is
+  /// fine). Pass `false` for any call the user didn't directly trigger -
+  /// MainNavScreen's initial load and its app-resume auto-retry both do -
+  /// see [PrayerService.getCurrentLocation] for why that matters.
+  Future<void> loadPrayerTimes({bool requestIfDenied = true}) async {
     _loading = true;
     _errorType = null;
     _errorDetail = null;
@@ -146,7 +152,8 @@ class PrayerProvider extends ChangeNotifier {
         latitude = savedLat;
         longitude = savedLng;
       } else {
-        final position = await _service.getCurrentLocation();
+        final position =
+            await _service.getCurrentLocation(requestIfDenied: requestIfDenied);
         latitude = position.latitude;
         longitude = position.longitude;
         await prefs.setDouble(_prefsLatKey, latitude);
@@ -193,7 +200,7 @@ class PrayerProvider extends ChangeNotifier {
     _errorDetail = null;
     notifyListeners();
     try {
-      final position = await _service.getCurrentLocation();
+      final position = await _service.getCurrentLocation(requestIfDenied: true);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setDouble(_prefsLatKey, position.latitude);
       await prefs.setDouble(_prefsLngKey, position.longitude);

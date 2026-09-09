@@ -51,7 +51,11 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     // initState. Defer to after the first frame instead.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      _prayerProvider.loadPrayerTimes();
+      // requestIfDenied: false - this fires on every app launch with nothing
+      // the user did to ask for it. Prompting here is how a single ignored
+      // dialog on day one turns into a permanently-denied permission before
+      // the user ever gets a screen that explains why the app wants it.
+      _prayerProvider.loadPrayerTimes(requestIfDenied: false);
     });
   }
 
@@ -81,7 +85,10 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     };
     if (_prayerProvider.hasError &&
         recoverableOnResume.contains(_prayerProvider.errorType)) {
-      _prayerProvider.loadPrayerTimes();
+      // requestIfDenied: false here too - this fires just from switching
+      // back to the app, so a permission dialog popping up with no tap to
+      // explain it would be a jarring surprise, not a fix.
+      _prayerProvider.loadPrayerTimes(requestIfDenied: false);
     }
   }
 

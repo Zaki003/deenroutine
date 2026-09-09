@@ -26,7 +26,17 @@ class PrayerException implements Exception {
 class PrayerService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<Position> getCurrentLocation() async {
+  /// [requestIfDenied] gates whether a currently-denied permission triggers
+  /// Android's native request dialog. This must be `false` for any call the
+  /// user didn't directly ask for (initial app launch, pull-to-refresh isn't
+  /// exempt either, and definitely not an automatic retry on app resume) -
+  /// Android permanently denies a permission after it's asked and refused
+  /// twice, "don't ask again" checkbox or not, so a silent background call
+  /// re-prompting on its own can burn through that budget before the user
+  /// ever consciously chose to be asked again. Only a real, explicit user
+  /// gesture for enabling location (onboarding's own prompt, or picking "use
+  /// current location" from the location sheet) should pass `true`.
+  Future<Position> getCurrentLocation({required bool requestIfDenied}) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       throw PrayerException(PrayerErrorType.locationServicesDisabled);
@@ -34,6 +44,9 @@ class PrayerService {
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
+      if (!requestIfDenied) {
+        throw PrayerException(PrayerErrorType.permissionDenied);
+      }
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         throw PrayerException(PrayerErrorType.permissionDenied);
