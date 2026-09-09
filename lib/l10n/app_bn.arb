@@ -52,6 +52,7 @@
   "noHabitsToday": "আজকের জন্য কোনো অভ্যাস নির্ধারিত নেই। একটি যোগ করতে + চাপুন।",
   "seeAllHabits": "সব {count} টি অভ্যাস দেখুন",
   "retryButton": "আবার চেষ্টা করুন",
+  "openSettingsButton": "সেটিংস খুলুন",
   "prayerUnavailableTitle": "নামাজের সময় পাওয়া যায়নি",
   "prayerTimesUnavailable": "নামাজের সময় পাওয়া যায়নি: {error}",
 

@@ -160,6 +160,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get retryButton => 'আবার চেষ্টা করুন';
 
   @override
+  String get openSettingsButton => 'সেটিংস খুলুন';
+
+  @override
   String get prayerUnavailableTitle => 'নামাজের সময় পাওয়া যায়নি';
 
   @override

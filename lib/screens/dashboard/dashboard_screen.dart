@@ -312,6 +312,7 @@ class _PrayerHero extends StatelessWidget {
       );
     }
     if (provider.hasError) {
+      final needsSettings = prayerErrorNeedsSettings(provider.errorType!);
       return EmptyStateCard(
         icon: Icons.cloud_off_rounded,
         iconColor: DeenColors.rust,
@@ -319,8 +320,10 @@ class _PrayerHero extends StatelessWidget {
         message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
         dark: dark,
         compact: true,
-        actionLabel: l10n.retryButton,
-        onAction: () => provider.loadPrayerTimes(),
+        actionLabel: needsSettings ? l10n.openSettingsButton : l10n.retryButton,
+        onAction: needsSettings
+            ? () => provider.openSettingsForCurrentError()
+            : () => provider.loadPrayerTimes(),
       );
     }
     if (provider.nextPrayerName == null) {

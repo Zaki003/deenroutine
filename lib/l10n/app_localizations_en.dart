@@ -160,6 +160,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retryButton => 'Retry';
 
   @override
+  String get openSettingsButton => 'Open Settings';
+
+  @override
   String get prayerUnavailableTitle => 'Prayer times unavailable';
 
   @override

@@ -368,6 +368,12 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retryButton;
 
+  /// No description provided for @openSettingsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettingsButton;
+
   /// No description provided for @prayerUnavailableTitle.
   ///
   /// In en, this message translates to:

@@ -56,6 +56,18 @@ class PrayerService {
     }
   }
 
+  /// Opens this app's system settings page — the only way out of
+  /// [PrayerErrorType.permissionDeniedForever]. Once Android has permanently
+  /// denied a permission, it won't show the in-app request dialog again
+  /// (asking would silently no-op), regardless of how many times
+  /// [getCurrentLocation] is retried.
+  Future<void> openAppSettings() => Geolocator.openAppSettings();
+
+  /// Opens the device's location-services (GPS on/off) settings — separate
+  /// from app permissions, and the only fix for
+  /// [PrayerErrorType.locationServicesDisabled].
+  Future<void> openLocationSettings() => Geolocator.openLocationSettings();
+
   /// On Android, `forceLocationManager` reads the OS's raw `LocationManager`
   /// GPS provider directly. Without it, Geolocator goes through Google Play
   /// Services' Fused Location Provider, whose per-app "last location" cache

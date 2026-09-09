@@ -166,6 +166,22 @@ class PrayerProvider extends ChangeNotifier {
     }
   }
 
+  /// Opens the system settings screen that can actually fix the current
+  /// error — app permission settings for a permanent denial, device
+  /// location-services settings for GPS being off entirely. No-op for any
+  /// other error type (or none), since [loadPrayerTimes] via Retry is the
+  /// right action there instead. See [prayerErrorNeedsSettings].
+  Future<void> openSettingsForCurrentError() {
+    switch (_errorType) {
+      case PrayerErrorType.permissionDeniedForever:
+        return _service.openAppSettings();
+      case PrayerErrorType.locationServicesDisabled:
+        return _service.openLocationSettings();
+      default:
+        return Future.value();
+    }
+  }
+
   /// Explicit "I've travelled" override: re-reads the device's current GPS
   /// location (ignoring whatever was saved, including a previously picked
   /// manual city), makes it the new sticky location for future

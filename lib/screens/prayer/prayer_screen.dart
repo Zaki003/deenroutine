@@ -20,6 +20,8 @@ class PrayerScreen extends StatelessWidget {
     final provider = context.watch<PrayerProvider>();
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
+    final needsSettings =
+        provider.hasError && prayerErrorNeedsSettings(provider.errorType!);
 
     return ColoredBox(
       color: DeenColors.surface(dark),
@@ -61,8 +63,10 @@ class PrayerScreen extends StatelessWidget {
                 message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
                 dark: dark,
                 compact: true,
-                actionLabel: l10n.retryButton,
-                onAction: () => provider.loadPrayerTimes(),
+                actionLabel: needsSettings ? l10n.openSettingsButton : l10n.retryButton,
+                onAction: needsSettings
+                    ? () => provider.openSettingsForCurrentError()
+                    : () => provider.loadPrayerTimes(),
               )
             else if (provider.timings.isEmpty)
               const SizedBox.shrink()

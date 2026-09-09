@@ -61,6 +61,7 @@
     "placeholders": { "count": {} }
   },
   "retryButton": "Retry",
+  "openSettingsButton": "Open Settings",
   "prayerUnavailableTitle": "Prayer times unavailable",
   "prayerTimesUnavailable": "Prayer times unavailable: {error}",
   "@prayerTimesUnavailable": {
