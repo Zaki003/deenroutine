@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -8,6 +9,7 @@ import '../../providers/habit_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../services/firestore_service.dart';
+import '../../services/review_prompt_service.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/duration_format.dart';
@@ -127,7 +129,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: MilestoneBanner(
               key: ValueKey('${milestone.habitId}_${milestone.days}'),
               event: milestone,
-              onDismissed: () => context.read<HabitProvider>().consumeMilestone(),
+              onDismissed: () {
+                // 7 days specifically, not every milestone - a first real
+                // week is the "positive moment" worth asking on; 3 is too
+                // early to have formed an opinion, and 30/100/365 already
+                // had their chance at 7 for anyone who reaches them.
+                if (milestone.days == 7) {
+                  unawaited(ReviewPromptService().maybeRequestReview());
+                }
+                context.read<HabitProvider>().consumeMilestone();
+              },
             ),
           ),
       ],

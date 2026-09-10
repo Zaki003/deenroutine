@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -8,6 +9,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../services/analytics_service.dart';
 import '../../services/firestore_service.dart';
+import '../../services/review_prompt_service.dart';
 import '../../utils/app_theme.dart';
 import '../../widgets/empty_state_card.dart';
 import 'quiz_result_screen.dart';
@@ -75,6 +77,11 @@ class _QuizScreenState extends State<QuizScreen> {
       });
     } else {
       await _submitResult(questions);
+      // 80% mirrors QuizResultScreen's own "Excellent" threshold - the same
+      // bar the user already sees framed as a win, not a separate number.
+      if (questions.isNotEmpty && _score / questions.length >= 0.8) {
+        unawaited(ReviewPromptService().maybeRequestReview());
+      }
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
