@@ -68,6 +68,13 @@ class AuthProvider extends ChangeNotifier {
         _errorCode = 'device-account-limit';
         return false;
       }
+      // Set before the Firebase call, not after it returns: authStateChanges
+      // (which _AuthGate reads _inOnboarding alongside) can fire the moment
+      // the account is created - well before this function's own Firestore
+      // profile write finishes - so flipping this flag late leaves a window
+      // where isLoggedIn is already true but inOnboarding isn't yet, and
+      // MainNavScreen mounts for real underneath the onboarding screens.
+      _inOnboarding = true;
       _appUser = await _authService.register(
         name: name,
         email: email,
@@ -75,10 +82,10 @@ class AuthProvider extends ChangeNotifier {
       );
       await prefs.setInt(_deviceAccountCountKey, count + 1);
       _errorCode = null;
-      _inOnboarding = true;
       return true;
     } on FirebaseAuthException catch (e) {
       _errorCode = e.code;
+      _inOnboarding = false;
       return false;
     } finally {
       _setLoading(false);
