@@ -146,6 +146,7 @@
   "editHabitTitle": "Edit Habit",
   "habitTitleLabel": "Habit title",
   "habitTitleValidatorError": "Please enter a habit title",
+  "habitTitleTooLongError": "Keep the title under 60 characters",
   "categoryLabel": "Category",
   "frequencyLabel": "Frequency",
   "repeatOnLabel": "Repeat on",

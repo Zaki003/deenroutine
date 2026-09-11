@@ -675,6 +675,12 @@ abstract class AppLocalizations {
   /// **'Please enter a habit title'**
   String get habitTitleValidatorError;
 
+  /// No description provided for @habitTitleTooLongError.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the title under 60 characters'**
+  String get habitTitleTooLongError;
+
   /// No description provided for @categoryLabel.
   ///
   /// In en, this message translates to:

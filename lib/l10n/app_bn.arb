@@ -113,6 +113,7 @@
   "editHabitTitle": "অভ্যাস সম্পাদনা করুন",
   "habitTitleLabel": "অভ্যাসের নাম",
   "habitTitleValidatorError": "অভ্যাসের নাম লিখুন",
+  "habitTitleTooLongError": "অভ্যাসের নাম ৬০ অক্ষরের মধ্যে রাখুন",
   "categoryLabel": "বিভাগ",
   "frequencyLabel": "পুনরাবৃত্তি",
   "repeatOnLabel": "যেসব দিনে হবে",

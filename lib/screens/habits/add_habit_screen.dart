@@ -9,6 +9,10 @@ import '../../services/notification_service.dart';
 import '../../utils/habit_error_messages.dart';
 import '../../widgets/tracking_type_section.dart';
 
+/// Keeps a habit's title short enough to fit on one line in the compact
+/// dashboard/habits-list rows, which have no wrapping allowance.
+const _titleMaxLength = 60;
+
 class AddHabitScreen extends StatefulWidget {
   /// When set, the form opens pre-filled with this habit's values and saves
   /// via an update instead of creating a new habit.
@@ -193,9 +197,17 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               TextFormField(
                 controller: _titleCtrl,
                 decoration: InputDecoration(labelText: l10n.habitTitleLabel),
+                maxLength: _titleMaxLength,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return l10n.habitTitleValidatorError;
+                  }
+                  // maxLength above blocks typing past the limit, but can't
+                  // retroactively shorten a title that already exceeded it
+                  // before this limit existed - this is what actually stops
+                  // an old over-length title from being saved unchanged.
+                  if (value.trim().length > _titleMaxLength) {
+                    return l10n.habitTitleTooLongError;
                   }
                   return null;
                 },

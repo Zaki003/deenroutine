@@ -335,6 +335,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get habitTitleValidatorError => 'Please enter a habit title';
 
   @override
+  String get habitTitleTooLongError => 'Keep the title under 60 characters';
+
+  @override
   String get categoryLabel => 'Category';
 
   @override

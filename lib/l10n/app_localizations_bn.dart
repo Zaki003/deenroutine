@@ -336,6 +336,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get habitTitleValidatorError => 'অভ্যাসের নাম লিখুন';
 
   @override
+  String get habitTitleTooLongError => 'অভ্যাসের নাম ৬০ অক্ষরের মধ্যে রাখুন';
+
+  @override
   String get categoryLabel => 'বিভাগ';
 
   @override
