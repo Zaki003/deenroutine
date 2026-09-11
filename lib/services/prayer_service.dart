@@ -21,6 +21,35 @@ class PrayerException implements Exception {
   PrayerException(this.type, [this.detail]);
 }
 
+/// Aladhan's `method` param - which authority's angles compute Fajr/Isha.
+/// [aladhanCode] is the exact numeric id Aladhan's API expects.
+enum PrayerCalculationMethod {
+  karachi(1),
+  isna(2),
+  mwl(3),
+  ummAlQura(4);
+
+  final int aladhanCode;
+  const PrayerCalculationMethod(this.aladhanCode);
+
+  static PrayerCalculationMethod fromCode(int? code) => PrayerCalculationMethod.values
+      .firstWhere((m) => m.aladhanCode == code, orElse: () => PrayerCalculationMethod.mwl);
+}
+
+/// Aladhan's `school` param - the Asr shadow-length convention. Hanafi's
+/// longer shadow requirement pushes Asr noticeably later than Standard
+/// (Shafi'i/Maliki/Hanbali) - often by close to an hour.
+enum AsrJuristicMethod {
+  standard(0),
+  hanafi(1);
+
+  final int aladhanCode;
+  const AsrJuristicMethod(this.aladhanCode);
+
+  static AsrJuristicMethod fromCode(int? code) => AsrJuristicMethod.values
+      .firstWhere((m) => m.aladhanCode == code, orElse: () => AsrJuristicMethod.standard);
+}
+
 /// FR-07: Prayer time retrieval via Aladhan REST API, with Firestore
 /// caching to support offline access (PrayerCache collection).
 class PrayerService {
@@ -106,17 +135,43 @@ class PrayerService {
     }
   }
 
-  /// Fetches today's prayer times for a given lat/lng using the
-  /// public Aladhan API (method 3 = Muslim World League, matches
-  /// the default 'MWL' calculation method from the Settings schema).
+  /// Whether lat/lng falls inside a rough bounding box for Bangladesh,
+  /// India, or Pakistan - approximate on purpose (a sensible starting
+  /// default beats none; the user can always override it in Settings) and
+  /// deliberately not precise at borders.
+  bool _isSouthAsia(double lat, double lng) {
+    bool inBox(double latMin, double latMax, double lngMin, double lngMax) =>
+        lat >= latMin && lat <= latMax && lng >= lngMin && lng <= lngMax;
+    return inBox(20.3, 26.7, 88.0, 92.7) || // Bangladesh
+        inBox(6.5, 35.5, 68.0, 97.5) || // India
+        inBox(23.5, 37.1, 60.9, 77.8); // Pakistan
+  }
+
+  /// Karachi is the conventional method across Bangladesh/India/Pakistan;
+  /// MWL is the closest thing to a global/European default elsewhere.
+  PrayerCalculationMethod defaultMethodFor({required double lat, required double lng}) =>
+      _isSouthAsia(lat, lng) ? PrayerCalculationMethod.karachi : PrayerCalculationMethod.mwl;
+
+  /// Hanafi is the common Asr convention across Bangladesh/India/Pakistan;
+  /// Standard (Shafi'i/Maliki/Hanbali) elsewhere.
+  AsrJuristicMethod defaultSchoolFor({required double lat, required double lng}) =>
+      _isSouthAsia(lat, lng) ? AsrJuristicMethod.hanafi : AsrJuristicMethod.standard;
+
+  /// Fetches today's prayer times for a given lat/lng using the public
+  /// Aladhan API.
   Future<Map<String, String>> fetchPrayerTimes({
     required double latitude,
     required double longitude,
-    int method = 3,
+    PrayerCalculationMethod method = PrayerCalculationMethod.mwl,
+    AsrJuristicMethod school = AsrJuristicMethod.standard,
   }) async {
     final today = DateTime.now();
-    final cacheKey =
-        '${today.year}-${today.month}-${today.day}_${latitude.toStringAsFixed(2)}_${longitude.toStringAsFixed(2)}';
+    // method/school are part of the key deliberately - without them, switching
+    // either in Settings would keep serving the previous choice's cached
+    // timings for the rest of the day instead of the newly picked one.
+    final cacheKey = '${today.year}-${today.month}-${today.day}'
+        '_${latitude.toStringAsFixed(2)}_${longitude.toStringAsFixed(2)}'
+        '_${method.aladhanCode}_${school.aladhanCode}';
 
     // 1. Try cache first (offline-friendly, NFR-REL-01 support).
     final cached = await _db.collection('PrayerCache').doc(cacheKey).get();
@@ -137,7 +192,7 @@ class PrayerService {
     // 2. Fetch live from Aladhan.
     final url = Uri.parse(
       'https://api.aladhan.com/v1/timings/${today.day}-${today.month}-${today.year}'
-      '?latitude=$latitude&longitude=$longitude&method=$method',
+      '?latitude=$latitude&longitude=$longitude&method=${method.aladhanCode}&school=${school.aladhanCode}',
     );
     final response = await http.get(url);
 
@@ -162,6 +217,8 @@ class PrayerService {
       'fetchedAt': Timestamp.now(),
       'latitude': latitude,
       'longitude': longitude,
+      'method': method.aladhanCode,
+      'school': school.aladhanCode,
     });
 
     return timings;

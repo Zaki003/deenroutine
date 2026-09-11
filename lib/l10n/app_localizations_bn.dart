@@ -826,7 +826,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get prayerMethodTitle => 'নামাজের সময় গণনার পদ্ধতি';
 
   @override
-  String get prayerMethodSubtitle => 'MWL (ডিফল্ট)';
+  String get prayerMethodKarachi => 'করাচি';
+
+  @override
+  String get prayerMethodIsna => 'ISNA';
+
+  @override
+  String get prayerMethodMwl => 'MWL';
+
+  @override
+  String get prayerMethodUmmAlQura => 'উম্মুল কুরা';
+
+  @override
+  String get asrMethodTitle => 'আসর গণনার পদ্ধতি';
+
+  @override
+  String get asrMethodStandard => 'স্ট্যান্ডার্ড';
+
+  @override
+  String get asrMethodHanafi => 'হানাফি';
 
   @override
   String get profileLocationLabel => 'অবস্থান';

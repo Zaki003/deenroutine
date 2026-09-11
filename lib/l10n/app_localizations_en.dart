@@ -823,7 +823,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prayerMethodTitle => 'Prayer calculation method';
 
   @override
-  String get prayerMethodSubtitle => 'MWL (default)';
+  String get prayerMethodKarachi => 'Karachi';
+
+  @override
+  String get prayerMethodIsna => 'ISNA';
+
+  @override
+  String get prayerMethodMwl => 'MWL';
+
+  @override
+  String get prayerMethodUmmAlQura => 'Umm al-Qura';
+
+  @override
+  String get asrMethodTitle => 'Asr calculation';
+
+  @override
+  String get asrMethodStandard => 'Standard';
+
+  @override
+  String get asrMethodHanafi => 'Hanafi';
 
   @override
   String get profileLocationLabel => 'Location';

@@ -23,11 +23,21 @@ class PrayerProvider extends ChangeNotifier {
   /// [loadPrayerTimes] doesn't care how the saved coordinates got there.
   static const _prefsManualLabelKey = 'prayer_manual_city_label';
 
+  /// Null until the user explicitly picks one in Settings - see
+  /// [calculationMethod]/[asrMethod] for the location-based default used
+  /// until then.
+  static const _prefsMethodKey = 'prayer_calc_method';
+  static const _prefsSchoolKey = 'prayer_asr_school';
+
   Map<String, String> _timings = {};
   bool _loading = false;
   PrayerErrorType? _errorType;
   String? _errorDetail;
   String? _manualCityLabel;
+  double? _lat;
+  double? _lng;
+  PrayerCalculationMethod? _explicitMethod;
+  AsrJuristicMethod? _explicitSchool;
 
   /// Nothing else drives a rebuild as time passes, so without this the
   /// dashboard's prayer card and the Prayer tab only refresh their
@@ -61,6 +71,24 @@ class PrayerProvider extends ChangeNotifier {
   /// null until the first [loadPrayerTimes] populates them from prefs.
   bool get isManualLocation => _manualCityLabel != null;
   String? get manualCityLabel => _manualCityLabel;
+
+  /// Resolved calculation method: an explicit Settings choice if one exists,
+  /// otherwise a location-based smart default (see
+  /// [PrayerService.defaultMethodFor]) once a location is known, otherwise
+  /// MWL. Recomputes live off [_lat]/[_lng] as long as nothing's been
+  /// explicitly chosen, so it keeps tracking a changed location.
+  PrayerCalculationMethod get calculationMethod =>
+      _explicitMethod ??
+      (_lat != null && _lng != null
+          ? _service.defaultMethodFor(lat: _lat!, lng: _lng!)
+          : PrayerCalculationMethod.mwl);
+
+  /// Same resolution order as [calculationMethod], for the Asr school.
+  AsrJuristicMethod get asrMethod =>
+      _explicitSchool ??
+      (_lat != null && _lng != null
+          ? _service.defaultSchoolFor(lat: _lat!, lng: _lng!)
+          : AsrJuristicMethod.standard);
 
   /// Timings reordered so the next upcoming prayer is first, followed by
   /// the rest in their normal daily order (wrapping past ones to the end).
@@ -135,8 +163,22 @@ class PrayerProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final todayKey = _todayKey();
       _manualCityLabel = prefs.getString(_prefsManualLabelKey);
+      _explicitMethod = _readMethod(prefs);
+      _explicitSchool = _readSchool(prefs);
 
-      if (prefs.getString(_prefsDateKey) == todayKey) {
+      final savedLat = prefs.getDouble(_prefsLatKey);
+      final savedLng = prefs.getDouble(_prefsLngKey);
+      if (savedLat != null && savedLng != null) {
+        _lat = savedLat;
+        _lng = savedLng;
+      }
+
+      // method/school are folded into the stamp, so switching either in
+      // Settings invalidates today's local cache immediately instead of
+      // silently keeping the previous choice's times until the date rolls
+      // over - calculationMethod/asrMethod already reflect the values just
+      // loaded above.
+      if (prefs.getString(_prefsDateKey) == _cacheStamp(todayKey)) {
         final cached = _readCachedTimings(prefs);
         if (cached != null) {
           _timings = cached;
@@ -144,18 +186,18 @@ class PrayerProvider extends ChangeNotifier {
         }
       }
 
-      final savedLat = prefs.getDouble(_prefsLatKey);
-      final savedLng = prefs.getDouble(_prefsLngKey);
       double latitude;
       double longitude;
-      if (savedLat != null && savedLng != null) {
-        latitude = savedLat;
-        longitude = savedLng;
+      if (_lat != null && _lng != null) {
+        latitude = _lat!;
+        longitude = _lng!;
       } else {
         final position =
             await _service.getCurrentLocation(requestIfDenied: requestIfDenied);
         latitude = position.latitude;
         longitude = position.longitude;
+        _lat = latitude;
+        _lng = longitude;
         await prefs.setDouble(_prefsLatKey, latitude);
         await prefs.setDouble(_prefsLngKey, longitude);
       }
@@ -206,6 +248,8 @@ class PrayerProvider extends ChangeNotifier {
       await prefs.setDouble(_prefsLngKey, position.longitude);
       await prefs.remove(_prefsManualLabelKey);
       _manualCityLabel = null;
+      _lat = position.latitude;
+      _lng = position.longitude;
       await _fetchAndCache(prefs, position.latitude, position.longitude, _todayKey());
       return true;
     } on PrayerException catch (e) {
@@ -236,6 +280,8 @@ class PrayerProvider extends ChangeNotifier {
       await prefs.setDouble(_prefsLngKey, city.longitude);
       await prefs.setString(_prefsManualLabelKey, city.displayLabel);
       _manualCityLabel = city.displayLabel;
+      _lat = city.latitude;
+      _lng = city.longitude;
       await _fetchAndCache(prefs, city.latitude, city.longitude, _todayKey());
       return true;
     } on PrayerException catch (e) {
@@ -258,10 +304,72 @@ class PrayerProvider extends ChangeNotifier {
     double longitude,
     String todayKey,
   ) async {
-    _timings = await _service.fetchPrayerTimes(latitude: latitude, longitude: longitude);
-    await prefs.setString(_prefsDateKey, todayKey);
+    _timings = await _service.fetchPrayerTimes(
+      latitude: latitude,
+      longitude: longitude,
+      method: calculationMethod,
+      school: asrMethod,
+    );
+    await prefs.setString(_prefsDateKey, _cacheStamp(todayKey));
     await prefs.setString(_prefsTimingsKey, jsonEncode(_timings));
   }
+
+  /// Explicit choice from Settings - persists it and re-fetches today's
+  /// timings immediately under the new method, rather than waiting for the
+  /// next natural cache miss to notice.
+  Future<void> setCalculationMethod(PrayerCalculationMethod method) async {
+    _explicitMethod = method;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_prefsMethodKey, method.aladhanCode);
+    notifyListeners();
+    await _refetchToday();
+  }
+
+  /// Same shape as [setCalculationMethod], for the Asr school.
+  Future<void> setAsrMethod(AsrJuristicMethod school) async {
+    _explicitSchool = school;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_prefsSchoolKey, school.aladhanCode);
+    notifyListeners();
+    await _refetchToday();
+  }
+
+  /// Re-fetches today's timings under whatever [calculationMethod]/[asrMethod]
+  /// currently resolve to. No-ops quietly if location isn't known yet -
+  /// [loadPrayerTimes] will pick up the new choice whenever it next runs.
+  Future<void> _refetchToday() async {
+    if (_lat == null || _lng == null) return;
+    _loading = true;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await _fetchAndCache(prefs, _lat!, _lng!, _todayKey());
+    } on PrayerException catch (e) {
+      _errorType = e.type;
+      _errorDetail = e.detail;
+    } catch (e) {
+      _errorType = PrayerErrorType.unknown;
+      _errorDetail = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  PrayerCalculationMethod? _readMethod(SharedPreferences prefs) {
+    final code = prefs.getInt(_prefsMethodKey);
+    return code == null ? null : PrayerCalculationMethod.fromCode(code);
+  }
+
+  AsrJuristicMethod? _readSchool(SharedPreferences prefs) {
+    final code = prefs.getInt(_prefsSchoolKey);
+    return code == null ? null : AsrJuristicMethod.fromCode(code);
+  }
+
+  /// Folds the resolved method/school into the same-day cache key - see
+  /// their use in [loadPrayerTimes] and [_fetchAndCache].
+  String _cacheStamp(String todayKey) =>
+      '$todayKey|${calculationMethod.aladhanCode}|${asrMethod.aladhanCode}';
 
   /// Rebuilds the map in canonical key order explicitly, rather than
   /// trusting json round-tripping to preserve it, matching the defensive

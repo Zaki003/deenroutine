@@ -1545,11 +1545,47 @@ abstract class AppLocalizations {
   /// **'Prayer calculation method'**
   String get prayerMethodTitle;
 
-  /// No description provided for @prayerMethodSubtitle.
+  /// No description provided for @prayerMethodKarachi.
   ///
   /// In en, this message translates to:
-  /// **'MWL (default)'**
-  String get prayerMethodSubtitle;
+  /// **'Karachi'**
+  String get prayerMethodKarachi;
+
+  /// No description provided for @prayerMethodIsna.
+  ///
+  /// In en, this message translates to:
+  /// **'ISNA'**
+  String get prayerMethodIsna;
+
+  /// No description provided for @prayerMethodMwl.
+  ///
+  /// In en, this message translates to:
+  /// **'MWL'**
+  String get prayerMethodMwl;
+
+  /// No description provided for @prayerMethodUmmAlQura.
+  ///
+  /// In en, this message translates to:
+  /// **'Umm al-Qura'**
+  String get prayerMethodUmmAlQura;
+
+  /// No description provided for @asrMethodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr calculation'**
+  String get asrMethodTitle;
+
+  /// No description provided for @asrMethodStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get asrMethodStandard;
+
+  /// No description provided for @asrMethodHanafi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hanafi'**
+  String get asrMethodHanafi;
 
   /// No description provided for @profileLocationLabel.
   ///

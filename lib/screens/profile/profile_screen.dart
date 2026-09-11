@@ -8,12 +8,14 @@ import '../../providers/locale_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../theme/deen_colors.dart';
+import '../../utils/prayer_method_labels.dart';
 import '../../utils/text_format.dart';
 import '../../widgets/avatar_graphic.dart';
 import '../../widgets/avatar_picker_dialog.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/delete_account_dialog.dart';
 import '../../widgets/edit_name_dialog.dart';
+import '../../widgets/prayer_method_action.dart';
 import '../../widgets/update_location_action.dart';
 
 const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
@@ -229,8 +231,10 @@ class ProfileScreen extends StatelessWidget {
                   icon: Icons.public_rounded,
                   label: l10n.prayerMethodTitle,
                   dark: dark,
-                  trailingText: l10n.prayerMethodSubtitle,
-                  onTap: () {},
+                  trailingText: '${prayerMethodLabel(l10n, prayerProvider.calculationMethod)} · '
+                      '${asrMethodLabel(l10n, prayerProvider.asrMethod)}',
+                  showChevron: true,
+                  onTap: () => confirmPrayerMethod(context),
                 ),
                 Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
                 _AccountRow(
