@@ -826,6 +826,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prayerMethodSubtitle => 'MWL (default)';
 
   @override
+  String get profileLocationLabel => 'Location';
+
+  @override
   String get logoutButton => 'Log out';
 
   @override

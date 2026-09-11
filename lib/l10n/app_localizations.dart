@@ -1551,6 +1551,12 @@ abstract class AppLocalizations {
   /// **'MWL (default)'**
   String get prayerMethodSubtitle;
 
+  /// No description provided for @profileLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get profileLocationLabel;
+
   /// No description provided for @logoutButton.
   ///
   /// In en, this message translates to:

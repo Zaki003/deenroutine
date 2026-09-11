@@ -375,6 +375,7 @@
   "notificationsTitle": "Notifications",
   "prayerMethodTitle": "Prayer calculation method",
   "prayerMethodSubtitle": "MWL (default)",
+  "profileLocationLabel": "Location",
   "logoutButton": "Log out",
   "languageTitle": "Language",
   "languageEnglish": "English",

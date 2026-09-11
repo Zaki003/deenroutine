@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/analytics_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
+import '../../providers/prayer_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/text_format.dart';
@@ -13,6 +14,7 @@ import '../../widgets/avatar_picker_dialog.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/delete_account_dialog.dart';
 import '../../widgets/edit_name_dialog.dart';
+import '../../widgets/update_location_action.dart';
 
 const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
 
@@ -36,6 +38,7 @@ class ProfileScreen extends StatelessWidget {
     final themeProvider = context.watch<ThemeProvider>();
     final localeProvider = context.watch<LocaleProvider>();
     final analyticsProvider = context.watch<AnalyticsProvider>();
+    final prayerProvider = context.watch<PrayerProvider>();
     final user = auth.appUser;
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -231,6 +234,17 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
                 _AccountRow(
+                  icon: Icons.location_on_rounded,
+                  label: l10n.profileLocationLabel,
+                  dark: dark,
+                  trailingText: prayerProvider.isManualLocation
+                      ? l10n.currentLocationCity(prayerProvider.manualCityLabel!)
+                      : l10n.currentLocationGps,
+                  showChevron: true,
+                  onTap: () => confirmUpdateLocation(context),
+                ),
+                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
+                _AccountRow(
                   icon: Icons.logout_rounded,
                   label: l10n.logoutButton,
                   dark: dark,
@@ -409,6 +423,11 @@ class _AccountRow extends StatelessWidget {
   final bool dark;
   final Color? color;
   final String? trailingText;
+  /// Shows a chevron alongside [trailingText] instead of the default
+  /// text-only display — for a row where tapping genuinely navigates
+  /// somewhere (unlike e.g. the prayer-method row above, which is a plain
+  /// value display for now). Ignored when [trailingText] is null.
+  final bool showChevron;
   final VoidCallback onTap;
 
   const _AccountRow({
@@ -417,6 +436,7 @@ class _AccountRow extends StatelessWidget {
     required this.dark,
     this.color,
     this.trailingText,
+    this.showChevron = false,
     required this.onTap,
   });
 
@@ -440,7 +460,16 @@ class _AccountRow extends StatelessWidget {
               ],
             ),
             if (trailingText != null)
-              Text(trailingText!, style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)))
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(trailingText!, style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark))),
+                  if (showChevron) ...[
+                    const SizedBox(width: 2),
+                    Icon(Icons.chevron_right_rounded, size: 16, color: DeenColors.textMuted(dark)),
+                  ],
+                ],
+              )
             else if (color == null)
               Icon(Icons.chevron_right_rounded, size: 18, color: DeenColors.textMuted(dark)),
           ],

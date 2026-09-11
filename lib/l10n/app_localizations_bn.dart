@@ -829,6 +829,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get prayerMethodSubtitle => 'MWL (ডিফল্ট)';
 
   @override
+  String get profileLocationLabel => 'অবস্থান';
+
+  @override
   String get logoutButton => 'লগ আউট';
 
   @override
