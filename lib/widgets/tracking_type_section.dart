@@ -15,27 +15,53 @@ class TrackingTypePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final types = HabitTrackingType.values;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l10n.trackingTypeSectionLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 1.7,
-          children: [
-            for (final type in HabitTrackingType.values)
-              _TrackingTypeCard(
-                type: type,
-                selected: type == selected,
-                onTap: () => onChanged(type),
+        // Paired Rows instead of a GridView with a fixed childAspectRatio -
+        // a fixed aspect ratio locks every card to an exact height, and a
+        // longer label (a larger system font-scale setting, or a language
+        // whose word for a given type just runs longer) could need a touch
+        // more room than that budget allowed, overflowing the card.
+        //
+        // IntrinsicHeight (not just CrossAxisAlignment.stretch on its own)
+        // is what makes the pair share height correctly: this section sits
+        // inside AddHabitScreen's SingleChildScrollView, which gives the
+        // Row an unbounded height constraint - stretch alone would try to
+        // force each card to an infinite height and crash. IntrinsicHeight
+        // measures each card's real (bounded) natural height first, so
+        // there's always a concrete value to stretch both cards to.
+        for (var i = 0; i < types.length; i += 2)
+          Padding(
+            padding: EdgeInsets.only(bottom: i + 2 < types.length ? 10 : 0),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: _TrackingTypeCard(
+                      type: types[i],
+                      selected: types[i] == selected,
+                      onTap: () => onChanged(types[i]),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: i + 1 < types.length
+                        ? _TrackingTypeCard(
+                            type: types[i + 1],
+                            selected: types[i + 1] == selected,
+                            onTap: () => onChanged(types[i + 1]),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ],
               ),
-          ],
-        ),
+            ),
+          ),
       ],
     );
   }
@@ -70,6 +96,8 @@ class _TrackingTypeCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               type.label(l10n),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 12.5,
