@@ -28,9 +28,19 @@ import '../../widgets/habit_progress_ring.dart';
 import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/habit_timer_control.dart';
 import '../../widgets/milestone_banner.dart';
+import '../../widgets/shimmer_box.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
 import '../../widgets/update_location_action.dart';
+
+/// Forces [child] to the full available width. An [AnimatedSwitcher]-driven
+/// swap lays its branches out in a [Stack], which loosens width constraints
+/// for non-positioned children - without this, cards that don't set their
+/// own explicit width (EmptyStateCard, DeenCard, the skeletons below) would
+/// shrink-wrap to their content and center instead of spanning edge-to-edge
+/// like every other section on the dashboard.
+Widget _fullWidth(Widget child, {Key? key}) =>
+    SizedBox(key: key, width: double.infinity, child: child);
 
 /// FR-06: Dashboard displaying the greeting, a daily Ayah/Hadith, the
 /// next-prayer countdown, the Barakah Circle, and today's habits.
@@ -53,12 +63,21 @@ const _maxVisibleHabits = 5;
 class _DashboardScreenState extends State<DashboardScreen> {
   final _firestoreService = FirestoreService();
   DailyQuote? _quote;
+  // Separate from `_quote == null` so a quote that legitimately doesn't
+  // exist (vs. one still in flight) doesn't leave the skeleton spinning
+  // forever - see its use in _dashboardBody.
+  bool _quoteLoaded = false;
 
   @override
   void initState() {
     super.initState();
     _firestoreService.getDailyQuote().then((q) {
-      if (mounted) setState(() => _quote = q);
+      if (mounted) {
+        setState(() {
+          _quote = q;
+          _quoteLoaded = true;
+        });
+      }
     });
   }
 
@@ -179,51 +198,76 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            if (_quote != null) ...[
-              _QuoteCard(quote: _quote!, isBangla: isBangla, dark: dark),
-              const SizedBox(height: 16),
-            ],
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: !_quoteLoaded
+                  ? _fullWidth(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _QuoteCardSkeleton(dark: dark),
+                      ),
+                      key: const ValueKey('quote-skeleton'),
+                    )
+                  : _quote != null
+                      ? _fullWidth(
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: _QuoteCard(quote: _quote!, isBangla: isBangla, dark: dark),
+                          ),
+                          key: const ValueKey('quote-content'),
+                        )
+                      : const SizedBox.shrink(key: ValueKey('quote-empty')),
+            ),
             _PrayerHero(provider: prayerProvider, l10n: l10n),
             const SizedBox(height: 16),
-            DeenCard(
-              dark: dark,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        StarPattern(opacity: 0.12, color: DeenColors.gold),
-                        BarakahCircle(done: done, total: total, dark: dark, size: 100),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.barakahCircleTitle,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: DeenColors.primaryText(dark),
-                          ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: !habitProvider.hasLoadedOnce
+                  ? _fullWidth(_BarakahSkeleton(dark: dark), key: const ValueKey('barakah-skeleton'))
+                  : _fullWidth(
+                      DeenCard(
+                        dark: dark,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  StarPattern(opacity: 0.12, color: DeenColors.gold),
+                                  BarakahCircle(done: done, total: total, dark: dark, size: 100),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    l10n.barakahCircleTitle,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: DeenColors.primaryText(dark),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _summary(l10n, done, total, prayerProvider.nextPrayerName),
+                                    style:
+                                        TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _summary(l10n, done, total, prayerProvider.nextPrayerName),
-                          style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
-                        ),
-                      ],
+                      ),
+                      key: const ValueKey('barakah-content'),
                     ),
-                  ),
-                ],
-              ),
             ),
             const SizedBox(height: 20),
             Row(
@@ -253,42 +297,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            if (habitProvider.habits.isEmpty)
-              EmptyStateCard(icon: Icons.checklist_rounded, message: l10n.noHabitsYet, dark: dark)
-            else if (todaysHabits.isEmpty)
-              EmptyStateCard(
-                  icon: Icons.event_available_outlined, message: l10n.noHabitsToday, dark: dark),
-            for (final habit in visibleHabits)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _DashboardHabitRow(habit: habit, dark: dark),
-              ),
-            if (hiddenHabitCount > 0)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, bottom: 8),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: widget.onSeeAllHabits,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.seeAllHabits(habitProvider.habits.length),
-                          style: const TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w600,
-                            color: DeenColors.gold,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.arrow_forward_rounded, size: 14, color: DeenColors.gold),
-                      ],
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: !habitProvider.hasLoadedOnce
+                  ? _fullWidth(const _HabitListSkeleton(), key: const ValueKey('habits-skeleton'))
+                  : _fullWidth(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (habitProvider.habits.isEmpty)
+                            EmptyStateCard(
+                                icon: Icons.checklist_rounded,
+                                message: l10n.noHabitsYet,
+                                dark: dark)
+                          else if (todaysHabits.isEmpty)
+                            EmptyStateCard(
+                                icon: Icons.event_available_outlined,
+                                message: l10n.noHabitsToday,
+                                dark: dark),
+                          for (final habit in visibleHabits)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: _DashboardHabitRow(habit: habit, dark: dark),
+                            ),
+                          if (hiddenHabitCount > 0)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4, bottom: 8),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: widget.onSeeAllHabits,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        l10n.seeAllHabits(habitProvider.habits.length),
+                                        style: const TextStyle(
+                                          fontSize: 12.5,
+                                          fontWeight: FontWeight.w600,
+                                          color: DeenColors.gold,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const Icon(Icons.arrow_forward_rounded,
+                                          size: 14, color: DeenColors.gold),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      key: const ValueKey('habits-content'),
                     ),
-                  ),
-                ),
-              ),
+            ),
           ],
         ),
       ),
@@ -314,42 +377,91 @@ class _PrayerHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    if (provider.isLoading) {
-      return SizedBox(
-        height: 64,
-        child: Center(
-          child: CircularProgressIndicator(strokeWidth: 2, color: DeenColors.gold),
+    // Keyed off whether timings exist yet, not just isLoading - a
+    // pull-to-refresh also sets isLoading, and previously that blanked out
+    // the whole card back to a spinner even though the old timings were
+    // still perfectly valid to show while the refresh runs in the
+    // background (RefreshIndicator's own spinner already signals that).
+    final hasData = provider.nextPrayerName != null;
+
+    final Widget child;
+    if (hasData) {
+      final remaining = provider.timeUntilNextPrayer;
+      child = _fullWidth(
+        GradientHeroCard(
+          compact: true,
+          eyebrow: l10n.nextPrayerLabel,
+          prayerName: prayerNameLabel(l10n, provider.nextPrayerName!),
+          timeLabel: provider.nextPrayerTime ?? '',
+          remainingLabel:
+              remaining != null ? l10n.prayerRemainingShort(formatCountdown(remaining)) : '',
+          onUpdateLocation: () => confirmUpdateLocation(context),
         ),
+        key: const ValueKey('prayer-content'),
       );
-    }
-    if (provider.hasError) {
+    } else if (provider.hasError) {
       final needsSettings = prayerErrorNeedsSettings(provider.errorType!);
-      return EmptyStateCard(
-        icon: Icons.cloud_off_rounded,
-        iconColor: DeenColors.rust,
-        title: l10n.prayerUnavailableTitle,
-        message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
-        dark: dark,
-        compact: true,
-        actionLabel: needsSettings ? l10n.openSettingsButton : l10n.retryButton,
-        onAction: needsSettings
-            ? () => provider.openSettingsForCurrentError()
-            : () => provider.loadPrayerTimes(),
+      child = _fullWidth(
+        EmptyStateCard(
+          icon: Icons.cloud_off_rounded,
+          iconColor: DeenColors.rust,
+          title: l10n.prayerUnavailableTitle,
+          message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
+          dark: dark,
+          compact: true,
+          actionLabel: needsSettings ? l10n.openSettingsButton : l10n.retryButton,
+          onAction: needsSettings
+              ? () => provider.openSettingsForCurrentError()
+              : () => provider.loadPrayerTimes(),
+        ),
+        key: const ValueKey('prayer-error'),
       );
+    } else if (provider.isLoading) {
+      child = _fullWidth(_PrayerHeroSkeleton(dark: dark), key: const ValueKey('prayer-skeleton'));
+    } else {
+      child = const SizedBox.shrink(key: ValueKey('prayer-empty'));
     }
-    if (provider.nextPrayerName == null) {
-      return const SizedBox.shrink();
-    }
-    final remaining = provider.timeUntilNextPrayer;
-    return GradientHeroCard(
-      compact: true,
-      eyebrow: l10n.nextPrayerLabel,
-      prayerName: prayerNameLabel(l10n, provider.nextPrayerName!),
-      timeLabel: provider.nextPrayerTime ?? '',
-      remainingLabel: remaining != null
-          ? l10n.prayerRemainingShort(formatCountdown(remaining))
-          : '',
-      onUpdateLocation: () => confirmUpdateLocation(context),
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      child: child,
+    );
+  }
+}
+
+/// Placeholder shaped like [GradientHeroCard]'s compact layout - same
+/// padding and roughly the same line heights - so swapping in the real
+/// card once timings load doesn't shift anything below it.
+class _PrayerHeroSkeleton extends StatelessWidget {
+  final bool dark;
+
+  const _PrayerHeroSkeleton({required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: DeenColors.panelBackground(dark),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShimmerBox(width: 70, height: 9, dark: dark),
+              const SizedBox(height: 8),
+              ShimmerBox(width: 96, height: 18, dark: dark),
+              const SizedBox(height: 6),
+              ShimmerBox(width: 120, height: 11, dark: dark),
+            ],
+          ),
+          ShimmerBox(width: 20, height: 20, dark: dark, radius: 10),
+        ],
+      ),
     );
   }
 }
@@ -392,6 +504,115 @@ class _QuoteCard extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Placeholder shaped like [_QuoteCard] - two body-text-height bars plus a
+/// shorter source line, in the same padded panel.
+class _QuoteCardSkeleton extends StatelessWidget {
+  final bool dark;
+
+  const _QuoteCardSkeleton({required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: DeenColors.panelBackground(dark),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerBox(width: double.infinity, height: 14, dark: dark),
+          const SizedBox(height: 8),
+          ShimmerBox(width: 180, height: 14, dark: dark),
+          const SizedBox(height: 10),
+          ShimmerBox(width: 90, height: 11, dark: dark),
+        ],
+      ),
+    );
+  }
+}
+
+/// Placeholder shaped like the Barakah Circle [DeenCard] - a circular blob
+/// standing in for the ring, plus a title bar and a subtitle bar.
+class _BarakahSkeleton extends StatelessWidget {
+  final bool dark;
+
+  const _BarakahSkeleton({required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    return DeenCard(
+      dark: dark,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ShimmerBox(width: 100, height: 100, dark: dark, radius: 50),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShimmerBox(width: 120, height: 14, dark: dark),
+                const SizedBox(height: 8),
+                ShimmerBox(width: 160, height: 12, dark: dark),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A short stack of [_HabitRowSkeleton]s standing in for the habit list
+/// while [HabitProvider.hasLoadedOnce] is still false. Three is enough to
+/// read as "a list is coming" without guessing at the real count.
+class _HabitListSkeleton extends StatelessWidget {
+  const _HabitListSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < 3; i++)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _HabitRowSkeleton(dark: dark),
+          ),
+      ],
+    );
+  }
+}
+
+/// Placeholder shaped like [_DashboardHabitRow] - a ring-sized blob, a
+/// title bar, and a streak-badge-sized pill.
+class _HabitRowSkeleton extends StatelessWidget {
+  final bool dark;
+
+  const _HabitRowSkeleton({required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    return DeenCard(
+      dark: dark,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      child: Row(
+        children: [
+          ShimmerBox(width: 34, height: 34, dark: dark, radius: 17),
+          const SizedBox(width: 10),
+          Expanded(child: ShimmerBox(width: double.infinity, height: 13, dark: dark)),
+          const SizedBox(width: 10),
+          ShimmerBox(width: 28, height: 18, dark: dark, radius: 9),
         ],
       ),
     );

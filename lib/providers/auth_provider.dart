@@ -31,6 +31,14 @@ class AuthProvider extends ChangeNotifier {
   AppUser? get appUser => _appUser;
   bool get isLoading => _loading;
 
+  /// False until Firebase's first [authStateChanges] event arrives. Distinct
+  /// from [isLoggedIn] so _AuthGate can show a neutral splash while a
+  /// persisted session is still being confirmed, instead of flashing
+  /// LoginScreen for already-logged-in users before jumping to
+  /// MainNavScreen a moment later.
+  bool _authResolved = false;
+  bool get authResolved => _authResolved;
+
   /// A [FirebaseAuthException.code] (e.g. `'wrong-password'`), not a
   /// display string — map it through `authErrorMessage` before showing it.
   String? get errorCode => _errorCode;
@@ -56,6 +64,7 @@ class AuthProvider extends ChangeNotifier {
     } else {
       _appUser = null;
     }
+    _authResolved = true;
     notifyListeners();
   }
 

@@ -39,6 +39,13 @@ class HabitProvider extends ChangeNotifier {
   List<Habit> _habits = [];
   List<Habit> get habits => _habits;
 
+  /// False until [listenToHabits]'s stream delivers its first snapshot (or
+  /// error). Lets the dashboard tell "still loading" apart from "genuinely
+  /// no habits yet" so it can show a skeleton instead of briefly flashing
+  /// the empty state before real data arrives.
+  bool _hasLoadedOnce = false;
+  bool get hasLoadedOnce => _hasLoadedOnce;
+
   HabitErrorType? _errorType;
   String? _errorDetail;
   HabitErrorType? get errorType => _errorType;
@@ -125,6 +132,7 @@ class HabitProvider extends ChangeNotifier {
         _habits = habits;
         _errorType = null;
         _errorDetail = null;
+        _hasLoadedOnce = true;
         notifyListeners();
       },
       onError: (Object e) {
@@ -134,6 +142,7 @@ class HabitProvider extends ChangeNotifier {
         // killed the subscription with no feedback. Now it's surfaced, and
         // we retry so a transient error (e.g. brief connectivity loss)
         // recovers on its own instead of requiring an app restart.
+        _hasLoadedOnce = true;
         _setError(HabitErrorType.syncFailed, e.toString());
 
         _habitsSub?.cancel();
@@ -164,6 +173,7 @@ class HabitProvider extends ChangeNotifier {
     _habits = [];
     _errorType = null;
     _errorDetail = null;
+    _hasLoadedOnce = false;
     // Deferred: the caller is normally MainNavScreen.dispose(), and the
     // widget tree is locked mid-teardown at that point - notifying
     // synchronously here throws "setState() or markNeedsBuild() called when
