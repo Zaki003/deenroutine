@@ -209,9 +209,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prayerScreenTitle => 'Prayer Times';
 
   @override
-  String get prayerMethodFullName => 'Muslim World League';
-
-  @override
   String prayerRemainingLong(Object time) {
     return '$time remaining';
   }

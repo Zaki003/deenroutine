@@ -87,7 +87,6 @@
   },
 
   "prayerScreenTitle": "Prayer Times",
-  "prayerMethodFullName": "Muslim World League",
   "prayerRemainingLong": "{time} remaining",
   "@prayerRemainingLong": {
     "placeholders": { "time": {} }

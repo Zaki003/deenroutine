@@ -69,7 +69,6 @@
   "barakahSummaryComplete": "আজকের সব {total} টি অভ্যাস সম্পন্ন হয়েছে। চমৎকার!",
 
   "prayerScreenTitle": "নামাজের সময়",
-  "prayerMethodFullName": "মুসলিম ওয়ার্ল্ড লীগ",
   "prayerRemainingLong": "{time} বাকি",
   "prayerRemainingShort": "{time} পরে",
   "updateLocationTooltip": "অবস্থান আপডেট করুন",

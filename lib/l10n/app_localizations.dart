@@ -453,12 +453,6 @@ abstract class AppLocalizations {
   /// **'Prayer Times'**
   String get prayerScreenTitle;
 
-  /// No description provided for @prayerMethodFullName.
-  ///
-  /// In en, this message translates to:
-  /// **'Muslim World League'**
-  String get prayerMethodFullName;
-
   /// No description provided for @prayerRemainingLong.
   ///
   /// In en, this message translates to:

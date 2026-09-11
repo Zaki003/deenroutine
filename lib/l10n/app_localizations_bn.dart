@@ -209,9 +209,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get prayerScreenTitle => 'নামাজের সময়';
 
   @override
-  String get prayerMethodFullName => 'মুসলিম ওয়ার্ল্ড লীগ';
-
-  @override
   String prayerRemainingLong(Object time) {
     return '$time বাকি';
   }

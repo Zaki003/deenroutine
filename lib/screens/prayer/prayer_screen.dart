@@ -6,6 +6,7 @@ import '../../theme/deen_colors.dart';
 import '../../utils/duration_format.dart';
 import '../../utils/prayer_error_messages.dart';
 import '../../utils/prayer_labels.dart';
+import '../../utils/prayer_method_labels.dart';
 import '../../widgets/empty_state_card.dart';
 import '../../widgets/gradient_hero_card.dart';
 import '../../widgets/update_location_action.dart';
@@ -43,7 +44,7 @@ class PrayerScreen extends StatelessWidget {
               children: [
                 Icon(Icons.public_rounded, size: 12, color: DeenColors.textMuted(dark)),
                 const SizedBox(width: 4),
-                Text(l10n.prayerMethodFullName,
+                Text(prayerMethodLabel(l10n, provider.calculationMethod),
                     style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark))),
               ],
             ),
