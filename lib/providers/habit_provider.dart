@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
 import '../services/analytics_service.dart';
 import '../services/firestore_service.dart';
+import '../services/notification_service.dart';
 
 /// Kinds of error [HabitProvider] can surface. Kept as a type rather than a
 /// pre-formatted English sentence so the UI layer can localize the message
@@ -439,6 +440,9 @@ class HabitProvider extends ChangeNotifier {
   Future<void> deleteHabit(Habit habit) async {
     try {
       await _service.deleteHabit(habit);
+      if (habit.reminderHour != null) {
+        await NotificationService().cancelReminder(habit.title.hashCode);
+      }
     } catch (e) {
       _setError(HabitErrorType.deleteFailed, e.toString());
     }
