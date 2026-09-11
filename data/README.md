@@ -28,7 +28,8 @@ Each entry looks like this:
   "category": "Quran",
   "question": "How many surahs are there in the Quran?",
   "options": ["114", "110", "120", "99"],
-  "answer": "114"
+  "answer": "114",
+  "explanation": "The Quran has 114 surahs, ranging from Al-Fatihah to An-Nas."
 }
 ```
 
@@ -42,6 +43,10 @@ Rules the script enforces before it writes anything:
 - `options` must be unique, and there must be at least 2 of them.
 - `category` is free-form. It's stored in Firestore for future filtering; the
   app currently ignores it.
+- `explanation` is optional. When present, it's shown as one line of reasoning
+  right after the user answers — questions without one just skip that line, so
+  there's no need to backfill existing questions. A Bangla translation goes in
+  `explanationBn`, same opt-in pattern as `questionBn`/`optionsBn` below.
 
 ## Pushing to Firestore
 

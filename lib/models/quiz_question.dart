@@ -12,6 +12,13 @@ class QuizQuestion {
   final String questionTextBn;
   final List<String> optionsBn;
 
+  /// One line of reasoning shown after answering (e.g. citing the ayah or
+  /// hadith behind the correct option). Optional and empty on most questions
+  /// until content adds it — the quiz screen just skips showing anything
+  /// when it's blank, same non-breaking approach as [questionTextBn].
+  final String explanation;
+  final String explanationBn;
+
   QuizQuestion({
     required this.questionId,
     required this.questionText,
@@ -19,6 +26,8 @@ class QuizQuestion {
     required this.correctAnswer,
     this.questionTextBn = '',
     this.optionsBn = const [],
+    this.explanation = '',
+    this.explanationBn = '',
   });
 
   String displayQuestionText(bool bangla) =>
@@ -26,6 +35,9 @@ class QuizQuestion {
 
   List<String> displayOptions(bool bangla) =>
       (bangla && optionsBn.length == options.length) ? optionsBn : options;
+
+  String displayExplanation(bool bangla) =>
+      (bangla && explanationBn.isNotEmpty) ? explanationBn : explanation;
 
   factory QuizQuestion.fromMap(String id, Map<String, dynamic> map) {
     return QuizQuestion(
@@ -35,6 +47,8 @@ class QuizQuestion {
       correctAnswer: map['correctAnswer'] ?? '',
       questionTextBn: map['questionTextBn'] ?? '',
       optionsBn: List<String>.from(map['optionsBn'] ?? []),
+      explanation: map['explanation'] ?? '',
+      explanationBn: map['explanationBn'] ?? '',
     );
   }
 
@@ -44,5 +58,7 @@ class QuizQuestion {
         'correctAnswer': correctAnswer,
         'questionTextBn': questionTextBn,
         'optionsBn': optionsBn,
+        'explanation': explanation,
+        'explanationBn': explanationBn,
       };
 }

@@ -85,6 +85,14 @@ function loadQuestions() {
         errors.push(`${where}: every "optionsBn" entry must be a non-empty string.`);
       }
     }
+    // Explanation is optional too - shown after answering when present, and
+    // skipped entirely on questions that don't have one yet.
+    if (q.explanation !== undefined && (typeof q.explanation !== 'string' || !q.explanation.trim())) {
+      errors.push(`${where}: "explanation" must be a non-empty string if present.`);
+    }
+    if (q.explanationBn !== undefined && (typeof q.explanationBn !== 'string' || !q.explanationBn.trim())) {
+      errors.push(`${where}: "explanationBn" must be a non-empty string if present.`);
+    }
   });
 
   if (errors.length) {
@@ -208,6 +216,8 @@ async function main() {
       random: q.random,
       questionTextBn: q.questionBn || '',
       optionsBn,
+      explanation: q.explanation || '',
+      explanationBn: q.explanationBn || '',
       updatedAt: FieldValue.serverTimestamp(),
     });
   });

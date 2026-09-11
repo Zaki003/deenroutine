@@ -172,7 +172,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     ],
                   ),
                 ),
-                if (_answered)
+                if (_answered) ...[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Row(
@@ -199,6 +199,18 @@ class _QuizScreenState extends State<QuizScreen> {
                       ],
                     ),
                   ),
+                  if (q.displayExplanation(isBangla).isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        q.displayExplanation(isBangla),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                ],
                 FilledButton(
                   onPressed: !_answered
                       ? (_selectedOption == null ? null : () => _checkAnswer(q))
