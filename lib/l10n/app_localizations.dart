@@ -1245,6 +1245,18 @@ abstract class AppLocalizations {
   /// **'Enter your password to confirm.'**
   String get deleteAccountPasswordPrompt;
 
+  /// No description provided for @deleteAccountWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'That password doesn\'t match your account.'**
+  String get deleteAccountWrongPassword;
+
+  /// No description provided for @deleteAccountResetSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset email sent — check your inbox.'**
+  String get deleteAccountResetSent;
+
   /// No description provided for @editButton.
   ///
   /// In en, this message translates to:

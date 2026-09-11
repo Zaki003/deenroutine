@@ -298,6 +298,8 @@
   "deleteAccountTitle": "Delete your account?",
   "deleteAccountWarning": "This permanently deletes your habits, streaks, quiz results, and profile. This can't be undone.",
   "deleteAccountPasswordPrompt": "Enter your password to confirm.",
+  "deleteAccountWrongPassword": "That password doesn't match your account.",
+  "deleteAccountResetSent": "Password reset email sent — check your inbox.",
   "editButton": "Edit",
 
   "habitSyncError": "Couldn't sync your habits. Retrying...",

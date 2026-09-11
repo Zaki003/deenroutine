@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
+import '../utils/app_theme.dart';
 import '../utils/auth_error_messages.dart';
 
 /// Password-confirmation dialog for the in-app account-deletion path
@@ -26,6 +27,15 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
   // *stale* error from an earlier cancelled attempt the instant this
   // dialog reopens, before the user has typed or submitted anything.
   String? _errorCode;
+  bool _resettingPassword = false;
+  bool _resetSent = false;
+
+  // Firebase's reauthenticateWithCredential throws 'invalid-credential' for
+  // a wrong password here (not 'wrong-password' - that's the sign-in-flow
+  // code), but either way authErrorMessage's copy for it ("New here? Sign
+  // up below.") is written for a failed *login*, which makes no sense when
+  // the user is already signed in and just re-confirming their identity.
+  bool get _isWrongPassword => _errorCode == 'wrong-password' || _errorCode == 'invalid-credential';
 
   @override
   void dispose() {
@@ -38,6 +48,7 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
     setState(() {
       _submitting = true;
       _errorCode = null;
+      _resetSent = false;
     });
     final auth = context.read<AuthProvider>();
     final ok = await auth.deleteAccount(_passwordCtrl.text);
@@ -49,10 +60,23 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
     if (ok) Navigator.pop(context, true);
   }
 
+  Future<void> _sendResetEmail() async {
+    final email = context.read<AuthProvider>().firebaseUser?.email;
+    if (email == null || _resettingPassword) return;
+    setState(() => _resettingPassword = true);
+    final sent = await context.read<AuthProvider>().resetPassword(email);
+    if (!mounted) return;
+    setState(() {
+      _resettingPassword = false;
+      _resetSent = sent;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final errorColor = Theme.of(context).colorScheme.error;
+    final theme = Theme.of(context);
+    final errorColor = theme.colorScheme.error;
 
     return AlertDialog(
       title: Text(l10n.deleteAccountTitle),
@@ -82,10 +106,33 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
             ),
             if (_errorCode != null) ...[
               const SizedBox(height: 8),
-              Text(
-                authErrorMessage(l10n, _errorCode),
-                style: TextStyle(color: errorColor, fontSize: 12.5),
-              ),
+              if (_resetSent)
+                Text(
+                  l10n.deleteAccountResetSent,
+                  style: TextStyle(color: theme.colorScheme.success, fontSize: 12.5),
+                )
+              else if (_isWrongPassword) ...[
+                Text(
+                  l10n.deleteAccountWrongPassword,
+                  style: TextStyle(color: errorColor, fontSize: 12.5),
+                ),
+                const SizedBox(height: 2),
+                InkWell(
+                  onTap: _resettingPassword ? null : _sendResetEmail,
+                  child: Text(
+                    l10n.forgotPasswordLink,
+                    style: TextStyle(
+                      color: theme.colorScheme.primary,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ] else
+                Text(
+                  authErrorMessage(l10n, _errorCode),
+                  style: TextStyle(color: errorColor, fontSize: 12.5),
+                ),
             ],
           ],
         ),

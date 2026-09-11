@@ -655,6 +655,14 @@ class AppLocalizationsBn extends AppLocalizations {
       'নিশ্চিত করতে আপনার পাসওয়ার্ড লিখুন।';
 
   @override
+  String get deleteAccountWrongPassword =>
+      'পাসওয়ার্ডটি আপনার অ্যাকাউন্টের সাথে মিলছে না।';
+
+  @override
+  String get deleteAccountResetSent =>
+      'পাসওয়ার্ড রিসেট ইমেইল পাঠানো হয়েছে — আপনার ইনবক্স দেখুন।';
+
+  @override
   String get editButton => 'সম্পাদনা';
 
   @override

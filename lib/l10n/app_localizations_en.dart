@@ -653,6 +653,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccountPasswordPrompt => 'Enter your password to confirm.';
 
   @override
+  String get deleteAccountWrongPassword =>
+      'That password doesn\'t match your account.';
+
+  @override
+  String get deleteAccountResetSent =>
+      'Password reset email sent — check your inbox.';
+
+  @override
   String get editButton => 'Edit';
 
   @override
