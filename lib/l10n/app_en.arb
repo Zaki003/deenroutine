@@ -96,6 +96,8 @@
     "placeholders": { "time": {} }
   },
   "updateLocationTooltip": "Update location",
+  "prayerNotifyOnTooltip": "Turn off adhan notification",
+  "prayerNotifyOffTooltip": "Turn on adhan notification",
   "updateLocationTitle": "Update location",
   "updateLocationConfirm": "Use current location",
   "updateLocationSuccess": "Location updated",
@@ -315,6 +317,10 @@
   "reminderNotificationBody": "Time for: {title}",
   "@reminderNotificationBody": {
     "placeholders": { "title": {} }
+  },
+  "prayerNotificationBody": "It's time for {prayer}.",
+  "@prayerNotificationBody": {
+    "placeholders": { "prayer": {} }
   },
 
   "quizQuestionCountTitle": "How many questions?",

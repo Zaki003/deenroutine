@@ -72,6 +72,8 @@
   "prayerRemainingLong": "{time} বাকি",
   "prayerRemainingShort": "{time} পরে",
   "updateLocationTooltip": "অবস্থান আপডেট করুন",
+  "prayerNotifyOnTooltip": "আজানের নোটিফিকেশন বন্ধ করুন",
+  "prayerNotifyOffTooltip": "আজানের নোটিফিকেশন চালু করুন",
   "updateLocationTitle": "অবস্থান আপডেট করুন",
   "updateLocationConfirm": "বর্তমান অবস্থান ব্যবহার করুন",
   "updateLocationSuccess": "অবস্থান আপডেট হয়েছে",
@@ -232,6 +234,7 @@
 
   "reminderNotificationTitle": "DeenRoutine নোটিফিকেশন",
   "reminderNotificationBody": "এখন সময়: {title}",
+  "prayerNotificationBody": "{prayer}-এর সময় হয়েছে।",
 
   "quizQuestionCountTitle": "কতগুলো প্রশ্ন?",
   "quizQuestionCountSubtitle": "আপনি কতগুলো প্রশ্ন অনুশীলন করতে চান তা নির্বাচন করুন।",

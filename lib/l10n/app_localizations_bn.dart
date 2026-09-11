@@ -222,6 +222,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get updateLocationTooltip => 'অবস্থান আপডেট করুন';
 
   @override
+  String get prayerNotifyOnTooltip => 'আজানের নোটিফিকেশন বন্ধ করুন';
+
+  @override
+  String get prayerNotifyOffTooltip => 'আজানের নোটিফিকেশন চালু করুন';
+
+  @override
   String get updateLocationTitle => 'অবস্থান আপডেট করুন';
 
   @override
@@ -689,6 +695,11 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String reminderNotificationBody(Object title) {
     return 'এখন সময়: $title';
+  }
+
+  @override
+  String prayerNotificationBody(Object prayer) {
+    return '$prayer-এর সময় হয়েছে।';
   }
 
   @override

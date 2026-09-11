@@ -471,6 +471,18 @@ abstract class AppLocalizations {
   /// **'Update location'**
   String get updateLocationTooltip;
 
+  /// No description provided for @prayerNotifyOnTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off adhan notification'**
+  String get prayerNotifyOnTooltip;
+
+  /// No description provided for @prayerNotifyOffTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on adhan notification'**
+  String get prayerNotifyOffTooltip;
+
   /// No description provided for @updateLocationTitle.
   ///
   /// In en, this message translates to:
@@ -1304,6 +1316,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time for: {title}'**
   String reminderNotificationBody(Object title);
+
+  /// No description provided for @prayerNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s time for {prayer}.'**
+  String prayerNotificationBody(Object prayer);
 
   /// No description provided for @quizQuestionCountTitle.
   ///

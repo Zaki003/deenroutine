@@ -4,8 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Settings module: app language (English/Bangla), persisted locally so it
 /// survives app restarts. Same storage approach as [ThemeProvider] — a
 /// device-level UI preference in SharedPreferences rather than Firestore.
+/// Shared with [PrayerProvider], which needs the current language outside
+/// any widget tree to localize scheduled adhan notification text.
+const localePrefsKey = 'app_locale';
+
 class LocaleProvider extends ChangeNotifier {
-  static const _prefsKey = 'app_locale';
+  static const _prefsKey = localePrefsKey;
 
   Locale _locale = const Locale('en');
   Locale get locale => _locale;

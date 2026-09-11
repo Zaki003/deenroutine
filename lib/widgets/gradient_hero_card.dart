@@ -14,6 +14,11 @@ class GradientHeroCard extends StatelessWidget {
   final String remainingLabel;
   final bool compact;
   final VoidCallback? onUpdateLocation;
+  /// Shown as a second icon next to [onUpdateLocation] only when both this
+  /// and [onToggleNotify] are given - the Dashboard's compact card doesn't
+  /// pass either, so it renders exactly as before.
+  final bool? notifyEnabled;
+  final VoidCallback? onToggleNotify;
 
   const GradientHeroCard({
     super.key,
@@ -23,6 +28,8 @@ class GradientHeroCard extends StatelessWidget {
     required this.remainingLabel,
     this.compact = false,
     this.onUpdateLocation,
+    this.notifyEnabled,
+    this.onToggleNotify,
   });
 
   @override
@@ -44,7 +51,7 @@ class GradientHeroCard extends StatelessWidget {
           if (onUpdateLocation != null)
             Positioned(
               top: 0,
-              right: 0,
+              right: onToggleNotify != null ? 26 : 0,
               child: IconButton(
                 onPressed: onUpdateLocation,
                 icon: const Icon(Icons.edit_location_alt_outlined),
@@ -54,6 +61,25 @@ class GradientHeroCard extends StatelessWidget {
                 constraints: const BoxConstraints(),
                 visualDensity: VisualDensity.compact,
                 tooltip: AppLocalizations.of(context)!.updateLocationTooltip,
+              ),
+            ),
+          if (onToggleNotify != null)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: onToggleNotify,
+                icon: Icon(
+                  notifyEnabled == true ? Icons.notifications_active_rounded : Icons.notifications_off_outlined,
+                ),
+                iconSize: compact ? 14 : 18,
+                color: notifyEnabled == true ? DeenColors.gold : DeenColors.goldSoft,
+                padding: const EdgeInsets.all(4),
+                constraints: const BoxConstraints(),
+                visualDensity: VisualDensity.compact,
+                tooltip: notifyEnabled == true
+                    ? AppLocalizations.of(context)!.prayerNotifyOnTooltip
+                    : AppLocalizations.of(context)!.prayerNotifyOffTooltip,
               ),
             ),
         ],

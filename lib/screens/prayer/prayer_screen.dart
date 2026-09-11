@@ -82,6 +82,8 @@ class PrayerScreen extends StatelessWidget {
                     ? l10n.prayerRemainingLong(formatCountdown(provider.timeUntilNextPrayer!))
                     : '',
                 onUpdateLocation: () => confirmUpdateLocation(context),
+                notifyEnabled: provider.notifyEnabled(provider.nextPrayerName!),
+                onToggleNotify: () => provider.toggleNotify(provider.nextPrayerName!),
               ),
               const SizedBox(height: 16),
               for (final entry in _otherPrayers(provider))
@@ -107,8 +109,18 @@ class PrayerScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(entry.value,
-                            style: TextStyle(fontSize: 13, color: DeenColors.textMuted(dark))),
+                        Row(
+                          children: [
+                            Text(entry.value,
+                                style: TextStyle(fontSize: 13, color: DeenColors.textMuted(dark))),
+                            const SizedBox(width: 4),
+                            _NotifyBell(
+                              enabled: provider.notifyEnabled(entry.key),
+                              dark: dark,
+                              onTap: () => provider.toggleNotify(entry.key),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -190,6 +202,31 @@ class _DayProgress extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// Compact bell toggle for one prayer row - see [GradientHeroCard]'s own
+/// bell for the highlighted next-prayer version of the same control.
+class _NotifyBell extends StatelessWidget {
+  final bool enabled;
+  final bool dark;
+  final VoidCallback onTap;
+
+  const _NotifyBell({required this.enabled, required this.dark, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return IconButton(
+      onPressed: onTap,
+      icon: Icon(enabled ? Icons.notifications_active_rounded : Icons.notifications_off_outlined),
+      iconSize: 16,
+      color: enabled ? DeenColors.gold : DeenColors.textMuted(dark),
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      visualDensity: VisualDensity.compact,
+      tooltip: enabled ? l10n.prayerNotifyOnTooltip : l10n.prayerNotifyOffTooltip,
     );
   }
 }

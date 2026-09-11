@@ -1,12 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../l10n/app_localizations.dart';
 import '../models/city.dart';
+import '../services/notification_service.dart';
 import '../services/prayer_service.dart';
+import '../utils/prayer_labels.dart';
+import 'locale_provider.dart' show localePrefsKey;
+
+/// Fixed, small IDs (not hash-derived like habit reminders) since there are
+/// only ever exactly 5 of these - easy to keep memorable and guaranteed
+/// stable across app versions, unlike a hashCode that could theoretically
+/// change if Dart's string hashing algorithm ever did.
+const Map<String, int> kPrayerNotificationIds = {
+  'Fajr': -101,
+  'Dhuhr': -102,
+  'Asr': -103,
+  'Maghrib': -104,
+  'Isha': -105,
+};
 
 class PrayerProvider extends ChangeNotifier {
   final PrayerService _service = PrayerService();
+  final NotificationService _notifications = NotificationService();
 
   // Local, on-device cache. Prayer times only need recomputing once a
   // calendar day, and the location barely ever changes between launches —
@@ -29,10 +47,15 @@ class PrayerProvider extends ChangeNotifier {
   static const _prefsMethodKey = 'prayer_calc_method';
   static const _prefsSchoolKey = 'prayer_asr_school';
 
+  /// One bool per prayer key ('prayer_notify_Fajr', etc.), defaulting to
+  /// off - absent from prefs until the user first taps a bell.
+  static const _prefsNotifyPrefix = 'prayer_notify_';
+
   Map<String, String> _timings = {};
   bool _loading = false;
   PrayerErrorType? _errorType;
   String? _errorDetail;
+  final Map<String, bool> _notifyEnabled = {};
   String? _manualCityLabel;
   double? _lat;
   double? _lng;
@@ -89,6 +112,24 @@ class PrayerProvider extends ChangeNotifier {
       (_lat != null && _lng != null
           ? _service.defaultSchoolFor(lat: _lat!, lng: _lng!)
           : AsrJuristicMethod.standard);
+
+  /// Whether an adhan notification is scheduled for [prayerKey] (e.g.
+  /// 'Asr'). Off by default until the user taps that prayer's bell.
+  bool notifyEnabled(String prayerKey) => _notifyEnabled[prayerKey] ?? false;
+
+  /// Flips [prayerKey]'s notification on/off, persists it, and immediately
+  /// re-syncs every prayer's scheduled notification against the current
+  /// choices and today's [_timings] - not just this one prayer, since that's
+  /// cheap (five local calls, no network) and keeps [_rescheduleAll] as the
+  /// single place that logic lives.
+  Future<void> toggleNotify(String prayerKey) async {
+    final next = !notifyEnabled(prayerKey);
+    _notifyEnabled[prayerKey] = next;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('$_prefsNotifyPrefix$prayerKey', next);
+    await _rescheduleAll();
+  }
 
   /// Timings reordered so the next upcoming prayer is first, followed by
   /// the rest in their normal daily order (wrapping past ones to the end).
@@ -165,6 +206,9 @@ class PrayerProvider extends ChangeNotifier {
       _manualCityLabel = prefs.getString(_prefsManualLabelKey);
       _explicitMethod = _readMethod(prefs);
       _explicitSchool = _readSchool(prefs);
+      for (final key in kPrayerNotificationIds.keys) {
+        _notifyEnabled[key] = prefs.getBool('$_prefsNotifyPrefix$key') ?? false;
+      }
 
       final savedLat = prefs.getDouble(_prefsLatKey);
       final savedLng = prefs.getDouble(_prefsLngKey);
@@ -312,6 +356,41 @@ class PrayerProvider extends ChangeNotifier {
     );
     await prefs.setString(_prefsDateKey, _cacheStamp(todayKey));
     await prefs.setString(_prefsTimingsKey, jsonEncode(_timings));
+    await _rescheduleAll();
+  }
+
+  /// Cancels and re-schedules every prayer's adhan notification against the
+  /// current on/off choices and [_timings]. Runs after every fresh fetch (a
+  /// new day means new times) and from [toggleNotify] (same times, a
+  /// changed choice) - both are cheap, local-only calls, so re-syncing all
+  /// five rather than just the one that changed keeps this the single place
+  /// that scheduling logic lives.
+  ///
+  /// Builds notification text via [lookupAppLocalizations] instead of the
+  /// usual BuildContext-based lookup: this runs from a background refresh,
+  /// with no widget on screen to defer to, and the text has to be baked in
+  /// now since the OS shows whatever was scheduled whenever the alarm
+  /// actually fires.
+  Future<void> _rescheduleAll() async {
+    if (_timings.isEmpty) return;
+    final prefs = await SharedPreferences.getInstance();
+    final locale = Locale(prefs.getString(localePrefsKey) == 'bn' ? 'bn' : 'en');
+    final l10n = lookupAppLocalizations(locale);
+
+    for (final entry in kPrayerNotificationIds.entries) {
+      final prayerKey = entry.key;
+      final id = entry.value;
+      await _notifications.cancelReminder(id);
+      final timeStr = _timings[prayerKey];
+      if (timeStr == null || !notifyEnabled(prayerKey)) continue;
+      final name = prayerNameLabel(l10n, prayerKey);
+      await _notifications.schedulePrayerNotification(
+        id: id,
+        title: name,
+        body: l10n.prayerNotificationBody(name),
+        time: _parseTimeToday(timeStr),
+      );
+    }
   }
 
   /// Explicit choice from Settings - persists it and re-fetches today's

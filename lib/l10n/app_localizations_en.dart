@@ -222,6 +222,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateLocationTooltip => 'Update location';
 
   @override
+  String get prayerNotifyOnTooltip => 'Turn off adhan notification';
+
+  @override
+  String get prayerNotifyOffTooltip => 'Turn on adhan notification';
+
+  @override
   String get updateLocationTitle => 'Update location';
 
   @override
@@ -686,6 +692,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String reminderNotificationBody(Object title) {
     return 'Time for: $title';
+  }
+
+  @override
+  String prayerNotificationBody(Object prayer) {
+    return 'It\'s time for $prayer.';
   }
 
   @override
