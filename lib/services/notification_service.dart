@@ -17,7 +17,7 @@ class NotificationService {
     // silently scheduled at the device's UTC offset instead of the time
     // the user actually picked.
     final deviceTimezone = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(deviceTimezone));
+    tz.setLocalLocation(tz.getLocation(deviceTimezone.identifier));
 
     const androidSettings =
         AndroidInitializationSettings('ic_notification');
