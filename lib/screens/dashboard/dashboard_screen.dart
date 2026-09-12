@@ -28,6 +28,7 @@ import '../../widgets/habit_progress_ring.dart';
 import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/habit_timer_control.dart';
 import '../../widgets/milestone_banner.dart';
+import '../../widgets/quote_card.dart';
 import '../../widgets/shimmer_box.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
@@ -81,6 +82,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  Future<void> _handleToggleFavorite(DailyQuote quote) async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await context.read<AuthProvider>().toggleFavorite(quote.quoteId);
+    if (result != FavoriteToggleResult.limitReached || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: DeenColors.ink,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        content: Text(
+          l10n.favoritesLimitReachedMessage(AuthProvider.maxFreeFavorites),
+          style: const TextStyle(color: DeenColors.paper, fontSize: 13),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final habitProvider = context.watch<HabitProvider>();
@@ -88,7 +106,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final isBangla = context.watch<LocaleProvider>().isBangla;
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final name = capitalizeWords(context.watch<AuthProvider>().appUser?.name ?? '');
+    final authProvider = context.watch<AuthProvider>();
+    final name = capitalizeWords(authProvider.appUser?.name ?? '');
 
     if (habitProvider.hasError) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -138,8 +157,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Stack(
       children: [
-        _dashboardBody(l10n, habitProvider, prayerProvider, dark, isBangla, name, done, total,
-            todaysHabits, visibleHabits, hiddenHabitCount),
+        _dashboardBody(l10n, habitProvider, prayerProvider, authProvider, dark, isBangla, name,
+            done, total, todaysHabits, visibleHabits, hiddenHabitCount),
         if (milestone != null)
           Positioned(
             top: 10,
@@ -168,6 +187,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     AppLocalizations l10n,
     HabitProvider habitProvider,
     PrayerProvider prayerProvider,
+    AuthProvider authProvider,
     bool dark,
     bool isBangla,
     String name,
@@ -212,7 +232,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ? _fullWidth(
                           Padding(
                             padding: const EdgeInsets.only(bottom: 16),
-                            child: _QuoteCard(quote: _quote!, isBangla: isBangla, dark: dark),
+                            child: QuoteCard(
+                              quote: _quote!,
+                              isBangla: isBangla,
+                              dark: dark,
+                              isFavorite: authProvider.isFavorite(_quote!.quoteId),
+                              onToggleFavorite: () => _handleToggleFavorite(_quote!),
+                            ),
                           ),
                           key: const ValueKey('quote-content'),
                         )
@@ -466,51 +492,7 @@ class _PrayerHeroSkeleton extends StatelessWidget {
   }
 }
 
-class _QuoteCard extends StatelessWidget {
-  final DailyQuote quote;
-  final bool isBangla;
-  final bool dark;
-
-  const _QuoteCard({required this.quote, required this.isBangla, required this.dark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: DeenColors.panelBackground(dark),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          StarPattern(opacity: dark ? 0.06 : 0.08, color: DeenColors.gold),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                quote.displayText(isBangla),
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 15,
-                  height: 1.5,
-                  color: dark ? DeenColors.goldSoft : DeenColors.primary,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                quote.source,
-                style: TextStyle(fontSize: 11, color: DeenColors.textMuted(dark)),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Placeholder shaped like [_QuoteCard] - two body-text-height bars plus a
+/// Placeholder shaped like [QuoteCard] - two body-text-height bars plus a
 /// shorter source line, in the same padded panel.
 class _QuoteCardSkeleton extends StatelessWidget {
   final bool dark;

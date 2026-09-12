@@ -881,6 +881,29 @@ class AppLocalizationsBn extends AppLocalizations {
   String get languageBangla => 'বাংলা';
 
   @override
+  String get favoritesTitle => 'প্রিয় আয়াত ও হাদিস';
+
+  @override
+  String favoritesCountLabel(int count, int max) {
+    return '$count/$max সংরক্ষিত';
+  }
+
+  @override
+  String get favoritesEmptyBody =>
+      'দৈনিক উক্তির হার্ট আইকনে চাপ দিয়ে এটি এখানে সংরক্ষণ করুন।';
+
+  @override
+  String favoritesLimitReachedMessage(int max) {
+    return 'আপনি সর্বোচ্চ $maxটি সংরক্ষণ করেছেন। আরেকটি যোগ করতে একটি সরান।';
+  }
+
+  @override
+  String get favoriteAddTooltip => 'প্রিয় তালিকায় সংরক্ষণ করুন';
+
+  @override
+  String get favoriteRemoveTooltip => 'প্রিয় তালিকা থেকে সরান';
+
+  @override
   String get authErrorWrongPassword => 'ভুল পাসওয়ার্ড। আবার চেষ্টা করুন।';
 
   @override

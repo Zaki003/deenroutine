@@ -238,6 +238,20 @@ class FirestoreService {
 
   static final DateTime _epoch = DateTime.utc(2026, 1, 1);
 
+  /// Fetches specific quotes by id, for the favourites list. `whereIn` on
+  /// documentId caps at 30 values, well above [AuthService.maxFreeFavorites]
+  /// - if that cap ever grows past 30 this needs chunking, not before.
+  /// Firestore doesn't preserve input order, so callers that care about
+  /// order (e.g. most-recently-favourited first) need to re-sort by id.
+  Future<List<DailyQuote>> getQuotesByIds(List<String> ids) async {
+    if (ids.isEmpty) return [];
+    final snap = await _db
+        .collection('DailyQuotes')
+        .where(FieldPath.documentId, whereIn: ids)
+        .get();
+    return snap.docs.map((d) => DailyQuote.fromMap(d.id, d.data())).toList();
+  }
+
   // ---------------- Quiz (FR-10) ----------------
 
   /// Fetches [count] questions drawn at random from the bank.

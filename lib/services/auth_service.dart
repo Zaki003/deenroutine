@@ -9,6 +9,10 @@ class AuthService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirestoreService _firestoreService = FirestoreService();
 
+  /// Free-tier cap on saved favourites. The paid tier (not designed yet)
+  /// will replace how this is checked, not how favourites are stored.
+  static const maxFreeFavorites = 5;
+
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
 
@@ -58,6 +62,13 @@ class AuthService {
     if (name != null) {
       await _auth.currentUser?.updateDisplayName(name);
     }
+  }
+
+  /// Overwrites the saved-favourites list wholesale. The cap is enforced by
+  /// the caller ([AuthProvider.toggleFavorite]) before this is ever called,
+  /// so a plain `update` is enough - no need for `arrayUnion`/`arrayRemove`.
+  Future<void> setFavoriteQuoteIds(String uid, List<String> ids) {
+    return _db.collection('Users').doc(uid).update({'favoriteQuoteIds': ids});
   }
 
   Future<AppUser?> getUserProfile(String uid) async {

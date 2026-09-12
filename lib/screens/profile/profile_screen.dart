@@ -17,6 +17,7 @@ import '../../widgets/delete_account_dialog.dart';
 import '../../widgets/edit_name_dialog.dart';
 import '../../widgets/prayer_method_action.dart';
 import '../../widgets/update_location_action.dart';
+import 'favorites_screen.dart';
 
 const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
 
@@ -220,6 +221,21 @@ class ProfileScreen extends StatelessWidget {
             dark: dark,
             child: Column(
               children: [
+                _AccountRow(
+                  icon: Icons.favorite_border_rounded,
+                  label: l10n.favoritesTitle,
+                  dark: dark,
+                  trailingText: l10n.favoritesCountLabel(
+                    auth.appUser?.favoriteQuoteIds.length ?? 0,
+                    AuthProvider.maxFreeFavorites,
+                  ),
+                  showChevron: true,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const FavoritesScreen()),
+                  ),
+                ),
+                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
                 _AccountRow(
                   icon: Icons.notifications_none_rounded,
                   label: l10n.notificationsTitle,

@@ -1647,6 +1647,42 @@ abstract class AppLocalizations {
   /// **'বাংলা'**
   String get languageBangla;
 
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourite Ayats & Hadiths'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoritesCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/{max} saved'**
+  String favoritesCountLabel(int count, int max);
+
+  /// No description provided for @favoritesEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the heart on a daily quote to save it here.'**
+  String get favoritesEmptyBody;
+
+  /// No description provided for @favoritesLimitReachedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve saved the maximum of {max} for now. Remove one to add another.'**
+  String favoritesLimitReachedMessage(int max);
+
+  /// No description provided for @favoriteAddTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to favourites'**
+  String get favoriteAddTooltip;
+
+  /// No description provided for @favoriteRemoveTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourites'**
+  String get favoriteRemoveTooltip;
+
   /// No description provided for @authErrorWrongPassword.
   ///
   /// In en, this message translates to:

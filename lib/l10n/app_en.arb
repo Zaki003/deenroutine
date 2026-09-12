@@ -395,6 +395,24 @@
   "languageEnglish": "English",
   "languageBangla": "বাংলা",
 
+  "favoritesTitle": "Favourite Ayats & Hadiths",
+  "favoritesCountLabel": "{count}/{max} saved",
+  "@favoritesCountLabel": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "favoritesEmptyBody": "Tap the heart on a daily quote to save it here.",
+  "favoritesLimitReachedMessage": "You've saved the maximum of {max} for now. Remove one to add another.",
+  "@favoritesLimitReachedMessage": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "favoriteAddTooltip": "Save to favourites",
+  "favoriteRemoveTooltip": "Remove from favourites",
+
   "authErrorWrongPassword": "Incorrect password. Please try again.",
   "authErrorUserNotFound": "No account found with this email.",
   "authErrorInvalidCredential": "Incorrect email or password. New here? Sign up below.",

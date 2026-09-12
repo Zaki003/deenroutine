@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
 import '../models/app_user.dart';
 
+enum FavoriteToggleResult { added, removed, limitReached }
+
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
 
@@ -196,6 +198,38 @@ class AuthProvider extends ChangeNotifier {
     } finally {
       _setLoading(false);
     }
+  }
+
+  static const maxFreeFavorites = AuthService.maxFreeFavorites;
+
+  List<String> get favoriteQuoteIds => _appUser?.favoriteQuoteIds ?? const [];
+  bool isFavorite(String quoteId) => favoriteQuoteIds.contains(quoteId);
+
+  /// Toggles [quoteId] in the signed-in user's favourites, capped at
+  /// [AuthService.maxFreeFavorites]. Mirrors [updateProfile]'s
+  /// write-then-update-local-state shape, but returns which of the three
+  /// outcomes happened instead of a bare bool, since "did nothing" here has
+  /// two different reasons a caller needs to tell apart (removed vs. at cap).
+  Future<FavoriteToggleResult> toggleFavorite(String quoteId) async {
+    // Defensive: the screens that call this aren't reachable while logged out.
+    if (_appUser == null) return FavoriteToggleResult.removed;
+
+    final current = List<String>.from(_appUser!.favoriteQuoteIds);
+    final FavoriteToggleResult result;
+    if (current.contains(quoteId)) {
+      current.remove(quoteId);
+      result = FavoriteToggleResult.removed;
+    } else if (current.length >= AuthService.maxFreeFavorites) {
+      return FavoriteToggleResult.limitReached;
+    } else {
+      current.add(quoteId);
+      result = FavoriteToggleResult.added;
+    }
+
+    await _authService.setFavoriteQuoteIds(_appUser!.uid, current);
+    _appUser = _appUser!.copyWith(favoriteQuoteIds: current);
+    notifyListeners();
+    return result;
   }
 
   void _setLoading(bool value) {

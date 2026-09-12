@@ -11,12 +11,18 @@ class AppUser {
   final DateTime createdAt;
   final AvatarOption? avatar;
 
+  /// DailyQuotes doc ids the user has saved, most-recently-added last.
+  /// Capped client-side at [AuthService.maxFreeFavorites] - see
+  /// [AuthProvider.toggleFavorite].
+  final List<String> favoriteQuoteIds;
+
   AppUser({
     required this.uid,
     required this.name,
     required this.email,
     DateTime? createdAt,
     this.avatar,
+    this.favoriteQuoteIds = const [],
   }) : createdAt = createdAt ?? DateTime.now();
 
   Map<String, dynamic> toMap() => {
@@ -24,6 +30,7 @@ class AppUser {
         'email': email,
         'createdAt': Timestamp.fromDate(createdAt),
         'avatar': avatar?.name,
+        'favoriteQuoteIds': favoriteQuoteIds,
       };
 
   factory AppUser.fromMap(String uid, Map<String, dynamic> map) => AppUser(
@@ -32,14 +39,17 @@ class AppUser {
         email: map['email'] ?? '',
         createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
         avatar: _parseAvatar(map['avatar']),
+        favoriteQuoteIds: List<String>.from(map['favoriteQuoteIds'] ?? const []),
       );
 
-  AppUser copyWith({String? name, AvatarOption? avatar}) => AppUser(
+  AppUser copyWith({String? name, AvatarOption? avatar, List<String>? favoriteQuoteIds}) =>
+      AppUser(
         uid: uid,
         name: name ?? this.name,
         email: email,
         createdAt: createdAt,
         avatar: avatar ?? this.avatar,
+        favoriteQuoteIds: favoriteQuoteIds ?? this.favoriteQuoteIds,
       );
 
   static AvatarOption? _parseAvatar(dynamic value) {
