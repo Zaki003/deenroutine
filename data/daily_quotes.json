@@ -3,361 +3,421 @@
     "id": "dq001",
     "text": "So remember Me; I will remember you. And be thankful to Me, and do not be ungrateful.",
     "source": "Qur'an 2:152",
-    "category": "Remembrance"
+    "category": "Remembrance",
+    "textBn": "সুতরাং তোমরা আমাকে স্মরণ কর, আমিও তোমাদের স্মরণ রাখবো এবং আমার কৃতজ্ঞতা প্রকাশ কর; অকৃতজ্ঞ হয়ো না।"
   },
   {
     "id": "dq002",
     "text": "O you who believe, seek help through patience and prayer. Indeed, Allah is with the patient.",
     "source": "Qur'an 2:153",
-    "category": "Patience"
+    "category": "Patience",
+    "textBn": "হে মুমিন গন! তোমরা ধৈর্য্য ও নামাযের মাধ্যমে সাহায্য প্রার্থনা কর। নিশ্চিতই আল্লাহ ধৈর্য্যশীলদের সাথে রয়েছেন।"
   },
   {
     "id": "dq003",
     "text": "Allah does not burden a soul with more than it can bear.",
     "source": "Qur'an 2:286",
-    "category": "Hope"
+    "category": "Hope",
+    "textBn": "আল্লাহ কাউকে তার সাধ্যাতীত কোন কাজের ভার দেন না, সে তাই পায় যা সে উপার্জন করে এবং তাই তার উপর বর্তায় যা সে করে।"
   },
   {
     "id": "dq004",
     "text": "Truly, it is in the remembrance of Allah that hearts find rest.",
     "source": "Qur'an 13:28",
-    "category": "Remembrance"
+    "category": "Remembrance",
+    "textBn": "জেনে রাখ, আল্লাহর যিকির দ্বারাই অন্তর সমূহ শান্তি পায়।"
   },
   {
     "id": "dq005",
     "text": "If you are grateful, I will certainly give you more.",
     "source": "Qur'an 14:7",
-    "category": "Gratitude"
+    "category": "Gratitude",
+    "textBn": "যদি কৃতজ্ঞতা স্বীকার কর, তবে তোমাদেরকে আরও দেব এবং যদি অকৃতজ্ঞ হও তবে নিশ্চয়ই আমার শাস্তি হবে কঠোর।"
   },
   {
     "id": "dq006",
     "text": "Whoever is mindful of Allah, He will make a way out for him, and provide for him from where he never expected.",
     "source": "Qur'an 65:2-3",
-    "category": "Trust in Allah"
+    "category": "Trust in Allah",
+    "textBn": "আর যে আল্লাহকে ভয় করে, আল্লাহ তার জন্যে নিস্কৃতির পথ করে দেবেন। এবং তাকে তার ধারণাতীত জায়গা থেকে রিযিক দেবেন।"
   },
   {
     "id": "dq007",
     "text": "So, surely with hardship comes ease. Surely with hardship comes ease.",
     "source": "Qur'an 94:5-6",
-    "category": "Hope"
+    "category": "Hope",
+    "textBn": "নিশ্চয় কষ্টের সাথে স্বস্তি রয়েছে। নিশ্চয় কষ্টের সাথে স্বস্তি রয়েছে।"
   },
   {
     "id": "dq008",
     "text": "Those who strive for Our sake, We will surely guide them to Our paths.",
     "source": "Qur'an 29:69",
-    "category": "Striving"
+    "category": "Striving",
+    "textBn": "যারা আমার পথে সাধনায় আত্মনিয়োগ করে, আমি অবশ্যই তাদেরকে আমার পথে পরিচালিত করব।"
   },
   {
     "id": "dq009",
     "text": "And establish the prayer for My remembrance.",
     "source": "Qur'an 20:14",
-    "category": "Prayer"
+    "category": "Prayer",
+    "textBn": "অতএব আমার এবাদত কর এবং আমার স্মরণার্থে নামায কায়েম কর।"
   },
   {
     "id": "dq010",
     "text": "Indeed, the prayer restrains one from indecency and wrongdoing.",
     "source": "Qur'an 29:45",
-    "category": "Prayer"
+    "category": "Prayer",
+    "textBn": "নিশ্চয় নামায অশ্লীল ও গর্হিত কার্য থেকে বিরত রাখে।"
   },
   {
     "id": "dq011",
     "text": "Indeed, the prayer has been prescribed for the believers at fixed times.",
     "source": "Qur'an 4:103",
-    "category": "Prayer"
+    "category": "Prayer",
+    "textBn": "নিশ্চয় নামায মুসলমানদের উপর ফরয নির্দিষ্ট সময়ের মধ্যে।"
   },
   {
     "id": "dq012",
     "text": "Successful indeed are the believers — those who humble themselves in their prayer.",
     "source": "Qur'an 23:1-2",
-    "category": "Prayer"
+    "category": "Prayer",
+    "textBn": "মুমিনগণ সফলকাম হয়ে গেছে, যারা নিজেদের নামাযে বিনয়-নম্র;"
   },
   {
     "id": "dq013",
     "text": "Seek help through patience and prayer. It is indeed hard, except for the humble.",
     "source": "Qur'an 2:45",
-    "category": "Patience"
+    "category": "Patience",
+    "textBn": "ধৈর্য্যর সাথে সাহায্য প্রার্থনা কর নামাযের মাধ্যমে। অবশ্য তা যথেষ্ট কঠিন। কিন্তু সে সমস্ত বিনয়ী লোকদের পক্ষেই তা সম্ভব।"
   },
   {
     "id": "dq014",
     "text": "By time — humanity is surely in loss, except those who believe, do righteous deeds, and counsel one another to truth and to patience.",
     "source": "Qur'an 103:1-3",
-    "category": "Time"
+    "category": "Time",
+    "textBn": "কসম যুগের (সময়ের), নিশ্চয় মানুষ ক্ষতিগ্রস্ত; কিন্তু তারা নয়, যারা বিশ্বাস স্থাপন করে ও সৎকর্ম করে এবং পরস্পরকে তাকীদ করে সত্যের এবং তাকীদ করে সবরের।"
   },
   {
     "id": "dq015",
     "text": "In the creation of the heavens and the earth, and the alternation of night and day, there are signs for people of understanding.",
     "source": "Qur'an 3:190",
-    "category": "Reflection"
+    "category": "Reflection",
+    "textBn": "নিশ্চয় আসমান ও যমীন সৃষ্টিতে এবং রাত্রি ও দিনের আবর্তনে নিদর্শন রয়েছে বোধ সম্পন্ন লোকদের জন্যে।"
   },
   {
     "id": "dq016",
     "text": "I did not create jinn and humankind except to worship Me.",
     "source": "Qur'an 51:56",
-    "category": "Purpose"
+    "category": "Purpose",
+    "textBn": "আমার এবাদত করার জন্যই আমি মানব ও জিন জাতি সৃষ্টি করেছি।"
   },
   {
     "id": "dq017",
     "text": "When My servants ask you about Me — I am near. I answer the call of the caller when he calls on Me.",
     "source": "Qur'an 2:186",
-    "category": "Supplication"
+    "category": "Supplication",
+    "textBn": "আর আমার বান্দারা যখন তোমার কাছে জিজ্ঞেস করে আমার ব্যাপারে বস্তুতঃ আমি রয়েছি সন্নিকটে। যারা প্রার্থনা করে, তাদের প্রার্থনা কবুল করে নেই, যখন আমার কাছে প্রার্থনা করে।"
   },
   {
     "id": "dq018",
     "text": "Your Lord has said: Call upon Me, and I will respond to you.",
     "source": "Qur'an 40:60",
-    "category": "Supplication"
+    "category": "Supplication",
+    "textBn": "তোমাদের পালনকর্তা বলেন, তোমরা আমাকে ডাক, আমি সাড়া দেব।"
   },
   {
     "id": "dq019",
     "text": "Eat and drink, but do not be excessive. Indeed, He does not love those who are excessive.",
     "source": "Qur'an 7:31",
-    "category": "Health"
+    "category": "Health",
+    "textBn": "খাও ও পান কর এবং অপব্যয় করো না। তিনি অপব্যয়ীদেরকে পছন্দ করেন না।"
   },
   {
     "id": "dq020",
     "text": "The servants of the Most Merciful are those who walk upon the earth in humility, and when the ignorant address them, they respond with peace.",
     "source": "Qur'an 25:63",
-    "category": "Character"
+    "category": "Character",
+    "textBn": "রহমান-এর বান্দা তারাই, যারা পৃথিবীতে নম্রভাবে চলাফেরা করে এবং তাদের সাথে যখন মুর্খরা কথা বলতে থাকে, তখন তারা বলে, সালাম।"
   },
   {
     "id": "dq021",
     "text": "The most honoured of you in the sight of Allah is the most mindful of Him.",
     "source": "Qur'an 49:13",
-    "category": "Character"
+    "category": "Character",
+    "textBn": "নিশ্চয় আল্লাহর কাছে সে-ই সর্বাধিক সম্ভ্রান্ত যে সর্বাধিক পরহেযগার।"
   },
   {
     "id": "dq022",
     "text": "Your Lord has decreed that you worship none but Him, and that you be good to your parents.",
     "source": "Qur'an 17:23",
-    "category": "Family"
+    "category": "Family",
+    "textBn": "তোমার পালনকর্তা আদেশ করেছেন যে, তাঁকে ছাড়া অন্য কারও এবাদত করো না এবং পিতা-মাতার সাথে সদ্ব-ব্যবহার কর।"
   },
   {
     "id": "dq023",
     "text": "Whatever good you send forward for yourselves, you will find it with Allah.",
     "source": "Qur'an 2:110",
-    "category": "Good Deeds"
+    "category": "Good Deeds",
+    "textBn": "তোমরা নিজের জন্যে পূর্বে যে সৎকর্ম প্রেরণ করবে, তা আল্লাহর কাছে পাবে।"
   },
   {
     "id": "dq024",
     "text": "And once you have made a decision, put your trust in Allah.",
     "source": "Qur'an 3:159",
-    "category": "Trust in Allah"
+    "category": "Trust in Allah",
+    "textBn": "অতঃপর যখন কোন কাজের সিদ্ধান্ত গ্রহণ করে ফেলেন, তখন আল্লাহ তা’আলার উপর ভরসা করুন।"
   },
   {
     "id": "dq025",
     "text": "Whoever puts his trust in Allah — He is sufficient for him.",
     "source": "Qur'an 65:3",
-    "category": "Trust in Allah"
+    "category": "Trust in Allah",
+    "textBn": "যে ব্যক্তি আল্লাহর উপর ভরসা করে তার জন্যে তিনিই যথেষ্ট।"
   },
   {
     "id": "dq026",
     "text": "Indeed, Allah loves those who turn to Him in repentance, and He loves those who keep themselves pure.",
     "source": "Qur'an 2:222",
-    "category": "Repentance"
+    "category": "Repentance",
+    "textBn": "নিশ্চয়ই আল্লাহ তওবাকারী এবং অপবিত্রতা থেকে যারা বেঁচে থাকে তাদেরকে পছন্দ করেন।"
   },
   {
     "id": "dq027",
     "text": "Do not despair of Allah's mercy. Indeed, Allah forgives all sins.",
     "source": "Qur'an 39:53",
-    "category": "Repentance"
+    "category": "Repentance",
+    "textBn": "বলুন, হে আমার বান্দাগণ যারা নিজেদের উপর যুলুম করেছ তোমরা আল্লাহর রহমত থেকে নিরাশ হয়ো না। নিশ্চয় আল্লাহ সমস্ত গোনাহ মাফ করেন।"
   },
   {
     "id": "dq028",
     "text": "Whoever does righteousness, male or female, while being a believer — We will surely grant them a good life.",
     "source": "Qur'an 16:97",
-    "category": "Good Deeds"
+    "category": "Good Deeds",
+    "textBn": "যে সৎকর্ম সম্পাদন করে এবং সে ঈমাণদার, পুরুষ হোক কিংবা নারী আমি তাকে পবিত্র জীবন দান করব।"
   },
   {
     "id": "dq029",
     "text": "Whoever does an atom's weight of good will see it, and whoever does an atom's weight of evil will see it.",
     "source": "Qur'an 99:7-8",
-    "category": "Accountability"
+    "category": "Accountability",
+    "textBn": "অতঃপর কেউ অণু পরিমাণ সৎকর্ম করলে তা দেখতে পাবে এবং কেউ অণু পরিমাণ অসৎকর্ম করলে তাও দেখতে পাবে।"
   },
   {
     "id": "dq030",
     "text": "Is the reward for goodness anything but goodness?",
     "source": "Qur'an 55:60",
-    "category": "Good Deeds"
+    "category": "Good Deeds",
+    "textBn": "সৎকাজের প্রতিদান উত্তম পুরস্কার ব্যতীত কি হতে পারে?"
   },
   {
     "id": "dq031",
     "text": "O my son, establish the prayer, encourage what is good, forbid what is wrong, and be patient with whatever befalls you.",
     "source": "Qur'an 31:17",
-    "category": "Patience"
+    "category": "Patience",
+    "textBn": "হে বৎস, নামায কায়েম কর, সৎকাজে আদেশ দাও, মন্দকাজে নিষেধ কর এবং বিপদাপদে সবর কর। নিশ্চয় এটা সাহসিকতার কাজ।"
   },
   {
     "id": "dq032",
     "text": "And in part of the night, pray with it as an extra offering for you; perhaps your Lord will raise you to a praiseworthy station.",
     "source": "Qur'an 17:79",
-    "category": "Night Prayer"
+    "category": "Night Prayer",
+    "textBn": "রাত্রির কিছু অংশ কোরআন পাঠ সহ জাগ্রত থাকুন। এটা আপনার জন্যে অতিরিক্ত। হয়ত বা আপনার পালনকর্তা আপনাকে মোকামে মাহমুদে পৌঁছাবেন।"
   },
   {
     "id": "dq033",
     "text": "And remember the name of your Lord morning and evening.",
     "source": "Qur'an 76:25",
-    "category": "Remembrance"
+    "category": "Remembrance",
+    "textBn": "এবং সকাল-সন্ধ্যায় আপন পালনকর্তার নাম স্মরণ করুন।"
   },
   {
     "id": "dq034",
     "text": "O you who believe, remember Allah with much remembrance, and glorify Him morning and evening.",
     "source": "Qur'an 33:41-42",
-    "category": "Remembrance"
+    "category": "Remembrance",
+    "textBn": "মুমিনগণ তোমরা আল্লাহকে অধিক পরিমাণে স্মরণ কর। এবং সকাল বিকাল আল্লাহর পবিত্রতা বর্ণনা কর।"
   },
   {
     "id": "dq035",
     "text": "And say: My Lord, increase me in knowledge.",
     "source": "Qur'an 20:114",
-    "category": "Knowledge"
+    "category": "Knowledge",
+    "textBn": "বলুনঃ হে আমার পালনকর্তা, আমার জ্ঞান বৃদ্ধি করুন।"
   },
   {
     "id": "dq036",
     "text": "Allah will raise in rank those of you who believe and those who are given knowledge.",
     "source": "Qur'an 58:11",
-    "category": "Knowledge"
+    "category": "Knowledge",
+    "textBn": "তোমাদের মধ্যে যারা ঈমানদার এবং যারা জ্ঞানপ্রাপ্ত, আল্লাহ তাদের মর্যাদা উচ্চ করে দিবেন। আল্লাহ খবর রাখেন যা কিছু তোমরা কর।"
   },
   {
     "id": "dq037",
     "text": "Cooperate with one another in righteousness and mindfulness of Allah, and do not cooperate in sin and transgression.",
     "source": "Qur'an 5:2",
-    "category": "Community"
+    "category": "Community",
+    "textBn": "সৎকর্ম ও খোদাভীতিতে একে অন্যের সাহায্য কর। পাপ ও সীমালঙ্ঘনের ব্যাপারে একে অন্যের সহায়তা করো না।"
   },
   {
     "id": "dq038",
     "text": "When you are greeted with a greeting, respond with something better, or at least return it.",
     "source": "Qur'an 4:86",
-    "category": "Character"
+    "category": "Character",
+    "textBn": "আর তোমাদেরকে যদি কেউ দোয়া করে, তাহলে তোমরাও তার জন্য দোয়া কর; তারচেয়ে উত্তম দোয়া অথবা তারই মত ফিরিয়ে বল।"
   },
   {
     "id": "dq039",
     "text": "Avoid much suspicion — some suspicion is sin. And do not spy, nor backbite one another.",
     "source": "Qur'an 49:12",
-    "category": "Character"
+    "category": "Character",
+    "textBn": "মুমিনগণ, তোমরা অনেক ধারণা থেকে বেঁচে থাক। নিশ্চয় কতক ধারণা গোনাহ। এবং গোপনীয় বিষয় সন্ধান করো না। তোমাদের কেউ যেন কারও পশ্চাতে নিন্দা না করে।"
   },
   {
     "id": "dq040",
     "text": "Let them pardon and overlook. Would you not love that Allah should forgive you?",
     "source": "Qur'an 24:22",
-    "category": "Forgiveness"
+    "category": "Forgiveness",
+    "textBn": "তোমাদের মধ্যে যারা উচ্চমর্যাদা ও আর্থিক প্রাচুর্যের অধিকারী, তারা যেন কসম না খায় যে, তারা আত্নীয়-স্বজনকে, অভাবগ্রস্তকে এবং আল্লাহর পথে হিজরতকারীদেরকে কিছুই দেবে না। তাদের ক্ষমা করা উচিত এবং দোষক্রটি উপেক্ষা করা উচিত। তোমরা কি কামনা কর না যে, আল্লাহ তোমাদেরকে ক্ষমা করেন?"
   },
   {
     "id": "dq041",
     "text": "Repel evil with what is better, and the one you had enmity with will become like a close friend.",
     "source": "Qur'an 41:34",
-    "category": "Character"
+    "category": "Character",
+    "textBn": "সমান নয় ভাল ও মন্দ। জওয়াবে তাই বলুন যা উৎকৃষ্ট। তখন দেখবেন আপনার সাথে যে ব্যক্তির শত্রুতা রয়েছে, সে যেন অন্তরঙ্গ বন্ধু।"
   },
   {
     "id": "dq042",
     "text": "We made your sleep a means of rest, made the night a covering, and made the day for earning a living.",
     "source": "Qur'an 78:9-11",
-    "category": "Routine"
+    "category": "Routine",
+    "textBn": "তোমাদের নিদ্রাকে করেছি ক্লান্তি দূরকারী, রাত্রিকে করেছি আবরণ। দিনকে করেছি জীবিকা অর্জনের সময়,"
   },
   {
     "id": "dq043",
     "text": "Among His signs is your sleep by night and by day, and your seeking of His bounty.",
     "source": "Qur'an 30:23",
-    "category": "Routine"
+    "category": "Routine",
+    "textBn": "তাঁর আরও নিদর্শনঃ রাতে ও দিনে তোমাদের নিদ্রা এবং তাঁর কৃপা অন্বেষণ। নিশ্চয় এতে মনোযোগী সম্প্রদায়ের জন্যে নিদর্শনাবলী রয়েছে।"
   },
   {
     "id": "dq044",
     "text": "When the prayer is over, disperse through the land and seek Allah's bounty, and remember Allah often, so that you may succeed.",
     "source": "Qur'an 62:10",
-    "category": "Work"
+    "category": "Work",
+    "textBn": "অতঃপর নামায সমাপ্ত হলে তোমরা পৃথিবীতে ছড়িয়ে পড় এবং আল্লাহর অনুগ্রহ তালাশ কর ও আল্লাহকে অধিক স্মরণ কর, যাতে তোমরা সফলকাম হও।"
   },
   {
     "id": "dq045",
     "text": "O you who believe, eat from the good things We have provided you, and give thanks to Allah.",
     "source": "Qur'an 2:172",
-    "category": "Gratitude"
+    "category": "Gratitude",
+    "textBn": "হে ঈমানদারগণ, তোমরা পবিত্র বস্তু সামগ্রী আহার কর, যেগুলো আমি তোমাদেরকে রুযী হিসাবে দান করেছি এবং শুকরিয়া আদায় কর আল্লাহর প্রতি।"
   },
   {
     "id": "dq046",
     "text": "Do not squander your wealth wastefully. The wasteful are the brothers of devils.",
     "source": "Qur'an 17:26-27",
-    "category": "Moderation"
+    "category": "Moderation",
+    "textBn": "এবং কিছুতেই অপব্যয় করো না। নিশ্চয় অপব্যয়কারীরা শয়তানের ভাই।"
   },
   {
     "id": "dq047",
     "text": "And your Lord is going to give you, and you will be well pleased.",
     "source": "Qur'an 93:5",
-    "category": "Hope"
+    "category": "Hope",
+    "textBn": "আপনার পালনকর্তা সত্বরই আপনাকে দান করবেন, অতঃপর আপনি সন্তুষ্ট হবেন।"
   },
   {
     "id": "dq048",
     "text": "So when you have finished your task, devote yourself to worship, and turn to your Lord with longing.",
     "source": "Qur'an 94:7-8",
-    "category": "Routine"
+    "category": "Routine",
+    "textBn": "অতএব, যখন অবসর পান পরিশ্রম করুন। এবং আপনার পালনকর্তার প্রতি মনোনিবেশ করুন।"
   },
   {
     "id": "dq049",
     "text": "Allah intends ease for you, and does not intend hardship for you.",
     "source": "Qur'an 2:185",
-    "category": "Hope"
+    "category": "Hope",
+    "textBn": "আল্লাহ তোমাদের জন্য সহজ করতে চান; তোমাদের জন্য জটিলতা কামনা করেন না।"
   },
   {
     "id": "dq050",
     "text": "O you who believe, be patient, outdo others in patience, remain steadfast, and be mindful of Allah, so that you may succeed.",
     "source": "Qur'an 3:200",
-    "category": "Patience"
+    "category": "Patience",
+    "textBn": "হে ঈমানদানগণ! ধৈর্য্য ধারণ কর এবং মোকাবেলায় দৃঢ়তা অবলম্বন কর। আর আল্লাহকে ভয় করতে থাক যাতে তোমরা তোমাদের উদ্দেশ্য লাভে সমর্থ হতে পার।"
   },
   {
     "id": "dq051",
     "text": "If you support Allah's cause, He will support you and make your footsteps firm.",
     "source": "Qur'an 47:7",
-    "category": "Striving"
+    "category": "Striving",
+    "textBn": "হে বিশ্বাসীগণ! যদি তোমরা আল্লাহকে সাহায্য কর, আল্লাহ তোমাদেরকে সাহায্য করবেন এবং তোমাদের পা দৃঢ়প্রতিষ্ঠ করবেন।"
   },
   {
     "id": "dq052",
     "text": "Whoever is patient and forgives — that is truly a matter of firm resolve.",
     "source": "Qur'an 42:43",
-    "category": "Forgiveness"
+    "category": "Forgiveness",
+    "textBn": "অবশ্যই যে সবর করে ও ক্ষমা করে নিশ্চয় এটা সাহসিকতার কাজ।"
   },
   {
     "id": "dq053",
     "text": "And do good — indeed, Allah loves those who do good.",
     "source": "Qur'an 2:195",
-    "category": "Good Deeds"
+    "category": "Good Deeds",
+    "textBn": "আর ব্যয় কর আল্লাহর পথে, তবে নিজের জীবনকে ধ্বংসের সম্মুখীন করো না। আর মানুষের প্রতি অনুগ্রহ কর। আল্লাহ অনুগ্রহকারীদেরকে ভালবাসেন।"
   },
   {
     "id": "dq054",
     "text": "O you who believe, be mindful of Allah and stand with those who are truthful.",
     "source": "Qur'an 9:119",
-    "category": "Truthfulness"
+    "category": "Truthfulness",
+    "textBn": "হে ঈমানদারগণ, আল্লাহকে ভয় কর এবং সত্যবাদীদের সাথে থাক।"
   },
   {
     "id": "dq055",
     "text": "The believers are only those whose hearts tremble when Allah is mentioned, and whose faith increases when His verses are recited to them.",
     "source": "Qur'an 8:2",
-    "category": "Faith"
+    "category": "Faith",
+    "textBn": "যারা ঈমানদার, তারা এমন যে, যখন আল্লাহর নাম নেয়া হয় তখন ভীত হয়ে পড়ে তাদের অন্তর। আর যখন তাদের সামনে পাঠ করা হয় কালাম, তখন তাদের ঈমান বেড়ে যায়।"
   },
   {
     "id": "dq056",
     "text": "Recite what is easy for you of the Qur'an.",
     "source": "Qur'an 73:20",
-    "category": "Qur'an"
+    "category": "Qur'an",
+    "textBn": "কাজেই কোরআনের যতটুকু তোমাদের জন্যে সহজ, ততটুকু আবৃত্তি কর।"
   },
   {
     "id": "dq057",
     "text": "This is a blessed Book We have revealed to you, so that they may reflect on its verses.",
     "source": "Qur'an 38:29",
-    "category": "Qur'an"
+    "category": "Qur'an",
+    "textBn": "এটি একটি বরকতময় কিতাব, যা আমি আপনার প্রতি বরকত হিসেবে অবতীর্ণ করেছি, যাতে মানুষ এর আয়াতসূহ লক্ষ্য করে এবং বুদ্ধিমানগণ যেন তা অনুধাবন করে।"
   },
   {
     "id": "dq058",
     "text": "Take provision, and the best provision is mindfulness of Allah.",
     "source": "Qur'an 2:197",
-    "category": "Faith"
+    "category": "Faith",
+    "textBn": "আর তোমরা পাথেয় সাথে নিয়ে নাও। নিঃসন্দেহে সর্বোত্তম পাথেয় হচ্ছে আল্লাহর ভয়।"
   },
   {
     "id": "dq059",
     "text": "Race one another towards forgiveness from your Lord.",
     "source": "Qur'an 57:21",
-    "category": "Striving"
+    "category": "Striving",
+    "textBn": "তোমরা অগ্রে ধাবিত হও তোমাদের পালনকর্তার ক্ষমা ও সেই জান্নাতের দিকে, যা আকাশ ও পৃথিবীর মত প্রশস্ত।"
   },
   {
     "id": "dq060",
     "text": "Allah does not change the condition of a people until they change what is in themselves.",
     "source": "Qur'an 13:11",
-    "category": "Change"
+    "category": "Change",
+    "textBn": "আল্লাহ কোন জাতির অবস্থা পরিবর্তন করেন না, যে পর্যন্ত না তারা তাদের নিজেদের অবস্থা পরিবর্তন করে।"
   },
   {
     "id": "dq061",
