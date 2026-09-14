@@ -8,8 +8,11 @@ import 'habit.dart';
 /// the same way editing an existing habit does.
 class HabitTemplate {
   /// Stable, locale-independent identifier (unlike [title], which is
-  /// localized text) — used only to name which template was picked in
-  /// analytics events.
+  /// localized text) — names which template was picked in analytics events,
+  /// and backs [==]/[hashCode] below. [habitTemplates] builds a fresh list of
+  /// new instances on every call, so callers that track a selection (e.g. a
+  /// `Set<HabitTemplate>` across `setState` rebuilds) need equality by [id]
+  /// rather than the default identity equality.
   final String id;
   final String title;
   final HabitCategory category;
@@ -37,6 +40,12 @@ class HabitTemplate {
     this.numericUnit = '',
     this.timerTargetMinutes = 10,
   });
+
+  @override
+  bool operator ==(Object other) => other is HabitTemplate && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 /// Starter habits shown by the template picker, grouped by [HabitCategory]
