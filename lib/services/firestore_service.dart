@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/habit.dart';
 import '../models/habit_log.dart';
+import '../models/learn_progress.dart';
 import '../models/quiz_question.dart';
 import '../models/quiz_result.dart';
 import '../models/daily_quote.dart';
@@ -254,14 +255,22 @@ class FirestoreService {
 
   // ---------------- Quiz (FR-10) ----------------
 
-  /// Fetches [count] questions drawn at random from the bank.
+  /// Fetches [count] questions drawn at random from the bank, optionally
+  /// restricted to one Learn [category] — used by the topic assessment,
+  /// which always passes `count: null` (every question in the topic; 6-19
+  /// questions is small enough that "all of them" is the only sensible
+  /// assessment size) and so never exercises [_drawRandomQuestion] with a
+  /// category filter. That combination would need a `category`+`random`
+  /// composite index this app doesn't have — if a future caller wants a
+  /// small sampled [count] *and* a [category] together, add one first.
   ///
   /// Every question document carries a `random` value, spaced evenly across
   /// [0, 1) by `scripts/seed_quiz_questions.js`. Drawing one question is a
   /// `random >= pivot` cursor query with `limit(1)`, so a quiz costs about
   /// [count] document reads rather than downloading the whole collection.
-  Future<List<QuizQuestion>> getQuizQuestions({int? count}) async {
-    final col = _db.collection('QuizQuestions');
+  Future<List<QuizQuestion>> getQuizQuestions({int? count, String? category}) async {
+    Query<Map<String, dynamic>> col = _db.collection('QuizQuestions');
+    if (category != null) col = col.where('category', isEqualTo: category);
 
     // An aggregation query is billed at a small fraction of a document read,
     // so it is much cheaper than fetching documents to learn how many exist.
@@ -297,7 +306,7 @@ class FirestoreService {
 
   /// Reads a single question from a random position in the `random` ordering.
   Future<QueryDocumentSnapshot<Map<String, dynamic>>?> _drawRandomQuestion(
-    CollectionReference<Map<String, dynamic>> col,
+    Query<Map<String, dynamic>> col,
   ) async {
     var snap = await col
         .where('random', isGreaterThanOrEqualTo: _random.nextDouble())
@@ -324,22 +333,6 @@ class FirestoreService {
     return _db.collection('QuizResults').doc(result.resultId).set(result.toMap());
   }
 
-  /// The single highest-scoring attempt on record for [uid] at exactly
-  /// [totalQuestions] questions — a 20-question best is meaningless as a
-  /// "personal best" for someone picking the 5-question quiz, so this is
-  /// always scoped to one length rather than the best across all of them.
-  Future<QuizResult?> getBestQuizResult(String uid, int totalQuestions) async {
-    final snap = await _db
-        .collection('QuizResults')
-        .where('uid', isEqualTo: uid)
-        .where('totalQuestions', isEqualTo: totalQuestions)
-        .orderBy('score', descending: true)
-        .limit(1)
-        .get();
-    if (snap.docs.isEmpty) return null;
-    return QuizResult.fromMap(snap.docs.first.id, snap.docs.first.data());
-  }
-
   Stream<List<QuizResult>> watchQuizHistory(String uid) {
     return _db
         .collection('QuizResults')
@@ -350,11 +343,72 @@ class FirestoreService {
             snap.docs.map((d) => QuizResult.fromMap(d.id, d.data())).toList());
   }
 
+  // ---------------- Learn (topic paths) ----------------
+
+  /// Every question in [category], in fixed lesson order (ascending `order`,
+  /// assigned per-category by scripts/seed_quiz_questions.js). Unlike
+  /// [getQuizQuestions] this is never sampled — a lesson walks every
+  /// question in the topic once, in the same sequence every time.
+  Future<List<QuizQuestion>> getLessonQuestions(String category) async {
+    final snap = await _db
+        .collection('QuizQuestions')
+        .where('category', isEqualTo: category)
+        .orderBy('order')
+        .get();
+    return snap.docs.map((d) => QuizQuestion.fromMap(d.id, d.data())).toList();
+  }
+
+  Stream<List<LearnProgress>> watchLearnProgress(String uid) {
+    return _db
+        .collection('LearnProgress')
+        .where('uid', isEqualTo: uid)
+        .snapshots()
+        .map((snap) =>
+            snap.docs.map((d) => LearnProgress.fromMap(d.id, d.data())).toList());
+  }
+
+  /// Records [questionId] as walked in [category]'s lesson sequence.
+  /// [lessonsDone] is the caller-computed "has every question in this
+  /// category now been through the lesson at least once" decision — this
+  /// method doesn't re-derive it, same "caller decides, service persists"
+  /// split as [logProgress].
+  Future<void> logLessonQuestion(
+    String uid,
+    String category,
+    String questionId, {
+    required bool lessonsDone,
+  }) {
+    return _db.collection('LearnProgress').doc('${uid}_$category').set({
+      'uid': uid,
+      'category': category,
+      'lessonQuestionIds': FieldValue.arrayUnion([questionId]),
+      'lessonsDone': lessonsDone,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> saveAssessmentResult(
+    String uid,
+    String category, {
+    required int score,
+    required int total,
+  }) {
+    return _db.collection('LearnProgress').doc('${uid}_$category').set({
+      'uid': uid,
+      'category': category,
+      'assessmentDone': true,
+      'assessmentScore': score,
+      'assessmentTotal': total,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
   // ---------------- Account deletion (Play Store data-deletion requirement) ----------------
 
   /// Permanently deletes every Firestore document [uid] owns: all
-  /// Habits/HabitLogs/QuizResults/Notifications/Settings docs, then the
-  /// Users/{uid} profile itself. Irreversible — no grace period.
+  /// Habits/HabitLogs/QuizResults/LearnProgress/Notifications/Settings
+  /// docs, then the Users/{uid} profile itself. Irreversible — no grace
+  /// period.
   ///
   /// Excludes PrayerCache (shared cache keyed by rounded lat/lng + date, not
   /// owned by any uid — see docs/privacy-policy.md §4) and QuizQuestions/
@@ -368,7 +422,9 @@ class FirestoreService {
   /// rules need that match, so call this before deleting the Firebase Auth
   /// user or signing out.
   Future<void> deleteAllUserData(String uid) async {
-    const ownedCollections = ['Habits', 'HabitLogs', 'QuizResults', 'Notifications', 'Settings'];
+    const ownedCollections = [
+      'Habits', 'HabitLogs', 'QuizResults', 'LearnProgress', 'Notifications', 'Settings',
+    ];
     for (final name in ownedCollections) {
       await _deleteQueryInChunks(_db.collection(name).where('uid', isEqualTo: uid));
     }

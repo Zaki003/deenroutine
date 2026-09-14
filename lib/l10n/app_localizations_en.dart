@@ -180,7 +180,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navPrayer => 'Prayer';
 
   @override
-  String get navQuiz => 'Quiz';
+  String get navLearn => 'Learn';
 
   @override
   String get navProfile => 'Profile';
@@ -270,23 +270,80 @@ class AppLocalizationsEn extends AppLocalizations {
   String get citySearchNoResults => 'No matching cities found';
 
   @override
-  String get quizTabTitle => 'Quiz';
+  String get learnTabTitle => 'Learn';
 
   @override
-  String get quizChooseLengthLabel => 'Choose your length';
+  String get learnTopicLocked =>
+      'Finish the topics before this one to unlock it.';
 
   @override
-  String get quizStartButton => 'Start Quiz';
-
-  @override
-  String quizNoAttemptsYet(Object count) {
-    return 'Take your first $count-question quiz to set a personal best.';
+  String learnLessonsProgress(Object done, Object total) {
+    return '$done/$total lessons';
   }
 
   @override
-  String quizMinutesEstimate(Object minutes) {
-    return '~$minutes min';
+  String get learnLessonFinishButton => 'Finish';
+
+  @override
+  String learnPathCompleteTitle(Object topic) {
+    return '$topic complete!';
   }
+
+  @override
+  String learnPathCompleteMessage(Object count) {
+    return 'All $count lessons done';
+  }
+
+  @override
+  String get learnTakeAssessmentButton => 'Take the assessment';
+
+  @override
+  String get learnSkipForNowButton => 'Skip for now';
+
+  @override
+  String learnNextTopicUnlockedMessage(Object topic) {
+    return '$topic is now unlocked';
+  }
+
+  @override
+  String get learnAllTopicsCompleteMessage => 'You\'ve completed every topic!';
+
+  @override
+  String get learnSyncError =>
+      'Couldn\'t sync your Learn progress. Retrying...';
+
+  @override
+  String get learnSaveFailed => 'Couldn\'t save your progress. Try again.';
+
+  @override
+  String get learnTopicBelief => 'Belief';
+
+  @override
+  String get learnTopicPillars => 'Pillars';
+
+  @override
+  String get learnTopicSalah => 'Salah';
+
+  @override
+  String get learnTopicQuran => 'Quran';
+
+  @override
+  String get learnTopicSeerah => 'Seerah';
+
+  @override
+  String get learnTopicProphets => 'Prophets';
+
+  @override
+  String get learnTopicHistory => 'History';
+
+  @override
+  String get learnTopicRamadan => 'Ramadan';
+
+  @override
+  String get learnTopicHajj => 'Hajj';
+
+  @override
+  String get learnTopicManners => 'Manners';
 
   @override
   String get prayerErrorLocationDisabled => 'Location services are disabled.';
@@ -703,14 +760,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get quizQuestionCountTitle => 'How many questions?';
-
-  @override
-  String get quizQuestionCountSubtitle =>
-      'Choose how many questions you\'d like to practice.';
-
-  @override
-  String get quizAppBarTitle => 'Islamic Knowledge Quiz';
+  String learnAssessmentAppBarTitle(Object topic) {
+    return '$topic Assessment';
+  }
 
   @override
   String get quizNoQuestions => 'No quiz questions available yet.';
@@ -769,11 +821,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String quizScoreOfTotal(Object score, Object total) {
     return '$score / $total';
-  }
-
-  @override
-  String quizBestScore(Object score, Object total, Object pct) {
-    return 'Your best score: $score/$total ($pct%)';
   }
 
   @override

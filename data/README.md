@@ -41,8 +41,12 @@ Rules the script enforces before it writes anything:
 - `answer` must be **character-for-character identical** to one of the `options`.
   The app compares answers by text, so a trailing space breaks the question.
 - `options` must be unique, and there must be at least 2 of them.
-- `category` is free-form. It's stored in Firestore for future filtering; the
-  app currently ignores it.
+- `category` groups questions into a Learn topic (`Salah`, `Quran`, `Belief`,
+  …) — it's not free-form any more. New questions should reuse one of the
+  existing category names unless you're deliberately adding a new Learn
+  topic, which also needs a matching entry in `LearnProvider.kTopicOrder`
+  (`lib/providers/learn_provider.dart`) and `learnTopicLabel`
+  (`lib/utils/learn_topic_labels.dart`) before it shows up anywhere.
 - `explanation` is optional. When present, it's shown as one line of reasoning
   right after the user answers — questions without one just skip that line, so
   there's no need to backfill existing questions. A Bangla translation goes in
@@ -60,7 +64,7 @@ Re-running is safe and idempotent. Without `--prune`, deleting a question from
 this file leaves it in Firestore (so the app keeps serving it) — use
 `seed:quiz:prune` when you actually want it gone.
 
-## Two fields the script adds for you
+## Three fields the script adds for you
 
 Alongside your content, each document gets:
 
@@ -71,6 +75,10 @@ Alongside your content, each document gets:
   a `random >= pivot` cursor query, so a 5-question quiz reads 5 documents
   instead of the whole bank. Even spacing is what makes every question equally
   likely to be drawn.
+- `order`, each question's 0-based position within its own `category`,
+  counted in the order the category's questions already appear in this file.
+  The Learn feature's lesson walkthrough reads a topic's questions in this
+  fixed order — separate from `random` above, and never sampled.
 
 **Because of `random`, don't add questions by hand in the Firebase console.** A
 document without a `random` value is invisible to the sampling query, so the app

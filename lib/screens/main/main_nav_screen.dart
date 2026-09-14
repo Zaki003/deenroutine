@@ -9,9 +9,9 @@ import '../../services/prayer_service.dart';
 import '../../theme/deen_colors.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../habits/habits_screen.dart';
+import '../learn/learn_home_screen.dart';
 import '../prayer/prayer_screen.dart';
 import '../profile/profile_screen.dart';
-import '../quiz/quiz_home_screen.dart';
 
 /// Bottom-nav shell hosting the 5 top-level tabs (Home, Habits, Prayer,
 /// Quiz, Profile). Shared data (habits, prayer times) is loaded once here
@@ -25,7 +25,7 @@ class MainNavScreen extends StatefulWidget {
 
 // Stable, locale-independent names for screen-view analytics — l10n labels
 // would otherwise report a different value per language for the same tab.
-const _screenNames = ['Dashboard', 'Habits', 'Prayer', 'Quiz', 'Profile'];
+const _screenNames = ['Dashboard', 'Habits', 'Prayer', 'Learn', 'Profile'];
 
 class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserver {
   int _index = 0;
@@ -115,7 +115,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
       ),
       (icon: Icons.checklist_rounded, label: l10n.navHabits, screen: const HabitsScreen()),
       (icon: Icons.access_time_rounded, label: l10n.navPrayer, screen: const PrayerScreen()),
-      (icon: Icons.menu_book_rounded, label: l10n.navQuiz, screen: const QuizHomeScreen()),
+      (icon: Icons.menu_book_rounded, label: l10n.navLearn, screen: const LearnHomeScreen()),
       (icon: Icons.person_outline_rounded, label: l10n.navProfile, screen: const ProfileScreen()),
     ];
 

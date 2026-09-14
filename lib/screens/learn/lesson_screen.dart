@@ -1,69 +1,50 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/quiz_question.dart';
-import '../../models/quiz_result.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/learn_provider.dart';
 import '../../providers/locale_provider.dart';
-import '../../services/analytics_service.dart';
-import '../../services/firestore_service.dart';
-import '../../services/review_prompt_service.dart';
-import '../../utils/app_theme.dart';
+import '../../theme/deen_colors.dart';
 import '../../utils/learn_topic_labels.dart';
-import '../../widgets/empty_state_card.dart';
 import '../../widgets/quiz_option_tile.dart';
-import 'quiz_result_screen.dart';
+import 'path_complete_screen.dart';
 
-/// The scored assessment taken after finishing a Learn topic's lessons -
-/// every question in [category], shuffled, no user-picked length.
-class QuizScreen extends StatefulWidget {
+/// Untimed walkthrough of every not-yet-seen question in [category], in
+/// fixed lesson order - no score, no timer, same select/check/reveal
+/// interaction as the assessment via [QuizOptionTile]. Redirects straight to
+/// [PathCompleteScreen] if there's nothing left to walk through, which is
+/// what lets revisiting an already-finished topic "just work" with no
+/// separate branching in LearnHomeScreen.
+class LessonScreen extends StatefulWidget {
   final String category;
 
-  const QuizScreen({super.key, required this.category});
+  const LessonScreen({super.key, required this.category});
 
   @override
-  State<QuizScreen> createState() => _QuizScreenState();
+  State<LessonScreen> createState() => _LessonScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
-  final _service = FirestoreService();
-  final _analytics = AnalyticsService();
-  late Future<List<QuizQuestion>> _questionsFuture;
+class _LessonScreenState extends State<LessonScreen> {
+  late final Future<void> _loadFuture;
+  List<QuizQuestion> _allQuestions = [];
+  List<QuizQuestion> _remaining = [];
   int _index = 0;
-  int _score = 0;
   String? _selectedOption;
   bool _answered = false;
-  final List<bool> _answerResults = [];
 
   @override
   void initState() {
     super.initState();
-    _questionsFuture = _service.getQuizQuestions(category: widget.category);
+    _loadFuture = _load();
   }
 
-  Future<void> _submitResult(List<QuizQuestion> questions) async {
-    final uid = context.read<AuthProvider>().firebaseUser!.uid;
-    final learnProvider = context.read<LearnProvider>();
-    final result = QuizResult(
-      resultId: const Uuid().v4(),
-      uid: uid,
-      score: _score,
-      totalQuestions: questions.length,
-    );
-    await _service.saveQuizResult(result);
-    await learnProvider.completeAssessment(
-          uid,
-          widget.category,
-          score: _score,
-          total: questions.length,
-        );
-    _analytics.logQuizCompleted(
-      totalQuestions: questions.length,
-      scorePercent: questions.isEmpty ? 0 : (_score * 100 ~/ questions.length),
-    );
+  Future<void> _load() async {
+    final provider = context.read<LearnProvider>();
+    final all = await provider.loadLessonQuestions(widget.category);
+    final done = provider.progressFor(widget.category)?.lessonQuestionIds.toSet() ?? <String>{};
+    _allQuestions = all;
+    _remaining = all.where((q) => !done.contains(q.questionId)).toList();
   }
 
   void _selectOption(String option) {
@@ -71,37 +52,30 @@ class _QuizScreenState extends State<QuizScreen> {
     setState(() => _selectedOption = option);
   }
 
-  void _checkAnswer(QuizQuestion q) {
-    setState(() {
-      _answered = true;
-      final correct = _selectedOption == q.correctAnswer;
-      if (correct) _score++;
-      _answerResults.add(correct);
-    });
+  Future<void> _checkAnswer(QuizQuestion q) async {
+    setState(() => _answered = true);
+    final uid = context.read<AuthProvider>().firebaseUser!.uid;
+    await context.read<LearnProvider>().completeLessonQuestion(
+          uid,
+          widget.category,
+          q.questionId,
+          isLastQuestion: _index == _remaining.length - 1,
+        );
   }
 
-  Future<void> _next(List<QuizQuestion> questions) async {
-    if (_index < questions.length - 1) {
+  void _next() {
+    if (_index < _remaining.length - 1) {
       setState(() {
         _index++;
         _selectedOption = null;
         _answered = false;
       });
     } else {
-      await _submitResult(questions);
-      // 80% mirrors QuizResultScreen's own "Excellent" threshold - the same
-      // bar the user already sees framed as a win, not a separate number.
-      if (questions.isNotEmpty && _score / questions.length >= 0.8) {
-        unawaited(ReviewPromptService().maybeRequestReview());
-      }
-      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => QuizResultScreen(
+          builder: (_) => PathCompleteScreen(
             category: widget.category,
-            score: _score,
-            total: questions.length,
-            answerResults: _answerResults,
+            lessonCount: _allQuestions.length,
           ),
         ),
       );
@@ -110,33 +84,40 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final dark = Theme.of(context).brightness == Brightness.dark;
     final isBangla = context.watch<LocaleProvider>().isBangla;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.learnAssessmentAppBarTitle(learnTopicLabel(l10n, widget.category))),
-      ),
-      body: FutureBuilder<List<QuizQuestion>>(
-        future: _questionsFuture,
+      appBar: AppBar(title: Text(learnTopicLabel(l10n, widget.category))),
+      backgroundColor: DeenColors.surface(dark),
+      body: FutureBuilder<void>(
+        future: _loadFuture,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator(color: DeenColors.gold));
           }
-          final questions = snapshot.data!;
-          if (questions.isEmpty) {
-            return Center(
-              child: EmptyStateCard(
-                icon: Icons.quiz_outlined,
-                message: l10n.quizNoQuestions,
-                dark: theme.brightness == Brightness.dark,
-              ),
-            );
+          if (_remaining.isEmpty) {
+            // Nothing left to walk through - redirect once this frame
+            // finishes building rather than mid-build.
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => PathCompleteScreen(
+                    category: widget.category,
+                    lessonCount: _allQuestions.length,
+                  ),
+                ),
+              );
+            });
+            return const SizedBox.shrink();
           }
 
-          final q = questions[_index];
+          final q = _remaining[_index];
           final options = q.options;
           final displayOptions = q.displayOptions(isBangla);
+
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -145,30 +126,31 @@ class _QuizScreenState extends State<QuizScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
-                    value: (_index + 1) / questions.length,
+                    value: (_index + 1) / _remaining.length,
                     minHeight: 8,
-                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    backgroundColor: DeenColors.trackLine(dark),
+                    valueColor: AlwaysStoppedAnimation(DeenColors.gold),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  l10n.quizQuestionProgress(_index + 1, questions.length),
-                  style: theme.textTheme.labelLarge
-                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  l10n.quizQuestionProgress(_index + 1, _remaining.length),
+                  style: TextStyle(fontSize: 12.5, color: DeenColors.textMuted(dark)),
                 ),
                 const SizedBox(height: 16),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primaryContainer,
+                    color: DeenColors.primary,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     q.displayQuestionText(isBangla),
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer,
+                    style: const TextStyle(
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
+                      color: DeenColors.paper,
                     ),
                   ),
                 ),
@@ -197,8 +179,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               ? Icons.check_circle_rounded
                               : Icons.cancel_rounded,
                           color: _selectedOption == q.correctAnswer
-                              ? theme.colorScheme.success
-                              : theme.colorScheme.error,
+                              ? DeenColors.green
+                              : DeenColors.rust,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -207,8 +189,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ? l10n.quizCorrect
                                 : l10n.quizCorrectAnswer(
                                     displayOptions[options.indexOf(q.correctAnswer)]),
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: DeenColors.primaryText(dark),
+                            ),
                           ),
                         ),
                       ],
@@ -219,8 +203,9 @@ class _QuizScreenState extends State<QuizScreen> {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: Text(
                         q.displayExplanation(isBangla),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          color: DeenColors.textMuted(dark),
                           height: 1.4,
                         ),
                       ),
@@ -229,13 +214,13 @@ class _QuizScreenState extends State<QuizScreen> {
                 FilledButton(
                   onPressed: !_answered
                       ? (_selectedOption == null ? null : () => _checkAnswer(q))
-                      : () => _next(questions),
+                      : _next,
                   child: Text(
                     !_answered
                         ? l10n.quizCheckAnswer
-                        : (_index < questions.length - 1
+                        : (_index < _remaining.length - 1
                             ? l10n.quizNextQuestion
-                            : l10n.quizSeeResults),
+                            : l10n.learnLessonFinishButton),
                   ),
                 ),
               ],

@@ -4,6 +4,17 @@ class QuizQuestion {
   final List<String> options;
   final String correctAnswer;
 
+  /// Which Learn topic this question belongs to (e.g. "Salah"). Every
+  /// question doc already carries this; assigned by
+  /// scripts/seed_quiz_questions.js from the JSON's `category` field.
+  final String category;
+
+  /// This question's 0-based position within its own [category], for the
+  /// Learn lesson walkthrough's fixed sequence. Deliberately separate from
+  /// the `random` field the assessment's uniform sampling depends on —
+  /// never use one for the other's purpose.
+  final int order;
+
   /// Bangla translations of [questionText]/[options], empty until Bangla
   /// content is added to the `QuizQuestions` collection. Answer matching
   /// always uses the canonical English [options]/[correctAnswer] — these
@@ -24,6 +35,8 @@ class QuizQuestion {
     required this.questionText,
     required this.options,
     required this.correctAnswer,
+    this.category = '',
+    this.order = 0,
     this.questionTextBn = '',
     this.optionsBn = const [],
     this.explanation = '',
@@ -45,6 +58,8 @@ class QuizQuestion {
       questionText: map['questionText'] ?? '',
       options: List<String>.from(map['options'] ?? []),
       correctAnswer: map['correctAnswer'] ?? '',
+      category: map['category'] ?? '',
+      order: map['order'] as int? ?? 0,
       questionTextBn: map['questionTextBn'] ?? '',
       optionsBn: List<String>.from(map['optionsBn'] ?? []),
       explanation: map['explanation'] ?? '',
@@ -56,6 +71,8 @@ class QuizQuestion {
         'questionText': questionText,
         'options': options,
         'correctAnswer': correctAnswer,
+        'category': category,
+        'order': order,
         'questionTextBn': questionTextBn,
         'optionsBn': optionsBn,
         'explanation': explanation,

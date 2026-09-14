@@ -180,7 +180,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get navPrayer => 'নামাজ';
 
   @override
-  String get navQuiz => 'কুইজ';
+  String get navLearn => 'শিখুন';
 
   @override
   String get navProfile => 'প্রোফাইল';
@@ -271,23 +271,80 @@ class AppLocalizationsBn extends AppLocalizations {
   String get citySearchNoResults => 'কোনো মিলযুক্ত শহর পাওয়া যায়নি';
 
   @override
-  String get quizTabTitle => 'কুইজ';
+  String get learnTabTitle => 'শিখুন';
 
   @override
-  String get quizChooseLengthLabel => 'দৈর্ঘ্য বেছে নিন';
+  String get learnTopicLocked => 'এটি আনলক করতে আগের বিষয়গুলো শেষ করুন।';
 
   @override
-  String get quizStartButton => 'কুইজ শুরু করুন';
-
-  @override
-  String quizNoAttemptsYet(Object count) {
-    return 'ব্যক্তিগত সেরা রেকর্ড করতে $count টি প্রশ্নের প্রথম কুইজ দিন।';
+  String learnLessonsProgress(Object done, Object total) {
+    return '$done/$total পাঠ';
   }
 
   @override
-  String quizMinutesEstimate(Object minutes) {
-    return '~$minutes মিনিট';
+  String get learnLessonFinishButton => 'শেষ করুন';
+
+  @override
+  String learnPathCompleteTitle(Object topic) {
+    return '$topic সম্পন্ন!';
   }
+
+  @override
+  String learnPathCompleteMessage(Object count) {
+    return '$count টি পাঠ সম্পন্ন হয়েছে';
+  }
+
+  @override
+  String get learnTakeAssessmentButton => 'মূল্যায়ন দিন';
+
+  @override
+  String get learnSkipForNowButton => 'আপাতত বাদ দিন';
+
+  @override
+  String learnNextTopicUnlockedMessage(Object topic) {
+    return '$topic এখন আনলক হয়েছে';
+  }
+
+  @override
+  String get learnAllTopicsCompleteMessage =>
+      'আপনি সবগুলো বিষয় সম্পন্ন করেছেন!';
+
+  @override
+  String get learnSyncError =>
+      'শেখার অগ্রগতি সিঙ্ক করা যায়নি। আবার চেষ্টা করা হচ্ছে...';
+
+  @override
+  String get learnSaveFailed => 'অগ্রগতি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।';
+
+  @override
+  String get learnTopicBelief => 'বিশ্বাস';
+
+  @override
+  String get learnTopicPillars => 'স্তম্ভ';
+
+  @override
+  String get learnTopicSalah => 'নামাজ';
+
+  @override
+  String get learnTopicQuran => 'কুরআন';
+
+  @override
+  String get learnTopicSeerah => 'সীরাত';
+
+  @override
+  String get learnTopicProphets => 'নবীগণ';
+
+  @override
+  String get learnTopicHistory => 'ইতিহাস';
+
+  @override
+  String get learnTopicRamadan => 'রমজান';
+
+  @override
+  String get learnTopicHajj => 'হজ্জ';
+
+  @override
+  String get learnTopicManners => 'আদব';
 
   @override
   String get prayerErrorLocationDisabled => 'লোকেশন সার্ভিস বন্ধ আছে।';
@@ -706,14 +763,9 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get quizQuestionCountTitle => 'কতগুলো প্রশ্ন?';
-
-  @override
-  String get quizQuestionCountSubtitle =>
-      'আপনি কতগুলো প্রশ্ন অনুশীলন করতে চান তা নির্বাচন করুন।';
-
-  @override
-  String get quizAppBarTitle => 'ইসলামিক জ্ঞান কুইজ';
+  String learnAssessmentAppBarTitle(Object topic) {
+    return '$topic মূল্যায়ন';
+  }
 
   @override
   String get quizNoQuestions => 'এখনো কোনো কুইজ প্রশ্ন নেই।';
@@ -772,11 +824,6 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String quizScoreOfTotal(Object score, Object total) {
     return '$score / $total';
-  }
-
-  @override
-  String quizBestScore(Object score, Object total, Object pct) {
-    return 'আপনার সেরা স্কোর: $score/$total ($pct%)';
   }
 
   @override

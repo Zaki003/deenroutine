@@ -168,9 +168,9 @@ class _PickerCategorySection extends StatelessWidget {
 }
 
 /// Same 96px/icon-above-title footprint as habit_template_sheet.dart's
-/// private _TemplateChip, layered with quiz_home_screen.dart's _LengthChip
-/// selected/unselected fill treatment — this needs both: a card sized for a
-/// template, but a toggle state that sheet's chip never had.
+/// private _TemplateChip, layered with a selected/unselected fill treatment
+/// — this needs both: a card sized for a template, but a toggle state that
+/// sheet's chip never had.
 class _OnboardingTemplateChip extends StatelessWidget {
   final HabitTemplate template;
   final bool selected;

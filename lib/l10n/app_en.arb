@@ -71,7 +71,7 @@
   "navHome": "Home",
   "navHabits": "Habits",
   "navPrayer": "Prayer",
-  "navQuiz": "Quiz",
+  "navLearn": "Learn",
   "navProfile": "Profile",
 
   "assalamuAlaikumGreeting": "ASSALAMU ALAIKUM",
@@ -115,17 +115,41 @@
   "citySearchEmptyHint": "Start typing to search for a city",
   "citySearchNoResults": "No matching cities found",
 
-  "quizTabTitle": "Quiz",
-  "quizChooseLengthLabel": "Choose your length",
-  "quizStartButton": "Start Quiz",
-  "quizNoAttemptsYet": "Take your first {count}-question quiz to set a personal best.",
-  "@quizNoAttemptsYet": {
+  "learnTabTitle": "Learn",
+  "learnTopicLocked": "Finish the topics before this one to unlock it.",
+  "learnLessonsProgress": "{done}/{total} lessons",
+  "@learnLessonsProgress": {
+    "placeholders": { "done": {}, "total": {} }
+  },
+  "learnLessonFinishButton": "Finish",
+  "learnPathCompleteTitle": "{topic} complete!",
+  "@learnPathCompleteTitle": {
+    "placeholders": { "topic": {} }
+  },
+  "learnPathCompleteMessage": "All {count} lessons done",
+  "@learnPathCompleteMessage": {
     "placeholders": { "count": {} }
   },
-  "quizMinutesEstimate": "~{minutes} min",
-  "@quizMinutesEstimate": {
-    "placeholders": { "minutes": {} }
+  "learnTakeAssessmentButton": "Take the assessment",
+  "learnSkipForNowButton": "Skip for now",
+  "learnNextTopicUnlockedMessage": "{topic} is now unlocked",
+  "@learnNextTopicUnlockedMessage": {
+    "placeholders": { "topic": {} }
   },
+  "learnAllTopicsCompleteMessage": "You've completed every topic!",
+  "learnSyncError": "Couldn't sync your Learn progress. Retrying...",
+  "learnSaveFailed": "Couldn't save your progress. Try again.",
+
+  "learnTopicBelief": "Belief",
+  "learnTopicPillars": "Pillars",
+  "learnTopicSalah": "Salah",
+  "learnTopicQuran": "Quran",
+  "learnTopicSeerah": "Seerah",
+  "learnTopicProphets": "Prophets",
+  "learnTopicHistory": "History",
+  "learnTopicRamadan": "Ramadan",
+  "learnTopicHajj": "Hajj",
+  "learnTopicManners": "Manners",
 
   "prayerErrorLocationDisabled": "Location services are disabled.",
   "prayerErrorPermissionDenied": "Location permission denied.",
@@ -324,9 +348,10 @@
     "placeholders": { "prayer": {} }
   },
 
-  "quizQuestionCountTitle": "How many questions?",
-  "quizQuestionCountSubtitle": "Choose how many questions you'd like to practice.",
-  "quizAppBarTitle": "Islamic Knowledge Quiz",
+  "learnAssessmentAppBarTitle": "{topic} Assessment",
+  "@learnAssessmentAppBarTitle": {
+    "placeholders": { "topic": {} }
+  },
   "quizNoQuestions": "No quiz questions available yet.",
   "quizQuestionProgress": "Question {current} of {total}",
   "@quizQuestionProgress": {
@@ -355,10 +380,6 @@
   "quizScoreOfTotal": "{score} / {total}",
   "@quizScoreOfTotal": {
     "placeholders": { "score": {}, "total": {} }
-  },
-  "quizBestScore": "Your best score: {score}/{total} ({pct}%)",
-  "@quizBestScore": {
-    "placeholders": { "score": {}, "total": {}, "pct": {} }
   },
   "quizTryAgain": "Try Again",
   "quizBackToHome": "Back to Home",

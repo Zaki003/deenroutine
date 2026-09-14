@@ -404,11 +404,11 @@ abstract class AppLocalizations {
   /// **'Prayer'**
   String get navPrayer;
 
-  /// No description provided for @navQuiz.
+  /// No description provided for @navLearn.
   ///
   /// In en, this message translates to:
-  /// **'Quiz'**
-  String get navQuiz;
+  /// **'Learn'**
+  String get navLearn;
 
   /// No description provided for @navProfile.
   ///
@@ -561,35 +561,137 @@ abstract class AppLocalizations {
   /// **'No matching cities found'**
   String get citySearchNoResults;
 
-  /// No description provided for @quizTabTitle.
+  /// No description provided for @learnTabTitle.
   ///
   /// In en, this message translates to:
-  /// **'Quiz'**
-  String get quizTabTitle;
+  /// **'Learn'**
+  String get learnTabTitle;
 
-  /// No description provided for @quizChooseLengthLabel.
+  /// No description provided for @learnTopicLocked.
   ///
   /// In en, this message translates to:
-  /// **'Choose your length'**
-  String get quizChooseLengthLabel;
+  /// **'Finish the topics before this one to unlock it.'**
+  String get learnTopicLocked;
 
-  /// No description provided for @quizStartButton.
+  /// No description provided for @learnLessonsProgress.
   ///
   /// In en, this message translates to:
-  /// **'Start Quiz'**
-  String get quizStartButton;
+  /// **'{done}/{total} lessons'**
+  String learnLessonsProgress(Object done, Object total);
 
-  /// No description provided for @quizNoAttemptsYet.
+  /// No description provided for @learnLessonFinishButton.
   ///
   /// In en, this message translates to:
-  /// **'Take your first {count}-question quiz to set a personal best.'**
-  String quizNoAttemptsYet(Object count);
+  /// **'Finish'**
+  String get learnLessonFinishButton;
 
-  /// No description provided for @quizMinutesEstimate.
+  /// No description provided for @learnPathCompleteTitle.
   ///
   /// In en, this message translates to:
-  /// **'~{minutes} min'**
-  String quizMinutesEstimate(Object minutes);
+  /// **'{topic} complete!'**
+  String learnPathCompleteTitle(Object topic);
+
+  /// No description provided for @learnPathCompleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All {count} lessons done'**
+  String learnPathCompleteMessage(Object count);
+
+  /// No description provided for @learnTakeAssessmentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the assessment'**
+  String get learnTakeAssessmentButton;
+
+  /// No description provided for @learnSkipForNowButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get learnSkipForNowButton;
+
+  /// No description provided for @learnNextTopicUnlockedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{topic} is now unlocked'**
+  String learnNextTopicUnlockedMessage(Object topic);
+
+  /// No description provided for @learnAllTopicsCompleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve completed every topic!'**
+  String get learnAllTopicsCompleteMessage;
+
+  /// No description provided for @learnSyncError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sync your Learn progress. Retrying...'**
+  String get learnSyncError;
+
+  /// No description provided for @learnSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your progress. Try again.'**
+  String get learnSaveFailed;
+
+  /// No description provided for @learnTopicBelief.
+  ///
+  /// In en, this message translates to:
+  /// **'Belief'**
+  String get learnTopicBelief;
+
+  /// No description provided for @learnTopicPillars.
+  ///
+  /// In en, this message translates to:
+  /// **'Pillars'**
+  String get learnTopicPillars;
+
+  /// No description provided for @learnTopicSalah.
+  ///
+  /// In en, this message translates to:
+  /// **'Salah'**
+  String get learnTopicSalah;
+
+  /// No description provided for @learnTopicQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran'**
+  String get learnTopicQuran;
+
+  /// No description provided for @learnTopicSeerah.
+  ///
+  /// In en, this message translates to:
+  /// **'Seerah'**
+  String get learnTopicSeerah;
+
+  /// No description provided for @learnTopicProphets.
+  ///
+  /// In en, this message translates to:
+  /// **'Prophets'**
+  String get learnTopicProphets;
+
+  /// No description provided for @learnTopicHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get learnTopicHistory;
+
+  /// No description provided for @learnTopicRamadan.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan'**
+  String get learnTopicRamadan;
+
+  /// No description provided for @learnTopicHajj.
+  ///
+  /// In en, this message translates to:
+  /// **'Hajj'**
+  String get learnTopicHajj;
+
+  /// No description provided for @learnTopicManners.
+  ///
+  /// In en, this message translates to:
+  /// **'Manners'**
+  String get learnTopicManners;
 
   /// No description provided for @prayerErrorLocationDisabled.
   ///
@@ -1329,23 +1431,11 @@ abstract class AppLocalizations {
   /// **'It\'s time for {prayer}.'**
   String prayerNotificationBody(Object prayer);
 
-  /// No description provided for @quizQuestionCountTitle.
+  /// No description provided for @learnAssessmentAppBarTitle.
   ///
   /// In en, this message translates to:
-  /// **'How many questions?'**
-  String get quizQuestionCountTitle;
-
-  /// No description provided for @quizQuestionCountSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose how many questions you\'d like to practice.'**
-  String get quizQuestionCountSubtitle;
-
-  /// No description provided for @quizAppBarTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Islamic Knowledge Quiz'**
-  String get quizAppBarTitle;
+  /// **'{topic} Assessment'**
+  String learnAssessmentAppBarTitle(Object topic);
 
   /// No description provided for @quizNoQuestions.
   ///
@@ -1442,12 +1532,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{score} / {total}'**
   String quizScoreOfTotal(Object score, Object total);
-
-  /// No description provided for @quizBestScore.
-  ///
-  /// In en, this message translates to:
-  /// **'Your best score: {score}/{total} ({pct}%)'**
-  String quizBestScore(Object score, Object total, Object pct);
 
   /// No description provided for @quizTryAgain.
   ///

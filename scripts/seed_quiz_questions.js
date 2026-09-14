@@ -149,6 +149,23 @@ function shuffledOptionsPaired(options, optionsBn) {
 }
 
 /**
+ * Assigns each question an `order`: its 0-based position within its own
+ * category, counted in the order that category's questions already appear
+ * in the JSON file. The Learn feature's lesson walkthrough sorts by this -
+ * it must stay separate from `random` below, which is reserved for uniform
+ * sampling and must never be repurposed for sequencing.
+ */
+function withCategoryOrder(questions) {
+  const counters = {};
+  return questions.map((q) => {
+    const category = q.category ?? 'General';
+    const order = counters[category] ?? 0;
+    counters[category] = order + 1;
+    return { ...q, order };
+  });
+}
+
+/**
  * Assigns each question a `random` value that the app samples against.
  *
  * The questions are shuffled, then handed values spaced evenly across
@@ -203,7 +220,7 @@ async function main() {
     return;
   }
 
-  await commitInBatches(db, withRandomKeys(questions), (batch, q) => {
+  await commitInBatches(db, withRandomKeys(withCategoryOrder(questions)), (batch, q) => {
     // Stored shuffled so the answer isn't sitting in the same slot for
     // every question. The app reshuffles again on each attempt. optionsBn
     // is shuffled the same way so it stays aligned by index with options.
@@ -213,6 +230,7 @@ async function main() {
       options,
       correctAnswer: q.answer,
       category: q.category ?? 'General',
+      order: q.order,
       random: q.random,
       questionTextBn: q.questionBn || '',
       optionsBn,

@@ -4,6 +4,7 @@ import 'l10n/app_localizations.dart';
 import 'providers/analytics_provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/habit_provider.dart';
+import 'providers/learn_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/prayer_provider.dart';
 import 'providers/theme_provider.dart';
@@ -20,6 +21,7 @@ class DeenRoutineApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => HabitProvider()),
+        ChangeNotifierProvider(create: (_) => LearnProvider()),
         ChangeNotifierProvider(create: (_) => PrayerProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),

@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
-import '../../models/quiz_result.dart';
-import '../../providers/auth_provider.dart';
-import '../../services/firestore_service.dart';
+import '../../providers/learn_provider.dart';
+import '../../theme/deen_colors.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/learn_topic_labels.dart';
 import 'quiz_screen.dart';
 
-/// Beautified results page shown after finishing a quiz (FR-10).
+/// Shown after finishing a topic's assessment (FR-10). Score is feedback,
+/// not a gate - the assessment always marks the topic's [category] complete
+/// once submitted, regardless of score, so the next topic in
+/// [LearnProvider.kTopicOrder] unlocks either way.
 class QuizResultScreen extends StatelessWidget {
+  final String category;
   final int score;
   final int total;
   final List<bool> answerResults;
 
   const QuizResultScreen({
     super.key,
+    required this.category,
     required this.score,
     required this.total,
     this.answerResults = const [],
@@ -53,9 +58,18 @@ class QuizResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
     final outcome = _outcome(theme.colorScheme, l10n);
-    final uid = context.read<AuthProvider>().firebaseUser?.uid;
+    // watch, not read: the assessment's completeAssessment() write lands via
+    // Firestore's round-trip through LearnProvider's listener, not
+    // synchronously on navigation here - watching lets the unlocked banner
+    // below pop in the moment that snapshot arrives rather than needing a
+    // rebuild trigger of its own.
+    final learnProvider = context.watch<LearnProvider>();
+    final topicComplete = learnProvider.isTopicComplete(category);
+    final topicIndex = LearnProvider.kTopicOrder.indexOf(category);
+    final isLastTopic = topicIndex == LearnProvider.kTopicOrder.length - 1;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.quizResultsAppBarTitle)),
@@ -160,32 +174,15 @@ class QuizResultScreen extends StatelessWidget {
                         ],
                       ),
                     ],
-                    if (uid != null) ...[
+                    if (topicComplete) ...[
                       const SizedBox(height: 16),
-                      FutureBuilder<QuizResult?>(
-                        future: FirestoreService().getBestQuizResult(uid, total),
-                        builder: (context, snapshot) {
-                          final best = snapshot.data;
-                          if (best == null || best.totalQuestions == 0) {
-                            return Text(
-                              l10n.quizNoAttemptsYet(total),
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            );
-                          }
-                          final bestPct =
-                              (best.score / best.totalQuestions * 100).round();
-                          return Text(
-                            l10n.quizBestScore(
-                                best.score, best.totalQuestions, bestPct),
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          );
-                        },
+                      _NextTopicBanner(
+                        dark: dark,
+                        message: isLastTopic
+                            ? l10n.learnAllTopicsCompleteMessage
+                            : l10n.learnNextTopicUnlockedMessage(
+                                learnTopicLabel(
+                                    l10n, LearnProvider.kTopicOrder[topicIndex + 1])),
                       ),
                     ],
                   ],
@@ -203,7 +200,7 @@ class QuizResultScreen extends StatelessWidget {
                       label: Text(l10n.quizTryAgain),
                       onPressed: () => Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (_) => QuizScreen(questionCount: total),
+                          builder: (_) => QuizScreen(category: category),
                         ),
                       ),
                     ),
@@ -223,6 +220,45 @@ class QuizResultScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// "{Topic} is now unlocked" / "You've completed every topic!" card.
+/// Deliberately a plain static card rather than reusing the habit
+/// milestone banner's flame animation - that's a streak-specific visual
+/// identity, and this moment doesn't need to borrow it.
+class _NextTopicBanner extends StatelessWidget {
+  final bool dark;
+  final String message;
+
+  const _NextTopicBanner({required this.dark, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: DeenColors.panelBackground(dark),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.lock_open_rounded, size: 20, color: DeenColors.gold),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: DeenColors.primaryText(dark),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
