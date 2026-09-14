@@ -317,8 +317,8 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingAddHabitsButton.
   ///
   /// In en, this message translates to:
-  /// **'Add {count} habits and finish'**
-  String onboardingAddHabitsButton(Object count);
+  /// **'{count, plural, =1{Add 1 habit and finish} other{Add {count} habits and finish}}'**
+  String onboardingAddHabitsButton(int count);
 
   /// No description provided for @onboardingSkipHabitsButton.
   ///

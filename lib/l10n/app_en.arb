@@ -42,9 +42,11 @@
   "onboardingExactAlarmLaterButton": "I'll do this later",
   "onboardingHabitPickerHeadline": "Add your first habits",
   "onboardingHabitPickerSubtitle": "Pick a few to get started — you can add more anytime.",
-  "onboardingAddHabitsButton": "Add {count} habits and finish",
+  "onboardingAddHabitsButton": "{count, plural, =1{Add 1 habit and finish} other{Add {count} habits and finish}}",
   "@onboardingAddHabitsButton": {
-    "placeholders": { "count": {} }
+    "placeholders": {
+      "count": { "type": "int" }
+    }
   },
   "onboardingSkipHabitsButton": "Skip — I'll add my own",
 

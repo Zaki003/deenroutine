@@ -126,7 +126,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'শুরু করতে কয়েকটি বেছে নিন — পরেও যোগ করতে পারবেন।';
 
   @override
-  String onboardingAddHabitsButton(Object count) {
+  String onboardingAddHabitsButton(int count) {
     return '$count টি অভ্যাস যোগ করে শেষ করুন';
   }
 

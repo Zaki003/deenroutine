@@ -126,8 +126,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pick a few to get started — you can add more anytime.';
 
   @override
-  String onboardingAddHabitsButton(Object count) {
-    return 'Add $count habits and finish';
+  String onboardingAddHabitsButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Add $count habits and finish',
+      one: 'Add 1 habit and finish',
+    );
+    return '$_temp0';
   }
 
   @override
