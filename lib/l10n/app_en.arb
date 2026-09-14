@@ -139,17 +139,22 @@
   "learnAllTopicsCompleteMessage": "You've completed every topic!",
   "learnSyncError": "Couldn't sync your Learn progress. Retrying...",
   "learnSaveFailed": "Couldn't save your progress. Try again.",
+  "learnPathProgress": "{done}/{total} topics",
+  "@learnPathProgress": {
+    "placeholders": { "done": {}, "total": {} }
+  },
+  "learnMilestoneLabel": "Milestone",
 
-  "learnTopicBelief": "Belief",
-  "learnTopicPillars": "Pillars",
+  "learnTopicBelief": "Aqeedah",
+  "learnTopicPillars": "Arkan",
   "learnTopicSalah": "Salah",
   "learnTopicQuran": "Quran",
   "learnTopicSeerah": "Seerah",
-  "learnTopicProphets": "Prophets",
-  "learnTopicHistory": "History",
+  "learnTopicProphets": "Anbiya",
+  "learnTopicHistory": "Tarikh",
   "learnTopicRamadan": "Ramadan",
   "learnTopicHajj": "Hajj",
-  "learnTopicManners": "Manners",
+  "learnTopicManners": "Adab",
 
   "prayerErrorLocationDisabled": "Location services are disabled.",
   "prayerErrorPermissionDenied": "Location permission denied.",

@@ -317,6 +317,14 @@ class AppLocalizationsBn extends AppLocalizations {
   String get learnSaveFailed => 'অগ্রগতি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।';
 
   @override
+  String learnPathProgress(Object done, Object total) {
+    return '$done/$total বিষয়';
+  }
+
+  @override
+  String get learnMilestoneLabel => 'মাইলফলক';
+
+  @override
   String get learnTopicBelief => 'বিশ্বাস';
 
   @override

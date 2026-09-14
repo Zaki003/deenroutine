@@ -316,10 +316,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnSaveFailed => 'Couldn\'t save your progress. Try again.';
 
   @override
-  String get learnTopicBelief => 'Belief';
+  String learnPathProgress(Object done, Object total) {
+    return '$done/$total topics';
+  }
 
   @override
-  String get learnTopicPillars => 'Pillars';
+  String get learnMilestoneLabel => 'Milestone';
+
+  @override
+  String get learnTopicBelief => 'Aqeedah';
+
+  @override
+  String get learnTopicPillars => 'Arkan';
 
   @override
   String get learnTopicSalah => 'Salah';
@@ -331,10 +339,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnTopicSeerah => 'Seerah';
 
   @override
-  String get learnTopicProphets => 'Prophets';
+  String get learnTopicProphets => 'Anbiya';
 
   @override
-  String get learnTopicHistory => 'History';
+  String get learnTopicHistory => 'Tarikh';
 
   @override
   String get learnTopicRamadan => 'Ramadan';
@@ -343,7 +351,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnTopicHajj => 'Hajj';
 
   @override
-  String get learnTopicManners => 'Manners';
+  String get learnTopicManners => 'Adab';
 
   @override
   String get prayerErrorLocationDisabled => 'Location services are disabled.';

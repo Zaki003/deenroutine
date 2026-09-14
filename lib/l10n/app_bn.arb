@@ -103,6 +103,8 @@
   "learnAllTopicsCompleteMessage": "আপনি সবগুলো বিষয় সম্পন্ন করেছেন!",
   "learnSyncError": "শেখার অগ্রগতি সিঙ্ক করা যায়নি। আবার চেষ্টা করা হচ্ছে...",
   "learnSaveFailed": "অগ্রগতি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।",
+  "learnPathProgress": "{done}/{total} বিষয়",
+  "learnMilestoneLabel": "মাইলফলক",
 
   "learnTopicBelief": "বিশ্বাস",
   "learnTopicPillars": "স্তম্ভ",

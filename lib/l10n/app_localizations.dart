@@ -633,16 +633,28 @@ abstract class AppLocalizations {
   /// **'Couldn\'t save your progress. Try again.'**
   String get learnSaveFailed;
 
+  /// No description provided for @learnPathProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done}/{total} topics'**
+  String learnPathProgress(Object done, Object total);
+
+  /// No description provided for @learnMilestoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone'**
+  String get learnMilestoneLabel;
+
   /// No description provided for @learnTopicBelief.
   ///
   /// In en, this message translates to:
-  /// **'Belief'**
+  /// **'Aqeedah'**
   String get learnTopicBelief;
 
   /// No description provided for @learnTopicPillars.
   ///
   /// In en, this message translates to:
-  /// **'Pillars'**
+  /// **'Arkan'**
   String get learnTopicPillars;
 
   /// No description provided for @learnTopicSalah.
@@ -666,13 +678,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnTopicProphets.
   ///
   /// In en, this message translates to:
-  /// **'Prophets'**
+  /// **'Anbiya'**
   String get learnTopicProphets;
 
   /// No description provided for @learnTopicHistory.
   ///
   /// In en, this message translates to:
-  /// **'History'**
+  /// **'Tarikh'**
   String get learnTopicHistory;
 
   /// No description provided for @learnTopicRamadan.
@@ -690,7 +702,7 @@ abstract class AppLocalizations {
   /// No description provided for @learnTopicManners.
   ///
   /// In en, this message translates to:
-  /// **'Manners'**
+  /// **'Adab'**
   String get learnTopicManners;
 
   /// No description provided for @prayerErrorLocationDisabled.

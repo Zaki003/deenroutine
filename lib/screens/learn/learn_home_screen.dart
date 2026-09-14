@@ -71,6 +71,8 @@ class _LearnHomeScreenState extends State<LearnHomeScreen> {
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final learnProvider = context.watch<LearnProvider>();
+    final completedCount =
+        LearnProvider.kTopicOrder.where(learnProvider.isTopicComplete).length;
 
     return ColoredBox(
       color: DeenColors.surface(dark),
@@ -80,57 +82,173 @@ class _LearnHomeScreenState extends State<LearnHomeScreen> {
             : ListView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
                 children: [
-                  Text(
-                    l10n.learnTabTitle,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: DeenColors.primaryText(dark),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Stack(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Positioned(
-                        top: 28,
-                        bottom: 28,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            width: 2,
-                            color: DeenColors.primaryLight.withValues(alpha: 0.35),
-                          ),
+                      Text(
+                        l10n.learnTabTitle,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: DeenColors.primaryText(dark),
                         ),
                       ),
-                      Column(
-                        children: [
-                          for (var i = 0; i < LearnProvider.kTopicOrder.length; i++)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Align(
-                                alignment: i.isEven ? Alignment.centerLeft : Alignment.centerRight,
-                                child: _TopicNode(
-                                  category: LearnProvider.kTopicOrder[i],
-                                  dark: dark,
-                                  unlocked: learnProvider.isUnlocked(LearnProvider.kTopicOrder[i]),
-                                  complete:
-                                      learnProvider.isTopicComplete(LearnProvider.kTopicOrder[i]),
-                                  learnProvider: learnProvider,
-                                  onTap: () =>
-                                      _openTopic(context, LearnProvider.kTopicOrder[i]),
-                                ),
-                              ),
-                            ),
-                        ],
+                      Text(
+                        l10n.learnPathProgress(completedCount, LearnProvider.kTopicOrder.length),
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                          color: DeenColors.textMuted(dark),
+                        ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: completedCount / LearnProvider.kTopicOrder.length,
+                      minHeight: 6,
+                      backgroundColor: DeenColors.trackLine(dark),
+                      valueColor: const AlwaysStoppedAnimation(DeenColors.gold),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _Trail(
+                    dark: dark,
+                    learnProvider: learnProvider,
+                    onOpenTopic: (category) => _openTopic(context, category),
                   ),
                 ],
               ),
       ),
     );
   }
+}
+
+/// The winding path itself: a curve threaded through every node's actual
+/// center (via [_TrailPainter]) rather than a straight line floating behind
+/// them, plus a milestone label every few topics to break up the scroll.
+class _Trail extends StatelessWidget {
+  static const double _rowHeight = 128;
+  static const double _nodeSlotWidth = 96;
+  static const double _laneInset = 16;
+  static const Set<int> _milestoneAfter = {2, 5, 8};
+
+  final bool dark;
+  final LearnProvider learnProvider;
+  final void Function(String category) onOpenTopic;
+
+  const _Trail({required this.dark, required this.learnProvider, required this.onOpenTopic});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final count = LearnProvider.kTopicOrder.length;
+    final totalHeight = count * _rowHeight;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final leftX = _laneInset + _nodeSlotWidth / 2;
+        final rightX = constraints.maxWidth - _laneInset - _nodeSlotWidth / 2;
+
+        return SizedBox(
+          height: totalHeight,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: _TrailPainter(
+                    count: count,
+                    rowHeight: _rowHeight,
+                    leftX: leftX,
+                    rightX: rightX,
+                    color: DeenColors.primaryLight.withValues(alpha: 0.35),
+                  ),
+                ),
+              ),
+              for (var i = 0; i < count; i++) ...[
+                Positioned(
+                  top: i * _rowHeight,
+                  left: i.isEven ? _laneInset : null,
+                  right: i.isEven ? null : _laneInset,
+                  width: _nodeSlotWidth,
+                  child: _TopicNode(
+                    category: LearnProvider.kTopicOrder[i],
+                    dark: dark,
+                    unlocked: learnProvider.isUnlocked(LearnProvider.kTopicOrder[i]),
+                    complete: learnProvider.isTopicComplete(LearnProvider.kTopicOrder[i]),
+                    learnProvider: learnProvider,
+                    onTap: () => onOpenTopic(LearnProvider.kTopicOrder[i]),
+                  ),
+                ),
+                if (_milestoneAfter.contains(i))
+                  Positioned(
+                    top: (i + 1) * _rowHeight - 20,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        l10n.learnMilestoneLabel.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.8,
+                          color: DeenColors.textMuted(dark),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _TrailPainter extends CustomPainter {
+  final int count;
+  final double rowHeight;
+  final double leftX;
+  final double rightX;
+  final Color color;
+
+  const _TrailPainter({
+    required this.count,
+    required this.rowHeight,
+    required this.leftX,
+    required this.rightX,
+    required this.color,
+  });
+
+  Offset _centerFor(int i) => Offset(i.isEven ? leftX : rightX, i * rowHeight + 24);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (count < 2) return;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    final path = Path()..moveTo(_centerFor(0).dx, _centerFor(0).dy);
+    for (var i = 1; i < count; i++) {
+      final prev = _centerFor(i - 1);
+      final curr = _centerFor(i);
+      final midY = (prev.dy + curr.dy) / 2;
+      path.cubicTo(prev.dx, midY, curr.dx, midY, curr.dx, curr.dy);
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _TrailPainter oldDelegate) =>
+      oldDelegate.count != count ||
+      oldDelegate.leftX != leftX ||
+      oldDelegate.rightX != rightX ||
+      oldDelegate.color != color;
 }
 
 class _TopicNode extends StatelessWidget {
@@ -162,7 +280,7 @@ class _TopicNode extends StatelessWidget {
       icon = const Icon(Icons.check_rounded, color: DeenColors.ink, size: 22);
     } else if (unlocked) {
       circleColor = DeenColors.ink;
-      icon = const Icon(Icons.local_fire_department_rounded, color: DeenColors.gold, size: 20);
+      icon = const Icon(Icons.auto_stories_rounded, color: DeenColors.gold, size: 20);
     } else {
       circleColor = DeenColors.cardBackground(dark);
       icon = Icon(Icons.lock_rounded, color: DeenColors.textMuted(dark), size: 18);
