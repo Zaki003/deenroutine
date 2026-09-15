@@ -25,7 +25,8 @@ class MilestoneEvent {
   final String habitTitle;
   final int days;
 
-  const MilestoneEvent({required this.habitId, required this.habitTitle, required this.days});
+  const MilestoneEvent(
+      {required this.habitId, required this.habitTitle, required this.days});
 }
 
 class HabitProvider extends ChangeNotifier {
@@ -68,7 +69,8 @@ class HabitProvider extends ChangeNotifier {
   /// first time and each celebrates once. The dashboard shows one at a
   /// time and calls [consumeMilestone] to advance to the next.
   final List<MilestoneEvent> _milestoneQueue = [];
-  MilestoneEvent? get pendingMilestone => _milestoneQueue.isEmpty ? null : _milestoneQueue.first;
+  MilestoneEvent? get pendingMilestone =>
+      _milestoneQueue.isEmpty ? null : _milestoneQueue.first;
 
   void consumeMilestone() {
     if (_milestoneQueue.isEmpty) return;
@@ -96,10 +98,11 @@ class HabitProvider extends ChangeNotifier {
     final crossed = kMilestoneDays.where((d) => d > lastSeen && d <= streak);
     if (crossed.isNotEmpty) {
       final days = crossed.last;
-      final alreadyQueued =
-          _milestoneQueue.any((m) => m.habitId == habit.habitId && m.days == days);
+      final alreadyQueued = _milestoneQueue
+          .any((m) => m.habitId == habit.habitId && m.days == days);
       if (!alreadyQueued) {
-        _milestoneQueue.add(MilestoneEvent(habitId: habit.habitId, habitTitle: habit.title, days: days));
+        _milestoneQueue.add(MilestoneEvent(
+            habitId: habit.habitId, habitTitle: habit.title, days: days));
         _analytics.logStreakMilestone(days: days);
         notifyListeners();
       }
@@ -197,6 +200,7 @@ class HabitProvider extends ChangeNotifier {
     required HabitCategory category,
     required HabitFrequency frequency,
     List<int> selectedDays = const [],
+    DateTime? dueDate,
     int? reminderHour,
     int? reminderMinute,
     HabitTrackingType trackingType = HabitTrackingType.yesNo,
@@ -223,6 +227,7 @@ class HabitProvider extends ChangeNotifier {
       category: category,
       frequency: frequency,
       selectedDays: selectedDays,
+      dueDate: dueDate,
       reminderHour: reminderHour,
       reminderMinute: reminderMinute,
       trackingType: trackingType,
@@ -250,6 +255,7 @@ class HabitProvider extends ChangeNotifier {
     required HabitCategory category,
     required HabitFrequency frequency,
     List<int> selectedDays = const [],
+    DateTime? dueDate,
     int? reminderHour,
     int? reminderMinute,
     HabitTrackingType trackingType = HabitTrackingType.yesNo,
@@ -280,6 +286,7 @@ class HabitProvider extends ChangeNotifier {
       completed: original.completed,
       lastCompletedDate: original.lastCompletedDate,
       selectedDays: selectedDays,
+      dueDate: dueDate,
       reminderHour: reminderHour,
       reminderMinute: reminderMinute,
       trackingType: trackingType,
@@ -345,9 +352,11 @@ class HabitProvider extends ChangeNotifier {
 
   /// Timer tracking: persists an absolute elapsed-seconds checkpoint.
   /// Satisfied once elapsed reaches [Habit.timerTargetMinutes].
-  Future<void> logTimerProgress(Habit habit, {required int elapsedSeconds}) async {
+  Future<void> logTimerProgress(Habit habit,
+      {required int elapsedSeconds}) async {
     final targetSeconds = habit.timerTargetMinutes * 60;
-    final completing = elapsedSeconds >= targetSeconds && !habit.isCompletedToday;
+    final completing =
+        elapsedSeconds >= targetSeconds && !habit.isCompletedToday;
     try {
       await _service.logProgress(
         habit,
@@ -411,7 +420,8 @@ class HabitProvider extends ChangeNotifier {
           await _service.logProgress(
             habit,
             status: false,
-            numericValue: (habit.numericTarget - 1).clamp(0, habit.numericTarget),
+            numericValue:
+                (habit.numericTarget - 1).clamp(0, habit.numericTarget),
           );
         case HabitTrackingType.timer:
           final targetSeconds = habit.timerTargetMinutes * 60;
@@ -424,7 +434,8 @@ class HabitProvider extends ChangeNotifier {
           await _service.logProgress(
             habit,
             status: false,
-            checklistDone: habit.hasProgressToday ? habit.todayChecklistDone : const [],
+            checklistDone:
+                habit.hasProgressToday ? habit.todayChecklistDone : const [],
           );
         case HabitTrackingType.rating:
         case HabitTrackingType.yesNo:

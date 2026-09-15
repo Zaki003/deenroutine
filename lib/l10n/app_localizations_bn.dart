@@ -427,6 +427,23 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get onceDueDateLabel => 'শেষ তারিখ';
+
+  @override
+  String get onceTodayOption => 'আজ';
+
+  @override
+  String get oncePickDateOption => 'তারিখ বেছে নিন';
+
+  @override
+  String get onceReminderTitle => 'নোটিফিকেশন';
+
+  @override
+  String onceReminderAtDateTime(Object date, Object time) {
+    return '$date, $time';
+  }
+
+  @override
   String get saveHabitButton => 'অভ্যাস সংরক্ষণ করুন';
 
   @override
@@ -465,6 +482,23 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get frequencySpecificDays => 'নির্দিষ্ট দিন';
+
+  @override
+  String get frequencyOnce => 'একবার';
+
+  @override
+  String get onceSectionTitle => 'করণীয়';
+
+  @override
+  String get onceDueTodayTag => 'আজ';
+
+  @override
+  String get onceOverdueTag => 'বকেয়া';
+
+  @override
+  String onceDueOnTag(Object date) {
+    return 'শেষ তারিখ $date';
+  }
 
   @override
   String get trackingTypeSectionLabel => 'ট্র্যাকিং ধরন';

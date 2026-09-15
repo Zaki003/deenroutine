@@ -84,7 +84,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _handleToggleFavorite(DailyQuote quote) async {
     final l10n = AppLocalizations.of(context)!;
-    final result = await context.read<AuthProvider>().toggleFavorite(quote.quoteId);
+    final result =
+        await context.read<AuthProvider>().toggleFavorite(quote.quoteId);
     if (result != FavoriteToggleResult.limitReached || !mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -116,15 +117,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           SnackBar(
             backgroundColor: DeenColors.ink,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             content: Row(
               children: [
-                const Icon(Icons.info_outline_rounded, size: 18, color: DeenColors.goldSoft),
+                const Icon(Icons.info_outline_rounded,
+                    size: 18, color: DeenColors.goldSoft),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    habitErrorMessage(l10n, habitProvider.errorType!, habitProvider.errorDetail),
-                    style: const TextStyle(color: DeenColors.paper, fontSize: 13),
+                    habitErrorMessage(l10n, habitProvider.errorType!,
+                        habitProvider.errorDetail),
+                    style:
+                        const TextStyle(color: DeenColors.paper, fontSize: 13),
                   ),
                 ),
               ],
@@ -139,17 +144,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // qualify, a specificDays habit only when today is one of its
     // selectedDays. The Habits tab is still the place to see every habit
     // regardless of day.
-    final todaysHabits = habitProvider.habits.where((h) => h.isDueToday).toList();
+    final todaysHabits =
+        habitProvider.habits.where((h) => h.isDueToday).toList();
     final done = todaysHabits.where((h) => h.isCompletedToday).length;
     final total = todaysHabits.length;
 
     // Incomplete habits float to the top — those are the ones that still
     // need action today — and the list is capped so the dashboard stays a
     // glanceable summary instead of growing into a duplicate of the Habits
-    // tab as someone adds more habits.
+    // tab as someone adds more habits. One-off to-dos float above every
+    // recurring habit within that: they're date-bound and disappear off
+    // this list the moment their day passes, so they're the more
+    // time-sensitive thing to see first.
+    final onceToday =
+        todaysHabits.where((h) => h.frequency == HabitFrequency.once);
+    final recurringToday =
+        todaysHabits.where((h) => h.frequency != HabitFrequency.once);
     final orderedHabits = [
-      ...todaysHabits.where((h) => !h.isCompletedToday),
-      ...todaysHabits.where((h) => h.isCompletedToday),
+      ...onceToday.where((h) => !h.isCompletedToday),
+      ...recurringToday.where((h) => !h.isCompletedToday),
+      ...onceToday.where((h) => h.isCompletedToday),
+      ...recurringToday.where((h) => h.isCompletedToday),
     ];
     final visibleHabits = orderedHabits.take(_maxVisibleHabits).toList();
     final hiddenHabitCount = orderedHabits.length - visibleHabits.length;
@@ -157,8 +172,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Stack(
       children: [
-        _dashboardBody(l10n, habitProvider, prayerProvider, authProvider, dark, isBangla, name,
-            done, total, todaysHabits, visibleHabits, hiddenHabitCount),
+        _dashboardBody(
+            l10n,
+            habitProvider,
+            prayerProvider,
+            authProvider,
+            dark,
+            isBangla,
+            name,
+            done,
+            total,
+            todaysHabits,
+            visibleHabits,
+            hiddenHabitCount),
         if (milestone != null)
           Positioned(
             top: 10,
@@ -206,7 +232,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Text(
               l10n.assalamuAlaikumGreeting,
-              style: TextStyle(fontSize: 12, color: DeenColors.gold, letterSpacing: 1),
+              style: TextStyle(
+                  fontSize: 12, color: DeenColors.gold, letterSpacing: 1),
             ),
             const SizedBox(height: 2),
             Text(
@@ -236,8 +263,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               quote: _quote!,
                               isBangla: isBangla,
                               dark: dark,
-                              isFavorite: authProvider.isFavorite(_quote!.quoteId),
-                              onToggleFavorite: () => _handleToggleFavorite(_quote!),
+                              isFavorite:
+                                  authProvider.isFavorite(_quote!.quoteId),
+                              onToggleFavorite: () =>
+                                  _handleToggleFavorite(_quote!),
                             ),
                           ),
                           key: const ValueKey('quote-content'),
@@ -249,7 +278,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: !habitProvider.hasLoadedOnce
-                  ? _fullWidth(_BarakahSkeleton(dark: dark), key: const ValueKey('barakah-skeleton'))
+                  ? _fullWidth(_BarakahSkeleton(dark: dark),
+                      key: const ValueKey('barakah-skeleton'))
                   : _fullWidth(
                       DeenCard(
                         dark: dark,
@@ -262,8 +292,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  StarPattern(opacity: 0.12, color: DeenColors.gold),
-                                  BarakahCircle(done: done, total: total, dark: dark, size: 100),
+                                  StarPattern(
+                                      opacity: 0.12, color: DeenColors.gold),
+                                  BarakahCircle(
+                                      done: done,
+                                      total: total,
+                                      dark: dark,
+                                      size: 100),
                                 ],
                               ),
                             ),
@@ -282,9 +317,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    _summary(l10n, done, total, prayerProvider.nextPrayerName),
-                                    style:
-                                        TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
+                                    _summary(l10n, done, total,
+                                        prayerProvider.nextPrayerName),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: DeenColors.textMuted(dark)),
                                   ),
                                 ],
                               ),
@@ -317,7 +354,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       shape: BoxShape.circle,
                       color: DeenColors.gold,
                     ),
-                    child: const Icon(Icons.add, size: 18, color: DeenColors.ink),
+                    child:
+                        const Icon(Icons.add, size: 18, color: DeenColors.ink),
                   ),
                 ),
               ],
@@ -326,7 +364,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: !habitProvider.hasLoadedOnce
-                  ? _fullWidth(const _HabitListSkeleton(), key: const ValueKey('habits-skeleton'))
+                  ? _fullWidth(const _HabitListSkeleton(),
+                      key: const ValueKey('habits-skeleton'))
                   : _fullWidth(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -344,7 +383,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           for (final habit in visibleHabits)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8),
-                              child: _DashboardHabitRow(habit: habit, dark: dark),
+                              child:
+                                  _DashboardHabitRow(habit: habit, dark: dark),
                             ),
                           if (hiddenHabitCount > 0)
                             Padding(
@@ -353,12 +393,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 onTap: widget.onSeeAllHabits,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        l10n.seeAllHabits(habitProvider.habits.length),
+                                        l10n.seeAllHabits(
+                                            habitProvider.habits.length),
                                         style: const TextStyle(
                                           fontSize: 12.5,
                                           fontWeight: FontWeight.w600,
@@ -384,12 +426,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  String _summary(AppLocalizations l10n, int done, int total, String? nextPrayerKey) {
+  String _summary(
+      AppLocalizations l10n, int done, int total, String? nextPrayerKey) {
     final remaining = total - done;
     if (total == 0 || remaining <= 0) {
       return l10n.barakahSummaryComplete(total);
     }
-    final prayer = nextPrayerKey != null ? prayerNameLabel(l10n, nextPrayerKey) : '';
+    final prayer =
+        nextPrayerKey != null ? prayerNameLabel(l10n, nextPrayerKey) : '';
     return l10n.barakahSummaryRemaining(done, total, remaining, prayer);
   }
 }
@@ -419,8 +463,9 @@ class _PrayerHero extends StatelessWidget {
           eyebrow: l10n.nextPrayerLabel,
           prayerName: prayerNameLabel(l10n, provider.nextPrayerName!),
           timeLabel: provider.nextPrayerTime ?? '',
-          remainingLabel:
-              remaining != null ? l10n.prayerRemainingShort(formatCountdown(remaining)) : '',
+          remainingLabel: remaining != null
+              ? l10n.prayerRemainingShort(formatCountdown(remaining))
+              : '',
           onUpdateLocation: () => confirmUpdateLocation(context),
         ),
         key: const ValueKey('prayer-content'),
@@ -432,10 +477,12 @@ class _PrayerHero extends StatelessWidget {
           icon: Icons.cloud_off_rounded,
           iconColor: DeenColors.rust,
           title: l10n.prayerUnavailableTitle,
-          message: prayerErrorMessage(l10n, provider.errorType!, provider.errorDetail),
+          message: prayerErrorMessage(
+              l10n, provider.errorType!, provider.errorDetail),
           dark: dark,
           compact: true,
-          actionLabel: needsSettings ? l10n.openSettingsButton : l10n.retryButton,
+          actionLabel:
+              needsSettings ? l10n.openSettingsButton : l10n.retryButton,
           onAction: needsSettings
               ? () => provider.openSettingsForCurrentError()
               : () => provider.loadPrayerTimes(),
@@ -443,7 +490,8 @@ class _PrayerHero extends StatelessWidget {
         key: const ValueKey('prayer-error'),
       );
     } else if (provider.isLoading) {
-      child = _fullWidth(_PrayerHeroSkeleton(dark: dark), key: const ValueKey('prayer-skeleton'));
+      child = _fullWidth(_PrayerHeroSkeleton(dark: dark),
+          key: const ValueKey('prayer-skeleton'));
     } else {
       child = const SizedBox.shrink(key: ValueKey('prayer-empty'));
     }
@@ -592,7 +640,9 @@ class _HabitRowSkeleton extends StatelessWidget {
         children: [
           ShimmerBox(width: 34, height: 34, dark: dark, radius: 17),
           const SizedBox(width: 10),
-          Expanded(child: ShimmerBox(width: double.infinity, height: 13, dark: dark)),
+          Expanded(
+              child:
+                  ShimmerBox(width: double.infinity, height: 13, dark: dark)),
           const SizedBox(width: 10),
           ShimmerBox(width: 28, height: 18, dark: dark, radius: 9),
         ],
@@ -629,7 +679,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
     final l10n = AppLocalizations.of(context)!;
     final done = habit.isCompletedToday;
     final subtitle = habitProgressSubtitle(l10n, habit);
-    final showRatingPicker = habit.trackingType == HabitTrackingType.rating && _expanded;
+    final showRatingPicker =
+        habit.trackingType == HabitTrackingType.rating && _expanded;
     final isAvoidance = habit.trackingType == HabitTrackingType.avoidance;
 
     return HabitActionsMenu(
@@ -654,7 +705,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
                           fontSize: 13,
                           color: DeenColors.primaryText(dark),
                           decoration: done ? TextDecoration.lineThrough : null,
-                          decorationColor: DeenColors.primaryText(dark).withValues(alpha: 0.6),
+                          decorationColor: DeenColors.primaryText(dark)
+                              .withValues(alpha: 0.6),
                         ),
                       ),
                       if (showRatingPicker)
@@ -665,21 +717,27 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
                         const SizedBox(height: 2),
                         Text(
                           subtitle,
-                          style: TextStyle(fontSize: 11, color: DeenColors.textMuted(dark)),
+                          style: TextStyle(
+                              fontSize: 11, color: DeenColors.textMuted(dark)),
                         ),
                       ],
                     ],
                   ),
                 ),
-                FutureBuilder<int>(
-                  future: context.read<HabitProvider>().streakFor(habit),
-                  builder: (context, snapshot) => StreakBadge(streak: snapshot.data ?? 0, dark: dark),
-                ),
+                // A streak describes a recurrence pattern a one-off to-do
+                // doesn't have.
+                if (habit.frequency != HabitFrequency.once)
+                  FutureBuilder<int>(
+                    future: context.read<HabitProvider>().streakFor(habit),
+                    builder: (context, snapshot) =>
+                        StreakBadge(streak: snapshot.data ?? 0, dark: dark),
+                  ),
               ],
             ),
             if (habit.trackingType == HabitTrackingType.checklist && _expanded)
               _checklistItemsSection(context),
-            if (isAvoidance && _confirmingSlip) _avoidanceConfirmSection(context),
+            if (isAvoidance && _confirmingSlip)
+              _avoidanceConfirmSection(context),
           ],
         ),
       ),
@@ -691,7 +749,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
       case HabitTrackingType.numeric:
         final current = habit.hasProgressToday ? habit.todayProgressValue : 0;
         return HabitProgressRing(
-          progress: habit.numericTarget == 0 ? 0 : current / habit.numericTarget,
+          progress:
+              habit.numericTarget == 0 ? 0 : current / habit.numericTarget,
           done: done,
           dark: dark,
           onTap: done
@@ -710,7 +769,9 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
         return HabitTimerControl(habit: habit, dark: dark);
       case HabitTrackingType.checklist:
         final total = habit.checklistItems.length;
-        final doneItems = habit.hasProgressToday ? habit.todayChecklistDone : const <String>[];
+        final doneItems = habit.hasProgressToday
+            ? habit.todayChecklistDone
+            : const <String>[];
         final doneCount = doneItems.where(habit.checklistItems.contains).length;
         return HabitProgressRing(
           progress: total == 0 ? 0 : doneCount / total,
@@ -737,7 +798,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           onTap: done
               ? () => context.read<HabitProvider>().undoCompletion(habit)
               : () => setState(() => _expanded = !_expanded),
-          centerGlyph: Icon(Icons.star_outline, size: 15, color: DeenColors.textMuted(dark)),
+          centerGlyph: Icon(Icons.star_outline,
+              size: 15, color: DeenColors.textMuted(dark)),
         );
       case HabitTrackingType.yesNo:
         return HabitCheckbox(
@@ -758,7 +820,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           child: Icon(
             slipLoggedToday ? Icons.flag : Icons.flag_outlined,
             size: 20,
-            color: slipLoggedToday ? DeenColors.rust : DeenColors.textMuted(dark),
+            color:
+                slipLoggedToday ? DeenColors.rust : DeenColors.textMuted(dark),
           ),
         );
     }
@@ -805,7 +868,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
           Expanded(
             child: Text(
               l10n.avoidanceConfirmTitle,
-              style: TextStyle(fontSize: 11.5, color: DeenColors.primaryText(dark)),
+              style: TextStyle(
+                  fontSize: 11.5, color: DeenColors.primaryText(dark)),
             ),
           ),
           GestureDetector(
@@ -814,7 +878,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Text(
                 l10n.cancelButton,
-                style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
+                style: TextStyle(
+                    fontSize: 11.5, color: DeenColors.textMuted(dark)),
               ),
             ),
           ),
@@ -846,7 +911,8 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
 
   Widget _checklistItemsSection(BuildContext context) {
     final doneItems =
-        (habit.hasProgressToday ? habit.todayChecklistDone : const <String>[]).toSet();
+        (habit.hasProgressToday ? habit.todayChecklistDone : const <String>[])
+            .toSet();
     return Padding(
       padding: const EdgeInsets.only(top: 6),
       child: Column(
@@ -880,7 +946,9 @@ class _DashboardHabitRowState extends State<_DashboardHabitRow> {
                           color: doneItems.contains(item)
                               ? DeenColors.textMuted(dark)
                               : DeenColors.primaryText(dark),
-                          decoration: doneItems.contains(item) ? TextDecoration.lineThrough : null,
+                          decoration: doneItems.contains(item)
+                              ? TextDecoration.lineThrough
+                              : null,
                         ),
                       ),
                     ),
@@ -932,9 +1000,11 @@ class _ChecklistDot extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: done ? DeenColors.primary : Colors.transparent,
-        border: Border.all(color: done ? DeenColors.primary : DeenColors.outlineFaint(dark)),
+        border: Border.all(
+            color: done ? DeenColors.primary : DeenColors.outlineFaint(dark)),
       ),
-      child: done ? const Icon(Icons.check, size: 11, color: Colors.white) : null,
+      child:
+          done ? const Icon(Icons.check, size: 11, color: Colors.white) : null,
     );
   }
 }

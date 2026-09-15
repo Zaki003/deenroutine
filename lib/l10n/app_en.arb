@@ -188,6 +188,14 @@
   "@reminderAtTime": {
     "placeholders": { "time": {} }
   },
+  "onceDueDateLabel": "Due date",
+  "onceTodayOption": "Today",
+  "oncePickDateOption": "Pick a date",
+  "onceReminderTitle": "Reminder",
+  "onceReminderAtDateTime": "{date}, {time}",
+  "@onceReminderAtDateTime": {
+    "placeholders": { "date": {}, "time": {} }
+  },
   "saveHabitButton": "Save Habit",
   "saveChangesButton": "Save Changes",
   "discardChangesTitle": "Discard changes?",
@@ -202,6 +210,15 @@
   "frequencyDaily": "Daily",
   "frequencyWeekly": "Weekly",
   "frequencySpecificDays": "Specific days",
+  "frequencyOnce": "Once",
+
+  "onceSectionTitle": "To-dos",
+  "onceDueTodayTag": "Today",
+  "onceOverdueTag": "Overdue",
+  "onceDueOnTag": "Due {date}",
+  "@onceDueOnTag": {
+    "placeholders": { "date": {} }
+  },
 
   "trackingTypeSectionLabel": "Tracking type",
   "trackingTypeYesNoLabel": "Yes / No",

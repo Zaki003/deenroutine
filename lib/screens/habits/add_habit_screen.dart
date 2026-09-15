@@ -7,8 +7,17 @@ import '../../models/habit_template.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../services/notification_service.dart';
+import '../../utils/date_format.dart';
 import '../../utils/habit_error_messages.dart';
 import '../../widgets/tracking_type_section.dart';
+
+/// The only tracking types that make sense for a one-off to-do: a plain
+/// checkbox, or a checklist of sub-steps. Numeric/timer/rating targets and
+/// avoidance all assume an ongoing, repeating habit.
+const _onceTrackingTypes = [
+  HabitTrackingType.yesNo,
+  HabitTrackingType.checklist
+];
 
 /// Keeps a habit's title short enough to fit on one line in the compact
 /// dashboard/habits-list rows, which have no wrapping allowance.
@@ -43,6 +52,12 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   final Set<int> _selectedDays = {};
   String? _dayPickerError;
 
+  /// [HabitFrequency.once] only: the single day the to-do is due. Defaulted
+  /// to today as soon as [_frequency] becomes [HabitFrequency.once] — see
+  /// the frequency dropdown's `onChanged` — so it's never null while that
+  /// frequency is selected.
+  DateTime? _dueDate;
+
   HabitTrackingType _trackingType = HabitTrackingType.yesNo;
   int _numericTarget = 1;
   String _numericUnit = '';
@@ -61,6 +76,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   late final HabitCategory _initialCategory;
   late final HabitFrequency _initialFrequency;
   late final Set<int> _initialSelectedDays;
+  late final DateTime? _initialDueDate;
   late final TimeOfDay? _initialReminderTime;
   late final HabitTrackingType _initialTrackingType;
   late final int _initialNumericTarget;
@@ -76,6 +92,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         _category != _initialCategory ||
         _frequency != _initialFrequency ||
         !setEquals(_selectedDays, _initialSelectedDays) ||
+        _dueDate != _initialDueDate ||
         _reminderTime != _initialReminderTime ||
         _trackingType != _initialTrackingType ||
         _numericTarget != _initialNumericTarget ||
@@ -95,6 +112,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       _category = habit.category;
       _frequency = habit.frequency;
       _selectedDays.addAll(habit.selectedDays);
+      _dueDate = habit.dueDate;
       if (habit.reminderHour != null && habit.reminderMinute != null) {
         _reminderTime =
             TimeOfDay(hour: habit.reminderHour!, minute: habit.reminderMinute!);
@@ -124,11 +142,15 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       _timerTargetMinutes = template.timerTargetMinutes;
       _checklistItems.addAll(template.checklistItems);
     }
+    if (_frequency == HabitFrequency.once) {
+      _dueDate ??= DateTime.now();
+    }
 
     _initialTitle = _titleCtrl.text;
     _initialCategory = _category;
     _initialFrequency = _frequency;
     _initialSelectedDays = Set.of(_selectedDays);
+    _initialDueDate = _dueDate;
     _initialReminderTime = _reminderTime;
     _initialTrackingType = _trackingType;
     _initialNumericTarget = _numericTarget;
@@ -186,6 +208,75 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       initialTime: _reminderTime ?? const TimeOfDay(hour: 20, minute: 0),
     );
     if (picked != null) setState(() => _reminderTime = picked);
+  }
+
+  bool get _onceDueDateIsToday {
+    final due = _dueDate;
+    if (due == null) return true;
+    final now = DateTime.now();
+    return due.year == now.year && due.month == now.month && due.day == now.day;
+  }
+
+  Future<void> _pickDueDate() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final due = _dueDate;
+    final dueDay = due == null ? null : DateTime(due.year, due.month, due.day);
+    final picked = await showDatePicker(
+      context: context,
+      // Defaults to tomorrow rather than today — picking "a date" while
+      // already defaulted to today would otherwise reopen on the one date
+      // this chip exists to move away from. Compares calendar days, not
+      // instants: _dueDate for "today" carries the current time of day, so
+      // comparing the raw DateTimes would call this afternoon "after"
+      // midnight today and wrongly treat it as already a future date.
+      initialDate: dueDay != null && dueDay.isAfter(today)
+          ? dueDay
+          : today.add(const Duration(days: 1)),
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 730)),
+    );
+    if (picked != null) setState(() => _dueDate = picked);
+  }
+
+  Widget _buildOnceDueDateSection(AppLocalizations l10n) {
+    final isToday = _onceDueDateIsToday;
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.onceDueDateLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: [
+              ChoiceChip(
+                label: Text(l10n.onceTodayOption),
+                selected: isToday,
+                onSelected: (_) => setState(() => _dueDate = DateTime.now()),
+              ),
+              ChoiceChip(
+                label: Text(l10n.oncePickDateOption),
+                selected: !isToday,
+                onSelected: (_) => _pickDueDate(),
+              ),
+            ],
+          ),
+          if (!isToday)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.calendar_today_outlined),
+                title: Text(formatShortDate(l10n.localeName, _dueDate!)),
+                onTap: _pickDueDate,
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   Widget _buildDayPicker(AppLocalizations l10n) {
@@ -315,13 +406,24 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                       _selectedDays.clear();
                       _dayPickerError = null;
                     }
+                    if (_frequency == HabitFrequency.once) {
+                      _dueDate ??= DateTime.now();
+                      if (!_onceTrackingTypes.contains(_trackingType)) {
+                        _trackingType = HabitTrackingType.yesNo;
+                      }
+                    }
                   }),
                 ),
                 if (_frequency == HabitFrequency.specificDays)
                   _buildDayPicker(l10n),
+                if (_frequency == HabitFrequency.once)
+                  _buildOnceDueDateSection(l10n),
                 const SizedBox(height: 16),
                 TrackingTypePicker(
                   selected: _trackingType,
+                  types: _frequency == HabitFrequency.once
+                      ? _onceTrackingTypes
+                      : HabitTrackingType.values,
                   onChanged: (t) => setState(() {
                     _trackingType = t;
                     _checklistError = null;
@@ -362,11 +464,20 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.notifications_outlined),
-                  title: Text(l10n.dailyReminderTitle),
+                  title: Text(_frequency == HabitFrequency.once
+                      ? l10n.onceReminderTitle
+                      : l10n.dailyReminderTitle),
                   subtitle: Text(
                     _reminderTime == null
                         ? l10n.reminderOffSubtitle
-                        : l10n.reminderAtTime(_reminderTime!.format(context)),
+                        : _frequency == HabitFrequency.once
+                            ? l10n.onceReminderAtDateTime(
+                                formatShortDate(l10n.localeName,
+                                    _dueDate ?? DateTime.now()),
+                                _reminderTime!.format(context),
+                              )
+                            : l10n
+                                .reminderAtTime(_reminderTime!.format(context)),
                   ),
                   trailing: _reminderTime == null
                       ? null
@@ -404,6 +515,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                           final habitProvider = context.read<HabitProvider>();
                           final selectedDays = _selectedDays.toList()..sort();
 
+                          final dueDate = _frequency == HabitFrequency.once
+                              ? _dueDate
+                              : null;
+
                           final saved = _isEditing
                               ? await habitProvider.updateHabit(
                                   original: widget.editingHabit!,
@@ -411,6 +526,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                   category: _category,
                                   frequency: _frequency,
                                   selectedDays: selectedDays,
+                                  dueDate: dueDate,
                                   reminderHour: _reminderTime?.hour,
                                   reminderMinute: _reminderTime?.minute,
                                   trackingType: _trackingType,
@@ -426,6 +542,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                   category: _category,
                                   frequency: _frequency,
                                   selectedDays: selectedDays,
+                                  dueDate: dueDate,
                                   reminderHour: _reminderTime?.hour,
                                   reminderMinute: _reminderTime?.minute,
                                   trackingType: _trackingType,
@@ -468,7 +585,18 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                               await NotificationService().cancelReminder(
                                   widget.editingHabit!.title.hashCode);
                             }
-                            if (_reminderTime != null) {
+                            if (_reminderTime != null &&
+                                _frequency == HabitFrequency.once) {
+                              final due = dueDate ?? DateTime.now();
+                              await NotificationService()
+                                  .scheduleOneOffReminder(
+                                id: title.hashCode,
+                                title: l10n.reminderNotificationTitle,
+                                body: l10n.reminderNotificationBody(title),
+                                dateTime: DateTime(due.year, due.month, due.day,
+                                    _reminderTime!.hour, _reminderTime!.minute),
+                              );
+                            } else if (_reminderTime != null) {
                               await NotificationService().scheduleDailyReminder(
                                 id: title.hashCode,
                                 title: l10n.reminderNotificationTitle,

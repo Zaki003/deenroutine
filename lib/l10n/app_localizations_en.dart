@@ -432,6 +432,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get onceDueDateLabel => 'Due date';
+
+  @override
+  String get onceTodayOption => 'Today';
+
+  @override
+  String get oncePickDateOption => 'Pick a date';
+
+  @override
+  String get onceReminderTitle => 'Reminder';
+
+  @override
+  String onceReminderAtDateTime(Object date, Object time) {
+    return '$date, $time';
+  }
+
+  @override
   String get saveHabitButton => 'Save Habit';
 
   @override
@@ -470,6 +487,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get frequencySpecificDays => 'Specific days';
+
+  @override
+  String get frequencyOnce => 'Once';
+
+  @override
+  String get onceSectionTitle => 'To-dos';
+
+  @override
+  String get onceDueTodayTag => 'Today';
+
+  @override
+  String get onceOverdueTag => 'Overdue';
+
+  @override
+  String onceDueOnTag(Object date) {
+    return 'Due $date';
+  }
 
   @override
   String get trackingTypeSectionLabel => 'Tracking type';

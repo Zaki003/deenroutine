@@ -10,16 +10,26 @@ class TrackingTypePicker extends StatelessWidget {
   final HabitTrackingType selected;
   final ValueChanged<HabitTrackingType> onChanged;
 
-  const TrackingTypePicker({super.key, required this.selected, required this.onChanged});
+  /// Narrowed by the add-habit form for [HabitFrequency.once], which only
+  /// makes sense as a plain checkbox or a checklist — defaults to every type
+  /// for a recurring habit.
+  final List<HabitTrackingType> types;
+
+  const TrackingTypePicker({
+    super.key,
+    required this.selected,
+    required this.onChanged,
+    this.types = HabitTrackingType.values,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final types = HabitTrackingType.values;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.trackingTypeSectionLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+        Text(l10n.trackingTypeSectionLabel,
+            style: const TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         // Paired Rows instead of a GridView with a fixed childAspectRatio -
         // a fixed aspect ratio locks every card to an exact height, and a
@@ -72,7 +82,8 @@ class _TrackingTypeCard extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _TrackingTypeCard({required this.type, required this.selected, required this.onTap});
+  const _TrackingTypeCard(
+      {required this.type, required this.selected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +103,8 @@ class _TrackingTypeCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(type.icon, size: 20, color: selected ? Colors.white : scheme.primary),
+            Icon(type.icon,
+                size: 20, color: selected ? Colors.white : scheme.primary),
             const SizedBox(height: 6),
             Text(
               type.label(l10n),
@@ -111,7 +123,9 @@ class _TrackingTypeCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 10.5,
-                color: selected ? Colors.white.withValues(alpha: 0.85) : scheme.onSurfaceVariant,
+                color: selected
+                    ? Colors.white.withValues(alpha: 0.85)
+                    : scheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -170,12 +184,14 @@ class NumericConfigPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.numericTargetLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.numericTargetLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Row(
             children: [
               IconButton.outlined(
-                onPressed: target > 1 ? () => onTargetChanged(target - 1) : null,
+                onPressed:
+                    target > 1 ? () => onTargetChanged(target - 1) : null,
                 icon: const Icon(Icons.remove),
               ),
               SizedBox(
@@ -183,7 +199,8 @@ class NumericConfigPanel extends StatelessWidget {
                 child: Text(
                   '$target',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               IconButton.outlined(
@@ -193,7 +210,8 @@ class NumericConfigPanel extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Text(l10n.numericUnitLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.numericUnitLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -243,7 +261,8 @@ class TimerConfigPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.timerTargetLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.timerTargetLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -265,7 +284,9 @@ class TimerConfigPanel extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w600)),
               ),
               IconButton.outlined(
-                onPressed: targetMinutes > 1 ? () => onTargetMinutesChanged(targetMinutes - 1) : null,
+                onPressed: targetMinutes > 1
+                    ? () => onTargetMinutesChanged(targetMinutes - 1)
+                    : null,
                 icon: const Icon(Icons.remove),
               ),
               SizedBox(
@@ -273,7 +294,8 @@ class TimerConfigPanel extends StatelessWidget {
                 child: Text(
                   '$targetMinutes',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               IconButton.outlined(
@@ -314,7 +336,8 @@ class ChecklistConfigPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.checklistItemsLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.checklistItemsLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           for (var i = 0; i < items.length; i++)
             Padding(
@@ -335,7 +358,8 @@ class ChecklistConfigPanel extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: itemController,
-                  decoration: InputDecoration(hintText: l10n.checklistItemInputHint),
+                  decoration:
+                      InputDecoration(hintText: l10n.checklistItemInputHint),
                   onFieldSubmitted: (_) => onAdd(),
                 ),
               ),
@@ -351,7 +375,8 @@ class ChecklistConfigPanel extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.error, fontSize: 12),
               ),
             ),
         ],
@@ -365,7 +390,8 @@ class RatingConfigPanel extends StatelessWidget {
   final int scale;
   final ValueChanged<int> onScaleChanged;
 
-  const RatingConfigPanel({super.key, required this.scale, required this.onScaleChanged});
+  const RatingConfigPanel(
+      {super.key, required this.scale, required this.onScaleChanged});
 
   static const _presets = [3, 5, 10];
 
@@ -377,7 +403,8 @@ class RatingConfigPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.ratingScaleLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.ratingScaleLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -414,7 +441,8 @@ class TrackingTypeInfoNote extends StatelessWidget {
           color: scheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(text, style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant)),
+        child: Text(text,
+            style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant)),
       ),
     );
   }

@@ -19,8 +19,7 @@ class NotificationService {
     final deviceTimezone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(deviceTimezone.identifier));
 
-    const androidSettings =
-        AndroidInitializationSettings('ic_notification');
+    const androidSettings = AndroidInitializationSettings('ic_notification');
     const iosSettings = DarwinInitializationSettings();
     const initSettings = InitializationSettings(
       android: androidSettings,
@@ -70,6 +69,38 @@ class NotificationService {
 
   Future<void> cancelReminder(int id) => _plugin.cancel(id: id);
 
+  /// Schedules a one-off habit reminder that fires exactly once, at
+  /// [dateTime] — a one-time habit's reminder, unlike
+  /// [scheduleDailyReminder], has no `matchDateTimeComponents` so it doesn't
+  /// recur daily. A [dateTime] already in the past is silently skipped,
+  /// same as [schedulePrayerNotification].
+  Future<void> scheduleOneOffReminder({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime dateTime,
+  }) async {
+    final scheduled = tz.TZDateTime.from(dateTime, tz.local);
+    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
+    await _plugin.zonedSchedule(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduled,
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'deenroutine_reminders',
+          'DeenRoutine Reminders',
+          channelDescription: 'Habit and prayer time reminders',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
+  }
+
   /// Schedules a one-off adhan notification for [time]. Unlike
   /// [scheduleDailyReminder], this doesn't use `matchDateTimeComponents` to
   /// recur daily at a fixed clock time - prayer times shift by a minute or
@@ -100,7 +131,8 @@ class NotificationService {
         android: AndroidNotificationDetails(
           'deenroutine_adhan',
           'Adhan',
-          channelDescription: 'Notification with adhan sound at each enabled prayer time',
+          channelDescription:
+              'Notification with adhan sound at each enabled prayer time',
           importance: Importance.max,
           priority: Priority.high,
           sound: RawResourceAndroidNotificationSound('adhan_takbir'),

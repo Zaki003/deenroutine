@@ -837,6 +837,36 @@ abstract class AppLocalizations {
   /// **'At {time}'**
   String reminderAtTime(Object time);
 
+  /// No description provided for @onceDueDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get onceDueDateLabel;
+
+  /// No description provided for @onceTodayOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get onceTodayOption;
+
+  /// No description provided for @oncePickDateOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get oncePickDateOption;
+
+  /// No description provided for @onceReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get onceReminderTitle;
+
+  /// No description provided for @onceReminderAtDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}, {time}'**
+  String onceReminderAtDateTime(Object date, Object time);
+
   /// No description provided for @saveHabitButton.
   ///
   /// In en, this message translates to:
@@ -914,6 +944,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Specific days'**
   String get frequencySpecificDays;
+
+  /// No description provided for @frequencyOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once'**
+  String get frequencyOnce;
+
+  /// No description provided for @onceSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'To-dos'**
+  String get onceSectionTitle;
+
+  /// No description provided for @onceDueTodayTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get onceDueTodayTag;
+
+  /// No description provided for @onceOverdueTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get onceOverdueTag;
+
+  /// No description provided for @onceDueOnTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {date}'**
+  String onceDueOnTag(Object date);
 
   /// No description provided for @trackingTypeSectionLabel.
   ///

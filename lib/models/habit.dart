@@ -4,7 +4,7 @@ import '../l10n/app_localizations.dart';
 
 enum HabitCategory { islam, lifestyle, learn, work }
 
-enum HabitFrequency { daily, weekly, specificDays }
+enum HabitFrequency { daily, weekly, specificDays, once }
 
 /// How a habit's daily completion is logged. [yesNo] is the original,
 /// still-default behavior; the others each pair with their own config
@@ -31,6 +31,11 @@ class Habit {
   /// 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat.
   final List<int> selectedDays;
 
+  /// Only meaningful when [frequency] is [HabitFrequency.once]: the single
+  /// calendar day this to-do is due, separate from [createdAt] since it can
+  /// be created today for a future date.
+  final DateTime? dueDate;
+
   /// Time of day the daily reminder notification fires, or null if this
   /// habit has no reminder set.
   final int? reminderHour;
@@ -40,13 +45,17 @@ class Habit {
 
   /// [HabitTrackingType.numeric] only: the day's target count (e.g. 10 pages).
   final int numericTarget;
+
   /// [HabitTrackingType.numeric] only: unit label shown next to the count.
   final String numericUnit;
+
   /// [HabitTrackingType.timer] only: the day's target duration.
   final int timerTargetMinutes;
+
   /// [HabitTrackingType.checklist] only: the fixed set of items a day's log
   /// checks off.
   final List<String> checklistItems;
+
   /// [HabitTrackingType.rating] only: the scale's upper bound (e.g. 5 for
   /// "out of 5").
   final int ratingScale;
@@ -61,6 +70,7 @@ class Habit {
   /// checked off today. Same denormalization idea as [todayProgressValue] —
   /// meaningful only when [hasProgressToday] is true.
   final List<String> todayChecklistDone;
+
   /// [HabitTrackingType.rating] only: today's rating, or null if not rated
   /// yet. Meaningful only when [hasProgressToday] is true.
   final int? todayRatingValue;
@@ -74,6 +84,7 @@ class Habit {
     this.completed = false,
     this.lastCompletedDate,
     this.selectedDays = const [],
+    this.dueDate,
     this.reminderHour,
     this.reminderMinute,
     this.trackingType = HabitTrackingType.yesNo,
@@ -101,16 +112,43 @@ class Habit {
 
   /// Whether [completed] reflects today, rather than a stale value carried
   /// over from a previous day the habit was checked off.
-  bool get isCompletedToday => completed && hasProgressToday;
+  ///
+  /// [HabitFrequency.once] is the exception: it has exactly one due day
+  /// ever, so completion shouldn't reset the day after like a recurring
+  /// habit's would — [completed] alone is the permanent record.
+  bool get isCompletedToday => frequency == HabitFrequency.once
+      ? completed
+      : (completed && hasProgressToday);
 
   /// Whether this habit is scheduled for today. Daily and weekly habits are
   /// always due; a [HabitFrequency.specificDays] habit is due only when
-  /// today's weekday is one of [selectedDays].
+  /// today's weekday is one of [selectedDays]; a [HabitFrequency.once] habit
+  /// is due only on its [dueDate].
   bool get isDueToday {
+    if (frequency == HabitFrequency.once) {
+      final due = dueDate;
+      if (due == null) return true;
+      final now = DateTime.now();
+      return due.year == now.year &&
+          due.month == now.month &&
+          due.day == now.day;
+    }
     if (frequency != HabitFrequency.specificDays) return true;
     // Dart's DateTime.weekday is Mon=1..Sun=7; selectedDays uses Sun=0..Sat=6.
     final todayIndex = DateTime.now().weekday % 7;
     return selectedDays.contains(todayIndex);
+  }
+
+  /// [HabitFrequency.once] only: [dueDate] has passed without the to-do
+  /// being completed. Unlike a missed day on a recurring habit, this has no
+  /// automatic recovery — the UI surfaces it so it can be cleared manually.
+  bool get isOverdue {
+    if (frequency != HabitFrequency.once || completed) return false;
+    final due = dueDate;
+    if (due == null) return false;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return DateTime(due.year, due.month, due.day).isBefore(today);
   }
 
   Map<String, dynamic> toMap() {
@@ -120,9 +158,11 @@ class Habit {
       'category': category.name,
       'frequency': frequency.name,
       'completed': completed,
-      'lastCompletedDate':
-          lastCompletedDate != null ? Timestamp.fromDate(lastCompletedDate!) : null,
+      'lastCompletedDate': lastCompletedDate != null
+          ? Timestamp.fromDate(lastCompletedDate!)
+          : null,
       'selectedDays': selectedDays,
+      'dueDate': dueDate != null ? Timestamp.fromDate(dueDate!) : null,
       'reminderHour': reminderHour,
       'reminderMinute': reminderMinute,
       'trackingType': trackingType.name,
@@ -154,6 +194,7 @@ class Habit {
       completed: map['completed'] ?? false,
       lastCompletedDate: (map['lastCompletedDate'] as Timestamp?)?.toDate(),
       selectedDays: List<int>.from(map['selectedDays'] ?? const []),
+      dueDate: (map['dueDate'] as Timestamp?)?.toDate(),
       reminderHour: map['reminderHour'] as int?,
       reminderMinute: map['reminderMinute'] as int?,
       trackingType: HabitTrackingType.values.firstWhere(
@@ -166,7 +207,8 @@ class Habit {
       checklistItems: List<String>.from(map['checklistItems'] ?? const []),
       ratingScale: map['ratingScale'] as int? ?? 5,
       todayProgressValue: map['todayProgressValue'] as int? ?? 0,
-      todayChecklistDone: List<String>.from(map['todayChecklistDone'] ?? const []),
+      todayChecklistDone:
+          List<String>.from(map['todayChecklistDone'] ?? const []),
       todayRatingValue: map['todayRatingValue'] as int?,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -211,6 +253,8 @@ extension HabitFrequencyLabel on HabitFrequency {
         return l10n.frequencyWeekly;
       case HabitFrequency.specificDays:
         return l10n.frequencySpecificDays;
+      case HabitFrequency.once:
+        return l10n.frequencyOnce;
     }
   }
 }
