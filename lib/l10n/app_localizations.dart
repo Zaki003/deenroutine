@@ -849,6 +849,30 @@ abstract class AppLocalizations {
   /// **'Save Changes'**
   String get saveChangesButton;
 
+  /// No description provided for @discardChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get discardChangesTitle;
+
+  /// No description provided for @discardChangesContent.
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsaved changes. If you leave now, they\'ll be lost.'**
+  String get discardChangesContent;
+
+  /// No description provided for @discardButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get discardButton;
+
+  /// No description provided for @keepEditingButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Editing'**
+  String get keepEditingButton;
+
   /// No description provided for @categoryIslam.
   ///
   /// In en, this message translates to:

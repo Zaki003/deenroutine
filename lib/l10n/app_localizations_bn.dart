@@ -433,6 +433,19 @@ class AppLocalizationsBn extends AppLocalizations {
   String get saveChangesButton => 'পরিবর্তন সংরক্ষণ করুন';
 
   @override
+  String get discardChangesTitle => 'পরিবর্তনগুলো বাতিল করবেন?';
+
+  @override
+  String get discardChangesContent =>
+      'আপনার অসংরক্ষিত পরিবর্তন রয়েছে। এখন চলে গেলে তা হারিয়ে যাবে।';
+
+  @override
+  String get discardButton => 'বাতিল করুন';
+
+  @override
+  String get keepEditingButton => 'সম্পাদনা চালিয়ে যান';
+
+  @override
   String get categoryIslam => 'ইসলাম';
 
   @override

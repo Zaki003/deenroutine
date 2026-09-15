@@ -438,6 +438,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveChangesButton => 'Save Changes';
 
   @override
+  String get discardChangesTitle => 'Discard changes?';
+
+  @override
+  String get discardChangesContent =>
+      'You have unsaved changes. If you leave now, they\'ll be lost.';
+
+  @override
+  String get discardButton => 'Discard';
+
+  @override
+  String get keepEditingButton => 'Keep Editing';
+
+  @override
   String get categoryIslam => 'Islam';
 
   @override

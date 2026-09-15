@@ -143,6 +143,10 @@
   "reminderAtTime": "{time} টায়",
   "saveHabitButton": "অভ্যাস সংরক্ষণ করুন",
   "saveChangesButton": "পরিবর্তন সংরক্ষণ করুন",
+  "discardChangesTitle": "পরিবর্তনগুলো বাতিল করবেন?",
+  "discardChangesContent": "আপনার অসংরক্ষিত পরিবর্তন রয়েছে। এখন চলে গেলে তা হারিয়ে যাবে।",
+  "discardButton": "বাতিল করুন",
+  "keepEditingButton": "সম্পাদনা চালিয়ে যান",
 
   "categoryIslam": "ইসলাম",
   "categoryLifestyle": "জীবনযাপন",

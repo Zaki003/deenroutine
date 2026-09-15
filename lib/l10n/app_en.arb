@@ -190,6 +190,10 @@
   },
   "saveHabitButton": "Save Habit",
   "saveChangesButton": "Save Changes",
+  "discardChangesTitle": "Discard changes?",
+  "discardChangesContent": "You have unsaved changes. If you leave now, they'll be lost.",
+  "discardButton": "Discard",
+  "keepEditingButton": "Keep Editing",
 
   "categoryIslam": "Islam",
   "categoryLifestyle": "Lifestyle",

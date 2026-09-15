@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -52,7 +53,37 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   String? _checklistError;
   int _ratingScale = 5;
 
+  // Snapshot of every saved field's starting value, taken right after the
+  // pre-fill logic below runs — compared against the live fields in
+  // [_hasUnsavedChanges] to decide whether leaving the screen needs a
+  // discard-changes confirmation.
+  late final String _initialTitle;
+  late final HabitCategory _initialCategory;
+  late final HabitFrequency _initialFrequency;
+  late final Set<int> _initialSelectedDays;
+  late final TimeOfDay? _initialReminderTime;
+  late final HabitTrackingType _initialTrackingType;
+  late final int _initialNumericTarget;
+  late final String _initialNumericUnit;
+  late final int _initialTimerTargetMinutes;
+  late final List<String> _initialChecklistItems;
+  late final int _initialRatingScale;
+
   bool get _isEditing => widget.editingHabit != null;
+
+  bool get _hasUnsavedChanges {
+    return _titleCtrl.text != _initialTitle ||
+        _category != _initialCategory ||
+        _frequency != _initialFrequency ||
+        !setEquals(_selectedDays, _initialSelectedDays) ||
+        _reminderTime != _initialReminderTime ||
+        _trackingType != _initialTrackingType ||
+        _numericTarget != _initialNumericTarget ||
+        _numericUnit != _initialNumericUnit ||
+        _timerTargetMinutes != _initialTimerTargetMinutes ||
+        !listEquals(_checklistItems, _initialChecklistItems) ||
+        _ratingScale != _initialRatingScale;
+  }
 
   @override
   void initState() {
@@ -93,6 +124,18 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       _timerTargetMinutes = template.timerTargetMinutes;
       _checklistItems.addAll(template.checklistItems);
     }
+
+    _initialTitle = _titleCtrl.text;
+    _initialCategory = _category;
+    _initialFrequency = _frequency;
+    _initialSelectedDays = Set.of(_selectedDays);
+    _initialReminderTime = _reminderTime;
+    _initialTrackingType = _trackingType;
+    _initialNumericTarget = _numericTarget;
+    _initialNumericUnit = _numericUnit;
+    _initialTimerTargetMinutes = _timerTargetMinutes;
+    _initialChecklistItems = List.of(_checklistItems);
+    _initialRatingScale = _ratingScale;
   }
 
   @override
@@ -113,6 +156,30 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     });
   }
 
+  Future<bool> _confirmDiscardChanges(AppLocalizations l10n) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.discardChangesTitle),
+        content: Text(l10n.discardChangesContent),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.keepEditingButton),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              l10n.discardButton,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   Future<void> _pickReminderTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -128,7 +195,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.repeatOnLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(l10n.repeatOnLabel,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,231 +253,251 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(_isEditing ? l10n.editHabitTitle : l10n.newHabitTitle)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _titleCtrl,
-                decoration: InputDecoration(labelText: l10n.habitTitleLabel),
-                maxLength: _titleMaxLength,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return l10n.habitTitleValidatorError;
-                  }
-                  // maxLength above blocks typing past the limit, but can't
-                  // retroactively shorten a title that already exceeded it
-                  // before this limit existed - this is what actually stops
-                  // an old over-length title from being saved unchanged.
-                  if (value.trim().length > _titleMaxLength) {
-                    return l10n.habitTitleTooLongError;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<HabitCategory>(
-                initialValue: _category,
-                decoration: InputDecoration(labelText: l10n.categoryLabel),
-                items: HabitCategory.values
-                    .map((c) => DropdownMenuItem(value: c, child: Text(c.label(l10n))))
-                    .toList(),
-                onChanged: (v) => setState(() => _category = v!),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<HabitFrequency>(
-                initialValue: _frequency,
-                decoration: InputDecoration(labelText: l10n.frequencyLabel),
-                items: HabitFrequency.values
-                    .map((f) => DropdownMenuItem(value: f, child: Text(f.label(l10n))))
-                    .toList(),
-                onChanged: (v) => setState(() {
-                  _frequency = v!;
-                  if (_frequency != HabitFrequency.specificDays) {
-                    _selectedDays.clear();
-                    _dayPickerError = null;
-                  }
-                }),
-              ),
-              if (_frequency == HabitFrequency.specificDays) _buildDayPicker(l10n),
-              const SizedBox(height: 16),
-              TrackingTypePicker(
-                selected: _trackingType,
-                onChanged: (t) => setState(() {
-                  _trackingType = t;
-                  _checklistError = null;
-                }),
-              ),
-              switch (_trackingType) {
-                HabitTrackingType.numeric => NumericConfigPanel(
-                    target: _numericTarget,
-                    onTargetChanged: (v) => setState(() => _numericTarget = v),
-                    unit: _numericUnit,
-                    onUnitChanged: (v) => setState(() => _numericUnit = v),
-                    unitController: _numericUnitCtrl,
-                  ),
-                HabitTrackingType.timer => TimerConfigPanel(
-                    targetMinutes: _timerTargetMinutes,
-                    onTargetMinutesChanged: (v) => setState(() => _timerTargetMinutes = v),
-                  ),
-                HabitTrackingType.checklist => ChecklistConfigPanel(
-                    items: _checklistItems,
-                    itemController: _checklistItemCtrl,
-                    error: _checklistError,
-                    onAdd: _addChecklistItem,
-                    onRemoveAt: (i) => setState(() => _checklistItems.removeAt(i)),
-                  ),
-                HabitTrackingType.rating => RatingConfigPanel(
-                    scale: _ratingScale,
-                    onScaleChanged: (v) => setState(() => _ratingScale = v),
-                  ),
-                HabitTrackingType.yesNo =>
-                  TrackingTypeInfoNote(text: l10n.yesNoInfoNote),
-                HabitTrackingType.avoidance =>
-                  TrackingTypeInfoNote(text: l10n.avoidanceInfoNote),
-              },
-              const SizedBox(height: 16),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.notifications_outlined),
-                title: Text(l10n.dailyReminderTitle),
-                subtitle: Text(
-                  _reminderTime == null
-                      ? l10n.reminderOffSubtitle
-                      : l10n.reminderAtTime(_reminderTime!.format(context)),
+    return PopScope(
+      canPop: !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final discard = await _confirmDiscardChanges(l10n);
+        if (discard && context.mounted) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(_isEditing ? l10n.editHabitTitle : l10n.newHabitTitle)),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _titleCtrl,
+                  decoration: InputDecoration(labelText: l10n.habitTitleLabel),
+                  maxLength: _titleMaxLength,
+                  onChanged: (_) => setState(() {}),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return l10n.habitTitleValidatorError;
+                    }
+                    // maxLength above blocks typing past the limit, but can't
+                    // retroactively shorten a title that already exceeded it
+                    // before this limit existed - this is what actually stops
+                    // an old over-length title from being saved unchanged.
+                    if (value.trim().length > _titleMaxLength) {
+                      return l10n.habitTitleTooLongError;
+                    }
+                    return null;
+                  },
                 ),
-                trailing: _reminderTime == null
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => setState(() => _reminderTime = null),
-                      ),
-                onTap: _pickReminderTime,
-              ),
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: _saving
-                    ? null
-                    : () async {
-                        if (!_formKey.currentState!.validate()) return;
+                const SizedBox(height: 16),
+                DropdownButtonFormField<HabitCategory>(
+                  initialValue: _category,
+                  decoration: InputDecoration(labelText: l10n.categoryLabel),
+                  items: HabitCategory.values
+                      .map((c) => DropdownMenuItem(
+                          value: c, child: Text(c.label(l10n))))
+                      .toList(),
+                  onChanged: (v) => setState(() => _category = v!),
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<HabitFrequency>(
+                  initialValue: _frequency,
+                  decoration: InputDecoration(labelText: l10n.frequencyLabel),
+                  items: HabitFrequency.values
+                      .map((f) => DropdownMenuItem(
+                          value: f, child: Text(f.label(l10n))))
+                      .toList(),
+                  onChanged: (v) => setState(() {
+                    _frequency = v!;
+                    if (_frequency != HabitFrequency.specificDays) {
+                      _selectedDays.clear();
+                      _dayPickerError = null;
+                    }
+                  }),
+                ),
+                if (_frequency == HabitFrequency.specificDays)
+                  _buildDayPicker(l10n),
+                const SizedBox(height: 16),
+                TrackingTypePicker(
+                  selected: _trackingType,
+                  onChanged: (t) => setState(() {
+                    _trackingType = t;
+                    _checklistError = null;
+                  }),
+                ),
+                switch (_trackingType) {
+                  HabitTrackingType.numeric => NumericConfigPanel(
+                      target: _numericTarget,
+                      onTargetChanged: (v) =>
+                          setState(() => _numericTarget = v),
+                      unit: _numericUnit,
+                      onUnitChanged: (v) => setState(() => _numericUnit = v),
+                      unitController: _numericUnitCtrl,
+                    ),
+                  HabitTrackingType.timer => TimerConfigPanel(
+                      targetMinutes: _timerTargetMinutes,
+                      onTargetMinutesChanged: (v) =>
+                          setState(() => _timerTargetMinutes = v),
+                    ),
+                  HabitTrackingType.checklist => ChecklistConfigPanel(
+                      items: _checklistItems,
+                      itemController: _checklistItemCtrl,
+                      error: _checklistError,
+                      onAdd: _addChecklistItem,
+                      onRemoveAt: (i) =>
+                          setState(() => _checklistItems.removeAt(i)),
+                    ),
+                  HabitTrackingType.rating => RatingConfigPanel(
+                      scale: _ratingScale,
+                      onScaleChanged: (v) => setState(() => _ratingScale = v),
+                    ),
+                  HabitTrackingType.yesNo =>
+                    TrackingTypeInfoNote(text: l10n.yesNoInfoNote),
+                  HabitTrackingType.avoidance =>
+                    TrackingTypeInfoNote(text: l10n.avoidanceInfoNote),
+                },
+                const SizedBox(height: 16),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.notifications_outlined),
+                  title: Text(l10n.dailyReminderTitle),
+                  subtitle: Text(
+                    _reminderTime == null
+                        ? l10n.reminderOffSubtitle
+                        : l10n.reminderAtTime(_reminderTime!.format(context)),
+                  ),
+                  trailing: _reminderTime == null
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () => setState(() => _reminderTime = null),
+                        ),
+                  onTap: _pickReminderTime,
+                ),
+                const SizedBox(height: 24),
+                FilledButton(
+                  onPressed: _saving
+                      ? null
+                      : () async {
+                          if (!_formKey.currentState!.validate()) return;
 
-                        if (_frequency == HabitFrequency.specificDays &&
-                            _selectedDays.isEmpty) {
-                          setState(() {
-                            _dayPickerError = l10n.selectAtLeastOneDay;
-                          });
-                          return;
-                        }
+                          if (_frequency == HabitFrequency.specificDays &&
+                              _selectedDays.isEmpty) {
+                            setState(() {
+                              _dayPickerError = l10n.selectAtLeastOneDay;
+                            });
+                            return;
+                          }
 
-                        if (_trackingType == HabitTrackingType.checklist &&
-                            _checklistItems.isEmpty) {
-                          setState(() {
-                            _checklistError = l10n.checklistEmptyError;
-                          });
-                          return;
-                        }
+                          if (_trackingType == HabitTrackingType.checklist &&
+                              _checklistItems.isEmpty) {
+                            setState(() {
+                              _checklistError = l10n.checklistEmptyError;
+                            });
+                            return;
+                          }
 
-                        setState(() => _saving = true);
-                        final title = _titleCtrl.text.trim();
-                        final habitProvider = context.read<HabitProvider>();
-                        final selectedDays = _selectedDays.toList()..sort();
+                          setState(() => _saving = true);
+                          final title = _titleCtrl.text.trim();
+                          final habitProvider = context.read<HabitProvider>();
+                          final selectedDays = _selectedDays.toList()..sort();
 
-                        final saved = _isEditing
-                            ? await habitProvider.updateHabit(
-                                original: widget.editingHabit!,
-                                title: title,
-                                category: _category,
-                                frequency: _frequency,
-                                selectedDays: selectedDays,
-                                reminderHour: _reminderTime?.hour,
-                                reminderMinute: _reminderTime?.minute,
-                                trackingType: _trackingType,
-                                numericTarget: _numericTarget,
-                                numericUnit: _numericUnit.trim(),
-                                timerTargetMinutes: _timerTargetMinutes,
-                                checklistItems: List.of(_checklistItems),
-                                ratingScale: _ratingScale,
-                              )
-                            : await habitProvider.addHabit(
-                                uid: uid,
-                                title: title,
-                                category: _category,
-                                frequency: _frequency,
-                                selectedDays: selectedDays,
-                                reminderHour: _reminderTime?.hour,
-                                reminderMinute: _reminderTime?.minute,
-                                trackingType: _trackingType,
-                                numericTarget: _numericTarget,
-                                numericUnit: _numericUnit.trim(),
-                                timerTargetMinutes: _timerTargetMinutes,
-                                checklistItems: List.of(_checklistItems),
-                                ratingScale: _ratingScale,
-                                templateId: widget.template?.id,
-                              );
-                        if (!context.mounted) return;
+                          final saved = _isEditing
+                              ? await habitProvider.updateHabit(
+                                  original: widget.editingHabit!,
+                                  title: title,
+                                  category: _category,
+                                  frequency: _frequency,
+                                  selectedDays: selectedDays,
+                                  reminderHour: _reminderTime?.hour,
+                                  reminderMinute: _reminderTime?.minute,
+                                  trackingType: _trackingType,
+                                  numericTarget: _numericTarget,
+                                  numericUnit: _numericUnit.trim(),
+                                  timerTargetMinutes: _timerTargetMinutes,
+                                  checklistItems: List.of(_checklistItems),
+                                  ratingScale: _ratingScale,
+                                )
+                              : await habitProvider.addHabit(
+                                  uid: uid,
+                                  title: title,
+                                  category: _category,
+                                  frequency: _frequency,
+                                  selectedDays: selectedDays,
+                                  reminderHour: _reminderTime?.hour,
+                                  reminderMinute: _reminderTime?.minute,
+                                  trackingType: _trackingType,
+                                  numericTarget: _numericTarget,
+                                  numericUnit: _numericUnit.trim(),
+                                  timerTargetMinutes: _timerTargetMinutes,
+                                  checklistItems: List.of(_checklistItems),
+                                  ratingScale: _ratingScale,
+                                  templateId: widget.template?.id,
+                                );
+                          if (!context.mounted) return;
 
-                        if (!saved) {
-                          setState(() => _saving = false);
-                          final errorType = habitProvider.errorType;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                errorType != null
-                                    ? habitErrorMessage(
-                                        l10n, errorType, habitProvider.errorDetail)
-                                    : l10n.habitSaveFailedGeneric,
+                          if (!saved) {
+                            setState(() => _saving = false);
+                            final errorType = habitProvider.errorType;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  errorType != null
+                                      ? habitErrorMessage(l10n, errorType,
+                                          habitProvider.errorDetail)
+                                      : l10n.habitSaveFailedGeneric,
+                                ),
                               ),
-                            ),
-                          );
-                          habitProvider.clearError();
-                          return;
-                        }
-
-                        // Notification scheduling is best-effort: the habit
-                        // itself is already saved at this point, so a
-                        // failure here (e.g. missing exact-alarm permission
-                        // on Android 12+) must not trap the user on this
-                        // screen with a spinner that never resolves.
-                        try {
-                          // The old title's notification id must be
-                          // cancelled separately since a rename changes the
-                          // id (it's derived from the title's hashCode).
-                          if (_isEditing) {
-                            await NotificationService().cancelReminder(
-                                widget.editingHabit!.title.hashCode);
-                          }
-                          if (_reminderTime != null) {
-                            await NotificationService().scheduleDailyReminder(
-                              id: title.hashCode,
-                              title: l10n.reminderNotificationTitle,
-                              body: l10n.reminderNotificationBody(title),
-                              hour: _reminderTime!.hour,
-                              minute: _reminderTime!.minute,
                             );
+                            habitProvider.clearError();
+                            return;
                           }
-                        } catch (_) {
-                          // Ignored: the habit saved successfully, which is
-                          // what the user is waiting on. The reminder just
-                          // won't fire until they reopen and re-save it.
-                        }
 
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
-                      },
-                child: _saving
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(_isEditing ? l10n.saveChangesButton : l10n.saveHabitButton),
-              ),
-            ],
+                          // Notification scheduling is best-effort: the habit
+                          // itself is already saved at this point, so a
+                          // failure here (e.g. missing exact-alarm permission
+                          // on Android 12+) must not trap the user on this
+                          // screen with a spinner that never resolves.
+                          try {
+                            // The old title's notification id must be
+                            // cancelled separately since a rename changes the
+                            // id (it's derived from the title's hashCode).
+                            if (_isEditing) {
+                              await NotificationService().cancelReminder(
+                                  widget.editingHabit!.title.hashCode);
+                            }
+                            if (_reminderTime != null) {
+                              await NotificationService().scheduleDailyReminder(
+                                id: title.hashCode,
+                                title: l10n.reminderNotificationTitle,
+                                body: l10n.reminderNotificationBody(title),
+                                hour: _reminderTime!.hour,
+                                minute: _reminderTime!.minute,
+                              );
+                            }
+                          } catch (_) {
+                            // Ignored: the habit saved successfully, which is
+                            // what the user is waiting on. The reminder just
+                            // won't fire until they reopen and re-save it.
+                          }
+
+                          if (!context.mounted) return;
+                          Navigator.pop(context);
+                        },
+                  child: _saving
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(_isEditing
+                          ? l10n.saveChangesButton
+                          : l10n.saveHabitButton),
+                ),
+              ],
+            ),
           ),
         ),
       ),
