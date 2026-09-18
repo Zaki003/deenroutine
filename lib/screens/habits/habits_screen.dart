@@ -202,10 +202,10 @@ class _HabitRow extends StatelessWidget {
     final Color color;
     if (habit.isOverdue) {
       text = l10n.onceOverdueTag;
-      color = DeenColors.rust;
+      color = dark ? DeenColors.rustLight : DeenColors.rust;
     } else if (habit.isDueToday) {
       text = l10n.onceDueTodayTag;
-      color = DeenColors.primary;
+      color = dark ? DeenColors.goldSoft : DeenColors.primary;
     } else {
       text =
           l10n.onceDueOnTag(formatShortDate(l10n.localeName, habit.dueDate!));

@@ -19,6 +19,7 @@ class DeenColors {
   static const textDark = Color(0xFF16302B);
   static Color textMuted(bool dark) => dark ? const Color(0xFF96ACA5) : const Color(0xFF4A5E57);
   static const rust = Color(0xFFA8522F);
+  static const rustLight = Color(0xFFD08F6E);
   static const green = Color(0xFF3F9142);
 
   /// Light-mode wash for the quote card and quiz "best score" banner.
