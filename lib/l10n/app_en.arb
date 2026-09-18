@@ -415,6 +415,23 @@
   "profilePreferencesLabel": "PREFERENCES",
   "profileAccountLabel": "ACCOUNT",
   "profileAboutLabel": "ABOUT",
+  "settingsTitle": "Settings",
+  "thisWeekLabel": "THIS WEEK",
+  "bestHabitLabel": "Best habit",
+  "bestHabitDaysSubtitle": "{count} of 7 days",
+  "@bestHabitDaysSubtitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "habitsTrackedLabel": "Habits tracked",
+  "habitsCompletedOnDay": "{count} completed",
+  "@habitsCompletedOnDay": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "noHabitsCompletedOnDay": "No habits completed",
   "noAdsTitle": "No ads, ever",
   "noAdsBody": "DeenRoutine has no ad network and never sells or shares your data. Usage analytics are optional — off unless you turn them on in Preferences.",
   "privacyPolicyLabel": "Privacy Policy",

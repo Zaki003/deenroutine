@@ -296,6 +296,23 @@
   "profilePreferencesLabel": "পছন্দসমূহ",
   "profileAccountLabel": "অ্যাকাউন্ট",
   "profileAboutLabel": "সম্পর্কে",
+  "settingsTitle": "সেটিংস",
+  "thisWeekLabel": "এই সপ্তাহ",
+  "bestHabitLabel": "সেরা অভ্যাস",
+  "bestHabitDaysSubtitle": "৭ দিনের মধ্যে {count} দিন",
+  "@bestHabitDaysSubtitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "habitsTrackedLabel": "ট্র্যাক করা অভ্যাস",
+  "habitsCompletedOnDay": "{count}টি সম্পন্ন হয়েছে",
+  "@habitsCompletedOnDay": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "noHabitsCompletedOnDay": "কোনো অভ্যাস সম্পন্ন হয়নি",
   "noAdsTitle": "কোনো বিজ্ঞাপন নেই, কখনোই না",
   "noAdsBody": "DeenRoutine-এর কোনো বিজ্ঞাপন নেটওয়ার্ক নেই এবং আমরা কখনো আপনার তথ্য বিক্রি বা শেয়ার করি না। ব্যবহার বিশ্লেষণ ঐচ্ছিক — আপনি প্রেফারেন্সে চালু না করা পর্যন্ত বন্ধ থাকে।",
   "privacyPolicyLabel": "গোপনীয়তা নীতি",

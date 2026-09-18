@@ -1659,6 +1659,48 @@ abstract class AppLocalizations {
   /// **'ABOUT'**
   String get profileAboutLabel;
 
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @thisWeekLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS WEEK'**
+  String get thisWeekLabel;
+
+  /// No description provided for @bestHabitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best habit'**
+  String get bestHabitLabel;
+
+  /// No description provided for @bestHabitDaysSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 7 days'**
+  String bestHabitDaysSubtitle(int count);
+
+  /// No description provided for @habitsTrackedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Habits tracked'**
+  String get habitsTrackedLabel;
+
+  /// No description provided for @habitsCompletedOnDay.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} completed'**
+  String habitsCompletedOnDay(int count);
+
+  /// No description provided for @noHabitsCompletedOnDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No habits completed'**
+  String get noHabitsCompletedOnDay;
+
   /// No description provided for @noAdsTitle.
   ///
   /// In en, this message translates to:

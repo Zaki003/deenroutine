@@ -1,57 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
-import '../../providers/analytics_provider.dart';
+import '../../models/habit.dart';
 import '../../providers/auth_provider.dart';
-import '../../providers/locale_provider.dart';
-import '../../providers/prayer_provider.dart';
-import '../../providers/theme_provider.dart';
+import '../../providers/habit_provider.dart';
 import '../../theme/deen_colors.dart';
-import '../../utils/prayer_method_labels.dart';
+import '../../utils/date_format.dart';
 import '../../utils/text_format.dart';
+import '../../widgets/account_row.dart';
 import '../../widgets/avatar_graphic.dart';
 import '../../widgets/avatar_picker_dialog.dart';
 import '../../widgets/deen_card.dart';
-import '../../widgets/delete_account_dialog.dart';
 import '../../widgets/edit_name_dialog.dart';
-import '../../widgets/prayer_method_action.dart';
-import '../../widgets/update_location_action.dart';
+import '../../widgets/section_label.dart';
 import 'favorites_screen.dart';
+import 'settings_screen.dart';
 
-const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
-
-Future<void> _openPrivacyPolicy(BuildContext context) async {
-  final opened =
-      await launchUrl(Uri.parse(_privacyPolicyUrl), mode: LaunchMode.externalApplication);
-  if (!opened && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context)!.linkOpenFailed)),
-    );
-  }
-}
-
-/// FR-03: Profile management, and Settings collection (theme, prayer method).
+/// FR-03: Profile — identity, favorites, and a this-week habit overview.
+/// Settings (theme, language, prayer method, account actions) live one tap
+/// away via the gear icon, in [SettingsScreen].
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    final themeProvider = context.watch<ThemeProvider>();
-    final localeProvider = context.watch<LocaleProvider>();
-    final analyticsProvider = context.watch<AnalyticsProvider>();
-    final prayerProvider = context.watch<PrayerProvider>();
+    final habits = context.watch<HabitProvider>().habits;
+    final habitProvider = context.read<HabitProvider>();
     final user = auth.appUser;
     final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final name = capitalizeWords(user?.name ?? '');
+    // A one-off to-do has no week of recurrence to summarize - excluded the
+    // same way the Habits tab and Dashboard already exclude it from
+    // streak/week displays.
+    final recurringHabits =
+        habits.where((h) => h.frequency != HabitFrequency.once).toList();
 
     return ColoredBox(
       color: DeenColors.surface(dark),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.navProfile,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: DeenColors.primaryText(dark),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings_outlined),
+                color: DeenColors.primaryText(dark),
+                tooltip: l10n.settingsTitle,
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
           Row(
             children: [
               InkWell(
@@ -100,416 +113,416 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
-          _SectionLabel(l10n.profilePreferencesLabel),
-          const SizedBox(height: 8),
-          DeenCard(
-            dark: dark,
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.appearanceTitle,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: DeenColors.primaryText(dark),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: dark ? DeenColors.ink : DeenColors.cream,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      _AppearanceOption(
-                        icon: Icons.light_mode_rounded,
-                        label: l10n.appearanceLight,
-                        selected: themeProvider.themeMode == ThemeMode.light,
-                        onTap: () => themeProvider.setThemeMode(ThemeMode.light),
-                      ),
-                      _AppearanceOption(
-                        icon: Icons.dark_mode_rounded,
-                        label: l10n.appearanceDark,
-                        selected: themeProvider.themeMode == ThemeMode.dark,
-                        onTap: () => themeProvider.setThemeMode(ThemeMode.dark),
-                      ),
-                      _AppearanceOption(
-                        icon: Icons.brightness_auto_rounded,
-                        label: l10n.appearanceSystem,
-                        selected: themeProvider.themeMode == ThemeMode.system,
-                        onTap: () => themeProvider.setThemeMode(ThemeMode.system),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          DeenCard(
-            dark: dark,
-            margin: const EdgeInsets.only(bottom: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.languageTitle,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: DeenColors.primaryText(dark),
-                  ),
-                ),
-                _LanguageRow(
-                  label: l10n.languageEnglish,
-                  selected: !localeProvider.isBangla,
-                  dark: dark,
-                  onTap: () => localeProvider.setLocale(const Locale('en')),
-                ),
-                _LanguageRow(
-                  label: l10n.languageBangla,
-                  selected: localeProvider.isBangla,
-                  dark: dark,
-                  onTap: () => localeProvider.setLocale(const Locale('bn')),
-                ),
-              ],
-            ),
-          ),
-          DeenCard(
-            dark: dark,
-            margin: const EdgeInsets.only(bottom: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.usageAnalyticsTitle,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: DeenColors.primaryText(dark),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.usageAnalyticsBody,
-                        style: TextStyle(
-                            fontSize: 11.5, height: 1.4, color: DeenColors.textMuted(dark)),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Switch(
-                  value: analyticsProvider.enabled,
-                  onChanged: (value) => analyticsProvider.setEnabled(value),
-                  activeThumbColor: DeenColors.primary,
-                ),
-              ],
-            ),
-          ),
-          _SectionLabel(l10n.profileAccountLabel),
-          const SizedBox(height: 8),
-          DeenCard(
-            dark: dark,
-            child: Column(
-              children: [
-                _AccountRow(
-                  icon: Icons.favorite_border_rounded,
-                  label: l10n.favoritesTitle,
-                  dark: dark,
-                  trailingText: l10n.favoritesCountLabel(
-                    auth.appUser?.favoriteQuoteIds.length ?? 0,
-                    AuthProvider.maxFreeFavorites,
-                  ),
-                  showChevron: true,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const FavoritesScreen()),
-                  ),
-                ),
-                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                _AccountRow(
-                  icon: Icons.notifications_none_rounded,
-                  label: l10n.notificationsTitle,
-                  dark: dark,
-                  onTap: () {},
-                ),
-                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                _AccountRow(
-                  icon: Icons.public_rounded,
-                  label: l10n.prayerMethodTitle,
-                  dark: dark,
-                  trailingText: '${prayerMethodLabel(l10n, prayerProvider.calculationMethod)} · '
-                      '${asrMethodLabel(l10n, prayerProvider.asrMethod)}',
-                  showChevron: true,
-                  onTap: () => confirmPrayerMethod(context),
-                ),
-                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                _AccountRow(
-                  icon: Icons.location_on_rounded,
-                  label: l10n.profileLocationLabel,
-                  dark: dark,
-                  trailingText: prayerProvider.isManualLocation
-                      ? l10n.currentLocationCity(prayerProvider.manualCityLabel!)
-                      : l10n.currentLocationGps,
-                  showChevron: true,
-                  onTap: () => confirmUpdateLocation(context),
-                ),
-                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                _AccountRow(
-                  icon: Icons.logout_rounded,
-                  label: l10n.logoutButton,
-                  dark: dark,
-                  color: DeenColors.rust,
-                  onTap: () async {
-                    await context.read<AuthProvider>().logout();
-                    if (context.mounted) {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    }
-                  },
-                ),
-                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                _AccountRow(
-                  icon: Icons.delete_outline_rounded,
-                  label: l10n.deleteAccountButton,
-                  dark: dark,
-                  color: DeenColors.rust,
-                  onTap: () async {
-                    final deleted = await showDialog<bool>(
-                      context: context,
-                      builder: (_) => const DeleteAccountDialog(),
-                    );
-                    if (deleted == true && context.mounted) {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 20),
-          _SectionLabel(l10n.profileAboutLabel),
-          const SizedBox(height: 8),
           DeenCard(
             dark: dark,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.noAdsTitle,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: DeenColors.primaryText(dark),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.noAdsBody,
-                  style: TextStyle(fontSize: 12, height: 1.4, color: DeenColors.textMuted(dark)),
-                ),
-                const SizedBox(height: 12),
-                Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                _AccountRow(
-                  icon: Icons.privacy_tip_outlined,
-                  label: l10n.privacyPolicyLabel,
-                  dark: dark,
-                  onTap: () => _openPrivacyPolicy(context),
-                ),
-              ],
+            margin: const EdgeInsets.only(bottom: 20),
+            child: AccountRow(
+              icon: Icons.favorite_border_rounded,
+              label: l10n.favoritesTitle,
+              dark: dark,
+              trailingText: l10n.favoritesCountLabel(
+                auth.appUser?.favoriteQuoteIds.length ?? 0,
+                AuthProvider.maxFreeFavorites,
+              ),
+              showChevron: true,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FavoritesScreen()),
+              ),
             ),
           ),
+          if (recurringHabits.isNotEmpty) ...[
+            SectionLabel(l10n.thisWeekLabel),
+            const SizedBox(height: 8),
+            _WeekStatsCard(
+              recurringHabits: recurringHabits,
+              totalHabitsCount: habits.length,
+              habitProvider: habitProvider,
+              dark: dark,
+            ),
+          ],
         ],
       ),
     );
   }
 }
 
-class _SectionLabel extends StatelessWidget {
-  final String text;
+/// This week's ring + bar chart, plus the best-habit/habits-tracked tiles
+/// below it. Waits on one [HabitProvider.weekFor] call per habit - the same
+/// per-habit `HabitLogs` query the Habits tab's week picker already makes,
+/// just aggregated across every recurring habit instead of shown per-row.
+class _WeekStatsCard extends StatelessWidget {
+  final List<Habit> recurringHabits;
+  final int totalHabitsCount;
+  final HabitProvider habitProvider;
+  final bool dark;
 
-  const _SectionLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    return Text(
-      text,
-      style: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.5,
-        color: DeenColors.textMuted(dark),
-      ),
-    );
-  }
-}
-
-/// One segment of the appearance picker — matches [_LengthChip]-style
-/// "pill button" interaction rather than [InkWell], since a ripple on a
-/// small rounded segment tends to bleed past the corners.
-class _AppearanceOption extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _AppearanceOption({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
+  const _WeekStatsCard({
+    required this.recurringHabits,
+    required this.totalHabitsCount,
+    required this.habitProvider,
+    required this.dark,
   });
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: selected ? DeenColors.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 14, color: selected ? Colors.white : DeenColors.textMuted(dark)),
-              const SizedBox(width: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: selected ? Colors.white : DeenColors.textMuted(dark),
+    final l10n = AppLocalizations.of(context)!;
+    return FutureBuilder<List<List<bool>>>(
+      future: Future.wait(recurringHabits.map(habitProvider.weekFor)),
+      builder: (context, snapshot) {
+        final weeks = snapshot.data;
+        if (weeks == null) {
+          return DeenCard(
+            dark: dark,
+            margin: const EdgeInsets.only(bottom: 10),
+            child: SizedBox(
+              height: 62,
+              child: Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: dark ? DeenColors.goldSoft : DeenColors.primary,
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _LanguageRow extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final bool dark;
-  final VoidCallback onTap;
-
-  const _LanguageRow({
-    required this.label,
-    required this.selected,
-    required this.dark,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: TextStyle(fontSize: 13.5, color: DeenColors.primaryText(dark)),
             ),
-            if (selected)
-              const Icon(Icons.check_rounded, size: 16, color: DeenColors.primary),
-          ],
-        ),
-      ),
-    );
-  }
-}
+          );
+        }
 
-class _AccountRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool dark;
-  final Color? color;
-  final String? trailingText;
-  /// Shows a chevron alongside [trailingText] instead of the default
-  /// text-only display — for a row where tapping genuinely navigates
-  /// somewhere (unlike e.g. the prayer-method row above, which is a plain
-  /// value display for now). Ignored when [trailingText] is null.
-  final bool showChevron;
-  final VoidCallback onTap;
+        final dayCounts = List.generate(7, (i) => weeks.where((w) => w[i]).length);
+        final totalDone = dayCounts.fold(0, (sum, c) => sum + c);
+        final totalPossible = recurringHabits.length * 7;
 
-  const _AccountRow({
-    required this.icon,
-    required this.label,
-    required this.dark,
-    this.color,
-    this.trailingText,
-    this.showChevron = false,
-    required this.onTap,
-  });
+        var bestIndex = -1;
+        var bestCount = 0;
+        for (var i = 0; i < recurringHabits.length; i++) {
+          final count = weeks[i].where((done) => done).length;
+          if (count > bestCount) {
+            bestCount = count;
+            bestIndex = i;
+          }
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(
+        final today = DateTime.now();
+        final todayMidnight = DateTime(today.year, today.month, today.day);
+        // DateTime.weekday is 1=Mon..7=Sun, matching FirestoreService.weekCompletion.
+        final monday = todayMidnight.subtract(Duration(days: todayMidnight.weekday - 1));
+
+        return Column(
           children: [
-            Icon(icon, size: 16, color: color ?? DeenColors.textMuted(dark)),
-            const SizedBox(width: 10),
-            Text(
-              label,
-              style: TextStyle(fontSize: 13.5, color: color ?? DeenColors.primaryText(dark)),
+            DeenCard(
+              dark: dark,
+              margin: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _WeekRing(done: totalDone, total: totalPossible, dark: dark),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _WeekBars(
+                      dayCounts: dayCounts,
+                      dark: dark,
+                      onTapDay: (dayIndex) {
+                        final day = monday.add(Duration(days: dayIndex));
+                        final titles = [
+                          for (var i = 0; i < recurringHabits.length; i++)
+                            if (weeks[i][dayIndex]) recurringHabits[i].title,
+                        ];
+                        _showDayDetail(context, l10n, dark, day, titles);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-            // A fixed gap here (rather than relying on spaceBetween to
-            // supply one) is what keeps the label and a long trailing value
-            // - e.g. "Umm al-Qura · Standard" - from ending up flush against
-            // each other with no breathing room once the value's own
-            // ellipsis has already done all the shrinking it can.
-            const SizedBox(width: 8),
-            Expanded(
-              child: trailingText != null
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            trailingText!,
-                            textAlign: TextAlign.end,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
-                          ),
-                        ),
-                        if (showChevron) ...[
-                          const SizedBox(width: 2),
-                          Icon(Icons.chevron_right_rounded, size: 16, color: DeenColors.textMuted(dark)),
-                        ],
-                      ],
-                    )
-                  : (color == null
-                      ? Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(Icons.chevron_right_rounded,
-                              size: 18, color: DeenColors.textMuted(dark)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: bestIndex >= 0
+                      ? _BestHabitTile(
+                          habitTitle: recurringHabits[bestIndex].title,
+                          daysThisWeek: bestCount,
+                          dark: dark,
                         )
-                      : const SizedBox.shrink()),
+                      : _StatTile(label: l10n.bestHabitLabel, value: '—', dark: dark),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _StatTile(
+                    label: l10n.habitsTrackedLabel,
+                    value: '$totalHabitsCount',
+                    dark: dark,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// Animated done/total ring for the week, styled like the Dashboard's daily
+/// [BarakahCircle] (same gold-on-track palette) but a plain
+/// [CircularProgressIndicator] rather than that widget's own painter/label,
+/// since "TODAY" is baked into [BarakahCircle] and isn't true here.
+class _WeekRing extends StatelessWidget {
+  final int done;
+  final int total;
+  final bool dark;
+
+  const _WeekRing({required this.done, required this.total, required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    final target = total == 0 ? 0.0 : done / total;
+    return SizedBox(
+      width: 62,
+      height: 62,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: target),
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeOutCubic,
+        builder: (context, value, _) => Stack(
+          alignment: Alignment.center,
+          children: [
+            CircularProgressIndicator(
+              value: value,
+              strokeWidth: 6,
+              backgroundColor:
+                  dark ? Colors.white.withValues(alpha: 0.10) : DeenColors.primary.withValues(alpha: 0.12),
+              valueColor: const AlwaysStoppedAnimation(DeenColors.gold),
+            ),
+            Text(
+              '$done/$total',
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Mon-Sun bar chart, each bar's height relative to the week's own busiest
+/// day so the chart stays readable regardless of how many habits exist.
+/// Tapping a day hands it off to [onTapDay] rather than tracking selection
+/// itself - the caller opens a bottom sheet, so there's no persistent
+/// "selected day" state to hold here.
+class _WeekBars extends StatelessWidget {
+  static const _maxBarHeight = 40.0;
+
+  final List<int> dayCounts;
+  final bool dark;
+  final ValueChanged<int> onTapDay;
+
+  const _WeekBars({required this.dayCounts, required this.dark, required this.onTapDay});
+
+  @override
+  Widget build(BuildContext context) {
+    final maxCount = dayCounts.fold(0, (m, c) => c > m ? c : m);
+    return SizedBox(
+      height: _maxBarHeight,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOutCubic,
+        builder: (context, t, _) => Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            for (var i = 0; i < 7; i++)
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () => onTapDay(i),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 8,
+                      height: (maxCount == 0 ? 0.0 : _maxBarHeight * (dayCounts[i] / maxCount) * t)
+                          .clamp(3.0, _maxBarHeight),
+                      decoration: BoxDecoration(
+                        color: dayCounts[i] == 0
+                            ? DeenColors.outlineFaint(dark)
+                            : (dark ? DeenColors.goldSoft : DeenColors.primary),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void _showDayDetail(
+  BuildContext context,
+  AppLocalizations l10n,
+  bool dark,
+  DateTime day,
+  List<String> completedTitles,
+) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: DeenColors.cardBackground(dark),
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+    builder: (context) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 34,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: DeenColors.outlineFaint(dark),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text(
+              formatShortDate(l10n.localeName, day),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              completedTitles.isEmpty
+                  ? l10n.noHabitsCompletedOnDay
+                  : l10n.habitsCompletedOnDay(completedTitles.length),
+              style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
+            ),
+            const SizedBox(height: 12),
+            for (final title in completedTitles)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Row(
+                  children: [
+                    Icon(Icons.check_rounded, size: 16, color: dark ? DeenColors.goldSoft : DeenColors.primary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 13, color: DeenColors.primaryText(dark)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+/// The habit with the most completed days this week - tap to reveal which
+/// one it is. Collapsed by default so a fresh Profile screen reads as a
+/// plain stat tile, matching [_StatTile] beside it.
+class _BestHabitTile extends StatefulWidget {
+  final String habitTitle;
+  final int daysThisWeek;
+  final bool dark;
+
+  const _BestHabitTile({required this.habitTitle, required this.daysThisWeek, required this.dark});
+
+  @override
+  State<_BestHabitTile> createState() => _BestHabitTileState();
+}
+
+class _BestHabitTileState extends State<_BestHabitTile> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () => setState(() => _expanded = !_expanded),
+      child: DeenCard(
+        dark: widget.dark,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          // .stretch (rather than .start, like the plain _StatTile beside
+          // this) keeps the AnimatedSize child's width identical between
+          // its collapsed and expanded states, so only the height animates.
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.bestHabitLabel,
+                  style: TextStyle(fontSize: 10, color: DeenColors.textMuted(widget.dark)),
+                ),
+                AnimatedRotation(
+                  turns: _expanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: DeenColors.textMuted(widget.dark)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 2),
+            Text(
+              widget.habitTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: DeenColors.primaryText(widget.dark)),
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              child: _expanded
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        l10n.bestHabitDaysSubtitle(widget.daysThisWeek),
+                        style: TextStyle(fontSize: 10, color: DeenColors.textMuted(widget.dark)),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StatTile extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool dark;
+
+  const _StatTile({required this.label, required this.value, required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    return DeenCard(
+      dark: dark,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(fontSize: 10, color: DeenColors.textMuted(dark))),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
+          ),
+        ],
       ),
     );
   }

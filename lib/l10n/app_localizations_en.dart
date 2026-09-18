@@ -900,6 +900,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileAboutLabel => 'ABOUT';
 
   @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get thisWeekLabel => 'THIS WEEK';
+
+  @override
+  String get bestHabitLabel => 'Best habit';
+
+  @override
+  String bestHabitDaysSubtitle(int count) {
+    return '$count of 7 days';
+  }
+
+  @override
+  String get habitsTrackedLabel => 'Habits tracked';
+
+  @override
+  String habitsCompletedOnDay(int count) {
+    return '$count completed';
+  }
+
+  @override
+  String get noHabitsCompletedOnDay => 'No habits completed';
+
+  @override
   String get noAdsTitle => 'No ads, ever';
 
   @override

@@ -897,6 +897,31 @@ class AppLocalizationsBn extends AppLocalizations {
   String get profileAboutLabel => 'সম্পর্কে';
 
   @override
+  String get settingsTitle => 'সেটিংস';
+
+  @override
+  String get thisWeekLabel => 'এই সপ্তাহ';
+
+  @override
+  String get bestHabitLabel => 'সেরা অভ্যাস';
+
+  @override
+  String bestHabitDaysSubtitle(int count) {
+    return '৭ দিনের মধ্যে $count দিন';
+  }
+
+  @override
+  String get habitsTrackedLabel => 'ট্র্যাক করা অভ্যাস';
+
+  @override
+  String habitsCompletedOnDay(int count) {
+    return '$countটি সম্পন্ন হয়েছে';
+  }
+
+  @override
+  String get noHabitsCompletedOnDay => 'কোনো অভ্যাস সম্পন্ন হয়নি';
+
+  @override
   String get noAdsTitle => 'কোনো বিজ্ঞাপন নেই, কখনোই না';
 
   @override
