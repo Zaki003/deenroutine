@@ -225,6 +225,11 @@ class _WeekStatsCard extends StatelessWidget {
                     child: _WeekBars(
                       dayCounts: dayCounts,
                       dark: dark,
+                      dayLabels: [
+                        for (var i = 0; i < 7; i++)
+                          '${formatShortDate(l10n.localeName, monday.add(Duration(days: i)))}, '
+                          '${dayCounts[i] == 0 ? l10n.noHabitsCompletedOnDay : l10n.habitsCompletedOnDay(dayCounts[i])}',
+                      ],
                       onTapDay: (dayIndex) {
                         final day = monday.add(Duration(days: dayIndex));
                         final titles = [
@@ -280,29 +285,34 @@ class _WeekRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final target = total == 0 ? 0.0 : done / total;
-    return SizedBox(
-      width: 62,
-      height: 62,
-      child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: target),
-        duration: const Duration(milliseconds: 700),
-        curve: Curves.easeOutCubic,
-        builder: (context, value, _) => Stack(
-          alignment: Alignment.center,
-          children: [
-            CircularProgressIndicator(
-              value: value,
-              strokeWidth: 6,
-              backgroundColor:
-                  dark ? Colors.white.withValues(alpha: 0.10) : DeenColors.primary.withValues(alpha: 0.12),
-              valueColor: const AlwaysStoppedAnimation(DeenColors.gold),
-            ),
-            Text(
-              '$done/$total',
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
-            ),
-          ],
+    return Semantics(
+      label: l10n.weekProgressLabel(done, total),
+      excludeSemantics: true,
+      child: SizedBox(
+        width: 62,
+        height: 62,
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: target),
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, _) => Stack(
+            alignment: Alignment.center,
+            children: [
+              CircularProgressIndicator(
+                value: value,
+                strokeWidth: 6,
+                backgroundColor:
+                    dark ? Colors.white.withValues(alpha: 0.10) : DeenColors.primary.withValues(alpha: 0.12),
+                valueColor: const AlwaysStoppedAnimation(DeenColors.gold),
+              ),
+              Text(
+                '$done/$total',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -318,46 +328,65 @@ class _WeekBars extends StatelessWidget {
   static const _maxBarHeight = 40.0;
 
   final List<int> dayCounts;
+  final List<String> dayLabels;
   final bool dark;
   final ValueChanged<int> onTapDay;
 
-  const _WeekBars({required this.dayCounts, required this.dark, required this.onTapDay});
+  const _WeekBars({
+    required this.dayCounts,
+    required this.dayLabels,
+    required this.dark,
+    required this.onTapDay,
+  });
 
   @override
   Widget build(BuildContext context) {
     final maxCount = dayCounts.fold(0, (m, c) => c > m ? c : m);
     return SizedBox(
       height: _maxBarHeight,
-      child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: 1),
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOutCubic,
-        builder: (context, t, _) => Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            for (var i = 0; i < 7; i++)
-              Expanded(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(4),
-                  onTap: () => onTapDay(i),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: 8,
-                      height: (maxCount == 0 ? 0.0 : _maxBarHeight * (dayCounts[i] / maxCount) * t)
-                          .clamp(3.0, _maxBarHeight),
-                      decoration: BoxDecoration(
-                        color: dayCounts[i] == 0
-                            ? DeenColors.outlineFaint(dark)
-                            : (dark ? DeenColors.goldSoft : DeenColors.primary),
-                        borderRadius: BorderRadius.circular(3),
+      // A bar's width is a share of its own slot rather than a fixed pixel
+      // value, so the chart fills the available width on a wider screen
+      // (tablet, landscape) instead of leaving 7 skinny bars stranded in
+      // wide gaps - clamped so it still reads as a bar, not a block.
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final barWidth = (constraints.maxWidth / 7 * 0.5).clamp(6.0, 18.0);
+          return TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (var i = 0; i < 7; i++)
+                  Expanded(
+                    child: Semantics(
+                      label: dayLabels[i],
+                      button: true,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(4),
+                        onTap: () => onTapDay(i),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: barWidth,
+                            height: (maxCount == 0 ? 0.0 : _maxBarHeight * (dayCounts[i] / maxCount) * t)
+                                .clamp(3.0, _maxBarHeight),
+                            decoration: BoxDecoration(
+                              color: dayCounts[i] == 0
+                                  ? DeenColors.outlineFaint(dark)
+                                  : (dark ? DeenColors.goldSoft : DeenColors.primary),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-          ],
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -448,53 +477,57 @@ class _BestHabitTileState extends State<_BestHabitTile> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: () => setState(() => _expanded = !_expanded),
-      child: DeenCard(
-        dark: widget.dark,
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          // .stretch (rather than .start, like the plain _StatTile beside
-          // this) keeps the AnimatedSize child's width identical between
-          // its collapsed and expanded states, so only the height animates.
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n.bestHabitLabel,
-                  style: TextStyle(fontSize: 10, color: DeenColors.textMuted(widget.dark)),
-                ),
-                AnimatedRotation(
-                  turns: _expanded ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: DeenColors.textMuted(widget.dark)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 2),
-            Text(
-              widget.habitTitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: DeenColors.primaryText(widget.dark)),
-            ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOutCubic,
-              child: _expanded
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        l10n.bestHabitDaysSubtitle(widget.daysThisWeek),
-                        style: TextStyle(fontSize: 10, color: DeenColors.textMuted(widget.dark)),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          ],
+    return Semantics(
+      button: true,
+      expanded: _expanded,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => setState(() => _expanded = !_expanded),
+        child: DeenCard(
+          dark: widget.dark,
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            // .stretch (rather than .start, like the plain _StatTile beside
+            // this) keeps the AnimatedSize child's width identical between
+            // its collapsed and expanded states, so only the height animates.
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.bestHabitLabel,
+                    style: TextStyle(fontSize: 10, color: DeenColors.textMuted(widget.dark)),
+                  ),
+                  AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: DeenColors.textMuted(widget.dark)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(
+                widget.habitTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: DeenColors.primaryText(widget.dark)),
+              ),
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _expanded
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          l10n.bestHabitDaysSubtitle(widget.daysThisWeek),
+                          style: TextStyle(fontSize: 10, color: DeenColors.textMuted(widget.dark)),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -510,19 +543,23 @@ class _StatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DeenCard(
-      dark: dark,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(fontSize: 10, color: DeenColors.textMuted(dark))),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
-          ),
-        ],
+    return Semantics(
+      label: '$label: $value',
+      excludeSemantics: true,
+      child: DeenCard(
+        dark: dark,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: TextStyle(fontSize: 10, color: DeenColors.textMuted(dark))),
+            const SizedBox(height: 2),
+            Text(
+              value,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
+            ),
+          ],
+        ),
       ),
     );
   }

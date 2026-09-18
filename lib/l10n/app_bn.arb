@@ -298,6 +298,13 @@
   "profileAboutLabel": "সম্পর্কে",
   "settingsTitle": "সেটিংস",
   "thisWeekLabel": "এই সপ্তাহ",
+  "weekProgressLabel": "এই সপ্তাহে {total} এর মধ্যে {done} সম্পন্ন",
+  "@weekProgressLabel": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
   "bestHabitLabel": "সেরা অভ্যাস",
   "bestHabitDaysSubtitle": "৭ দিনের মধ্যে {count} দিন",
   "@bestHabitDaysSubtitle": {

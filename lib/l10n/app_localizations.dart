@@ -1671,6 +1671,12 @@ abstract class AppLocalizations {
   /// **'THIS WEEK'**
   String get thisWeekLabel;
 
+  /// No description provided for @weekProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This week, {done} of {total} completed'**
+  String weekProgressLabel(int done, int total);
+
   /// No description provided for @bestHabitLabel.
   ///
   /// In en, this message translates to:

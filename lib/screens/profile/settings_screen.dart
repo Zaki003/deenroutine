@@ -203,7 +203,7 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.logout_rounded,
                     label: l10n.logoutButton,
                     dark: dark,
-                    color: DeenColors.rust,
+                    color: dark ? DeenColors.rustLight : DeenColors.rust,
                     onTap: () async {
                       await context.read<AuthProvider>().logout();
                       if (context.mounted) {
@@ -216,7 +216,7 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.delete_outline_rounded,
                     label: l10n.deleteAccountButton,
                     dark: dark,
-                    color: DeenColors.rust,
+                    color: dark ? DeenColors.rustLight : DeenColors.rust,
                     onTap: () async {
                       final deleted = await showDialog<bool>(
                         context: context,

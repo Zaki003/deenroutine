@@ -417,6 +417,13 @@
   "profileAboutLabel": "ABOUT",
   "settingsTitle": "Settings",
   "thisWeekLabel": "THIS WEEK",
+  "weekProgressLabel": "This week, {done} of {total} completed",
+  "@weekProgressLabel": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
   "bestHabitLabel": "Best habit",
   "bestHabitDaysSubtitle": "{count} of 7 days",
   "@bestHabitDaysSubtitle": {

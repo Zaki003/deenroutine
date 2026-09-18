@@ -903,6 +903,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get thisWeekLabel => 'এই সপ্তাহ';
 
   @override
+  String weekProgressLabel(int done, int total) {
+    return 'এই সপ্তাহে $total এর মধ্যে $done সম্পন্ন';
+  }
+
+  @override
   String get bestHabitLabel => 'সেরা অভ্যাস';
 
   @override

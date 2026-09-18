@@ -906,6 +906,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thisWeekLabel => 'THIS WEEK';
 
   @override
+  String weekProgressLabel(int done, int total) {
+    return 'This week, $done of $total completed';
+  }
+
+  @override
   String get bestHabitLabel => 'Best habit';
 
   @override
