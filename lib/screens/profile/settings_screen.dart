@@ -255,14 +255,25 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
-                  AccountRow(
-                    icon: Icons.ios_share_rounded,
-                    label: l10n.shareInviteTitle,
-                    dark: dark,
-                    onTap: () {
-                      AnalyticsService().logShareTapped(source: 'settings');
-                      SharePromptService().share();
-                    },
+                  // Gold wash, not a plain row like its neighbours - the one
+                  // action here worth a glance catching, not just a tap that
+                  // happens to be findable.
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: DeenColors.gold.withValues(alpha: dark ? 0.18 : 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: AccountRow(
+                      icon: Icons.ios_share_rounded,
+                      label: l10n.shareInviteTitle,
+                      dark: dark,
+                      onTap: () {
+                        AnalyticsService().logShareTapped(source: 'settings');
+                        SharePromptService().share();
+                      },
+                    ),
                   ),
                   Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
                   AccountRow(
