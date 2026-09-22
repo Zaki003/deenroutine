@@ -937,6 +937,19 @@ class AppLocalizationsBn extends AppLocalizations {
       'DeenRoutine-এর কোনো বিজ্ঞাপন নেটওয়ার্ক নেই এবং আমরা কখনো আপনার তথ্য বিক্রি বা শেয়ার করি না। ব্যবহার বিশ্লেষণ ঐচ্ছিক — আপনি প্রেফারেন্সে চালু না করা পর্যন্ত বন্ধ থাকে।';
 
   @override
+  String get shareInviteTitle => 'DeenRoutine শেয়ার করুন';
+
+  @override
+  String get shareInviteBody =>
+      'এমন কাউকে চেনেন যিনি এটা পছন্দ করবেন? একটি শেয়ার অনেক পার্থক্য তৈরি করতে পারে।';
+
+  @override
+  String get shareInviteButton => 'শেয়ার করুন';
+
+  @override
+  String get notNowButton => 'এখন নয়';
+
+  @override
   String get privacyPolicyLabel => 'গোপনীয়তা নীতি';
 
   @override

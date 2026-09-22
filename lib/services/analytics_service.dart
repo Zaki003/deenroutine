@@ -59,6 +59,13 @@ class AnalyticsService {
     );
   }
 
+  Future<void> logShareTapped({required String source}) {
+    return _analytics.logEvent(
+      name: 'share_tapped',
+      parameters: {'source': source},
+    );
+  }
+
   String _scoreBand(int scorePercent) {
     if (scorePercent <= 25) return '0-25';
     if (scorePercent <= 50) return '26-50';

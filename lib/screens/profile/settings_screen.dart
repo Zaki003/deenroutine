@@ -7,6 +7,8 @@ import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../services/analytics_service.dart';
+import '../../services/share_prompt_service.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/prayer_method_labels.dart';
 import '../../widgets/account_row.dart';
@@ -252,6 +254,16 @@ class SettingsScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 12, height: 1.4, color: DeenColors.textMuted(dark)),
                   ),
                   const SizedBox(height: 12),
+                  Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
+                  AccountRow(
+                    icon: Icons.ios_share_rounded,
+                    label: l10n.shareInviteTitle,
+                    dark: dark,
+                    onTap: () {
+                      AnalyticsService().logShareTapped(source: 'settings');
+                      SharePromptService().share();
+                    },
+                  ),
                   Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
                   AccountRow(
                     icon: Icons.privacy_tip_outlined,

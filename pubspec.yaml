@@ -37,6 +37,9 @@ dependencies:
   # notification sound which Android may cut short after a second or two)
   alarm: ^5.13.2
 
+  # Word-of-mouth: opens the OS share sheet with an invite message
+  share_plus: ^13.3.0
+
   # Utilities
   uuid: ^4.5.1
   intl: ^0.20.2

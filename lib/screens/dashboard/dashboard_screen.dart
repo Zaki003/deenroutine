@@ -10,6 +10,7 @@ import '../../providers/locale_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../services/firestore_service.dart';
 import '../../services/review_prompt_service.dart';
+import '../../services/share_prompt_service.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/duration_format.dart';
@@ -29,6 +30,7 @@ import '../../widgets/habit_template_sheet.dart';
 import '../../widgets/habit_timer_control.dart';
 import '../../widgets/milestone_banner.dart';
 import '../../widgets/quote_card.dart';
+import '../../widgets/share_invite_sheet.dart';
 import '../../widgets/shimmer_box.dart';
 import '../../widgets/star_pattern.dart';
 import '../../widgets/streak_badge.dart';
@@ -60,6 +62,17 @@ class DashboardScreen extends StatefulWidget {
 /// first) plus a link to the full list, instead of growing into a second
 /// copy of the Habits tab as someone adds more habits.
 const _maxVisibleHabits = 5;
+
+/// Shows the share-invite sheet if [SharePromptService] hasn't already used
+/// its one-ever showing - marks it used regardless of what the user does
+/// with the sheet, same "ask once, whatever happens" policy as
+/// [ReviewPromptService].
+Future<void> _maybeNudgeShare(BuildContext context, int days) async {
+  if (!await SharePromptService().shouldShowPrompt()) return;
+  await SharePromptService().markPromptShown();
+  if (!context.mounted) return;
+  await showShareInviteSheet(context, streakDays: days);
+}
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final _firestoreService = FirestoreService();
@@ -200,6 +213,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // had their chance at 7 for anyone who reaches them.
                 if (milestone.days == 7) {
                   unawaited(ReviewPromptService().maybeRequestReview());
+                } else if (milestone.days == 30) {
+                  // A separate, later milestone from the review ask above -
+                  // the two prompts should never compete for the same
+                  // moment, and 30 days is a real enough accomplishment to
+                  // be worth sharing on its own.
+                  unawaited(_maybeNudgeShare(context, milestone.days));
                 }
                 context.read<HabitProvider>().consumeMilestone();
               },

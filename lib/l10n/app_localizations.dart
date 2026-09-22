@@ -1725,6 +1725,30 @@ abstract class AppLocalizations {
   /// **'DeenRoutine has no ad network and never sells or shares your data. Usage analytics are optional — off unless you turn them on in Preferences.'**
   String get noAdsBody;
 
+  /// No description provided for @shareInviteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share DeenRoutine'**
+  String get shareInviteTitle;
+
+  /// No description provided for @shareInviteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Know someone who\'d like this too? A quick share goes a long way.'**
+  String get shareInviteBody;
+
+  /// No description provided for @shareInviteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareInviteButton;
+
+  /// No description provided for @notNowButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNowButton;
+
   /// No description provided for @privacyPolicyLabel.
   ///
   /// In en, this message translates to:

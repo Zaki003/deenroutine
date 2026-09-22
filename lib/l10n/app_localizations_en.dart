@@ -940,6 +940,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'DeenRoutine has no ad network and never sells or shares your data. Usage analytics are optional — off unless you turn them on in Preferences.';
 
   @override
+  String get shareInviteTitle => 'Share DeenRoutine';
+
+  @override
+  String get shareInviteBody =>
+      'Know someone who\'d like this too? A quick share goes a long way.';
+
+  @override
+  String get shareInviteButton => 'Share';
+
+  @override
+  String get notNowButton => 'Not now';
+
+  @override
   String get privacyPolicyLabel => 'Privacy Policy';
 
   @override
