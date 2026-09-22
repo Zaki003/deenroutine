@@ -821,6 +821,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get alarmStopButton => 'Stop';
+
+  @override
   String learnAssessmentAppBarTitle(Object topic) {
     return '$topic Assessment';
   }

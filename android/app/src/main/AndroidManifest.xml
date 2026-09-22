@@ -6,6 +6,19 @@
 <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+<!-- Required by the `alarm` package (prayer alarms) for full-screen ringing,
+     its foreground service, and exact scheduling - see help/INSTALL-ANDROID.md
+     at https://github.com/gdelataillade/alarm. USE_FULL_SCREEN_INTENT is
+     under stricter Play Store review as of 2023; see the plugin's FAQ if a
+     future upload gets flagged for it. -->
+<uses-permission android:name="android.permission.WAKE_LOCK"/>
+<uses-permission android:name="android.permission.VIBRATE"/>
+<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+<uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+
 <!-- Firebase Analytics' native SDK auto-declares these for ad-attribution
      use cases (Google Ads conversion tracking, install referrer). This app
      has no ads and uses analytics for aggregate product-usage insight only
@@ -62,6 +75,10 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
+        <!-- Shows "your alarm may not ring" if the app is killed - see
+             AlarmService's warningNotificationOnKill (iOS-only in practice,
+             but the plugin's Android install steps ask for this either way). -->
+        <service android:name="com.gdelataillade.alarm.services.NotificationOnKillService" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

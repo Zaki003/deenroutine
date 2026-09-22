@@ -1527,6 +1527,12 @@ abstract class AppLocalizations {
   /// **'It\'s time for {prayer}.'**
   String prayerNotificationBody(Object prayer);
 
+  /// No description provided for @alarmStopButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get alarmStopButton;
+
   /// No description provided for @learnAssessmentAppBarTitle.
   ///
   /// In en, this message translates to:

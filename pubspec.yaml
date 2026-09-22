@@ -33,6 +33,10 @@ dependencies:
   timezone: ^0.10.1
   flutter_timezone: ^5.1.0
 
+  # Full-length prayer alarms (foreground-service audio, unlike a
+  # notification sound which Android may cut short after a second or two)
+  alarm: ^5.13.2
+
   # Utilities
   uuid: ^4.5.1
   intl: ^0.20.2
@@ -52,3 +56,4 @@ flutter:
   generate: true
   assets:
     - assets/cities.json
+    - assets/sounds/adhan_takbir.mp3

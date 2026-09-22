@@ -271,6 +271,7 @@
   "reminderNotificationTitle": "DeenRoutine নোটিফিকেশন",
   "reminderNotificationBody": "এখন সময়: {title}",
   "prayerNotificationBody": "{prayer}-এর সময় হয়েছে।",
+  "alarmStopButton": "বন্ধ করুন",
 
   "learnAssessmentAppBarTitle": "{topic} মূল্যায়ন",
   "quizNoQuestions": "এখনো কোনো কুইজ প্রশ্ন নেই।",

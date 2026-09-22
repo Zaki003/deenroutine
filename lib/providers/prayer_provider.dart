@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart' show Locale;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../models/city.dart';
-import '../services/notification_service.dart';
+import '../services/alarm_service.dart';
 import '../services/prayer_service.dart';
 import '../utils/prayer_labels.dart';
 import 'locale_provider.dart' show localePrefsKey;
@@ -24,7 +24,7 @@ const Map<String, int> kPrayerNotificationIds = {
 
 class PrayerProvider extends ChangeNotifier {
   final PrayerService _service = PrayerService();
-  final NotificationService _notifications = NotificationService();
+  final AlarmService _alarms = AlarmService();
 
   // Local, on-device cache. Prayer times only need recomputing once a
   // calendar day, and the location barely ever changes between launches —
@@ -359,18 +359,17 @@ class PrayerProvider extends ChangeNotifier {
     await _rescheduleAll();
   }
 
-  /// Cancels and re-schedules every prayer's adhan notification against the
+  /// Cancels and re-schedules every prayer's adhan alarm against the
   /// current on/off choices and [_timings]. Runs after every fresh fetch (a
   /// new day means new times) and from [toggleNotify] (same times, a
   /// changed choice) - both are cheap, local-only calls, so re-syncing all
   /// five rather than just the one that changed keeps this the single place
   /// that scheduling logic lives.
   ///
-  /// Builds notification text via [lookupAppLocalizations] instead of the
-  /// usual BuildContext-based lookup: this runs from a background refresh,
-  /// with no widget on screen to defer to, and the text has to be baked in
-  /// now since the OS shows whatever was scheduled whenever the alarm
-  /// actually fires.
+  /// Builds the alarm text via [lookupAppLocalizations] instead of the usual
+  /// BuildContext-based lookup: this runs from a background refresh, with no
+  /// widget on screen to defer to, and the text has to be baked in now since
+  /// the OS shows whatever was scheduled whenever the alarm actually fires.
   Future<void> _rescheduleAll() async {
     if (_timings.isEmpty) return;
     final prefs = await SharedPreferences.getInstance();
@@ -380,16 +379,38 @@ class PrayerProvider extends ChangeNotifier {
     for (final entry in kPrayerNotificationIds.entries) {
       final prayerKey = entry.key;
       final id = entry.value;
-      await _notifications.cancelReminder(id);
+      await _alarms.cancelRepeatingAlarm(id);
       final timeStr = _timings[prayerKey];
       if (timeStr == null || !notifyEnabled(prayerKey)) continue;
       final name = prayerNameLabel(l10n, prayerKey);
-      await _notifications.schedulePrayerNotification(
-        id: id,
+      await _alarms.scheduleRepeatingAlarm(
+        baseId: id,
         title: name,
         body: l10n.prayerNotificationBody(name),
-        time: _parseTimeToday(timeStr),
+        firstRing: _parseTimeToday(timeStr),
+        stopLabel: l10n.alarmStopButton,
       );
+    }
+  }
+
+  /// Stops any prayer alarm currently mid-series (rang at least once today
+  /// and hasn't exhausted its [AlarmService.repeatCount] repeats yet).
+  /// Called on every app resume - see [MainNavScreen] - since the alarm
+  /// plugin can't itself tell "the clip finished playing" apart from "the
+  /// user stopped it", opening the app is treated as the signal that the
+  /// user is aware and the re-firing should stop.
+  Future<void> cancelActiveAlarms() async {
+    final now = DateTime.now();
+    for (final entry in kPrayerNotificationIds.entries) {
+      if (!notifyEnabled(entry.key)) continue;
+      final timeStr = _timings[entry.key];
+      if (timeStr == null) continue;
+      final firstRing = _parseTimeToday(timeStr);
+      final lastRing = firstRing
+          .add(AlarmService.repeatInterval * (AlarmService.repeatCount - 1));
+      final stillActive = now.isAfter(firstRing) &&
+          now.isBefore(lastRing.add(const Duration(minutes: 1)));
+      if (stillActive) await _alarms.cancelRepeatingAlarm(entry.value);
     }
   }
 

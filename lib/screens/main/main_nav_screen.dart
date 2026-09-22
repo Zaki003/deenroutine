@@ -78,6 +78,11 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed) return;
+    // The user is clearly aware of the app now, which is the "unless the
+    // user interferes" case that should stop a still-repeating prayer
+    // alarm early - see PrayerProvider.cancelActiveAlarms. Cheap and a
+    // no-op when nothing's ringing, so unconditional is fine.
+    _prayerProvider.cancelActiveAlarms();
     const recoverableOnResume = {
       PrayerErrorType.permissionDenied,
       PrayerErrorType.permissionDeniedForever,

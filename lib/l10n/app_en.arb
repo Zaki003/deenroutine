@@ -375,6 +375,7 @@
   "@prayerNotificationBody": {
     "placeholders": { "prayer": {} }
   },
+  "alarmStopButton": "Stop",
 
   "learnAssessmentAppBarTitle": "{topic} Assessment",
   "@learnAssessmentAppBarTitle": {

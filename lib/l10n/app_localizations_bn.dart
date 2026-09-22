@@ -818,6 +818,9 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get alarmStopButton => 'বন্ধ করুন';
+
+  @override
   String learnAssessmentAppBarTitle(Object topic) {
     return '$topic মূল্যায়ন';
   }

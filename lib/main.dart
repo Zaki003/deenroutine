@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'firebase_options.dart';
 import 'app.dart';
+import 'services/alarm_service.dart';
 import 'services/notification_service.dart';
 
 Future<void> main() async {
@@ -35,6 +36,12 @@ Future<void> main() async {
     await NotificationService().init();
   } catch (e) {
     debugPrint('NotificationService init failed: $e');
+  }
+
+  try {
+    await AlarmService().init();
+  } catch (e) {
+    debugPrint('AlarmService init failed: $e');
   }
 
   runApp(const DeenRoutineApp());
