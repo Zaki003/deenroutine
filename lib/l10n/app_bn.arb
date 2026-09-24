@@ -130,7 +130,9 @@
   "prayerIsha": "এশা",
 
   "newHabitTitle": "নতুন অভ্যাস",
+  "newTodoTitle": "নতুন করণীয়",
   "editHabitTitle": "অভ্যাস সম্পাদনা করুন",
+  "editTodoTitle": "করণীয় সম্পাদনা করুন",
   "habitTitleLabel": "অভ্যাসের নাম",
   "habitTitleValidatorError": "অভ্যাসের নাম লিখুন",
   "habitTitleTooLongError": "অভ্যাসের নাম ৬০ অক্ষরের মধ্যে রাখুন",
@@ -147,6 +149,7 @@
   "onceReminderTitle": "নোটিফিকেশন",
   "onceReminderAtDateTime": "{date}, {time}",
   "saveHabitButton": "অভ্যাস সংরক্ষণ করুন",
+  "saveOneTimeTaskButton": "একবারের কাজ সংরক্ষণ করুন",
   "saveChangesButton": "পরিবর্তন সংরক্ষণ করুন",
   "discardChangesTitle": "পরিবর্তনগুলো বাতিল করবেন?",
   "discardChangesContent": "আপনার অসংরক্ষিত পরিবর্তন রয়েছে। এখন চলে গেলে তা হারিয়ে যাবে।",

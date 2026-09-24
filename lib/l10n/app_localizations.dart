@@ -771,11 +771,23 @@ abstract class AppLocalizations {
   /// **'New Habit'**
   String get newHabitTitle;
 
+  /// No description provided for @newTodoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New To-do'**
+  String get newTodoTitle;
+
   /// No description provided for @editHabitTitle.
   ///
   /// In en, this message translates to:
   /// **'Edit Habit'**
   String get editHabitTitle;
+
+  /// No description provided for @editTodoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit To-do'**
+  String get editTodoTitle;
 
   /// No description provided for @habitTitleLabel.
   ///
@@ -872,6 +884,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Habit'**
   String get saveHabitButton;
+
+  /// No description provided for @saveOneTimeTaskButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save One-Time Task'**
+  String get saveOneTimeTaskButton;
 
   /// No description provided for @saveChangesButton.
   ///

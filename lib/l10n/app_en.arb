@@ -174,7 +174,9 @@
   "prayerIsha": "Isha",
 
   "newHabitTitle": "New Habit",
+  "newTodoTitle": "New To-do",
   "editHabitTitle": "Edit Habit",
+  "editTodoTitle": "Edit To-do",
   "habitTitleLabel": "Habit title",
   "habitTitleValidatorError": "Please enter a habit title",
   "habitTitleTooLongError": "Keep the title under 60 characters",
@@ -197,6 +199,7 @@
     "placeholders": { "date": {}, "time": {} }
   },
   "saveHabitButton": "Save Habit",
+  "saveOneTimeTaskButton": "Save One-Time Task",
   "saveChangesButton": "Save Changes",
   "discardChangesTitle": "Discard changes?",
   "discardChangesContent": "You have unsaved changes. If you leave now, they'll be lost.",

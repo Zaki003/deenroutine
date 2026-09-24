@@ -397,7 +397,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newHabitTitle => 'New Habit';
 
   @override
+  String get newTodoTitle => 'New To-do';
+
+  @override
   String get editHabitTitle => 'Edit Habit';
+
+  @override
+  String get editTodoTitle => 'Edit To-do';
 
   @override
   String get habitTitleLabel => 'Habit title';
@@ -450,6 +456,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveHabitButton => 'Save Habit';
+
+  @override
+  String get saveOneTimeTaskButton => 'Save One-Time Task';
 
   @override
   String get saveChangesButton => 'Save Changes';

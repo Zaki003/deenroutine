@@ -343,6 +343,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   Widget build(BuildContext context) {
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     final l10n = AppLocalizations.of(context)!;
+    final isOnce = _frequency == HabitFrequency.once;
 
     return PopScope(
       canPop: !_hasUnsavedChanges,
@@ -355,7 +356,9 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-            title: Text(_isEditing ? l10n.editHabitTitle : l10n.newHabitTitle)),
+            title: Text(_isEditing
+                ? (isOnce ? l10n.editTodoTitle : l10n.editHabitTitle)
+                : (isOnce ? l10n.newTodoTitle : l10n.newHabitTitle))),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Form(
@@ -622,7 +625,9 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                         )
                       : Text(_isEditing
                           ? l10n.saveChangesButton
-                          : l10n.saveHabitButton),
+                          : isOnce
+                              ? l10n.saveOneTimeTaskButton
+                              : l10n.saveHabitButton),
                 ),
               ],
             ),

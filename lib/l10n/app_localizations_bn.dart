@@ -392,7 +392,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get newHabitTitle => 'নতুন অভ্যাস';
 
   @override
+  String get newTodoTitle => 'নতুন করণীয়';
+
+  @override
   String get editHabitTitle => 'অভ্যাস সম্পাদনা করুন';
+
+  @override
+  String get editTodoTitle => 'করণীয় সম্পাদনা করুন';
 
   @override
   String get habitTitleLabel => 'অভ্যাসের নাম';
@@ -445,6 +451,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get saveHabitButton => 'অভ্যাস সংরক্ষণ করুন';
+
+  @override
+  String get saveOneTimeTaskButton => 'একবারের কাজ সংরক্ষণ করুন';
 
   @override
   String get saveChangesButton => 'পরিবর্তন সংরক্ষণ করুন';
