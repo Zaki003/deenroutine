@@ -7,6 +7,7 @@ import '../models/learn_progress.dart';
 import '../models/quiz_question.dart';
 import '../models/quiz_result.dart';
 import '../models/daily_quote.dart';
+import '../utils/daily_quote_schedule.dart';
 
 /// FR-04 / FR-05 / FR-06 / FR-09 / FR-10 / FR-11 / FR-12, plus account
 /// deletion for the Play Store data-deletion requirement.
@@ -210,19 +211,14 @@ class FirestoreService {
   ///
   /// `scripts/seed_daily_quotes.js` numbers the quotes `dayIndex` 0..n-1, so the
   /// day's quote is a single lookup rather than a download of the collection.
-  /// The day number is counted in UTC: a local date would hand users in Sydney
-  /// and Los Angeles different quotes at the same moment.
+  /// See [quoteDayIndex] for how the day maps to an index.
   Future<DailyQuote?> getDailyQuote() async {
     final col = _db.collection('DailyQuotes');
 
     final total = (await col.count().get()).count ?? 0;
     if (total == 0) return null;
 
-    final today = DateTime.now().toUtc();
-    final dayNumber =
-        DateTime.utc(today.year, today.month, today.day).difference(_epoch).inDays;
-    // Dart's % is never negative, so dates before the epoch still map into range.
-    final index = dayNumber % total;
+    final index = quoteDayIndex(DateTime.now(), total);
 
     final snap = await col.where('dayIndex', isEqualTo: index).limit(1).get();
     if (snap.docs.isNotEmpty) {
@@ -237,7 +233,26 @@ class FirestoreService {
     return DailyQuote.fromMap(fallback.docs.first.id, fallback.docs.first.data());
   }
 
-  static final DateTime _epoch = DateTime.utc(2026, 1, 1);
+  /// The quote the dashboard will be showing at each of [instants], in the
+  /// same order - null where no document claims that day's index. Lets the
+  /// notification scheduler bake in a week of quotes with one query
+  /// (a single-field `whereIn` needs no composite index).
+  Future<List<DailyQuote?>> getDailyQuotesFor(List<DateTime> instants) async {
+    final col = _db.collection('DailyQuotes');
+
+    final total = (await col.count().get()).count ?? 0;
+    if (total == 0) return List.filled(instants.length, null);
+
+    final indexes = [for (final t in instants) quoteDayIndex(t, total)];
+    final snap =
+        await col.where('dayIndex', whereIn: indexes.toSet().toList()).get();
+    final byIndex = {
+      for (final d in snap.docs)
+        (d.data()['dayIndex'] as num).toInt():
+            DailyQuote.fromMap(d.id, d.data()),
+    };
+    return [for (final i in indexes) byIndex[i]];
+  }
 
   /// Fetches specific quotes by id, for the favourites list. `whereIn` on
   /// documentId caps at 30 values, well above [AuthService.maxFreeFavorites]

@@ -6,6 +6,7 @@ import 'providers/auth_provider.dart';
 import 'providers/habit_provider.dart';
 import 'providers/learn_provider.dart';
 import 'providers/locale_provider.dart';
+import 'providers/notification_settings_provider.dart';
 import 'providers/prayer_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/auth/login_screen.dart';
@@ -25,6 +26,12 @@ class DeenRoutineApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PrayerProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        // Follows the app language so scheduled notification text does too.
+        ChangeNotifierProxyProvider<LocaleProvider, NotificationSettingsProvider>(
+          create: (_) => NotificationSettingsProvider(),
+          update: (_, locale, settings) =>
+              settings!..onLocaleChanged(locale.isBangla),
+        ),
         ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(

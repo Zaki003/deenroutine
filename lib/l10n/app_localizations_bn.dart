@@ -999,6 +999,45 @@ class AppLocalizationsBn extends AppLocalizations {
   String get notificationsTitle => 'নোটিফিকেশন';
 
   @override
+  String get notificationsDailyQuoteLabel => 'দৈনিক আয়াত ও হাদিস';
+
+  @override
+  String get dailyQuoteNotifyTitle => 'প্রতিদিন একটি আয়াত বা হাদিস পাঠান';
+
+  @override
+  String get dailyQuoteNotifySubtitle =>
+      'দিনে একটি ছোট নোটিফিকেশন — হোম স্ক্রিনে যেটি দেখানো হয়, সেটিই।';
+
+  @override
+  String get dailyQuoteNotifyTimeLabel => 'সময়';
+
+  @override
+  String get dailyQuoteNotifyFootnote =>
+      'ফোনের ব্যাটারি সেটিংস অনুযায়ী আসতে কয়েক মিনিট দেরি হতে পারে।';
+
+  @override
+  String get notificationsStatusLabel => 'অবস্থা';
+
+  @override
+  String get alarmsAndRemindersLabel => 'অ্যালার্ম ও নোটিফিকেশন';
+
+  @override
+  String get permissionAllowed => 'অনুমোদিত';
+
+  @override
+  String get permissionNotAllowed => 'অনুমোদিত নয়';
+
+  @override
+  String get notificationsProblemNote =>
+      'এটি অনুমোদন না করা পর্যন্ত নোটিফিকেশন নাও পৌঁছাতে পারে। ফোনের সেটিংসে বদলাতে লাইনটিতে চাপুন।';
+
+  @override
+  String get dailyAyahNotificationTitle => 'আজকের আয়াত';
+
+  @override
+  String get dailyHadithNotificationTitle => 'আজকের হাদিস';
+
+  @override
   String get prayerMethodTitle => 'নামাজের সময় গণনার পদ্ধতি';
 
   @override

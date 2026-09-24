@@ -69,6 +69,50 @@ class NotificationService {
 
   Future<void> cancelReminder(int id) => _plugin.cancel(id: id);
 
+  /// The daily ayah/hadith is scheduled as a rolling window of individual
+  /// notifications rather than one repeating one, since a repeating
+  /// notification would show the same text forever. Fixed IDs in a band far
+  /// above anything a habit reminder's `title.hashCode` or a prayer alarm ID
+  /// can reach, so cancelling them never touches those.
+  static const quoteNotificationIdBase = 2000000000;
+  static const quoteNotificationSlots = 7;
+
+  Future<void> scheduleQuoteNotification({
+    required int slot,
+    required DateTime when,
+    required String title,
+    required String body,
+  }) async {
+    final scheduled = tz.TZDateTime.from(when, tz.local);
+    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
+    await _plugin.zonedSchedule(
+      id: quoteNotificationIdBase + slot,
+      title: title,
+      body: body,
+      scheduledDate: scheduled,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          'deenroutine_daily_quote',
+          'Daily ayah & hadith',
+          channelDescription: 'One ayah or hadith a day, at the time you choose',
+          // Expanded, so the whole quote is readable, not just the first line.
+          styleInformation: BigTextStyleInformation(body),
+        ),
+        iOS: const DarwinNotificationDetails(),
+      ),
+      // Inexact on purpose: a daily quote doesn't need to-the-minute delivery,
+      // and this way it works without the "Alarms & reminders" grant that
+      // exact scheduling needs (and silently fails without).
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+    );
+  }
+
+  Future<void> cancelQuoteNotifications() async {
+    for (var slot = 0; slot < quoteNotificationSlots; slot++) {
+      await _plugin.cancel(id: quoteNotificationIdBase + slot);
+    }
+  }
+
   /// Schedules a one-off habit reminder that fires exactly once, at
   /// [dateTime] — a one-time habit's reminder, unlike
   /// [scheduleDailyReminder], has no `matchDateTimeComponents` so it doesn't

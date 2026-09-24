@@ -1002,6 +1002,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsTitle => 'Notifications';
 
   @override
+  String get notificationsDailyQuoteLabel => 'DAILY AYAH & HADITH';
+
+  @override
+  String get dailyQuoteNotifyTitle => 'Send a daily ayah or hadith';
+
+  @override
+  String get dailyQuoteNotifySubtitle =>
+      'One short reminder a day — the same one shown on your home screen.';
+
+  @override
+  String get dailyQuoteNotifyTimeLabel => 'Time';
+
+  @override
+  String get dailyQuoteNotifyFootnote =>
+      'It can arrive a few minutes late, depending on your phone\'s battery settings.';
+
+  @override
+  String get notificationsStatusLabel => 'STATUS';
+
+  @override
+  String get alarmsAndRemindersLabel => 'Alarms & reminders';
+
+  @override
+  String get permissionAllowed => 'Allowed';
+
+  @override
+  String get permissionNotAllowed => 'Not allowed';
+
+  @override
+  String get notificationsProblemNote =>
+      'Reminders may not reach you until this is allowed. Tap the row to change it in your phone\'s settings.';
+
+  @override
+  String get dailyAyahNotificationTitle => 'Today\'s ayah';
+
+  @override
+  String get dailyHadithNotificationTitle => 'Today\'s hadith';
+
+  @override
   String get prayerMethodTitle => 'Prayer calculation method';
 
   @override

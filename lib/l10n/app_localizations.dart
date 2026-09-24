@@ -1845,6 +1845,78 @@ abstract class AppLocalizations {
   /// **'Notifications'**
   String get notificationsTitle;
 
+  /// No description provided for @notificationsDailyQuoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DAILY AYAH & HADITH'**
+  String get notificationsDailyQuoteLabel;
+
+  /// No description provided for @dailyQuoteNotifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a daily ayah or hadith'**
+  String get dailyQuoteNotifyTitle;
+
+  /// No description provided for @dailyQuoteNotifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One short reminder a day — the same one shown on your home screen.'**
+  String get dailyQuoteNotifySubtitle;
+
+  /// No description provided for @dailyQuoteNotifyTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get dailyQuoteNotifyTimeLabel;
+
+  /// No description provided for @dailyQuoteNotifyFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'It can arrive a few minutes late, depending on your phone\'s battery settings.'**
+  String get dailyQuoteNotifyFootnote;
+
+  /// No description provided for @notificationsStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'STATUS'**
+  String get notificationsStatusLabel;
+
+  /// No description provided for @alarmsAndRemindersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarms & reminders'**
+  String get alarmsAndRemindersLabel;
+
+  /// No description provided for @permissionAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get permissionAllowed;
+
+  /// No description provided for @permissionNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not allowed'**
+  String get permissionNotAllowed;
+
+  /// No description provided for @notificationsProblemNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders may not reach you until this is allowed. Tap the row to change it in your phone\'s settings.'**
+  String get notificationsProblemNote;
+
+  /// No description provided for @dailyAyahNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s ayah'**
+  String get dailyAyahNotificationTitle;
+
+  /// No description provided for @dailyHadithNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s hadith'**
+  String get dailyHadithNotificationTitle;
+
   /// No description provided for @prayerMethodTitle.
   ///
   /// In en, this message translates to:

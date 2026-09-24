@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
+import '../../providers/notification_settings_provider.dart';
 import '../../providers/prayer_provider.dart';
 import '../../services/analytics_service.dart';
 import '../../services/prayer_service.dart';
@@ -35,6 +36,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
   // providers.
   late final HabitProvider _habitProvider;
   late final PrayerProvider _prayerProvider;
+  late final NotificationSettingsProvider _notificationSettings;
 
   @override
   void initState() {
@@ -42,6 +44,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
     _habitProvider = context.read<HabitProvider>();
     _prayerProvider = context.read<PrayerProvider>();
+    _notificationSettings = context.read<NotificationSettingsProvider>();
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     _habitProvider.listenToHabits(uid);
     _analytics.logScreenView(_screenNames[_index]);
@@ -56,6 +59,9 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
       // dialog on day one turns into a permanently-denied permission before
       // the user ever gets a screen that explains why the app wants it.
       _prayerProvider.loadPrayerTimes(requestIfDenied: false);
+      // Tops up the rolling week of daily ayah/hadith notifications (a no-op
+      // unless the user turned them on).
+      _notificationSettings.refreshSchedule();
     });
   }
 
@@ -83,6 +89,8 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     // alarm early - see PrayerProvider.cancelActiveAlarms. Cheap and a
     // no-op when nothing's ringing, so unconditional is fine.
     _prayerProvider.cancelActiveAlarms();
+    // Throttled inside, so this is cheap on every resume.
+    _notificationSettings.refreshSchedule();
     const recoverableOnResume = {
       PrayerErrorType.permissionDenied,
       PrayerErrorType.permissionDeniedForever,
@@ -104,6 +112,10 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     // listener started in initState keeps trying to reconnect as a user
     // who's no longer signed in, forever. See HabitProvider.stopListening.
     _habitProvider.stopListening();
+    // Same moment, same reason: a signed-out device shouldn't keep getting
+    // daily quotes that lead to a login wall. The saved choice is kept, so
+    // signing back in resumes them.
+    _notificationSettings.cancelScheduled();
     super.dispose();
   }
 

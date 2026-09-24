@@ -17,6 +17,7 @@ import '../../widgets/delete_account_dialog.dart';
 import '../../widgets/prayer_method_action.dart';
 import '../../widgets/section_label.dart';
 import '../../widgets/update_location_action.dart';
+import 'notifications_screen.dart';
 
 const _privacyPolicyUrl = 'https://zaki003.github.io/deenroutine/privacy-policy.html';
 
@@ -177,7 +178,10 @@ class SettingsScreen extends StatelessWidget {
                     icon: Icons.notifications_none_rounded,
                     label: l10n.notificationsTitle,
                     dark: dark,
-                    onTap: () {},
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                    ),
                   ),
                   Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark)),
                   AccountRow(
