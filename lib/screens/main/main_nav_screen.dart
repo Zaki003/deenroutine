@@ -47,6 +47,9 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     _notificationSettings = context.read<NotificationSettingsProvider>();
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     _habitProvider.listenToHabits(uid);
+    // Reminders, nudges and the Friday summary all depend on habit state
+    // (what's done today, current streaks), so they're rebuilt as it changes.
+    _habitProvider.addListener(_onHabitsChanged);
     _analytics.logScreenView(_screenNames[_index]);
     // loadPrayerTimes() notifies synchronously before its first await (to
     // flip on isLoading immediately for pull-to-refresh callers), which
@@ -59,11 +62,14 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
       // dialog on day one turns into a permanently-denied permission before
       // the user ever gets a screen that explains why the app wants it.
       _prayerProvider.loadPrayerTimes(requestIfDenied: false);
-      // Tops up the rolling week of daily ayah/hadith notifications (a no-op
-      // unless the user turned them on).
+      // Tops up the rolling week of notifications. Habits may not have
+      // loaded yet - _onHabitsChanged covers the moment they do.
       _notificationSettings.refreshSchedule();
+      _notificationSettings.refreshHabitSchedule(_habitProvider);
     });
   }
+
+  void _onHabitsChanged() => _notificationSettings.onHabitsChanged(_habitProvider);
 
   void _onTabTap(int i) {
     setState(() => _index = i);
@@ -91,6 +97,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     _prayerProvider.cancelActiveAlarms();
     // Throttled inside, so this is cheap on every resume.
     _notificationSettings.refreshSchedule();
+    _notificationSettings.refreshHabitSchedule(_habitProvider);
     const recoverableOnResume = {
       PrayerErrorType.permissionDenied,
       PrayerErrorType.permissionDeniedForever,
@@ -108,13 +115,15 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _habitProvider.removeListener(_onHabitsChanged);
     // _AuthGate unmounts this screen on logout - without this, the habit
     // listener started in initState keeps trying to reconnect as a user
     // who's no longer signed in, forever. See HabitProvider.stopListening.
     _habitProvider.stopListening();
     // Same moment, same reason: a signed-out device shouldn't keep getting
-    // daily quotes that lead to a login wall. The saved choice is kept, so
-    // signing back in resumes them.
+    // reminders and daily quotes that lead to a login wall (or about someone
+    // else's habits). The saved choices are kept, so signing back in resumes
+    // everything.
     _notificationSettings.cancelScheduled();
     super.dispose();
   }

@@ -121,12 +121,17 @@ class FirestoreService {
   /// says so (`status == true`); avoidance succeeds on *silence* — a slip is
   /// the only thing ever logged for it, so a day with no log at all is the
   /// win, and a logged day is the break.
+  ///
+  /// [today] is the reference day the walk starts from, defaulting to now -
+  /// overridden to ask what the streak will read on a day that hasn't
+  /// happened yet.
   int calculateStreak(
     List<HabitLog> logs, {
     required DateTime createdAt,
     HabitFrequency frequency = HabitFrequency.daily,
     List<int> selectedDays = const [],
     HabitTrackingType trackingType = HabitTrackingType.yesNo,
+    DateTime? today,
   }) {
     final createdMidnight = DateTime(createdAt.year, createdAt.month, createdAt.day);
     bool isScheduled(DateTime day) =>
@@ -140,7 +145,7 @@ class FirestoreService {
         : byDate[day] == true;
 
     int streak = 0;
-    DateTime cursor = DateTime.now();
+    DateTime cursor = today ?? DateTime.now();
     cursor = DateTime(cursor.year, cursor.month, cursor.day);
 
     // Not having done today's habit yet doesn't break an in-progress streak —

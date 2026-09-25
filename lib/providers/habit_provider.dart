@@ -7,6 +7,7 @@ import '../models/habit.dart';
 import '../services/analytics_service.dart';
 import '../services/firestore_service.dart';
 import '../services/notification_service.dart';
+import '../utils/notification_plan.dart';
 
 /// Kinds of error [HabitProvider] can surface. Kept as a type rather than a
 /// pre-formatted English sentence so the UI layer can localize the message
@@ -461,9 +462,14 @@ class HabitProvider extends ChangeNotifier {
   Future<void> deleteHabit(Habit habit) async {
     try {
       await _service.deleteHabit(habit);
-      if (habit.reminderHour != null) {
-        await NotificationService().cancelReminder(habit.title.hashCode);
-      }
+      // Immediately, rather than waiting for the notification scheduler to
+      // notice the habit is gone - a reminder for a deleted habit is worse
+      // than a slightly late cleanup. The scheduler's own sweep catches
+      // anything this misses.
+      await NotificationService().cancelIds([
+        habit.title.hashCode,
+        ...allHabitReminderIds(habit.habitId),
+      ]);
     } catch (e) {
       _setError(HabitErrorType.deleteFailed, e.toString());
     }
@@ -480,6 +486,22 @@ class HabitProvider extends ChangeNotifier {
     );
     unawaited(_checkMilestone(habit, streak));
     return streak;
+  }
+
+  /// [streakFor] without its side effect of queueing milestone banners: what
+  /// the streak will read on [day], with [day] itself not yet done. For
+  /// notification planning, which asks about habits and days the user hasn't
+  /// looked at.
+  Future<int> streakAsOf(Habit habit, DateTime day) async {
+    final logs = await _service.watchHabitLogs(habit.uid, habit.habitId).first;
+    return _service.calculateStreak(
+      logs,
+      createdAt: habit.createdAt,
+      frequency: habit.frequency,
+      selectedDays: habit.selectedDays,
+      trackingType: habit.trackingType,
+      today: day,
+    );
   }
 
   /// This week's completion, one bool per day (Mon..Sun).

@@ -6,7 +6,6 @@ import '../../models/habit.dart';
 import '../../models/habit_template.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
-import '../../services/notification_service.dart';
 import '../../utils/date_format.dart';
 import '../../utils/habit_error_messages.dart';
 import '../../widgets/tracking_type_section.dart';
@@ -575,46 +574,11 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                             return;
                           }
 
-                          // Notification scheduling is best-effort: the habit
-                          // itself is already saved at this point, so a
-                          // failure here (e.g. missing exact-alarm permission
-                          // on Android 12+) must not trap the user on this
-                          // screen with a spinner that never resolves.
-                          try {
-                            // The old title's notification id must be
-                            // cancelled separately since a rename changes the
-                            // id (it's derived from the title's hashCode).
-                            if (_isEditing) {
-                              await NotificationService().cancelReminder(
-                                  widget.editingHabit!.title.hashCode);
-                            }
-                            if (_reminderTime != null &&
-                                _frequency == HabitFrequency.once) {
-                              final due = dueDate ?? DateTime.now();
-                              await NotificationService()
-                                  .scheduleOneOffReminder(
-                                id: title.hashCode,
-                                title: l10n.reminderNotificationTitle,
-                                body: l10n.reminderNotificationBody(title),
-                                dateTime: DateTime(due.year, due.month, due.day,
-                                    _reminderTime!.hour, _reminderTime!.minute),
-                              );
-                            } else if (_reminderTime != null) {
-                              await NotificationService().scheduleDailyReminder(
-                                id: title.hashCode,
-                                title: l10n.reminderNotificationTitle,
-                                body: l10n.reminderNotificationBody(title),
-                                hour: _reminderTime!.hour,
-                                minute: _reminderTime!.minute,
-                              );
-                            }
-                          } catch (_) {
-                            // Ignored: the habit saved successfully, which is
-                            // what the user is waiting on. The reminder just
-                            // won't fire until they reopen and re-save it.
-                          }
-
-                          if (!context.mounted) return;
+                          // No reminder scheduling here: the notification
+                          // scheduler rebuilds from the saved habit as soon as
+                          // it changes (see NotificationSettingsProvider), so
+                          // a rename, a new time, or a removed reminder all
+                          // take effect without this screen doing anything.
                           Navigator.pop(context);
                         },
                   child: _saving

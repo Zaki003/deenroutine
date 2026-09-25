@@ -1,7 +1,13 @@
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
+
+/// What a notification is for. Each kind gets its own Android channel, so a
+/// user can mute one (say, the weekly summary) from system settings without
+/// losing the others.
+enum NotificationKind { reminder, dailyQuote, streak, weekly, comeback }
 
 /// FR-08: Reminder notifications for scheduled habits and prayer times.
 ///
@@ -40,40 +46,109 @@ class NotificationService {
         ?.requestNotificationsPermission();
   }
 
-  Future<void> scheduleDailyReminder({
-    required int id,
-    required String title,
-    required String body,
-    required int hour,
-    required int minute,
-  }) async {
-    await _plugin.zonedSchedule(
-      id: id,
-      title: title,
-      body: body,
-      scheduledDate: _nextInstanceOfTime(hour, minute),
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
+  AndroidNotificationDetails _androidDetails(
+      NotificationKind kind, String body) {
+    // Expanded, so a whole message is readable rather than just its first line.
+    final style = BigTextStyleInformation(body);
+    switch (kind) {
+      case NotificationKind.reminder:
+        return AndroidNotificationDetails(
           'deenroutine_reminders',
           'DeenRoutine Reminders',
           channelDescription: 'Habit and prayer time reminders',
           importance: Importance.high,
           priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
+          styleInformation: style,
+        );
+      case NotificationKind.dailyQuote:
+        return AndroidNotificationDetails(
+          'deenroutine_daily_quote',
+          'Daily ayah & hadith',
+          channelDescription: 'One ayah or hadith a day, at the time you choose',
+          styleInformation: style,
+        );
+      case NotificationKind.streak:
+        return AndroidNotificationDetails(
+          'deenroutine_streak',
+          'Streak reminders',
+          channelDescription: 'An evening nudge when a streak is at risk',
+          styleInformation: style,
+        );
+      case NotificationKind.weekly:
+        return AndroidNotificationDetails(
+          'deenroutine_weekly',
+          'Weekly summary',
+          channelDescription: 'A Friday look back at your week',
+          styleInformation: style,
+        );
+      case NotificationKind.comeback:
+        return AndroidNotificationDetails(
+          'deenroutine_comeback',
+          'Come-back messages',
+          channelDescription: 'A gentle message after a few days away',
+          styleInformation: style,
+        );
+    }
   }
 
-  Future<void> cancelReminder(int id) => _plugin.cancel(id: id);
+  /// Schedules one notification at [when], replacing any pending one with the
+  /// same [id]. A [when] already in the past is silently skipped.
+  ///
+  /// [exact] is for things the user timed themselves (a habit reminder), which
+  /// should land on the minute. If the phone won't allow exact alarms it falls
+  /// back to an approximate one - a reminder a few minutes late beats none.
+  /// Everything else is approximate on purpose: it doesn't need to be
+  /// to-the-minute, and works without the "Alarms & reminders" grant.
+  Future<void> schedule({
+    required int id,
+    required DateTime when,
+    required String title,
+    required String body,
+    required NotificationKind kind,
+    bool exact = false,
+  }) async {
+    final scheduled = tz.TZDateTime.from(when, tz.local);
+    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
+    final details = NotificationDetails(
+      android: _androidDetails(kind, body),
+      iOS: const DarwinNotificationDetails(),
+    );
+    Future<void> go(AndroidScheduleMode mode) => _plugin.zonedSchedule(
+          id: id,
+          title: title,
+          body: body,
+          scheduledDate: scheduled,
+          notificationDetails: details,
+          androidScheduleMode: mode,
+        );
+
+    if (!exact) {
+      await go(AndroidScheduleMode.inexactAllowWhileIdle);
+      return;
+    }
+    try {
+      await go(AndroidScheduleMode.exactAllowWhileIdle);
+    } on PlatformException {
+      await go(AndroidScheduleMode.inexactAllowWhileIdle);
+    }
+  }
+
+  Future<Set<int>> pendingIds() async {
+    final pending = await _plugin.pendingNotificationRequests();
+    return {for (final request in pending) request.id};
+  }
+
+  Future<void> cancelIds(Iterable<int> ids) async {
+    for (final id in ids) {
+      await _plugin.cancel(id: id);
+    }
+  }
 
   /// The daily ayah/hadith is scheduled as a rolling window of individual
   /// notifications rather than one repeating one, since a repeating
   /// notification would show the same text forever. Fixed IDs in a band far
-  /// above anything a habit reminder's `title.hashCode` or a prayer alarm ID
-  /// can reach, so cancelling them never touches those.
+  /// above anything a habit reminder or a prayer alarm can reach (see
+  /// notification_plan.dart), so cancelling them never touches those.
   static const quoteNotificationIdBase = 2000000000;
   static const quoteNotificationSlots = 7;
 
@@ -82,75 +157,17 @@ class NotificationService {
     required DateTime when,
     required String title,
     required String body,
-  }) async {
-    final scheduled = tz.TZDateTime.from(when, tz.local);
-    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
-    await _plugin.zonedSchedule(
-      id: quoteNotificationIdBase + slot,
-      title: title,
-      body: body,
-      scheduledDate: scheduled,
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(
-          'deenroutine_daily_quote',
-          'Daily ayah & hadith',
-          channelDescription: 'One ayah or hadith a day, at the time you choose',
-          // Expanded, so the whole quote is readable, not just the first line.
-          styleInformation: BigTextStyleInformation(body),
-        ),
-        iOS: const DarwinNotificationDetails(),
-      ),
-      // Inexact on purpose: a daily quote doesn't need to-the-minute delivery,
-      // and this way it works without the "Alarms & reminders" grant that
-      // exact scheduling needs (and silently fails without).
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    );
-  }
+  }) =>
+      schedule(
+        id: quoteNotificationIdBase + slot,
+        when: when,
+        title: title,
+        body: body,
+        kind: NotificationKind.dailyQuote,
+      );
 
-  Future<void> cancelQuoteNotifications() async {
-    for (var slot = 0; slot < quoteNotificationSlots; slot++) {
-      await _plugin.cancel(id: quoteNotificationIdBase + slot);
-    }
-  }
-
-  /// Schedules a one-off habit reminder that fires exactly once, at
-  /// [dateTime] — a one-time habit's reminder, unlike
-  /// [scheduleDailyReminder], has no `matchDateTimeComponents` so it doesn't
-  /// recur daily. A [dateTime] already in the past is silently skipped.
-  Future<void> scheduleOneOffReminder({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime dateTime,
-  }) async {
-    final scheduled = tz.TZDateTime.from(dateTime, tz.local);
-    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
-    await _plugin.zonedSchedule(
-      id: id,
-      title: title,
-      body: body,
-      scheduledDate: scheduled,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'deenroutine_reminders',
-          'DeenRoutine Reminders',
-          channelDescription: 'Habit and prayer time reminders',
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
-  }
-
-  tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduled =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
-    if (scheduled.isBefore(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
-    }
-    return scheduled;
-  }
+  Future<void> cancelQuoteNotifications() => cancelIds([
+        for (var slot = 0; slot < quoteNotificationSlots; slot++)
+          quoteNotificationIdBase + slot,
+      ]);
 }
