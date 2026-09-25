@@ -8,10 +8,11 @@ import '../../widgets/account_row.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/section_label.dart';
 
-/// Where the notification choices live: the daily ayah/hadith (on/off and
-/// time), plus whether the phone is actually allowing the app's reminders
-/// through - the usual reason a reminder never shows up, and otherwise
-/// something only visible deep in system settings.
+/// Where the notification choices live: the daily ayah/hadith, how habit
+/// reminders are worded, the optional motivation (streak reminder, Friday
+/// summary, come-back message), and whether the phone is actually letting the
+/// app's notifications through - the usual reason a reminder never shows up,
+/// and otherwise something only visible deep in system settings.
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
@@ -54,13 +55,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     });
   }
 
-  Future<void> _pickTime(NotificationSettingsProvider settings) async {
+  Future<void> _pickTime(
+      int hour, int minute, Future<void> Function(int, int) onPicked) async {
     final picked = await showTimePicker(
       context: context,
-      initialTime:
-          TimeOfDay(hour: settings.quoteHour, minute: settings.quoteMinute),
+      initialTime: TimeOfDay(hour: hour, minute: minute),
     );
-    if (picked != null) await settings.setQuoteTime(picked.hour, picked.minute);
+    if (picked != null) await onPicked(picked.hour, picked.minute);
   }
 
   String? _statusText(AppLocalizations l10n, bool? allowed) {
@@ -78,13 +79,14 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     final notificationsBlocked = _notificationsAllowed == false;
     final alarmsBlocked = isAndroid && _alarmsAllowed == false;
     final problemColor = dark ? DeenColors.rustLight : DeenColors.rust;
-
+    final divider =
+        Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark));
     final noteStyle =
         TextStyle(fontSize: 11.5, height: 1.4, color: DeenColors.textMuted(dark));
-    // On: gold on dark, teal on light - DeenColors.primary alone vanishes into
-    // the dark card. Off: the muted track/thumb the rest of the UI uses.
-    final onTrack = dark ? DeenColors.gold : DeenColors.primary;
-    final onThumb = dark ? DeenColors.ink : Colors.white;
+    Widget note(String text) => Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+          child: Text(text, style: noteStyle),
+        );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.notificationsTitle)),
@@ -97,72 +99,72 @@ class _NotificationsScreenState extends State<NotificationsScreen>
             const SizedBox(height: 8),
             DeenCard(
               dark: dark,
+              child: _SwitchWithTime(
+                dark: dark,
+                title: l10n.dailyQuoteNotifyTitle,
+                subtitle: l10n.dailyQuoteNotifySubtitle,
+                value: settings.quoteEnabled,
+                onChanged: settings.loaded ? settings.setQuoteEnabled : null,
+                timeLabel: l10n.dailyQuoteNotifyTimeLabel,
+                hour: settings.quoteHour,
+                minute: settings.quoteMinute,
+                onTapTime: () => _pickTime(
+                    settings.quoteHour, settings.quoteMinute, settings.setQuoteTime),
+              ),
+            ),
+            note(l10n.dailyQuoteNotifyFootnote),
+            const SizedBox(height: 20),
+            SectionLabel(l10n.notificationsRemindersLabel),
+            const SizedBox(height: 8),
+            DeenCard(
+              dark: dark,
+              child: _NotificationSwitch(
+                dark: dark,
+                title: l10n.encouragingRemindersTitle,
+                subtitle: l10n.encouragingRemindersSubtitle,
+                value: settings.encouragingReminders,
+                onChanged: settings.loaded ? settings.setEncouragingReminders : null,
+              ),
+            ),
+            note(l10n.remindersSkipDoneNote),
+            const SizedBox(height: 20),
+            SectionLabel(l10n.notificationsNudgesLabel),
+            const SizedBox(height: 8),
+            DeenCard(
+              dark: dark,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      l10n.dailyQuoteNotifyTitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: DeenColors.primaryText(dark),
-                      ),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(l10n.dailyQuoteNotifySubtitle, style: noteStyle),
-                    ),
-                    value: settings.quoteEnabled,
-                    onChanged: settings.loaded ? settings.setQuoteEnabled : null,
-                    thumbColor: WidgetStateProperty.resolveWith((states) =>
-                        states.contains(WidgetState.selected)
-                            ? onThumb
-                            : DeenColors.textMuted(dark)),
-                    trackColor: WidgetStateProperty.resolveWith((states) =>
-                        states.contains(WidgetState.selected)
-                            ? onTrack
-                            : DeenColors.trackLine(dark)),
-                    trackOutlineColor: WidgetStateProperty.resolveWith(
-                        (states) => states.contains(WidgetState.selected)
-                            ? Colors.transparent
-                            : DeenColors.outlineFaint(dark)),
+                  _SwitchWithTime(
+                    dark: dark,
+                    title: l10n.streakNudgeSettingTitle,
+                    subtitle: l10n.streakNudgeSettingSubtitle,
+                    value: settings.streakNudge,
+                    onChanged: settings.loaded ? settings.setStreakNudge : null,
+                    timeLabel: l10n.dailyQuoteNotifyTimeLabel,
+                    hour: settings.streakHour,
+                    minute: settings.streakMinute,
+                    onTapTime: () => _pickTime(settings.streakHour,
+                        settings.streakMinute, settings.setStreakNudgeTime),
                   ),
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeOutCubic,
-                    alignment: Alignment.topCenter,
-                    child: settings.quoteEnabled
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Divider(
-                                height: 1,
-                                thickness: 1,
-                                color: DeenColors.dividerLine(dark),
-                              ),
-                              AccountRow(
-                                icon: Icons.schedule_rounded,
-                                label: l10n.dailyQuoteNotifyTimeLabel,
-                                dark: dark,
-                                trailingText: TimeOfDay(
-                                  hour: settings.quoteHour,
-                                  minute: settings.quoteMinute,
-                                ).format(context),
-                                showChevron: true,
-                                onTap: () => _pickTime(settings),
-                              ),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
+                  divider,
+                  _NotificationSwitch(
+                    dark: dark,
+                    title: l10n.weeklySummarySettingTitle,
+                    subtitle: l10n.weeklySummarySettingSubtitle,
+                    value: settings.weeklySummary,
+                    onChanged: settings.loaded ? settings.setWeeklySummary : null,
+                  ),
+                  divider,
+                  _NotificationSwitch(
+                    dark: dark,
+                    title: l10n.comebackSettingTitle,
+                    subtitle: l10n.comebackSettingSubtitle,
+                    value: settings.comeback,
+                    onChanged: settings.loaded ? settings.setComeback : null,
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
-              child: Text(l10n.dailyQuoteNotifyFootnote, style: noteStyle),
             ),
             const SizedBox(height: 20),
             SectionLabel(l10n.notificationsStatusLabel),
@@ -183,10 +185,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     onTap: openAppSettings,
                   ),
                   if (isAndroid) ...[
-                    Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: DeenColors.dividerLine(dark)),
+                    divider,
                     AccountRow(
                       icon: Icons.alarm_rounded,
                       label: l10n.alarmsAndRemindersLabel,
@@ -202,13 +201,136 @@ class _NotificationsScreenState extends State<NotificationsScreen>
               ),
             ),
             if (notificationsBlocked || alarmsBlocked)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
-                child: Text(l10n.notificationsProblemNote, style: noteStyle),
-              ),
+              note(l10n.notificationsProblemNote),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A titled switch in the app's colours. On: gold on dark, teal on light -
+/// DeenColors.primary alone vanishes into the dark card. Off: the muted
+/// track and thumb the rest of the UI uses. SwitchListTile merges the title,
+/// subtitle and state into one announcement for screen readers.
+class _NotificationSwitch extends StatelessWidget {
+  final bool dark;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool>? onChanged;
+
+  const _NotificationSwitch({
+    required this.dark,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final onTrack = dark ? DeenColors.gold : DeenColors.primary;
+    final onThumb = dark ? DeenColors.ink : Colors.white;
+    return SwitchListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: DeenColors.primaryText(dark),
+        ),
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Text(
+          subtitle,
+          style: TextStyle(
+              fontSize: 11.5, height: 1.4, color: DeenColors.textMuted(dark)),
+        ),
+      ),
+      value: value,
+      onChanged: onChanged,
+      thumbColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? onThumb
+              : DeenColors.textMuted(dark)),
+      trackColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? onTrack
+              : DeenColors.trackLine(dark)),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? Colors.transparent
+              : DeenColors.outlineFaint(dark)),
+    );
+  }
+}
+
+/// A [_NotificationSwitch] that reveals a time row while it's on.
+class _SwitchWithTime extends StatelessWidget {
+  final bool dark;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool>? onChanged;
+  final String timeLabel;
+  final int hour;
+  final int minute;
+  final VoidCallback onTapTime;
+
+  const _SwitchWithTime({
+    required this.dark,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+    required this.timeLabel,
+    required this.hour,
+    required this.minute,
+    required this.onTapTime,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _NotificationSwitch(
+          dark: dark,
+          title: title,
+          subtitle: subtitle,
+          value: value,
+          onChanged: onChanged,
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.topCenter,
+          child: value
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: DeenColors.dividerLine(dark),
+                    ),
+                    AccountRow(
+                      icon: Icons.schedule_rounded,
+                      label: timeLabel,
+                      dark: dark,
+                      trailingText:
+                          TimeOfDay(hour: hour, minute: minute).format(context),
+                      showChevron: true,
+                      onTap: onTapTime,
+                    ),
+                  ],
+                )
+              : const SizedBox.shrink(),
+        ),
+      ],
     );
   }
 }
