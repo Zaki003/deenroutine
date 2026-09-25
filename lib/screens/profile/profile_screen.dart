@@ -7,6 +7,7 @@ import '../../providers/habit_provider.dart';
 import '../../theme/deen_colors.dart';
 import '../../utils/date_format.dart';
 import '../../utils/text_format.dart';
+import '../../utils/week_stats.dart';
 import '../../widgets/account_row.dart';
 import '../../widgets/avatar_graphic.dart';
 import '../../widgets/avatar_picker_dialog.dart';
@@ -192,19 +193,12 @@ class _WeekStatsCard extends StatelessWidget {
           );
         }
 
-        final dayCounts = List.generate(7, (i) => weeks.where((w) => w[i]).length);
-        final totalDone = dayCounts.fold(0, (sum, c) => sum + c);
-        final totalPossible = recurringHabits.length * 7;
-
-        var bestIndex = -1;
-        var bestCount = 0;
-        for (var i = 0; i < recurringHabits.length; i++) {
-          final count = weeks[i].where((done) => done).length;
-          if (count > bestCount) {
-            bestCount = count;
-            bestIndex = i;
-          }
-        }
+        final stats = computeWeekStats(weeks);
+        final dayCounts = stats.dayCounts;
+        final totalDone = stats.totalDone;
+        final totalPossible = stats.totalPossible;
+        final bestIndex = stats.bestIndex;
+        final bestCount = stats.bestCount;
 
         final today = DateTime.now();
         final todayMidnight = DateTime(today.year, today.month, today.day);
