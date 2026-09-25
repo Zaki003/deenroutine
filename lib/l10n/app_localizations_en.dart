@@ -1315,9 +1315,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prayerExcusedSubtitle => 'Pauses your streak without breaking it';
 
   @override
-  String get prayerStatsLabel => 'PRAYERS · LAST 30 DAYS';
-
-  @override
   String get prayerStreakLabel => 'Days, all 5 prayed';
 
   @override
@@ -1350,4 +1347,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prayerDayYesterday => 'YESTERDAY';
+
+  @override
+  String get prayerInsightsTitle => 'Prayer insights';
+
+  @override
+  String get prayerInsightsSubtitle => 'Last 30 days';
+
+  @override
+  String get prayerInsightsEmpty =>
+      'Tick off your prayers on the Prayer tab and your insights will show up here.';
 }

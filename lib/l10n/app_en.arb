@@ -589,7 +589,6 @@
   "prayerStatusExcused": "Excused",
   "prayerOptionExcused": "Excused all day",
   "prayerExcusedSubtitle": "Pauses your streak without breaking it",
-  "prayerStatsLabel": "PRAYERS · LAST 30 DAYS",
   "prayerStreakLabel": "Days, all 5 prayed",
   "prayerPrayedLabel": "Prayed",
   "prayerWeakestInsight": "{prayer} is your hardest. An alarm could help.",
@@ -609,5 +608,8 @@
   "prayerLegendNotLogged": "Not logged",
   "prayerLogHistoryFailed": "Couldn't load your prayer history.",
   "prayerDayToday": "TODAY",
-  "prayerDayYesterday": "YESTERDAY"
+  "prayerDayYesterday": "YESTERDAY",
+  "prayerInsightsTitle": "Prayer insights",
+  "prayerInsightsSubtitle": "Last 30 days",
+  "prayerInsightsEmpty": "Tick off your prayers on the Prayer tab and your insights will show up here."
 }

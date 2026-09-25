@@ -444,7 +444,6 @@
   "prayerStatusExcused": "অব্যাহতি",
   "prayerOptionExcused": "সারাদিন অব্যাহতি",
   "prayerExcusedSubtitle": "আপনার ধারাবাহিকতা থামিয়ে রাখে, ভাঙে না",
-  "prayerStatsLabel": "নামাজ · গত ৩০ দিন",
   "prayerStreakLabel": "টানা ৫ ওয়াক্ত পড়ার দিন",
   "prayerPrayedLabel": "পড়েছেন",
   "prayerWeakestInsight": "{prayer} আপনার জন্য সবচেয়ে কঠিন। একটি অ্যালার্ম সাহায্য করতে পারে।",
@@ -454,5 +453,8 @@
   "prayerLegendNotLogged": "লগ করা হয়নি",
   "prayerLogHistoryFailed": "আপনার নামাজের ইতিহাস লোড করা যায়নি।",
   "prayerDayToday": "আজ",
-  "prayerDayYesterday": "গতকাল"
+  "prayerDayYesterday": "গতকাল",
+  "prayerInsightsTitle": "নামাজের হিসাব",
+  "prayerInsightsSubtitle": "গত ৩০ দিন",
+  "prayerInsightsEmpty": "নামাজ ট্যাবে আপনার নামাজগুলো চিহ্নিত করুন, আপনার হিসাব এখানে দেখা যাবে।"
 }

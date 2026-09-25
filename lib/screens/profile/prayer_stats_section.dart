@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/prayer_log.dart';
 import '../../providers/prayer_log_provider.dart';
@@ -9,13 +10,17 @@ import '../../utils/prayer_labels.dart';
 import '../../utils/prayer_log_error_messages.dart';
 import '../../utils/prayer_stats.dart';
 import '../../widgets/deen_card.dart';
-import '../../widgets/section_label.dart';
 import '../../widgets/stat_tile.dart';
 
-/// The Profile's last-30-days prayer summary: three headline numbers, a bar
-/// per prayer, a nudge for the hardest one, and a day-by-day grid. Private
-/// by design - there's no share action here, unlike the habit stats.
-/// Renders nothing until something has been logged.
+/// The Profile's "Prayer insights": a collapsed header that opens into the
+/// last-30-days prayer summary - three headline numbers, a bar per prayer, a
+/// nudge for the hardest one, and a day-by-day grid.
+///
+/// Collapsed by default because it's the most personal thing in the app and
+/// the Profile is the screen people show others; the header itself carries
+/// no numbers. Whether it's open is remembered per device, and the history
+/// is only fetched once it's opened, so a closed section costs no reads.
+/// No share action, unlike the habit stats.
 class PrayerStatsSection extends StatefulWidget {
   const PrayerStatsSection({super.key});
 
@@ -24,16 +29,100 @@ class PrayerStatsSection extends StatefulWidget {
 }
 
 class _PrayerStatsSectionState extends State<PrayerStatsSection> {
+  static const _expandedKey = 'profile_prayer_insights_expanded';
+
+  bool _expanded = false;
+
   @override
   void initState() {
     super.initState();
-    // loadHistory notifies when it finishes; kicking it off after the first
-    // frame keeps that out of this build. It's a no-op once loaded for the
-    // day, and reloads by itself when the prayer day rolls over.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) context.read<PrayerLogProvider>().loadHistory();
+    SharedPreferences.getInstance().then((prefs) {
+      if (!mounted || !(prefs.getBool(_expandedKey) ?? false)) return;
+      setState(() => _expanded = true);
+      _loadHistory();
     });
   }
+
+  // loadHistory notifies when it finishes, so it's kicked off after the
+  // frame rather than from a build. It's a no-op once loaded for the day.
+  void _loadHistory() => WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.read<PrayerLogProvider>().loadHistory();
+      });
+
+  Future<void> _toggle() async {
+    setState(() => _expanded = !_expanded);
+    if (_expanded) _loadHistory();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_expandedKey, _expanded);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Semantics(
+            button: true,
+            expanded: _expanded,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: _toggle,
+              child: DeenCard(
+                dark: dark,
+                padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
+                child: Row(
+                  children: [
+                    Icon(Icons.mosque_outlined, size: 22, color: dark ? DeenColors.goldSoft : DeenColors.primary),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.prayerInsightsTitle,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: DeenColors.primaryText(dark),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            l10n.prayerInsightsSubtitle,
+                            style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    AnimatedRotation(
+                      turns: _expanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Icon(Icons.keyboard_arrow_down_rounded, color: DeenColors.textMuted(dark)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topCenter,
+            child: _expanded ? const _PrayerInsightsBody() : const SizedBox(width: double.infinity),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PrayerInsightsBody extends StatelessWidget {
+  const _PrayerInsightsBody();
 
   @override
   Widget build(BuildContext context) {
@@ -44,26 +133,40 @@ class _PrayerStatsSectionState extends State<PrayerStatsSection> {
     final stats = logs.stats;
 
     if (stats == null) {
-      if (logs.errorType != PrayerLogErrorType.historyFailed) return const SizedBox.shrink();
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Text(
+      final Widget child;
+      if (logs.errorType == PrayerLogErrorType.historyFailed) {
+        child = Text(
           prayerLogErrorMessage(l10n, PrayerLogErrorType.historyFailed),
-          style: TextStyle(fontSize: 11.5, color: DeenColors.textMuted(dark)),
-        ),
-      );
+          style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
+        );
+      } else if (!logs.historyLoaded) {
+        child = Center(
+          child: SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: dark ? DeenColors.goldSoft : DeenColors.primary,
+            ),
+          ),
+        );
+      } else {
+        child = Text(
+          l10n.prayerInsightsEmpty,
+          style: TextStyle(fontSize: 12.5, height: 1.4, color: DeenColors.textMuted(dark)),
+        );
+      }
+      return Padding(padding: const EdgeInsets.fromLTRB(4, 14, 4, 0), child: child);
     }
 
     String pct(int? p) => p == null ? '—' : '$p%';
     final weakest = stats.weakestPrayer;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SectionLabel(l10n.prayerStatsLabel),
-          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(

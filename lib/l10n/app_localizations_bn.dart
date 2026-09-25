@@ -1315,9 +1315,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get prayerExcusedSubtitle => 'আপনার ধারাবাহিকতা থামিয়ে রাখে, ভাঙে না';
 
   @override
-  String get prayerStatsLabel => 'নামাজ · গত ৩০ দিন';
-
-  @override
   String get prayerStreakLabel => 'টানা ৫ ওয়াক্ত পড়ার দিন';
 
   @override
@@ -1350,4 +1347,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get prayerDayYesterday => 'গতকাল';
+
+  @override
+  String get prayerInsightsTitle => 'নামাজের হিসাব';
+
+  @override
+  String get prayerInsightsSubtitle => 'গত ৩০ দিন';
+
+  @override
+  String get prayerInsightsEmpty =>
+      'নামাজ ট্যাবে আপনার নামাজগুলো চিহ্নিত করুন, আপনার হিসাব এখানে দেখা যাবে।';
 }

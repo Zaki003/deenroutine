@@ -165,6 +165,11 @@ class PrayerLogProvider extends ChangeNotifier {
     }
   }
 
+  /// Whether [loadHistory] has finished for the current prayer day - tells
+  /// "still loading" apart from "loaded, nothing logged yet" when [stats] is
+  /// null.
+  bool get historyLoaded => _historyDay != null && _historyDay == prayerDay;
+
   /// Null until [loadHistory] has finished for the current prayer day, and
   /// while nothing has ever been logged.
   PrayerStats? get stats {

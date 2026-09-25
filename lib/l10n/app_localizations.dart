@@ -2385,12 +2385,6 @@ abstract class AppLocalizations {
   /// **'Pauses your streak without breaking it'**
   String get prayerExcusedSubtitle;
 
-  /// No description provided for @prayerStatsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'PRAYERS · LAST 30 DAYS'**
-  String get prayerStatsLabel;
-
   /// No description provided for @prayerStreakLabel.
   ///
   /// In en, this message translates to:
@@ -2450,6 +2444,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'YESTERDAY'**
   String get prayerDayYesterday;
+
+  /// No description provided for @prayerInsightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer insights'**
+  String get prayerInsightsTitle;
+
+  /// No description provided for @prayerInsightsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 30 days'**
+  String get prayerInsightsSubtitle;
+
+  /// No description provided for @prayerInsightsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Tick off your prayers on the Prayer tab and your insights will show up here.'**
+  String get prayerInsightsEmpty;
 }
 
 class _AppLocalizationsDelegate
