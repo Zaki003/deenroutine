@@ -15,12 +15,10 @@ import 'habit_provider.dart';
 /// The user's notification choices, persisted on the device like
 /// [ThemeProvider]'s, and the scheduling that acts on them.
 ///
-/// Everything beyond the reminders a user sets on a habit is opt-in and off
-/// by default (onboarding promises reminders "only for the habits you
-/// choose"): the daily ayah/hadith, the streak reminder, the Friday summary
-/// and the come-back message. The one exception is the wording of habit
-/// reminders, which defaults to the encouraging style but can be switched
-/// back to the plain "Time for: ..." line.
+/// Every switch is on by default and can be turned off: the daily
+/// ayah/hadith, the streak reminder, the Friday summary, the come-back
+/// message, and the encouraging wording of habit reminders (which falls back
+/// to the plain "Time for: ..." line when off).
 ///
 /// Two independent schedules live here. The daily quote is a rolling window
 /// of the next [NotificationService.quoteNotificationSlots] days. Everything
@@ -50,15 +48,15 @@ class NotificationSettingsProvider extends ChangeNotifier {
       HabitNotificationScheduler(_notifications);
 
   bool _loaded = false;
-  bool _quoteEnabled = false;
+  bool _quoteEnabled = true;
   int _quoteHour = _defaultQuoteHour;
   int _quoteMinute = 0;
   bool _encouragingReminders = true;
-  bool _streakNudge = false;
+  bool _streakNudge = true;
   int _streakHour = _defaultStreakHour;
   int _streakMinute = 0;
-  bool _weeklySummary = false;
-  bool _comeback = false;
+  bool _weeklySummary = true;
+  bool _comeback = true;
   bool _bangla = false;
 
   late final Future<void> _loading;
@@ -98,15 +96,15 @@ class NotificationSettingsProvider extends ChangeNotifier {
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    _quoteEnabled = prefs.getBool(_quoteEnabledKey) ?? false;
+    _quoteEnabled = prefs.getBool(_quoteEnabledKey) ?? true;
     _quoteHour = prefs.getInt(_quoteHourKey) ?? _defaultQuoteHour;
     _quoteMinute = prefs.getInt(_quoteMinuteKey) ?? 0;
     _encouragingReminders = prefs.getBool(_encouragingKey) ?? true;
-    _streakNudge = prefs.getBool(_streakEnabledKey) ?? false;
+    _streakNudge = prefs.getBool(_streakEnabledKey) ?? true;
     _streakHour = prefs.getInt(_streakHourKey) ?? _defaultStreakHour;
     _streakMinute = prefs.getInt(_streakMinuteKey) ?? 0;
-    _weeklySummary = prefs.getBool(_weeklyKey) ?? false;
-    _comeback = prefs.getBool(_comebackKey) ?? false;
+    _weeklySummary = prefs.getBool(_weeklyKey) ?? true;
+    _comeback = prefs.getBool(_comebackKey) ?? true;
     _loaded = true;
     notifyListeners();
   }
