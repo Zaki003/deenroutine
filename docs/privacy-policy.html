@@ -360,9 +360,9 @@
     <p class="eyebrow">Privacy Policy</p>
     <h1 class="title">How DeenRoutine handles your information</h1>
     <div class="gold-rule" aria-hidden="true"></div>
-    <p class="meta-line">Effective September 1, 2026 &nbsp;·&nbsp; Applies to the DeenRoutine Android app</p>
+    <p class="meta-line">Effective September 26, 2026 &nbsp;·&nbsp; Applies to the DeenRoutine Android app</p>
     <div class="summary-box">
-      <strong>In plain English:</strong> DeenRoutine stores your habits, quiz scores, and account info (name + email) in a private database tied to your account. It uses your approximate location only to calculate accurate prayer times, never shows you ads, and never sells your data. Usage analytics are entirely optional and off unless you turn them on.
+      <strong>In plain English:</strong> DeenRoutine stores your habits, prayer log, quiz scores, Learn progress, and account info (name + email) in a private database tied to your account. It uses your approximate location only to calculate accurate prayer times, never shows you ads, and never sells your data. Usage analytics are entirely optional and off unless you turn them on.
     </div>
   </div>
 </header>
@@ -389,19 +389,21 @@
   <main id="main-content">
     <section class="policy-section" id="overview">
       <h2><span class="num">01</span>Overview</h2>
-      <p>DeenRoutine ("the app," "we," "us") is a personal habit and spirituality tracker built by an independent developer. This policy explains what information the app collects when you use it, why, and how it's protected. It covers every feature currently in the app: account creation, habit tracking, prayer times, the daily quote, the Islamic-knowledge quiz, and reminder notifications.</p>
+      <p>DeenRoutine ("the app," "we," "us") is a personal habit and spirituality tracker built by an independent developer. This policy explains what information the app collects when you use it, why, and how it's protected. It covers every feature currently in the app: account creation, habit tracking, prayer times and prayer tracking, the daily quote and saved favourites, the Islamic-knowledge quiz and Learn lessons, and notifications.</p>
     </section>
 
     <section class="policy-section" id="information">
       <h2><span class="num">02</span>Information we collect</h2>
       <ul>
-        <li><strong>Account information</strong> — when you create an account, we collect your name, email address, and password. Your password is handled entirely by Firebase Authentication (a Google service); DeenRoutine never sees or stores it directly.</li>
+        <li><strong>Account information</strong> — when you create an account, we collect your name, email address, and password, plus the avatar you pick. Your password is handled entirely by Firebase Authentication (a Google service); DeenRoutine never sees or stores it directly.</li>
         <li><strong>Habit data</strong> — the habits you create (titles, category, frequency, reminder times) and your daily completion history, used to calculate streaks and show your progress.</li>
-        <li><strong>Prayer log</strong> — if you mark your prayers as prayed on the Prayer screen, a record of which of the five daily prayers you logged each day and whether each was on time, late, made up (qada), not prayed or excused. It's used to show your prayer stats on your profile. Only you can see it; it's never shared or used for analytics.</li>
+        <li><strong>Prayer log</strong> — if you mark your prayers as prayed on the Prayer screen, a record of which of the five daily prayers you logged each day and whether each was on time, late, made up (qada), not prayed or excused. It's used to show your prayer insights on your profile. If you turn on prayer check-ins, tapping Prayed on the notification saves the same record. Only you can see it; it's never shared or used for analytics.</li>
         <li><strong>Quiz results</strong> — your scores and completion dates for the Islamic-knowledge quiz, so you can see your best score over time.</li>
-        <li><strong>Approximate location</strong> — with your permission, your device's approximate GPS coordinates, used only to calculate accurate prayer times for your area (see Section 4).</li>
-        <li><strong>App preferences</strong> — your chosen theme and language, stored locally on your device.</li>
-        <li><strong>Usage analytics (optional, off by default)</strong> — if you turn this on in Profile → Preferences, DeenRoutine uses Firebase Analytics (a Google service) to record things like which screens you visit, that a habit was created and its category/tracking type, that a quiz was completed and roughly how well you scored, or that a streak reached a milestone. This never includes your habit titles, quiz answers, or anything else you typed — only which feature was used, in general shape.</li>
+        <li><strong>Learn progress</strong> — which Learn lessons and topic assessments you've completed, and your assessment scores.</li>
+        <li><strong>Favourites</strong> — the ayat and hadith you save as favourites (up to five), stored with your profile.</li>
+        <li><strong>Approximate location</strong> — with your permission, your device's approximate GPS coordinates (or, if you'd rather, a city you pick yourself), used only to calculate accurate prayer times for your area (see Section 4).</li>
+        <li><strong>App preferences</strong> — your chosen theme, language, notification choices, prayer-time calculation method, and last location, stored locally on your device.</li>
+        <li><strong>Usage analytics (optional, off by default)</strong> — if you turn this on in Settings → Preferences, DeenRoutine uses Firebase Analytics (a Google service) to record things like which screens you visit, that a habit was created and its category/tracking type, that a quiz was completed and roughly how well you scored, or that a streak reached a milestone. This never includes your habit titles, quiz answers, or anything else you typed — only which feature was used, in general shape.</li>
       </ul>
       <p>We do not collect payment information, government ID numbers, contacts, photos, or browsing history. DeenRoutine has no advertising. Analytics are opt-in only — see Section 5.</p>
     </section>
@@ -411,9 +413,9 @@
       <p>We use the information above only to run the app's own features:</p>
       <ul>
         <li>To create and secure your account, and let you log in from your device.</li>
-        <li>To save and sync your habits, streaks, and quiz results so they're there the next time you open the app.</li>
+        <li>To save and sync your habits, streaks, prayer log, quiz results, Learn progress, and favourites so they're there the next time you open the app.</li>
         <li>To calculate prayer times for your current location.</li>
-        <li>To schedule the habit reminder notifications you set — these are scheduled entirely on your device and never leave it.</li>
+        <li>To schedule notifications — habit reminders, the daily ayah or hadith, streak and weekly nudges, prayer-time adhan alarms, and prayer check-ins if you turn them on. These are scheduled entirely on your device and nothing about them is sent anywhere, except that tapping Prayed on a prayer check-in saves that prayer to your prayer log.</li>
       </ul>
       <p>We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
     </section>
@@ -424,6 +426,7 @@
       <ul>
         <li>Your coordinates are rounded to roughly 1.1&nbsp;km precision (2 decimal places) before being used.</li>
         <li>They're sent to <a href="https://aladhan.com" target="_blank" rel="noopener">Aladhan</a>, a free public prayer-time calculation API, along with the date — nothing that identifies you personally.</li>
+        <li>If you pick a city instead of using GPS, its coordinates are used the same way, and no GPS reading is taken.</li>
         <li>The result is cached in our database, keyed only by the rounded coordinates and date, so the app doesn't have to re-request the same day's times for the same area. This cache isn't tied to your account.</li>
       </ul>
       <div class="permission-note">You can deny or revoke location permission at any time in Android's app settings — prayer times just won't be available until it's granted again.</div>
@@ -431,7 +434,7 @@
 
     <section class="policy-section" id="usage-analytics">
       <h2><span class="num">05</span>Usage analytics</h2>
-      <p>DeenRoutine does not collect usage analytics by default. If you turn it on — Profile → Preferences → Usage Analytics — the app uses Firebase Analytics (Google) to record:</p>
+      <p>DeenRoutine does not collect usage analytics by default. If you turn it on — Settings → Preferences → Usage Analytics — the app uses Firebase Analytics (Google) to record:</p>
       <ul>
         <li>Which screens you visit.</li>
         <li>That a habit was created, with its category and tracking type — never its title.</li>
@@ -439,15 +442,16 @@
         <li>That a quiz was completed, with question count and a rough score band — never your answers.</li>
         <li>That a streak reached a milestone (3/7/30/100/365 days) — never which habit.</li>
         <li>Which starter template you picked, if any.</li>
+        <li>That you tapped a share button, and on which screen — never what was shared.</li>
       </ul>
       <p>We use this only to see which features people actually use, so we can improve the app and design better default habit templates. It's never used to build an advertising profile, and we've turned off Google's data-sharing settings in our Firebase project, so this data isn't used by Google for its own purposes either.</p>
-      <div class="permission-note">Turn it on or off at any time in Profile → Preferences.</div>
+      <div class="permission-note">Turn it on or off at any time in Settings → Preferences.</div>
     </section>
 
     <section class="policy-section" id="third-party">
       <h2><span class="num">06</span>Third-party services</h2>
       <ul>
-        <li><strong>Firebase (Google)</strong> — Authentication and Cloud Firestore database. Firebase stores your account info, habits, quiz results, and cached prayer times. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
+        <li><strong>Firebase (Google)</strong> — Authentication and Cloud Firestore database. Firebase stores your account info, habits, prayer log, quiz results, Learn progress, favourites, and cached prayer times. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
         <li><strong>Firebase Analytics (Google)</strong> — only if you've turned on usage analytics; see Section 5.</li>
         <li><strong>Aladhan API</strong> — receives approximate coordinates and a date to return prayer times. See their terms at aladhan.com.</li>
       </ul>
@@ -456,14 +460,14 @@
 
     <section class="policy-section" id="security">
       <h2><span class="num">07</span>Storage &amp; security</h2>
-      <p>Your data is stored in Cloud Firestore and protected by security rules that restrict access so only you can read or write your own habits, logs, quiz results, and profile — enforced on Google's servers, not just in the app. Data is encrypted in transit (HTTPS/TLS) and at rest by Firebase's infrastructure.</p>
+      <p>Your data is stored in Cloud Firestore and protected by security rules that restrict access so only you can read or write your own habits, logs, prayer log, quiz results, Learn progress, and profile — enforced on Google's servers, not just in the app. Data is encrypted in transit (HTTPS/TLS) and at rest by Firebase's infrastructure.</p>
     </section>
 
     <section class="policy-section" id="retention">
       <h2><span class="num">08</span>Data retention</h2>
       <p>We retain your account and habit data for as long as your account exists. You can permanently delete your account and all associated data yourself, at any time, with no waiting period:</p>
       <ul>
-        <li><strong>In the app</strong> — go to Profile → Account → Delete Account.</li>
+        <li><strong>In the app</strong> — go to Profile → Settings → Delete Account.</li>
         <li><strong>On the web, without installing the app</strong> — visit <a href="delete-account.html">delete-account.html</a> and follow the prompts.</li>
       </ul>
       <p>Both options delete your data immediately and permanently — there is no 30-day grace period. If you can't use either option (for example, you're locked out of your account), email us (Section 12) and we'll delete it for you.</p>
@@ -473,10 +477,10 @@
       <h2><span class="num">09</span>Your rights</h2>
       <ul>
         <li>You can edit or delete individual habits at any time within the app.</li>
-        <li>You can permanently delete your entire account and all associated data yourself, instantly — either in the app (Profile → Account → Delete Account) or on the web at <a href="delete-account.html">delete-account.html</a>, with no app install required. This cannot be undone.</li>
+        <li>You can permanently delete your entire account and all associated data yourself, instantly — either in the app (Profile → Settings → Delete Account) or on the web at <a href="delete-account.html">delete-account.html</a>, with no app install required. This cannot be undone.</li>
         <li>You can also request a copy of your data, or ask us to delete your account by hand, by emailing us at the address below — useful if you're unable to use either self-service option above.</li>
         <li>You can revoke location or notification permissions at any time from your device's system settings.</li>
-        <li>You can turn usage analytics on or off at any time in Profile → Preferences.</li>
+        <li>You can turn usage analytics on or off at any time in Settings → Preferences.</li>
       </ul>
     </section>
 
