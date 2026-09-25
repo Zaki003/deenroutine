@@ -157,10 +157,10 @@ class _PrayerBar extends StatelessWidget {
                 builder: (context, v, _) => LinearProgressIndicator(
                   value: v,
                   minHeight: 6,
-                  backgroundColor: DeenColors.trackLine(dark),
+                  backgroundColor: DeenColors.prayerEmpty(dark),
                   // The hardest prayer is gold, never red.
                   valueColor: AlwaysStoppedAnimation(
-                    highlight ? DeenColors.prayerLate : DeenColors.prayerOnTime(dark),
+                    highlight ? DeenColors.prayerLate(dark) : DeenColors.prayerOnTime(dark),
                   ),
                 ),
               ),
@@ -193,7 +193,7 @@ class _WeakestInsight extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
       child: Row(
         children: [
-          const Icon(Icons.wb_twilight_rounded, size: 18, color: DeenColors.gold),
+          Icon(Icons.wb_twilight_rounded, size: 18, color: DeenColors.prayerLate(dark)),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -224,9 +224,9 @@ class _PrayerGrid extends StatelessWidget {
 
   Color _colorFor(PrayerStatus? status) => switch (status) {
         PrayerStatus.onTime => DeenColors.prayerOnTime(dark),
-        PrayerStatus.late => DeenColors.prayerLate,
+        PrayerStatus.late => DeenColors.prayerLate(dark),
         PrayerStatus.qada => DeenColors.prayerQada(dark),
-        _ => DeenColors.outlineFaint(dark),
+        _ => DeenColors.prayerEmpty(dark),
       };
 
   @override

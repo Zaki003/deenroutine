@@ -434,7 +434,7 @@ class _Dot extends StatelessWidget {
     final size = active ? 14.0 : 10.0;
     final fill = switch (status) {
       PrayerStatus.onTime => DeenColors.prayerOnTime(dark),
-      PrayerStatus.late => DeenColors.prayerLate,
+      PrayerStatus.late => DeenColors.prayerLate(dark),
       PrayerStatus.qada => DeenColors.prayerQada(dark),
       PrayerStatus.excused => DeenColors.outlineFaint(dark),
       PrayerStatus.missed || null => passed ? DeenColors.gold : null,
@@ -469,8 +469,8 @@ class _StatusCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (Color? fill, Color? iconColor, IconData? icon) = switch (status) {
-      PrayerStatus.onTime => (DeenColors.prayerOnTime(dark), Colors.white, Icons.check_rounded),
-      PrayerStatus.late => (DeenColors.prayerLate, DeenColors.ink, Icons.schedule_rounded),
+      PrayerStatus.onTime => (DeenColors.prayerOnTime(dark), DeenColors.onPrayerOnTime(dark), Icons.check_rounded),
+      PrayerStatus.late => (DeenColors.prayerLate(dark), DeenColors.onPrayerLate, Icons.schedule_rounded),
       PrayerStatus.qada => (DeenColors.prayerQada(dark), Colors.white, Icons.history_rounded),
       PrayerStatus.missed => (null, DeenColors.textMuted(dark), Icons.remove_rounded),
       PrayerStatus.excused => (null, DeenColors.textMuted(dark), Icons.nightlight_outlined),

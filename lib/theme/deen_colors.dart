@@ -24,11 +24,23 @@ class DeenColors {
 
   /// Prayer-log states. Qada gets its own blue so it never reads as a shade
   /// of late; "not prayed" deliberately has no colour of its own (see the
-  /// Prayer screen) so a missed prayer never shows up as a red mark. Icons
-  /// sit on these in white, except late's gold, which takes [ink].
-  static Color prayerOnTime(bool dark) => dark ? primaryLight : primary;
-  static const prayerLate = gold;
+  /// Prayer screen) so a missed prayer never shows up as a red mark.
+  ///
+  /// Each is at least 3:1 against [cardBackground] in its own theme (WCAG's
+  /// bar for chart marks), which is why they aren't simply [primaryLight]
+  /// and [gold]: those measured 2.7:1 in dark and 2.4:1 in light. Draw an
+  /// icon on one in its matching `on...` colour.
+  static Color prayerOnTime(bool dark) => dark ? const Color(0xFF34A88D) : primary;
+  static Color onPrayerOnTime(bool dark) => dark ? ink : Colors.white;
+  static Color prayerLate(bool dark) => dark ? gold : const Color(0xFFA8832F);
+  static const onPrayerLate = ink;
   static Color prayerQada(bool dark) => dark ? const Color(0xFF5B8FD6) : const Color(0xFF2F6DB5);
+
+  /// Empty grid squares and bar tracks in the prayer stats: a little
+  /// stronger than [outlineFaint] so the grid's shape reads, but kept well
+  /// below the data colours so "nothing here" never looks like a mark.
+  static Color prayerEmpty(bool dark) =>
+      dark ? Colors.white.withValues(alpha: 0.22) : primary.withValues(alpha: 0.32);
 
   /// Light-mode wash for the quote card and quiz "best score" banner.
   static const creamPanel = Color(0xFFEFE7D2);
