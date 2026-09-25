@@ -167,6 +167,12 @@ class PrayerService {
     PrayerCalculationMethod method = PrayerCalculationMethod.mwl,
     AsrJuristicMethod school = AsrJuristicMethod.standard,
   }) async {
+    // Rounded to 2 decimals (~1.1 km) before anything leaves the device: close
+    // enough for prayer times, and what the privacy policy and onboarding
+    // promise. Both the Aladhan request and the shared PrayerCache (readable
+    // by any signed-in user) only ever see these.
+    latitude = double.parse(latitude.toStringAsFixed(2));
+    longitude = double.parse(longitude.toStringAsFixed(2));
     final today = DateTime.now();
     // method/school are part of the key deliberately - without them, switching
     // either in Settings would keep serving the previous choice's cached
