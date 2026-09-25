@@ -124,19 +124,19 @@ class Habit {
   /// always due; a [HabitFrequency.specificDays] habit is due only when
   /// today's weekday is one of [selectedDays]; a [HabitFrequency.once] habit
   /// is due only on its [dueDate].
-  bool get isDueToday {
+  bool get isDueToday => isDueOn(DateTime.now());
+
+  /// [isDueToday] for any calendar day - the notification scheduler needs it
+  /// for days ahead.
+  bool isDueOn(DateTime day) {
     if (frequency == HabitFrequency.once) {
       final due = dueDate;
       if (due == null) return true;
-      final now = DateTime.now();
-      return due.year == now.year &&
-          due.month == now.month &&
-          due.day == now.day;
+      return due.year == day.year && due.month == day.month && due.day == day.day;
     }
     if (frequency != HabitFrequency.specificDays) return true;
     // Dart's DateTime.weekday is Mon=1..Sun=7; selectedDays uses Sun=0..Sat=6.
-    final todayIndex = DateTime.now().weekday % 7;
-    return selectedDays.contains(todayIndex);
+    return selectedDays.contains(day.weekday % 7);
   }
 
   /// [HabitFrequency.once] only: [dueDate] has passed without the to-do
