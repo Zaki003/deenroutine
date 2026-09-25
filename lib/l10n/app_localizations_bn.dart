@@ -1245,4 +1245,66 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get authErrorTooManyRequests =>
       'অনেকবার চেষ্টা করা হয়েছে। একটু পরে আবার চেষ্টা করুন।';
+
+  @override
+  String get prayerStatusOnTime => 'সময়মতো পড়েছেন';
+
+  @override
+  String get prayerStatusLate => 'দেরিতে পড়েছেন';
+
+  @override
+  String get prayerStatusQada => 'কাযা আদায় করেছেন';
+
+  @override
+  String get prayerStatusMissed => 'পড়া হয়নি';
+
+  @override
+  String get prayerNotStartedYet => 'এখনো শুরু হয়নি';
+
+  @override
+  String get prayerOptionOnTime => 'সময়মতো';
+
+  @override
+  String get prayerOptionLate => 'দেরিতে';
+
+  @override
+  String get prayerOptionQada => 'পরে আদায় (কাযা)';
+
+  @override
+  String get prayerOptionMissed => 'পড়া হয়নি';
+
+  @override
+  String get prayerOptionClear => 'মুছে ফেলুন';
+
+  @override
+  String prayerLogSheetTitle(String prayer) {
+    return '$prayer চিহ্নিত করুন';
+  }
+
+  @override
+  String prayerDayTodayProgress(int count) {
+    return 'আজ · ৫ ওয়াক্তের মধ্যে $count ওয়াক্ত পড়েছেন';
+  }
+
+  @override
+  String prayerDayYesterdayProgress(int count) {
+    return 'গতকাল · ৫ ওয়াক্তের মধ্যে $count ওয়াক্ত পড়েছেন';
+  }
+
+  @override
+  String get prayerMarkHint => 'পড়েছি হিসেবে চিহ্নিত করুন';
+
+  @override
+  String get prayerUndoHint => 'ফিরিয়ে নিন';
+
+  @override
+  String get prayerMoreOptionsHint => 'আরও বিকল্প';
+
+  @override
+  String get prayerLogSaveFailed =>
+      'নামাজটি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।';
+
+  @override
+  String get prayerLogSyncFailed =>
+      'আপনার নামাজের তথ্য লোড করা যায়নি। আবার চেষ্টা করা হচ্ছে...';
 }

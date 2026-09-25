@@ -22,6 +22,14 @@ class DeenColors {
   static const rustLight = Color(0xFFD08F6E);
   static const green = Color(0xFF3F9142);
 
+  /// Prayer-log states. Qada gets its own blue so it never reads as a shade
+  /// of late; "not prayed" deliberately has no colour of its own (see the
+  /// Prayer screen) so a missed prayer never shows up as a red mark. Icons
+  /// sit on these in white, except late's gold, which takes [ink].
+  static Color prayerOnTime(bool dark) => dark ? primaryLight : primary;
+  static const prayerLate = gold;
+  static Color prayerQada(bool dark) => dark ? const Color(0xFF5B8FD6) : const Color(0xFF2F6DB5);
+
   /// Light-mode wash for the quote card and quiz "best score" banner.
   static const creamPanel = Color(0xFFEFE7D2);
 

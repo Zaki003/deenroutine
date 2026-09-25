@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/habit.dart';
 import '../models/habit_log.dart';
 import '../models/learn_progress.dart';
+import '../models/prayer_log.dart';
 import '../models/quiz_question.dart';
 import '../models/quiz_result.dart';
 import '../models/daily_quote.dart';
@@ -423,11 +424,37 @@ class FirestoreService {
     }, SetOptions(merge: true));
   }
 
+  // ---------------- Prayer tracking ----------------
+
+  /// The [day] record, or null while nothing has been logged for it. A query
+  /// rather than a document get: the owner-only rule checks
+  /// `resource.data.uid`, which a document that doesn't exist yet doesn't
+  /// have, so a plain get of today's not-yet-created record would be denied.
+  Stream<PrayerLog?> watchPrayerLog(String uid, DateTime day) {
+    return _db
+        .collection('PrayerLogs')
+        .where('uid', isEqualTo: uid)
+        .where('day', isEqualTo: PrayerLog.dayKey(day))
+        .limit(1)
+        .snapshots()
+        .map((snap) => snap.docs.isEmpty ? null : PrayerLog.fromMap(snap.docs.first.data()));
+  }
+
+  /// Sets or, with a null [status], clears one prayer on [day]'s record,
+  /// creating the record on first use. One document per user per day keeps
+  /// a month of history at about 30 reads.
+  Future<void> setPrayerStatus(String uid, DateTime day, String prayerKey, PrayerStatus? status) {
+    return _db.collection('PrayerLogs').doc('${uid}_${PrayerLog.dayKey(day)}').set({
+      ...PrayerLog.baseFields(uid, day),
+      PrayerLog.fieldFor(prayerKey): status?.name ?? FieldValue.delete(),
+    }, SetOptions(merge: true));
+  }
+
   // ---------------- Account deletion (Play Store data-deletion requirement) ----------------
 
   /// Permanently deletes every Firestore document [uid] owns: all
-  /// Habits/HabitLogs/QuizResults/LearnProgress/Notifications/Settings
-  /// docs, then the Users/{uid} profile itself. Irreversible — no grace
+  /// Habits/HabitLogs/QuizResults/LearnProgress/PrayerLogs/Notifications/
+  /// Settings docs, then the Users/{uid} profile itself. Irreversible — no grace
   /// period.
   ///
   /// Excludes PrayerCache (shared cache keyed by rounded lat/lng + date, not
@@ -443,7 +470,8 @@ class FirestoreService {
   /// user or signing out.
   Future<void> deleteAllUserData(String uid) async {
     const ownedCollections = [
-      'Habits', 'HabitLogs', 'QuizResults', 'LearnProgress', 'Notifications', 'Settings',
+      'Habits', 'HabitLogs', 'QuizResults', 'LearnProgress', 'PrayerLogs', 'Notifications',
+      'Settings',
     ];
     for (final name in ownedCollections) {
       await _deleteQueryInChunks(_db.collection(name).where('uid', isEqualTo: uid));

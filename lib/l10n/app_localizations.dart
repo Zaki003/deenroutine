@@ -2264,6 +2264,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Too many attempts. Please wait and try again.'**
   String get authErrorTooManyRequests;
+
+  /// No description provided for @prayerStatusOnTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayed on time'**
+  String get prayerStatusOnTime;
+
+  /// No description provided for @prayerStatusLate.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayed late'**
+  String get prayerStatusLate;
+
+  /// No description provided for @prayerStatusQada.
+  ///
+  /// In en, this message translates to:
+  /// **'Made up (qada)'**
+  String get prayerStatusQada;
+
+  /// No description provided for @prayerStatusMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not prayed'**
+  String get prayerStatusMissed;
+
+  /// No description provided for @prayerNotStartedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started yet'**
+  String get prayerNotStartedYet;
+
+  /// No description provided for @prayerOptionOnTime.
+  ///
+  /// In en, this message translates to:
+  /// **'On time'**
+  String get prayerOptionOnTime;
+
+  /// No description provided for @prayerOptionLate.
+  ///
+  /// In en, this message translates to:
+  /// **'Late'**
+  String get prayerOptionLate;
+
+  /// No description provided for @prayerOptionQada.
+  ///
+  /// In en, this message translates to:
+  /// **'Made up later (qada)'**
+  String get prayerOptionQada;
+
+  /// No description provided for @prayerOptionMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not prayed'**
+  String get prayerOptionMissed;
+
+  /// No description provided for @prayerOptionClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get prayerOptionClear;
+
+  /// No description provided for @prayerLogSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark {prayer} as'**
+  String prayerLogSheetTitle(String prayer);
+
+  /// No description provided for @prayerDayTodayProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY · {count} OF 5 PRAYED'**
+  String prayerDayTodayProgress(int count);
+
+  /// No description provided for @prayerDayYesterdayProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'YESTERDAY · {count} OF 5 PRAYED'**
+  String prayerDayYesterdayProgress(int count);
+
+  /// No description provided for @prayerMarkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'mark as prayed'**
+  String get prayerMarkHint;
+
+  /// No description provided for @prayerUndoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'undo'**
+  String get prayerUndoHint;
+
+  /// No description provided for @prayerMoreOptionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'more options'**
+  String get prayerMoreOptionsHint;
+
+  /// No description provided for @prayerLogSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that prayer. Try again.'**
+  String get prayerLogSaveFailed;
+
+  /// No description provided for @prayerLogSyncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your prayers. Retrying...'**
+  String get prayerLogSyncFailed;
 }
 
 class _AppLocalizationsDelegate

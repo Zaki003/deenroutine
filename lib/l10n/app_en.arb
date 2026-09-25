@@ -553,5 +553,38 @@
   "authErrorGeneric": "Something went wrong. Please try again.",
   "authErrorRequiresRecentLogin": "For your security, please log out and back in, then try again.",
   "authErrorDeviceLimit": "Maximum of 3 accounts on this device. Log in instead.",
-  "authErrorTooManyRequests": "Too many attempts. Please wait and try again."
+  "authErrorTooManyRequests": "Too many attempts. Please wait and try again.",
+  "prayerStatusOnTime": "Prayed on time",
+  "prayerStatusLate": "Prayed late",
+  "prayerStatusQada": "Made up (qada)",
+  "prayerStatusMissed": "Not prayed",
+  "prayerNotStartedYet": "Not started yet",
+  "prayerOptionOnTime": "On time",
+  "prayerOptionLate": "Late",
+  "prayerOptionQada": "Made up later (qada)",
+  "prayerOptionMissed": "Not prayed",
+  "prayerOptionClear": "Clear",
+  "prayerLogSheetTitle": "Mark {prayer} as",
+  "@prayerLogSheetTitle": {
+    "placeholders": {
+      "prayer": { "type": "String" }
+    }
+  },
+  "prayerDayTodayProgress": "TODAY · {count} OF 5 PRAYED",
+  "@prayerDayTodayProgress": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "prayerDayYesterdayProgress": "YESTERDAY · {count} OF 5 PRAYED",
+  "@prayerDayYesterdayProgress": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "prayerMarkHint": "mark as prayed",
+  "prayerUndoHint": "undo",
+  "prayerMoreOptionsHint": "more options",
+  "prayerLogSaveFailed": "Couldn't save that prayer. Try again.",
+  "prayerLogSyncFailed": "Couldn't load your prayers. Retrying..."
 }

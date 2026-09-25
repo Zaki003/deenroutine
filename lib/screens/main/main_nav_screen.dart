@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/habit_provider.dart';
 import '../../providers/notification_settings_provider.dart';
 import '../../providers/prayer_provider.dart';
+import '../../providers/prayer_log_provider.dart';
 import '../../services/analytics_service.dart';
 import '../../services/prayer_service.dart';
 import '../../theme/deen_colors.dart';
@@ -36,6 +37,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
   // providers.
   late final HabitProvider _habitProvider;
   late final PrayerProvider _prayerProvider;
+  late final PrayerLogProvider _prayerLogProvider;
   late final NotificationSettingsProvider _notificationSettings;
 
   @override
@@ -44,9 +46,11 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
     _habitProvider = context.read<HabitProvider>();
     _prayerProvider = context.read<PrayerProvider>();
+    _prayerLogProvider = context.read<PrayerLogProvider>();
     _notificationSettings = context.read<NotificationSettingsProvider>();
     final uid = context.read<AuthProvider>().firebaseUser!.uid;
     _habitProvider.listenToHabits(uid);
+    _prayerLogProvider.listen(uid);
     // Reminders, nudges and the Friday summary all depend on habit state
     // (what's done today, current streaks), so they're rebuilt as it changes.
     _habitProvider.addListener(_onHabitsChanged);
@@ -120,6 +124,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     // listener started in initState keeps trying to reconnect as a user
     // who's no longer signed in, forever. See HabitProvider.stopListening.
     _habitProvider.stopListening();
+    _prayerLogProvider.stopListening();
     // Same moment, same reason: a signed-out device shouldn't keep getting
     // reminders and daily quotes that lead to a login wall (or about someone
     // else's habits). The saved choices are kept, so signing back in resumes

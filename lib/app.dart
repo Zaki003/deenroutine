@@ -7,6 +7,7 @@ import 'providers/habit_provider.dart';
 import 'providers/learn_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/notification_settings_provider.dart';
+import 'providers/prayer_log_provider.dart';
 import 'providers/prayer_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/auth/login_screen.dart';
@@ -24,6 +25,11 @@ class DeenRoutineApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HabitProvider()),
         ChangeNotifierProvider(create: (_) => LearnProvider()),
         ChangeNotifierProvider(create: (_) => PrayerProvider()),
+        // Each prayer's waqt comes from today's timings.
+        ChangeNotifierProxyProvider<PrayerProvider, PrayerLogProvider>(
+          create: (_) => PrayerLogProvider(),
+          update: (_, prayer, logs) => logs!..updateTimings(prayer.timings, prayer.sunrise),
+        ),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         // Follows the app language so scheduled notification text does too.

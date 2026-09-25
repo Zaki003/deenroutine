@@ -1247,4 +1247,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authErrorTooManyRequests =>
       'Too many attempts. Please wait and try again.';
+
+  @override
+  String get prayerStatusOnTime => 'Prayed on time';
+
+  @override
+  String get prayerStatusLate => 'Prayed late';
+
+  @override
+  String get prayerStatusQada => 'Made up (qada)';
+
+  @override
+  String get prayerStatusMissed => 'Not prayed';
+
+  @override
+  String get prayerNotStartedYet => 'Not started yet';
+
+  @override
+  String get prayerOptionOnTime => 'On time';
+
+  @override
+  String get prayerOptionLate => 'Late';
+
+  @override
+  String get prayerOptionQada => 'Made up later (qada)';
+
+  @override
+  String get prayerOptionMissed => 'Not prayed';
+
+  @override
+  String get prayerOptionClear => 'Clear';
+
+  @override
+  String prayerLogSheetTitle(String prayer) {
+    return 'Mark $prayer as';
+  }
+
+  @override
+  String prayerDayTodayProgress(int count) {
+    return 'TODAY · $count OF 5 PRAYED';
+  }
+
+  @override
+  String prayerDayYesterdayProgress(int count) {
+    return 'YESTERDAY · $count OF 5 PRAYED';
+  }
+
+  @override
+  String get prayerMarkHint => 'mark as prayed';
+
+  @override
+  String get prayerUndoHint => 'undo';
+
+  @override
+  String get prayerMoreOptionsHint => 'more options';
+
+  @override
+  String get prayerLogSaveFailed => 'Couldn\'t save that prayer. Try again.';
+
+  @override
+  String get prayerLogSyncFailed => 'Couldn\'t load your prayers. Retrying...';
 }

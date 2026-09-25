@@ -12,6 +12,7 @@ DeenRoutine ("the app," "we," "us") is a personal habit and spirituality tracker
 
 - **Account information:** When you create an account, we collect your name, email address, and password. Your password is handled entirely by Firebase Authentication (a Google service) — DeenRoutine never sees or stores your password directly.
 - **Habit data:** The habits you create (titles, category, frequency, reminder times) and your daily completion history, used to calculate streaks and show your progress.
+- **Prayer log:** If you mark your prayers as prayed on the Prayer screen, a record of which of the five daily prayers you logged each day and whether each was on time, late, made up (qada) or not prayed. Only you can see it; it's never shared or used for analytics.
 - **Quiz results:** Your scores and completion dates for the Islamic-knowledge quiz, so you can see your best score over time.
 - **Approximate location:** With your permission, your device's approximate GPS coordinates, used only to calculate accurate prayer times for your area (see Section 4).
 - **App preferences:** Your chosen theme (light/dark) and language (English/Bangla), stored locally on your device.

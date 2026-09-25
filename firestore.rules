@@ -55,6 +55,20 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid;
     }
 
+    // PrayerLogs: owner-only, one doc per user per prayer day, merged into
+    // as each prayer is logged. Reads are always a uid-pinned query (see
+    // FirestoreService.watchPrayerLog), since a get of a not-yet-created
+    // day would have no resource.data.uid to check.
+    match /PrayerLogs/{logId} {
+      allow read, delete: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid;
+    }
+
     // DailyQuotes: public read-only content library.
     match /DailyQuotes/{quoteId} {
       allow read: if request.auth != null;
