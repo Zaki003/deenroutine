@@ -655,6 +655,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get templateDhikrAfterPrayer => 'Dhikr after prayer';
 
   @override
+  String get templateMorningEveningAdhkar => 'Morning & evening adhkar';
+
+  @override
+  String get templateAdhkarMorning => 'Morning';
+
+  @override
+  String get templateAdhkarEvening => 'Evening';
+
+  @override
   String get templateDrinkWater => 'Drink water';
 
   @override

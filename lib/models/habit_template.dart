@@ -67,6 +67,15 @@ List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
         icon: Icons.self_improvement,
       ),
       HabitTemplate(
+        id: 'morning_evening_adhkar',
+        title: l10n.templateMorningEveningAdhkar,
+        category: HabitCategory.islam,
+        frequency: HabitFrequency.daily,
+        icon: Icons.wb_twilight_rounded,
+        trackingType: HabitTrackingType.checklist,
+        checklistItems: [l10n.templateAdhkarMorning, l10n.templateAdhkarEvening],
+      ),
+      HabitTemplate(
         id: 'drink_water',
         title: l10n.templateDrinkWater,
         category: HabitCategory.lifestyle,

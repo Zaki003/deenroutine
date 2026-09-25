@@ -650,6 +650,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get templateDhikrAfterPrayer => 'নামাজের পর জিকির করুন';
 
   @override
+  String get templateMorningEveningAdhkar => 'সকাল-সন্ধ্যার আযকার পড়ুন';
+
+  @override
+  String get templateAdhkarMorning => 'সকাল';
+
+  @override
+  String get templateAdhkarEvening => 'সন্ধ্যা';
+
+  @override
   String get templateDrinkWater => 'পানি পান করুন';
 
   @override

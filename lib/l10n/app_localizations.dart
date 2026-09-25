@@ -1245,6 +1245,24 @@ abstract class AppLocalizations {
   /// **'Dhikr after prayer'**
   String get templateDhikrAfterPrayer;
 
+  /// No description provided for @templateMorningEveningAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning & evening adhkar'**
+  String get templateMorningEveningAdhkar;
+
+  /// No description provided for @templateAdhkarMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get templateAdhkarMorning;
+
+  /// No description provided for @templateAdhkarEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get templateAdhkarEvening;
+
   /// No description provided for @templateDrinkWater.
   ///
   /// In en, this message translates to:
