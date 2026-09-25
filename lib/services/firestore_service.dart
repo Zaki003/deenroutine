@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/habit.dart';
 import '../models/habit_log.dart';
 import '../models/learn_progress.dart';
@@ -17,6 +18,12 @@ class FirestoreService {
   static final Random _random = Random();
 
   // ---------------- Habits (FR-04) ----------------
+  /// Whether [uid] is still the signed-in user. A listener's onError checks
+  /// this first: signing out (or deleting the account) drops the session
+  /// while the listener is still attached, and the rejection that follows
+  /// isn't a sync problem worth reporting - the session is just over.
+  bool isSignedInAs(String uid) => FirebaseAuth.instance.currentUser?.uid == uid;
+
   Future<void> addHabit(Habit habit) {
     return _db.collection('Habits').doc(habit.habitId).set(habit.toMap());
   }

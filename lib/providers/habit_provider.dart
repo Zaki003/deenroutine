@@ -140,6 +140,12 @@ class HabitProvider extends ChangeNotifier {
         notifyListeners();
       },
       onError: (Object e) {
+        if (!_service.isSignedInAs(uid)) {
+          // Signed out or deleted mid-listen - see FirestoreService.isSignedInAs.
+          _habitsSub?.cancel();
+          _habitsSub = null;
+          return;
+        }
         // This is the fix for "works once, then needs a restart": previously
         // an error here (e.g. a missing Firestore composite index, or a
         // permission rule rejecting the *listener* specifically) silently

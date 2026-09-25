@@ -214,6 +214,12 @@ class PrayerLogProvider extends ChangeNotifier {
         notifyListeners();
       },
       onError: (Object e) {
+        if (!_service.isSignedInAs(uid)) {
+          // Signed out or deleted mid-listen - see FirestoreService.isSignedInAs.
+          _sub?.cancel();
+          _sub = null;
+          return;
+        }
         _setError(PrayerLogErrorType.syncFailed, e.toString());
         _sub?.cancel();
         _sub = null;

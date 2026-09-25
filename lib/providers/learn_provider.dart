@@ -72,6 +72,12 @@ class LearnProvider extends ChangeNotifier {
         notifyListeners();
       },
       onError: (Object e) {
+        if (!_service.isSignedInAs(uid)) {
+          // Signed out or deleted mid-listen - see FirestoreService.isSignedInAs.
+          _progressSub?.cancel();
+          _progressSub = null;
+          return;
+        }
         _hasLoadedOnce = true;
         _setError(LearnErrorType.syncFailed, e.toString());
 
