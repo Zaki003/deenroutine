@@ -8,5 +8,7 @@ String prayerLogErrorMessage(AppLocalizations l10n, PrayerLogErrorType type) {
       return l10n.prayerLogSyncFailed;
     case PrayerLogErrorType.saveFailed:
       return l10n.prayerLogSaveFailed;
+    case PrayerLogErrorType.historyFailed:
+      return l10n.prayerLogHistoryFailed;
   }
 }

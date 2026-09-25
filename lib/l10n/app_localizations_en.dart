@@ -1304,4 +1304,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prayerLogSyncFailed => 'Couldn\'t load your prayers. Retrying...';
+
+  @override
+  String get prayerStatusExcused => 'Excused';
+
+  @override
+  String get prayerOptionExcused => 'Excused all day';
+
+  @override
+  String get prayerExcusedSubtitle => 'Pauses your streak without breaking it';
+
+  @override
+  String get prayerStatsLabel => 'PRAYERS · LAST 30 DAYS';
+
+  @override
+  String get prayerStreakLabel => 'Days, all 5 prayed';
+
+  @override
+  String get prayerPrayedLabel => 'Prayed';
+
+  @override
+  String prayerWeakestInsight(String prayer) {
+    return '$prayer is your hardest. An alarm could help.';
+  }
+
+  @override
+  String prayerWeakestInsightPlain(String prayer) {
+    return '$prayer is your hardest right now.';
+  }
+
+  @override
+  String get prayerTurnOnAlarm => 'Turn on';
+
+  @override
+  String get prayerLegendQada => 'Qada';
+
+  @override
+  String get prayerLegendNotLogged => 'Not logged';
+
+  @override
+  String get prayerLogHistoryFailed => 'Couldn\'t load your prayer history.';
 }

@@ -585,5 +585,27 @@
   "prayerUndoHint": "undo",
   "prayerMoreOptionsHint": "more options",
   "prayerLogSaveFailed": "Couldn't save that prayer. Try again.",
-  "prayerLogSyncFailed": "Couldn't load your prayers. Retrying..."
+  "prayerLogSyncFailed": "Couldn't load your prayers. Retrying...",
+  "prayerStatusExcused": "Excused",
+  "prayerOptionExcused": "Excused all day",
+  "prayerExcusedSubtitle": "Pauses your streak without breaking it",
+  "prayerStatsLabel": "PRAYERS · LAST 30 DAYS",
+  "prayerStreakLabel": "Days, all 5 prayed",
+  "prayerPrayedLabel": "Prayed",
+  "prayerWeakestInsight": "{prayer} is your hardest. An alarm could help.",
+  "@prayerWeakestInsight": {
+    "placeholders": {
+      "prayer": { "type": "String" }
+    }
+  },
+  "prayerWeakestInsightPlain": "{prayer} is your hardest right now.",
+  "@prayerWeakestInsightPlain": {
+    "placeholders": {
+      "prayer": { "type": "String" }
+    }
+  },
+  "prayerTurnOnAlarm": "Turn on",
+  "prayerLegendQada": "Qada",
+  "prayerLegendNotLogged": "Not logged",
+  "prayerLogHistoryFailed": "Couldn't load your prayer history."
 }

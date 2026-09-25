@@ -440,13 +440,25 @@ class FirestoreService {
         .map((snap) => snap.docs.isEmpty ? null : PrayerLog.fromMap(snap.docs.first.data()));
   }
 
-  /// Sets or, with a null [status], clears one prayer on [day]'s record,
-  /// creating the record on first use. One document per user per day keeps
-  /// a month of history at about 30 reads.
-  Future<void> setPrayerStatus(String uid, DateTime day, String prayerKey, PrayerStatus? status) {
+  /// Every record from [from] onward, for the Profile's prayer stats. The
+  /// uid equality plus day range needs the PrayerLogs composite index in
+  /// firestore.indexes.json.
+  Future<List<PrayerLog>> getPrayerLogsSince(String uid, DateTime from) async {
+    final snap = await _db
+        .collection('PrayerLogs')
+        .where('uid', isEqualTo: uid)
+        .where('day', isGreaterThanOrEqualTo: PrayerLog.dayKey(from))
+        .get();
+    return snap.docs.map((d) => PrayerLog.fromMap(d.data())).toList();
+  }
+
+  /// Sets or, where the value is null, clears prayers on [day]'s record in
+  /// one write, creating the record on first use. One document per user per
+  /// day keeps a month of history at about 30 reads.
+  Future<void> setPrayerStatuses(String uid, DateTime day, Map<String, PrayerStatus?> statuses) {
     return _db.collection('PrayerLogs').doc('${uid}_${PrayerLog.dayKey(day)}').set({
       ...PrayerLog.baseFields(uid, day),
-      PrayerLog.fieldFor(prayerKey): status?.name ?? FieldValue.delete(),
+      for (final e in statuses.entries) PrayerLog.fieldFor(e.key): e.value?.name ?? FieldValue.delete(),
     }, SetOptions(merge: true));
   }
 

@@ -1304,4 +1304,44 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get prayerLogSyncFailed =>
       'আপনার নামাজের তথ্য লোড করা যায়নি। আবার চেষ্টা করা হচ্ছে...';
+
+  @override
+  String get prayerStatusExcused => 'অব্যাহতি';
+
+  @override
+  String get prayerOptionExcused => 'সারাদিন অব্যাহতি';
+
+  @override
+  String get prayerExcusedSubtitle => 'আপনার ধারাবাহিকতা থামিয়ে রাখে, ভাঙে না';
+
+  @override
+  String get prayerStatsLabel => 'নামাজ · গত ৩০ দিন';
+
+  @override
+  String get prayerStreakLabel => 'টানা ৫ ওয়াক্ত পড়ার দিন';
+
+  @override
+  String get prayerPrayedLabel => 'পড়েছেন';
+
+  @override
+  String prayerWeakestInsight(String prayer) {
+    return '$prayer আপনার জন্য সবচেয়ে কঠিন। একটি অ্যালার্ম সাহায্য করতে পারে।';
+  }
+
+  @override
+  String prayerWeakestInsightPlain(String prayer) {
+    return 'এখন $prayer আপনার জন্য সবচেয়ে কঠিন।';
+  }
+
+  @override
+  String get prayerTurnOnAlarm => 'চালু করুন';
+
+  @override
+  String get prayerLegendQada => 'কাযা';
+
+  @override
+  String get prayerLegendNotLogged => 'লগ করা হয়নি';
+
+  @override
+  String get prayerLogHistoryFailed => 'আপনার নামাজের ইতিহাস লোড করা যায়নি।';
 }

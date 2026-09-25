@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../models/prayer_log.dart';
 import '../services/firestore_service.dart';
+import '../utils/prayer_stats.dart';
 import '../utils/prayer_waqt.dart';
 
 /// Kinds of error [PrayerLogProvider] can surface, localized by
 /// `prayerLogErrorMessage` - providers stay `AppLocalizations`-free.
-enum PrayerLogErrorType { syncFailed, saveFailed }
+enum PrayerLogErrorType { syncFailed, saveFailed, historyFailed }
 
 /// Which of the current prayer day's five prayers have been logged, and how.
 /// Kept apart from [PrayerProvider] (timings, location, alarms), which it
@@ -22,6 +23,19 @@ class PrayerLogProvider extends ChangeNotifier {
 
   Map<String, String> _timings = const {};
   String? _sunrise;
+
+  /// How far back the Profile's stats load. 30 days feed the percentages and
+  /// grid; the rest only lets a streak run past a month before it shows as
+  /// "90+".
+  static const historyDays = 90;
+
+  // Past records for the stats, fetched once per prayer day - today's comes
+  // from the live listener instead, so logging a prayer updates the stats
+  // without another fetch.
+  Map<String, PrayerLog> _history = {};
+  DateTime? _historyDay;
+  bool _historyWanted = false;
+  bool _historyLoading = false;
 
   PrayerLogErrorType? _errorType;
   String? _errorDetail;
@@ -54,6 +68,9 @@ class PrayerLogProvider extends ChangeNotifier {
     _uid = null;
     _subscribedDay = null;
     _log = null;
+    _history = {};
+    _historyDay = null;
+    _historyWanted = false;
     _errorType = null;
     _errorDetail = null;
     // Deferred for the same reason as LearnProvider.stopListening: callers
@@ -106,11 +123,67 @@ class PrayerLogProvider extends ChangeNotifier {
   }
 
   /// Sets or, with null, clears [prayerKey] on the current prayer day.
-  Future<bool> setStatus(String prayerKey, PrayerStatus? status) async {
+  Future<bool> setStatus(String prayerKey, PrayerStatus? status) =>
+      _write({prayerKey: status});
+
+  /// Marks every prayer of the current prayer day that hasn't been logged as
+  /// prayed as excused, in one tap - including ones whose time hasn't
+  /// started. Prayers already logged as prayed keep their status.
+  Future<bool> excuseDay() => _write({
+        for (final key in PrayerLog.prayerKeys)
+          if (!(statusFor(key)?.counted ?? false)) key: PrayerStatus.excused,
+      });
+
+  /// Loads the past [historyDays] for [stats], once per prayer day. Safe to
+  /// call on every Profile build; once it's been asked for, it reloads by
+  /// itself when the prayer day rolls over.
+  Future<void> loadHistory() async {
+    _historyWanted = true;
+    final uid = _uid;
+    final day = prayerDay;
+    if (uid == null || _timings.isEmpty || _historyLoading || _historyDay == day) return;
+    _historyLoading = true;
+    try {
+      final from = DateTime(day.year, day.month, day.day - (historyDays - 1));
+      final logs = await _service.getPrayerLogsSince(uid, from);
+      if (_uid != uid) return;
+      _history = {for (final l in logs) l.day: l};
+      _historyDay = day;
+      if (_errorType == PrayerLogErrorType.historyFailed) {
+        _errorType = null;
+        _errorDetail = null;
+      }
+      notifyListeners();
+    } catch (e) {
+      _setError(PrayerLogErrorType.historyFailed, e.toString());
+    } finally {
+      _historyLoading = false;
+    }
+  }
+
+  /// Null until [loadHistory] has finished for the current prayer day, and
+  /// while nothing has ever been logged.
+  PrayerStats? get stats {
+    final day = _historyDay;
+    if (day == null || day != prayerDay) return null;
+    final logs = {..._history};
+    final today = _log;
+    if (today != null && today.day == PrayerLog.dayKey(day)) logs[today.day] = today;
+    if (logs.isEmpty) return null;
+    return computePrayerStats(
+      today: day,
+      logsByDay: logs,
+      oldestLoaded: DateTime(day.year, day.month, day.day - (historyDays - 1)),
+      startedToday: {for (final k in PrayerLog.prayerKeys) if (canLog(k)) k},
+    );
+  }
+
+  Future<bool> _write(Map<String, PrayerStatus?> statuses) async {
     final uid = _uid;
     if (uid == null) return false;
+    if (statuses.isEmpty) return true;
     try {
-      await _service.setPrayerStatus(uid, prayerDay, prayerKey, status);
+      await _service.setPrayerStatuses(uid, prayerDay, statuses);
       if (_errorType == PrayerLogErrorType.saveFailed) _clearError();
       return true;
     } catch (e) {
@@ -123,6 +196,10 @@ class PrayerLogProvider extends ChangeNotifier {
     final uid = _uid;
     if (uid == null || _timings.isEmpty) return;
     final day = prayerDay;
+    // Covers the Profile asking before timings had loaded, a new prayer day
+    // (yesterday's live record is history now), and retrying a failed load
+    // on the next tick. Deferred since this runs during a build.
+    if (_historyWanted && _historyDay != day && !_historyLoading) Future.microtask(loadHistory);
     if (_sub != null && day == _subscribedDay) return;
 
     _sub?.cancel();

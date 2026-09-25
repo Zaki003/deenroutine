@@ -31,6 +31,8 @@ String prayerStatusLabel(AppLocalizations l10n, PrayerStatus status) {
       return l10n.prayerStatusQada;
     case PrayerStatus.missed:
       return l10n.prayerStatusMissed;
+    case PrayerStatus.excused:
+      return l10n.prayerStatusExcused;
   }
 }
 
@@ -45,5 +47,7 @@ String prayerOptionLabel(AppLocalizations l10n, PrayerStatus status) {
       return l10n.prayerOptionQada;
     case PrayerStatus.missed:
       return l10n.prayerOptionMissed;
+    case PrayerStatus.excused:
+      return l10n.prayerOptionExcused;
   }
 }

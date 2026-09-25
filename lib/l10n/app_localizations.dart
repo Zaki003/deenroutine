@@ -2366,6 +2366,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load your prayers. Retrying...'**
   String get prayerLogSyncFailed;
+
+  /// No description provided for @prayerStatusExcused.
+  ///
+  /// In en, this message translates to:
+  /// **'Excused'**
+  String get prayerStatusExcused;
+
+  /// No description provided for @prayerOptionExcused.
+  ///
+  /// In en, this message translates to:
+  /// **'Excused all day'**
+  String get prayerOptionExcused;
+
+  /// No description provided for @prayerExcusedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pauses your streak without breaking it'**
+  String get prayerExcusedSubtitle;
+
+  /// No description provided for @prayerStatsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PRAYERS · LAST 30 DAYS'**
+  String get prayerStatsLabel;
+
+  /// No description provided for @prayerStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Days, all 5 prayed'**
+  String get prayerStreakLabel;
+
+  /// No description provided for @prayerPrayedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayed'**
+  String get prayerPrayedLabel;
+
+  /// No description provided for @prayerWeakestInsight.
+  ///
+  /// In en, this message translates to:
+  /// **'{prayer} is your hardest. An alarm could help.'**
+  String prayerWeakestInsight(String prayer);
+
+  /// No description provided for @prayerWeakestInsightPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'{prayer} is your hardest right now.'**
+  String prayerWeakestInsightPlain(String prayer);
+
+  /// No description provided for @prayerTurnOnAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get prayerTurnOnAlarm;
+
+  /// No description provided for @prayerLegendQada.
+  ///
+  /// In en, this message translates to:
+  /// **'Qada'**
+  String get prayerLegendQada;
+
+  /// No description provided for @prayerLegendNotLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Not logged'**
+  String get prayerLegendNotLogged;
+
+  /// No description provided for @prayerLogHistoryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your prayer history.'**
+  String get prayerLogHistoryFailed;
 }
 
 class _AppLocalizationsDelegate

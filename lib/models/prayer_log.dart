@@ -16,9 +16,15 @@ enum PrayerStatus {
 
   /// Deliberately marked as not prayed. An unlogged prayer is simply absent
   /// from the record, never stored as this.
-  missed;
+  missed,
 
-  bool get counted => this != PrayerStatus.missed;
+  /// Not due - during a period, when prayer isn't required. Neither prayed
+  /// nor missed: it's left out of every percentage and pauses a streak
+  /// without breaking it. Never labelled with a reason anywhere in the UI.
+  excused;
+
+  /// Whether this counts as having prayed (qada included).
+  bool get counted => this == onTime || this == late || this == qada;
 
   static PrayerStatus? fromName(Object? name) {
     for (final s in PrayerStatus.values) {

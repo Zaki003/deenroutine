@@ -14,7 +14,9 @@ import '../../widgets/avatar_picker_dialog.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/edit_name_dialog.dart';
 import '../../widgets/section_label.dart';
+import '../../widgets/stat_tile.dart';
 import 'favorites_screen.dart';
+import 'prayer_stats_section.dart';
 import 'settings_screen.dart';
 
 /// FR-03: Profile — identity, favorites, and a this-week habit overview.
@@ -133,6 +135,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
+          const PrayerStatsSection(),
           if (recurringHabits.isNotEmpty) ...[
             SectionLabel(l10n.thisWeekLabel),
             const SizedBox(height: 8),
@@ -247,11 +250,11 @@ class _WeekStatsCard extends StatelessWidget {
                           daysThisWeek: bestCount,
                           dark: dark,
                         )
-                      : _StatTile(label: l10n.bestHabitLabel, value: '—', dark: dark),
+                      : StatTile(label: l10n.bestHabitLabel, value: '—', dark: dark),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _StatTile(
+                  child: StatTile(
                     label: l10n.habitsTrackedLabel,
                     value: '$totalHabitsCount',
                     dark: dark,
@@ -453,7 +456,7 @@ void _showDayDetail(
 
 /// The habit with the most completed days this week - tap to reveal which
 /// one it is. Collapsed by default so a fresh Profile screen reads as a
-/// plain stat tile, matching [_StatTile] beside it.
+/// plain stat tile, matching [StatTile] beside it.
 class _BestHabitTile extends StatefulWidget {
   final String habitTitle;
   final int daysThisWeek;
@@ -481,7 +484,7 @@ class _BestHabitTileState extends State<_BestHabitTile> {
           dark: widget.dark,
           padding: const EdgeInsets.all(10),
           child: Column(
-            // .stretch (rather than .start, like the plain _StatTile beside
+            // .stretch (rather than .start, like the plain StatTile beside
             // this) keeps the AnimatedSize child's width identical between
             // its collapsed and expanded states, so only the height animates.
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -522,37 +525,6 @@ class _BestHabitTileState extends State<_BestHabitTile> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatTile extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool dark;
-
-  const _StatTile({required this.label, required this.value, required this.dark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: '$label: $value',
-      excludeSemantics: true,
-      child: DeenCard(
-        dark: dark,
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontSize: 10, color: DeenColors.textMuted(dark))),
-            const SizedBox(height: 2),
-            Text(
-              value,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: DeenColors.primaryText(dark)),
-            ),
-          ],
         ),
       ),
     );

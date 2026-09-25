@@ -440,5 +440,17 @@
   "prayerUndoHint": "ফিরিয়ে নিন",
   "prayerMoreOptionsHint": "আরও বিকল্প",
   "prayerLogSaveFailed": "নামাজটি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।",
-  "prayerLogSyncFailed": "আপনার নামাজের তথ্য লোড করা যায়নি। আবার চেষ্টা করা হচ্ছে..."
+  "prayerLogSyncFailed": "আপনার নামাজের তথ্য লোড করা যায়নি। আবার চেষ্টা করা হচ্ছে...",
+  "prayerStatusExcused": "অব্যাহতি",
+  "prayerOptionExcused": "সারাদিন অব্যাহতি",
+  "prayerExcusedSubtitle": "আপনার ধারাবাহিকতা থামিয়ে রাখে, ভাঙে না",
+  "prayerStatsLabel": "নামাজ · গত ৩০ দিন",
+  "prayerStreakLabel": "টানা ৫ ওয়াক্ত পড়ার দিন",
+  "prayerPrayedLabel": "পড়েছেন",
+  "prayerWeakestInsight": "{prayer} আপনার জন্য সবচেয়ে কঠিন। একটি অ্যালার্ম সাহায্য করতে পারে।",
+  "prayerWeakestInsightPlain": "এখন {prayer} আপনার জন্য সবচেয়ে কঠিন।",
+  "prayerTurnOnAlarm": "চালু করুন",
+  "prayerLegendQada": "কাযা",
+  "prayerLegendNotLogged": "লগ করা হয়নি",
+  "prayerLogHistoryFailed": "আপনার নামাজের ইতিহাস লোড করা যায়নি।"
 }

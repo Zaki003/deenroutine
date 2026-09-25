@@ -224,6 +224,12 @@ class PrayerScreen extends StatelessWidget {
       if (!ok && context.mounted) _showSaveError(context, logs);
     }
 
+    Future<void> excuseDay(BuildContext sheetContext) async {
+      Navigator.pop(sheetContext);
+      final ok = await logs.excuseDay();
+      if (!ok && context.mounted) _showSaveError(context, logs);
+    }
+
     showModalBottomSheet(
       context: context,
       backgroundColor: DeenColors.cardBackground(dark),
@@ -259,6 +265,24 @@ class PrayerScreen extends StatelessWidget {
                   selected: option == current,
                   onTap: () => choose(sheetContext, option),
                 ),
+              Divider(height: 8, color: DeenColors.dividerLine(dark)),
+              // Deliberately worded without a reason, and it covers the whole
+              // day in one tap rather than prayer by prayer.
+              ListTile(
+                leading: _StatusCircle(status: PrayerStatus.excused, enabled: true, dark: dark, size: 26),
+                title: Text(
+                  l10n.prayerOptionExcused,
+                  style: TextStyle(fontSize: 14, color: DeenColors.primaryText(dark)),
+                ),
+                subtitle: Text(
+                  l10n.prayerExcusedSubtitle,
+                  style: TextStyle(fontSize: 12, color: DeenColors.textMuted(dark)),
+                ),
+                trailing: current == PrayerStatus.excused
+                    ? Icon(Icons.check_rounded, color: DeenColors.primaryText(dark))
+                    : null,
+                onTap: () => excuseDay(sheetContext),
+              ),
               if (current != null)
                 Align(
                   alignment: Alignment.centerRight,
@@ -412,6 +436,7 @@ class _Dot extends StatelessWidget {
       PrayerStatus.onTime => DeenColors.prayerOnTime(dark),
       PrayerStatus.late => DeenColors.prayerLate,
       PrayerStatus.qada => DeenColors.prayerQada(dark),
+      PrayerStatus.excused => DeenColors.outlineFaint(dark),
       PrayerStatus.missed || null => passed ? DeenColors.gold : null,
     };
     return Container(
@@ -430,8 +455,8 @@ class _Dot extends StatelessWidget {
 }
 
 /// A prayer's log state as a filled circle: a tick for on time, a clock for
-/// late, a rewind for qada, a dash for not prayed, and an empty ring while
-/// unlogged. Each state has its own icon as well as its own colour, so they
+/// late, a rewind for qada, a dash for not prayed, a moon for excused, and
+/// an empty ring while unlogged. Each state has its own icon as well as its own colour, so they
 /// stay distinguishable without colour vision.
 class _StatusCircle extends StatelessWidget {
   final PrayerStatus? status;
@@ -448,6 +473,7 @@ class _StatusCircle extends StatelessWidget {
       PrayerStatus.late => (DeenColors.prayerLate, DeenColors.ink, Icons.schedule_rounded),
       PrayerStatus.qada => (DeenColors.prayerQada(dark), Colors.white, Icons.history_rounded),
       PrayerStatus.missed => (null, DeenColors.textMuted(dark), Icons.remove_rounded),
+      PrayerStatus.excused => (null, DeenColors.textMuted(dark), Icons.nightlight_outlined),
       null => (null, null, null),
     };
     return AnimatedContainer(

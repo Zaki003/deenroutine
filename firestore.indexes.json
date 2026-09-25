@@ -18,6 +18,14 @@
       ]
     },
     {
+      "collectionGroup": "PrayerLogs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "day", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "Habits",
       "queryScope": "COLLECTION",
       "fields": [
