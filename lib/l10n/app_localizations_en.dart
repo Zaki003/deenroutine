@@ -96,7 +96,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingNotificationBody =>
-      'Get a gentle reminder only for the habits you choose to set a time for — nothing else.';
+      'Get gentle habit reminders, a daily ayah or hadith, and a weekly summary. You can turn any of them off under Settings → Notifications.';
 
   @override
   String get onboardingAllowNotificationsButton => 'Allow notifications';

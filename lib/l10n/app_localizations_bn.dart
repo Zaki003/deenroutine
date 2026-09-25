@@ -96,7 +96,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get onboardingNotificationBody =>
-      'শুধু আপনি বেছে নেওয়া অভ্যাসের জন্যই একটি হালকা নোটিফিকেশন পাবেন — আর কিছু নয়।';
+      'অভ্যাসের হালকা রিমাইন্ডার, প্রতিদিন একটি আয়াত বা হাদিস আর সাপ্তাহিক সারাংশ পাবেন। সেটিংস → নোটিফিকেশন থেকে যেকোনোটি বন্ধ করতে পারবেন।';
 
   @override
   String get onboardingAllowNotificationsButton => 'নোটিফিকেশনের অনুমতি দিন';

@@ -263,7 +263,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingNotificationBody.
   ///
   /// In en, this message translates to:
-  /// **'Get a gentle reminder only for the habits you choose to set a time for — nothing else.'**
+  /// **'Get gentle habit reminders, a daily ayah or hadith, and a weekly summary. You can turn any of them off under Settings → Notifications.'**
   String get onboardingNotificationBody;
 
   /// No description provided for @onboardingAllowNotificationsButton.

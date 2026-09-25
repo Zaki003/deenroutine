@@ -33,7 +33,7 @@
   "onboardingAllowLocationButton": "Allow location",
   "onboardingEnterCityManually": "Enter a city manually instead",
   "onboardingNotificationHeadline": "Stay on track",
-  "onboardingNotificationBody": "Get a gentle reminder only for the habits you choose to set a time for — nothing else.",
+  "onboardingNotificationBody": "Get gentle habit reminders, a daily ayah or hadith, and a weekly summary. You can turn any of them off under Settings → Notifications.",
   "onboardingAllowNotificationsButton": "Allow notifications",
   "onboardingSkipNotificationsButton": "Skip for now",
   "onboardingExactAlarmHeadline": "One more step for reminders to actually ring",

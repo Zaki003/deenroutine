@@ -33,7 +33,7 @@
   "onboardingAllowLocationButton": "অবস্থানের অনুমতি দিন",
   "onboardingEnterCityManually": "পরিবর্তে শহরের নাম লিখুন",
   "onboardingNotificationHeadline": "নিয়মিত থাকুন",
-  "onboardingNotificationBody": "শুধু আপনি বেছে নেওয়া অভ্যাসের জন্যই একটি হালকা নোটিফিকেশন পাবেন — আর কিছু নয়।",
+  "onboardingNotificationBody": "অভ্যাসের হালকা রিমাইন্ডার, প্রতিদিন একটি আয়াত বা হাদিস আর সাপ্তাহিক সারাংশ পাবেন। সেটিংস → নোটিফিকেশন থেকে যেকোনোটি বন্ধ করতে পারবেন।",
   "onboardingAllowNotificationsButton": "নোটিফিকেশনের অনুমতি দিন",
   "onboardingSkipNotificationsButton": "আপাতত বাদ দিন",
   "onboardingExactAlarmHeadline": "নোটিফিকেশন সত্যিই বাজতে আরেকটি ধাপ বাকি",
