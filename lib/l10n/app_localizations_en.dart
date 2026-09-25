@@ -1041,6 +1041,116 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dailyHadithNotificationTitle => 'Today\'s hadith';
 
   @override
+  String get notificationsRemindersLabel => 'HABIT REMINDERS';
+
+  @override
+  String get encouragingRemindersTitle => 'Encouraging reminder wording';
+
+  @override
+  String get encouragingRemindersSubtitle =>
+      'Short Islamic messages on your habit reminders, instead of the same line every day.';
+
+  @override
+  String get remindersSkipDoneNote =>
+      'A reminder is skipped for any habit you\'ve already finished that day.';
+
+  @override
+  String get notificationsNudgesLabel => 'MOTIVATION';
+
+  @override
+  String get streakNudgeSettingTitle => 'Streak reminder';
+
+  @override
+  String get streakNudgeSettingSubtitle =>
+      'One evening nudge when a streak of 3+ days is at risk, only if you haven\'t done it yet.';
+
+  @override
+  String get weeklySummarySettingTitle => 'Friday summary';
+
+  @override
+  String get weeklySummarySettingSubtitle =>
+      'Jumu\'ah Mubarak, with a look back at your week.';
+
+  @override
+  String get comebackSettingTitle => 'Come-back message';
+
+  @override
+  String get comebackSettingSubtitle =>
+      'A gentle message if you\'ve been away for a few days: at most twice, then silence.';
+
+  @override
+  String get reminderMsgDo1 =>
+      'Bismillah — a small step now beats a big plan later.';
+
+  @override
+  String get reminderMsgDo2 =>
+      'The deeds most beloved to Allah are those done consistently, even if they are few. (Sahih al-Bukhari 6464; Sahih Muslim 783)';
+
+  @override
+  String get reminderMsgDo3 =>
+      'Make it easy on yourself — even a few minutes counts, in shaa Allah.';
+
+  @override
+  String get reminderMsgDo4 =>
+      'Take a moment for it. Barakah grows in steady routines.';
+
+  @override
+  String get reminderMsgDo5 =>
+      'Keep going — steady effort adds up, in shaa Allah.';
+
+  @override
+  String get reminderMsgDo6 =>
+      'A calm moment for this, then on with your day. You can do it, in shaa Allah.';
+
+  @override
+  String get reminderMsgAvoid1 =>
+      'A steady day is built one choice at a time. Stay on course, in shaa Allah.';
+
+  @override
+  String get reminderMsgAvoid2 =>
+      'Be patient today. Indeed, Allah is with the patient. (Qur\'an 2:153)';
+
+  @override
+  String get reminderMsgAvoid3 =>
+      'You\'re doing well. Another day of staying on course, in shaa Allah.';
+
+  @override
+  String streakNudgeNotificationTitle(int count) {
+    return 'Keep your $count-day streak alive';
+  }
+
+  @override
+  String streakNudgeNotificationBody(Object habit) {
+    return '$habit — a few hours left today. Even a small effort keeps it going, in shaa Allah.';
+  }
+
+  @override
+  String get weeklySummaryNotificationTitle => 'Jumu\'ah Mubarak';
+
+  @override
+  String weeklySummaryNotificationBodyStats(int done, Object habit) {
+    return 'You checked off $done habits this week. Best habit: $habit.';
+  }
+
+  @override
+  String get weeklySummaryNotificationBodyGeneric =>
+      'Take a moment to look back on your week, then begin the next one with bismillah.';
+
+  @override
+  String get comebackNotificationTitle => 'Your habits are still here';
+
+  @override
+  String get comebackNotificationBody =>
+      'Every day is a fresh start. Begin small today, bismillah.';
+
+  @override
+  String get comebackSecondNotificationTitle => 'Take it gently';
+
+  @override
+  String get comebackSecondNotificationBody =>
+      'Allah does not burden a soul with more than it can bear. (Qur\'an 2:286)';
+
+  @override
   String get prayerMethodTitle => 'Prayer calculation method';
 
   @override

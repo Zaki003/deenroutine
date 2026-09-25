@@ -1038,6 +1038,116 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dailyHadithNotificationTitle => 'আজকের হাদিস';
 
   @override
+  String get notificationsRemindersLabel => 'অভ্যাসের নোটিফিকেশন';
+
+  @override
+  String get encouragingRemindersTitle => 'উৎসাহমূলক বার্তা';
+
+  @override
+  String get encouragingRemindersSubtitle =>
+      'প্রতিদিন একই লাইনের বদলে অভ্যাসের নোটিফিকেশনে ছোট ইসলামিক বার্তা।';
+
+  @override
+  String get remindersSkipDoneNote =>
+      'যে অভ্যাস আজকের জন্য শেষ করে ফেলেছেন, তার নোটিফিকেশন পাঠানো হয় না।';
+
+  @override
+  String get notificationsNudgesLabel => 'অনুপ্রেরণা';
+
+  @override
+  String get streakNudgeSettingTitle => 'ধারাবাহিকতা ধরে রাখার নোটিফিকেশন';
+
+  @override
+  String get streakNudgeSettingSubtitle =>
+      '৩ দিন বা তার বেশি ধারাবাহিকতা ভাঙার ঝুঁকিতে থাকলে সন্ধ্যায় একটি নোটিফিকেশন — শুধু যদি তখনো অভ্যাসটি না করে থাকেন।';
+
+  @override
+  String get weeklySummarySettingTitle => 'শুক্রবারের সারসংক্ষেপ';
+
+  @override
+  String get weeklySummarySettingSubtitle =>
+      'জুমা মোবারক — সপ্তাহটা কেমন গেল তার সংক্ষিপ্ত চিত্র।';
+
+  @override
+  String get comebackSettingTitle => 'ফিরে আসার বার্তা';
+
+  @override
+  String get comebackSettingSubtitle =>
+      'কয়েক দিন অ্যাপ না খুললে একটি কোমল বার্তা — সর্বোচ্চ দুবার, তারপর আর নয়।';
+
+  @override
+  String get reminderMsgDo1 =>
+      'বিসমিল্লাহ — পরের বড় পরিকল্পনার চেয়ে এখনকার ছোট একটি পদক্ষেপ ভালো।';
+
+  @override
+  String get reminderMsgDo2 =>
+      'আল্লাহর কাছে সবচেয়ে প্রিয় আমল হলো যা নিয়মিত করা হয়, তা অল্প হলেও। (Sahih al-Bukhari 6464; Sahih Muslim 783)';
+
+  @override
+  String get reminderMsgDo3 =>
+      'নিজের জন্য সহজ করে নিন — কয়েক মিনিটও গণ্য হয়, ইনশাআল্লাহ।';
+
+  @override
+  String get reminderMsgDo4 =>
+      'একটু সময় বের করুন। নিয়মিত অভ্যাসেই বরকত বাড়ে।';
+
+  @override
+  String get reminderMsgDo5 =>
+      'চালিয়ে যান — নিয়মিত চেষ্টা জমতে জমতে বড় হয়, ইনশাআল্লাহ।';
+
+  @override
+  String get reminderMsgDo6 =>
+      'এর জন্য একটি শান্ত মুহূর্ত, তারপর দিনের কাজে ফিরুন। আপনি পারবেন, ইনশাআল্লাহ।';
+
+  @override
+  String get reminderMsgAvoid1 =>
+      'একটি স্থির দিন গড়ে ওঠে একটি একটি সিদ্ধান্তে। ইনশাআল্লাহ, ঠিক পথে থাকুন।';
+
+  @override
+  String get reminderMsgAvoid2 =>
+      'আজ ধৈর্য্য ধরুন। নিশ্চিতই আল্লাহ ধৈর্য্যশীলদের সাথে রয়েছেন। (Qur\'an 2:153)';
+
+  @override
+  String get reminderMsgAvoid3 =>
+      'আপনি ভালো করছেন। আরও একটি দিন ঠিক পথে থাকুন, ইনশাআল্লাহ।';
+
+  @override
+  String streakNudgeNotificationTitle(int count) {
+    return 'আপনার $count দিনের ধারাবাহিকতা ধরে রাখুন';
+  }
+
+  @override
+  String streakNudgeNotificationBody(Object habit) {
+    return '$habit — আজ আর কয়েক ঘণ্টা বাকি। অল্প চেষ্টাতেও ধারাবাহিকতা বজায় থাকে, ইনশাআল্লাহ।';
+  }
+
+  @override
+  String get weeklySummaryNotificationTitle => 'জুমা মোবারক';
+
+  @override
+  String weeklySummaryNotificationBodyStats(int done, Object habit) {
+    return 'এই সপ্তাহে আপনি $done টি অভ্যাস সম্পন্ন করেছেন। সেরা অভ্যাস: $habit।';
+  }
+
+  @override
+  String get weeklySummaryNotificationBodyGeneric =>
+      'সপ্তাহটা একটু ফিরে দেখুন — তারপর বিসমিল্লাহ বলে নতুন সপ্তাহ শুরু করুন।';
+
+  @override
+  String get comebackNotificationTitle => 'আপনার অভ্যাসগুলো অপেক্ষায় আছে';
+
+  @override
+  String get comebackNotificationBody =>
+      'প্রতিটি দিনই নতুন শুরু। আজ ছোট করে শুরু করুন, বিসমিল্লাহ।';
+
+  @override
+  String get comebackSecondNotificationTitle => 'ধীরে ধীরে এগোন';
+
+  @override
+  String get comebackSecondNotificationBody =>
+      'আল্লাহ কাউকে তার সাধ্যাতীত কোন কাজের ভার দেন না। (Qur\'an 2:286)';
+
+  @override
   String get prayerMethodTitle => 'নামাজের সময় গণনার পদ্ধতি';
 
   @override

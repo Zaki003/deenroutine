@@ -1917,6 +1917,180 @@ abstract class AppLocalizations {
   /// **'Today\'s hadith'**
   String get dailyHadithNotificationTitle;
 
+  /// No description provided for @notificationsRemindersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'HABIT REMINDERS'**
+  String get notificationsRemindersLabel;
+
+  /// No description provided for @encouragingRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Encouraging reminder wording'**
+  String get encouragingRemindersTitle;
+
+  /// No description provided for @encouragingRemindersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Short Islamic messages on your habit reminders, instead of the same line every day.'**
+  String get encouragingRemindersSubtitle;
+
+  /// No description provided for @remindersSkipDoneNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A reminder is skipped for any habit you\'ve already finished that day.'**
+  String get remindersSkipDoneNote;
+
+  /// No description provided for @notificationsNudgesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'MOTIVATION'**
+  String get notificationsNudgesLabel;
+
+  /// No description provided for @streakNudgeSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak reminder'**
+  String get streakNudgeSettingTitle;
+
+  /// No description provided for @streakNudgeSettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One evening nudge when a streak of 3+ days is at risk, only if you haven\'t done it yet.'**
+  String get streakNudgeSettingSubtitle;
+
+  /// No description provided for @weeklySummarySettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday summary'**
+  String get weeklySummarySettingTitle;
+
+  /// No description provided for @weeklySummarySettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jumu\'ah Mubarak, with a look back at your week.'**
+  String get weeklySummarySettingSubtitle;
+
+  /// No description provided for @comebackSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Come-back message'**
+  String get comebackSettingTitle;
+
+  /// No description provided for @comebackSettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A gentle message if you\'ve been away for a few days: at most twice, then silence.'**
+  String get comebackSettingSubtitle;
+
+  /// No description provided for @reminderMsgDo1.
+  ///
+  /// In en, this message translates to:
+  /// **'Bismillah — a small step now beats a big plan later.'**
+  String get reminderMsgDo1;
+
+  /// No description provided for @reminderMsgDo2.
+  ///
+  /// In en, this message translates to:
+  /// **'The deeds most beloved to Allah are those done consistently, even if they are few. (Sahih al-Bukhari 6464; Sahih Muslim 783)'**
+  String get reminderMsgDo2;
+
+  /// No description provided for @reminderMsgDo3.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it easy on yourself — even a few minutes counts, in shaa Allah.'**
+  String get reminderMsgDo3;
+
+  /// No description provided for @reminderMsgDo4.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a moment for it. Barakah grows in steady routines.'**
+  String get reminderMsgDo4;
+
+  /// No description provided for @reminderMsgDo5.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going — steady effort adds up, in shaa Allah.'**
+  String get reminderMsgDo5;
+
+  /// No description provided for @reminderMsgDo6.
+  ///
+  /// In en, this message translates to:
+  /// **'A calm moment for this, then on with your day. You can do it, in shaa Allah.'**
+  String get reminderMsgDo6;
+
+  /// No description provided for @reminderMsgAvoid1.
+  ///
+  /// In en, this message translates to:
+  /// **'A steady day is built one choice at a time. Stay on course, in shaa Allah.'**
+  String get reminderMsgAvoid1;
+
+  /// No description provided for @reminderMsgAvoid2.
+  ///
+  /// In en, this message translates to:
+  /// **'Be patient today. Indeed, Allah is with the patient. (Qur\'an 2:153)'**
+  String get reminderMsgAvoid2;
+
+  /// No description provided for @reminderMsgAvoid3.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re doing well. Another day of staying on course, in shaa Allah.'**
+  String get reminderMsgAvoid3;
+
+  /// No description provided for @streakNudgeNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your {count}-day streak alive'**
+  String streakNudgeNotificationTitle(int count);
+
+  /// No description provided for @streakNudgeNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{habit} — a few hours left today. Even a small effort keeps it going, in shaa Allah.'**
+  String streakNudgeNotificationBody(Object habit);
+
+  /// No description provided for @weeklySummaryNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jumu\'ah Mubarak'**
+  String get weeklySummaryNotificationTitle;
+
+  /// No description provided for @weeklySummaryNotificationBodyStats.
+  ///
+  /// In en, this message translates to:
+  /// **'You checked off {done} habits this week. Best habit: {habit}.'**
+  String weeklySummaryNotificationBodyStats(int done, Object habit);
+
+  /// No description provided for @weeklySummaryNotificationBodyGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a moment to look back on your week, then begin the next one with bismillah.'**
+  String get weeklySummaryNotificationBodyGeneric;
+
+  /// No description provided for @comebackNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your habits are still here'**
+  String get comebackNotificationTitle;
+
+  /// No description provided for @comebackNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day is a fresh start. Begin small today, bismillah.'**
+  String get comebackNotificationBody;
+
+  /// No description provided for @comebackSecondNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take it gently'**
+  String get comebackSecondNotificationTitle;
+
+  /// No description provided for @comebackSecondNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allah does not burden a soul with more than it can bear. (Qur\'an 2:286)'**
+  String get comebackSecondNotificationBody;
+
   /// No description provided for @prayerMethodTitle.
   ///
   /// In en, this message translates to:
