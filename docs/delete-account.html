@@ -471,7 +471,7 @@
   // Same collections, same order, same "Users last" retry-safety reasoning
   // as FirestoreService.deleteAllUserData in the Flutter app — this page
   // can't import Dart, so it's a second hand-kept copy of that logic.
-  const OWNED_COLLECTIONS = ["Habits", "HabitLogs", "QuizResults", "Notifications", "Settings"];
+  const OWNED_COLLECTIONS = ["Habits", "HabitLogs", "QuizResults", "LearnProgress", "Notifications", "Settings"];
 
   async function deleteAllUserData(uid) {
     for (const name of OWNED_COLLECTIONS) {
