@@ -569,16 +569,16 @@
       "prayer": { "type": "String" }
     }
   },
-  "prayerDayTodayProgress": "TODAY · {count} OF 5 PRAYED",
+  "prayerDayTodayProgress": "TODAY · {count} OF {total} PRAYED",
   "@prayerDayTodayProgress": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": { "type": "int" }, "total": { "type": "int" }
     }
   },
-  "prayerDayYesterdayProgress": "YESTERDAY · {count} OF 5 PRAYED",
+  "prayerDayYesterdayProgress": "YESTERDAY · {count} OF {total} PRAYED",
   "@prayerDayYesterdayProgress": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": { "type": "int" }, "total": { "type": "int" }
     }
   },
   "prayerMarkHint": "mark as prayed",
@@ -607,5 +607,7 @@
   "prayerTurnOnAlarm": "Turn on",
   "prayerLegendQada": "Qada",
   "prayerLegendNotLogged": "Not logged",
-  "prayerLogHistoryFailed": "Couldn't load your prayer history."
+  "prayerLogHistoryFailed": "Couldn't load your prayer history.",
+  "prayerDayToday": "TODAY",
+  "prayerDayYesterday": "YESTERDAY"
 }

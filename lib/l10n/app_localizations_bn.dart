@@ -1279,13 +1279,13 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String prayerDayTodayProgress(int count) {
-    return 'আজ · ৫ ওয়াক্তের মধ্যে $count ওয়াক্ত পড়েছেন';
+  String prayerDayTodayProgress(int count, int total) {
+    return 'আজ · $total ওয়াক্তের মধ্যে $count ওয়াক্ত পড়েছেন';
   }
 
   @override
-  String prayerDayYesterdayProgress(int count) {
-    return 'গতকাল · ৫ ওয়াক্তের মধ্যে $count ওয়াক্ত পড়েছেন';
+  String prayerDayYesterdayProgress(int count, int total) {
+    return 'গতকাল · $total ওয়াক্তের মধ্যে $count ওয়াক্ত পড়েছেন';
   }
 
   @override
@@ -1344,4 +1344,10 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get prayerLogHistoryFailed => 'আপনার নামাজের ইতিহাস লোড করা যায়নি।';
+
+  @override
+  String get prayerDayToday => 'আজ';
+
+  @override
+  String get prayerDayYesterday => 'গতকাল';
 }

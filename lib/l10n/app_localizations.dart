@@ -2328,14 +2328,14 @@ abstract class AppLocalizations {
   /// No description provided for @prayerDayTodayProgress.
   ///
   /// In en, this message translates to:
-  /// **'TODAY · {count} OF 5 PRAYED'**
-  String prayerDayTodayProgress(int count);
+  /// **'TODAY · {count} OF {total} PRAYED'**
+  String prayerDayTodayProgress(int count, int total);
 
   /// No description provided for @prayerDayYesterdayProgress.
   ///
   /// In en, this message translates to:
-  /// **'YESTERDAY · {count} OF 5 PRAYED'**
-  String prayerDayYesterdayProgress(int count);
+  /// **'YESTERDAY · {count} OF {total} PRAYED'**
+  String prayerDayYesterdayProgress(int count, int total);
 
   /// No description provided for @prayerMarkHint.
   ///
@@ -2438,6 +2438,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load your prayer history.'**
   String get prayerLogHistoryFailed;
+
+  /// No description provided for @prayerDayToday.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get prayerDayToday;
+
+  /// No description provided for @prayerDayYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'YESTERDAY'**
+  String get prayerDayYesterday;
 }
 
 class _AppLocalizationsDelegate

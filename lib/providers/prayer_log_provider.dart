@@ -111,6 +111,10 @@ class PrayerLogProvider extends ChangeNotifier {
 
   int get prayedCount => PrayerLog.prayerKeys.where((k) => statusFor(k)?.counted ?? false).length;
 
+  /// Out of how many: excused prayers aren't due, so they drop out of the
+  /// total rather than sitting in it as unprayed.
+  int get dueCount => PrayerLog.prayerKeys.where((k) => statusFor(k) != PrayerStatus.excused).length;
+
   bool canLog(String prayerKey) => windowFor(prayerKey)?.hasStarted(DateTime.now()) ?? false;
 
   /// One-tap log: works out on time / late / qada from the clock. Only

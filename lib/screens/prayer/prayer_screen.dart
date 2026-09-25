@@ -101,9 +101,13 @@ class PrayerScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               if (logs.isAvailable) ...[
-                SectionLabel(logs.prayerDayIsYesterday
-                    ? l10n.prayerDayYesterdayProgress(logs.prayedCount)
-                    : l10n.prayerDayTodayProgress(logs.prayedCount)),
+                SectionLabel(switch ((logs.prayerDayIsYesterday, logs.dueCount)) {
+                  // A fully excused day shows no count at all.
+                  (true, 0) => l10n.prayerDayYesterday,
+                  (false, 0) => l10n.prayerDayToday,
+                  (true, final due) => l10n.prayerDayYesterdayProgress(logs.prayedCount, due),
+                  (false, final due) => l10n.prayerDayTodayProgress(logs.prayedCount, due),
+                }),
                 if (logs.errorType == PrayerLogErrorType.syncFailed) ...[
                   const SizedBox(height: 2),
                   Text(

@@ -434,8 +434,8 @@
   "prayerOptionMissed": "পড়া হয়নি",
   "prayerOptionClear": "মুছে ফেলুন",
   "prayerLogSheetTitle": "{prayer} চিহ্নিত করুন",
-  "prayerDayTodayProgress": "আজ · ৫ ওয়াক্তের মধ্যে {count} ওয়াক্ত পড়েছেন",
-  "prayerDayYesterdayProgress": "গতকাল · ৫ ওয়াক্তের মধ্যে {count} ওয়াক্ত পড়েছেন",
+  "prayerDayTodayProgress": "আজ · {total} ওয়াক্তের মধ্যে {count} ওয়াক্ত পড়েছেন",
+  "prayerDayYesterdayProgress": "গতকাল · {total} ওয়াক্তের মধ্যে {count} ওয়াক্ত পড়েছেন",
   "prayerMarkHint": "পড়েছি হিসেবে চিহ্নিত করুন",
   "prayerUndoHint": "ফিরিয়ে নিন",
   "prayerMoreOptionsHint": "আরও বিকল্প",
@@ -452,5 +452,7 @@
   "prayerTurnOnAlarm": "চালু করুন",
   "prayerLegendQada": "কাযা",
   "prayerLegendNotLogged": "লগ করা হয়নি",
-  "prayerLogHistoryFailed": "আপনার নামাজের ইতিহাস লোড করা যায়নি।"
+  "prayerLogHistoryFailed": "আপনার নামাজের ইতিহাস লোড করা যায়নি।",
+  "prayerDayToday": "আজ",
+  "prayerDayYesterday": "গতকাল"
 }

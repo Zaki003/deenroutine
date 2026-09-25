@@ -1281,13 +1281,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String prayerDayTodayProgress(int count) {
-    return 'TODAY · $count OF 5 PRAYED';
+  String prayerDayTodayProgress(int count, int total) {
+    return 'TODAY · $count OF $total PRAYED';
   }
 
   @override
-  String prayerDayYesterdayProgress(int count) {
-    return 'YESTERDAY · $count OF 5 PRAYED';
+  String prayerDayYesterdayProgress(int count, int total) {
+    return 'YESTERDAY · $count OF $total PRAYED';
   }
 
   @override
@@ -1344,4 +1344,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prayerLogHistoryFailed => 'Couldn\'t load your prayer history.';
+
+  @override
+  String get prayerDayToday => 'TODAY';
+
+  @override
+  String get prayerDayYesterday => 'YESTERDAY';
 }
