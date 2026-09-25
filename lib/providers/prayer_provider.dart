@@ -32,6 +32,7 @@ class PrayerProvider extends ChangeNotifier {
   // and zero network calls, not repeat both on every app start.
   static const _prefsDateKey = 'prayer_cache_date';
   static const _prefsTimingsKey = 'prayer_cache_timings';
+  static const _prefsSunriseKey = 'prayer_cache_sunrise';
   static const _prefsLatKey = 'prayer_last_lat';
   static const _prefsLngKey = 'prayer_last_lng';
 
@@ -52,6 +53,7 @@ class PrayerProvider extends ChangeNotifier {
   static const _prefsNotifyPrefix = 'prayer_notify_';
 
   Map<String, String> _timings = {};
+  String? _sunrise;
   bool _loading = false;
   PrayerErrorType? _errorType;
   String? _errorDetail;
@@ -84,6 +86,10 @@ class PrayerProvider extends ChangeNotifier {
   }
 
   Map<String, String> get timings => _timings;
+
+  /// Today's sunrise ('HH:mm'), where Fajr's waqt ends. Not one of
+  /// [timings], which is only ever the five prayers.
+  String? get sunrise => _sunrise;
   bool get isLoading => _loading;
   PrayerErrorType? get errorType => _errorType;
   String? get errorDetail => _errorDetail;
@@ -224,8 +230,12 @@ class PrayerProvider extends ChangeNotifier {
       // loaded above.
       if (prefs.getString(_prefsDateKey) == _cacheStamp(todayKey)) {
         final cached = _readCachedTimings(prefs);
-        if (cached != null) {
+        // Sunrise wasn't cached before prayer tracking, so a same-day cache
+        // from an older version falls through to one refetch.
+        final cachedSunrise = prefs.getString(_prefsSunriseKey);
+        if (cached != null && cachedSunrise != null) {
           _timings = cached;
+          _sunrise = cachedSunrise;
           return;
         }
       }
@@ -348,14 +358,17 @@ class PrayerProvider extends ChangeNotifier {
     double longitude,
     String todayKey,
   ) async {
-    _timings = await _service.fetchPrayerTimes(
+    final result = await _service.fetchPrayerTimes(
       latitude: latitude,
       longitude: longitude,
       method: calculationMethod,
       school: asrMethod,
     );
+    _timings = result.timings;
+    _sunrise = result.sunrise;
     await prefs.setString(_prefsDateKey, _cacheStamp(todayKey));
     await prefs.setString(_prefsTimingsKey, jsonEncode(_timings));
+    await prefs.setString(_prefsSunriseKey, result.sunrise);
     await _rescheduleAll();
   }
 

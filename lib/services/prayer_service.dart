@@ -158,8 +158,10 @@ class PrayerService {
       _isSouthAsia(lat, lng) ? AsrJuristicMethod.hanafi : AsrJuristicMethod.standard;
 
   /// Fetches today's prayer times for a given lat/lng using the public
-  /// Aladhan API.
-  Future<Map<String, String>> fetchPrayerTimes({
+  /// Aladhan API. [sunrise] isn't a prayer, so it's kept out of [timings]
+  /// (everything iterating those expects exactly the five) - it marks where
+  /// Fajr's waqt ends, for prayer tracking.
+  Future<({Map<String, String> timings, String sunrise})> fetchPrayerTimes({
     required double latitude,
     required double longitude,
     PrayerCalculationMethod method = PrayerCalculationMethod.mwl,
@@ -175,18 +177,24 @@ class PrayerService {
 
     // 1. Try cache first (offline-friendly, NFR-REL-01 support).
     final cached = await _db.collection('PrayerCache').doc(cacheKey).get();
-    if (cached.exists) {
+    // A doc cached before sunrise was stored is treated as a miss, so it's
+    // refetched and overwritten once rather than leaving tracking without it.
+    final cachedSunrise = cached.exists ? cached.data()!['sunrise'] as String? : null;
+    if (cachedSunrise != null) {
       // Firestore doesn't preserve map field key order, so the cached
       // timings must be rebuilt in canonical order (matching the live-fetch
       // path below) for PrayerProvider's rotation logic to work correctly.
       final raw = Map<String, dynamic>.from(cached.data()!['timings']);
-      return <String, String>{
-        'Fajr': raw['Fajr'],
-        'Dhuhr': raw['Dhuhr'],
-        'Asr': raw['Asr'],
-        'Maghrib': raw['Maghrib'],
-        'Isha': raw['Isha'],
-      };
+      return (
+        timings: <String, String>{
+          'Fajr': raw['Fajr'],
+          'Dhuhr': raw['Dhuhr'],
+          'Asr': raw['Asr'],
+          'Maghrib': raw['Maghrib'],
+          'Isha': raw['Isha'],
+        },
+        sunrise: cachedSunrise,
+      );
     }
 
     // 2. Fetch live from Aladhan.
@@ -210,10 +218,12 @@ class PrayerService {
       'Maghrib': timingsRaw['Maghrib'],
       'Isha': timingsRaw['Isha'],
     };
+    final sunrise = timingsRaw['Sunrise'] as String;
 
     // 3. Cache the result.
     await _db.collection('PrayerCache').doc(cacheKey).set({
       'timings': timings,
+      'sunrise': sunrise,
       'fetchedAt': Timestamp.now(),
       'latitude': latitude,
       'longitude': longitude,
@@ -221,6 +231,6 @@ class PrayerService {
       'school': school.aladhanCode,
     });
 
-    return timings;
+    return (timings: timings, sunrise: sunrise);
   }
 }
