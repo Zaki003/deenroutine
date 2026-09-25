@@ -1233,12 +1233,6 @@ abstract class AppLocalizations {
   /// **'Create your own habit'**
   String get createYourOwnHabit;
 
-  /// No description provided for @templatePrayFiveTimes.
-  ///
-  /// In en, this message translates to:
-  /// **'Pray 5 times daily'**
-  String get templatePrayFiveTimes;
-
   /// No description provided for @templateReadQuran.
   ///
   /// In en, this message translates to:

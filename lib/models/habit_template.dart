@@ -53,21 +53,6 @@ class HabitTemplate {
 /// entry here — no seed script or content release beyond a normal app build.
 List<HabitTemplate> habitTemplates(AppLocalizations l10n) => [
       HabitTemplate(
-        id: 'pray_five_times',
-        title: l10n.templatePrayFiveTimes,
-        category: HabitCategory.islam,
-        frequency: HabitFrequency.daily,
-        icon: Icons.nights_stay_outlined,
-        trackingType: HabitTrackingType.checklist,
-        checklistItems: [
-          l10n.prayerFajr,
-          l10n.prayerDhuhr,
-          l10n.prayerAsr,
-          l10n.prayerMaghrib,
-          l10n.prayerIsha,
-        ],
-      ),
-      HabitTemplate(
         id: 'read_quran',
         title: l10n.templateReadQuran,
         category: HabitCategory.islam,

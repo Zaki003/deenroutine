@@ -644,9 +644,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get createYourOwnHabit => 'নিজের অভ্যাস তৈরি করুন';
 
   @override
-  String get templatePrayFiveTimes => 'প্রতিদিন ৫ ওয়াক্ত নামাজ পড়ুন';
-
-  @override
   String get templateReadQuran => 'কুরআন তিলাওয়াত করুন';
 
   @override

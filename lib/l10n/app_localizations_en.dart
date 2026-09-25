@@ -649,9 +649,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createYourOwnHabit => 'Create your own habit';
 
   @override
-  String get templatePrayFiveTimes => 'Pray 5 times daily';
-
-  @override
   String get templateReadQuran => 'Read Qur\'an';
 
   @override
