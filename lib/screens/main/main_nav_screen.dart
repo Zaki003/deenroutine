@@ -54,6 +54,9 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     // Reminders, nudges and the Friday summary all depend on habit state
     // (what's done today, current streaks), so they're rebuilt as it changes.
     _habitProvider.addListener(_onHabitsChanged);
+    // Prayer check-ins depend on the day's times and what's been logged.
+    _prayerProvider.addListener(_onPrayerChanged);
+    _prayerLogProvider.addListener(_onPrayerChanged);
     _analytics.logScreenView(_screenNames[_index]);
     // loadPrayerTimes() notifies synchronously before its first await (to
     // flip on isLoading immediately for pull-to-refresh callers), which
@@ -70,10 +73,14 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
       // loaded yet - _onHabitsChanged covers the moment they do.
       _notificationSettings.refreshSchedule();
       _notificationSettings.refreshHabitSchedule(_habitProvider);
+      _notificationSettings.refreshPrayerCheckIns(_prayerProvider, _prayerLogProvider);
     });
   }
 
   void _onHabitsChanged() => _notificationSettings.onHabitsChanged(_habitProvider);
+
+  void _onPrayerChanged() =>
+      _notificationSettings.onPrayerChanged(_prayerProvider, _prayerLogProvider);
 
   void _onTabTap(int i) {
     setState(() => _index = i);
@@ -102,6 +109,7 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
     // Throttled inside, so this is cheap on every resume.
     _notificationSettings.refreshSchedule();
     _notificationSettings.refreshHabitSchedule(_habitProvider);
+    _notificationSettings.refreshPrayerCheckIns(_prayerProvider, _prayerLogProvider);
     const recoverableOnResume = {
       PrayerErrorType.permissionDenied,
       PrayerErrorType.permissionDeniedForever,
@@ -120,6 +128,8 @@ class _MainNavScreenState extends State<MainNavScreen> with WidgetsBindingObserv
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _habitProvider.removeListener(_onHabitsChanged);
+    _prayerProvider.removeListener(_onPrayerChanged);
+    _prayerLogProvider.removeListener(_onPrayerChanged);
     // _AuthGate unmounts this screen on logout - without this, the habit
     // listener started in initState keeps trying to reconnect as a user
     // who's no longer signed in, forever. See HabitProvider.stopListening.

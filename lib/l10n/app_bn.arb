@@ -459,5 +459,19 @@
   "prayerDayYesterday": "গতকাল",
   "prayerInsightsTitle": "নামাজের হিসাব",
   "prayerInsightsSubtitle": "গত ৩০ দিন",
-  "prayerInsightsEmpty": "নামাজ ট্যাবে আপনার নামাজগুলো চিহ্নিত করুন, আপনার হিসাব এখানে দেখা যাবে।"
+  "prayerInsightsEmpty": "নামাজ ট্যাবে আপনার নামাজগুলো চিহ্নিত করুন, আপনার হিসাব এখানে দেখা যাবে।",
+  "notificationsPrayerCheckInsLabel": "নামাজের চেক-ইন",
+  "prayerCheckInSettingTitle": "নামাজ পড়েছি কি না জিজ্ঞেস করুন",
+  "prayerCheckInSettingSubtitle": "প্রতি ওয়াক্তের মাঝামাঝি একটি নীরব রিমাইন্ডার, নামাজ লগ করার বাটনসহ",
+  "prayerCheckInPrayersLabel": "এই নামাজগুলোর জন্য",
+  "prayerCheckInDelayLabel": "কখন জিজ্ঞেস করবে",
+  "prayerCheckInDelaySubtitle": "ওয়াক্ত শুরু হওয়ার পর থেকে",
+  "prayerCheckInDelayMinutes": "{minutes} মিনিট",
+  "prayerCheckInFootnote": "“পরে” চাপলে ৩০ মিনিট পর আরেকবার জিজ্ঞেস করবে। আগেই লগ করা নামাজের কথা জিজ্ঞেস করবে না।",
+  "prayerCheckInTitle": "{prayer} পড়েছেন?",
+  "prayerCheckInBody": "লগ করতে “পড়েছি” চাপুন। {prayer}-এর ওয়াক্ত {time} পর্যন্ত।",
+  "prayerCheckInPrayed": "পড়েছি",
+  "prayerCheckInLater": "পরে",
+  "prayerCheckInLogged": "{prayer} লগ হয়েছে · {status}",
+  "prayerCheckInLoggedBody": "নামাজ ট্যাব থেকে যেকোনো সময় বদলাতে পারবেন।"
 }

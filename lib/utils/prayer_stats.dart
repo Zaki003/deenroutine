@@ -58,7 +58,7 @@ PrayerStats computePrayerStats({
   final keys = PrayerLog.prayerKeys;
   final firstTracked = logsByDay.keys.isEmpty
       ? null
-      : _parseDay(logsByDay.keys.reduce((a, b) => a.compareTo(b) <= 0 ? a : b));
+      : PrayerLog.parseDayKey(logsByDay.keys.reduce((a, b) => a.compareTo(b) <= 0 ? a : b));
 
   DateTime dayBefore(DateTime d, int n) => DateTime(d.year, d.month, d.day - n);
   PrayerStatus? statusOn(DateTime d, String key) => logsByDay[PrayerLog.dayKey(d)]?.statusFor(key);
@@ -134,9 +134,4 @@ PrayerStats computePrayerStats({
     grid: grid,
     weakestPrayer: weakest,
   );
-}
-
-DateTime _parseDay(String key) {
-  final p = key.split('-').map(int.parse).toList();
-  return DateTime(p[0], p[1], p[2]);
 }

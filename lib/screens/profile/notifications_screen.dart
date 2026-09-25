@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/prayer_log.dart';
 import '../../providers/notification_settings_provider.dart';
 import '../../theme/deen_colors.dart';
+import '../../utils/prayer_check_in_plan.dart';
+import '../../utils/prayer_labels.dart';
 import '../../widgets/account_row.dart';
 import '../../widgets/deen_card.dart';
 import '../../widgets/section_label.dart';
 
 /// Where the notification choices live: the daily ayah/hadith, how habit
 /// reminders are worded, the optional motivation (streak reminder, Friday
-/// summary, come-back message), and whether the phone is actually letting the
+/// summary, come-back message), the opt-in prayer check-ins (Android only),
+/// and whether the phone is actually letting the
 /// app's notifications through - the usual reason a reminder never shows up,
 /// and otherwise something only visible deep in system settings.
 class NotificationsScreen extends StatefulWidget {
@@ -166,6 +170,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                 ],
               ),
             ),
+            if (settings.checkInsSupported) ...[
+              const SizedBox(height: 20),
+              SectionLabel(l10n.notificationsPrayerCheckInsLabel),
+              const SizedBox(height: 8),
+              DeenCard(dark: dark, child: _PrayerCheckInSettings(settings: settings, dark: dark)),
+              note(l10n.prayerCheckInFootnote),
+            ],
             const SizedBox(height: 20),
             SectionLabel(l10n.notificationsStatusLabel),
             const SizedBox(height: 8),
@@ -331,6 +342,127 @@ class _SwitchWithTime extends StatelessWidget {
               : const SizedBox.shrink(),
         ),
       ],
+    );
+  }
+}
+
+/// The check-in switch, and while it's on, which prayers to ask about and how
+/// long into the waqt to ask.
+class _PrayerCheckInSettings extends StatelessWidget {
+  final NotificationSettingsProvider settings;
+  final bool dark;
+
+  const _PrayerCheckInSettings({required this.settings, required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final muted = TextStyle(fontSize: 11.5, height: 1.4, color: DeenColors.textMuted(dark));
+    final divider = Divider(height: 1, thickness: 1, color: DeenColors.dividerLine(dark));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _NotificationSwitch(
+          dark: dark,
+          title: l10n.prayerCheckInSettingTitle,
+          subtitle: l10n.prayerCheckInSettingSubtitle,
+          value: settings.checkInEnabled,
+          onChanged: settings.loaded ? settings.setCheckInEnabled : null,
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.topCenter,
+          child: !settings.checkInEnabled
+              ? const SizedBox(width: double.infinity)
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    divider,
+                    const SizedBox(height: 12),
+                    Text(l10n.prayerCheckInPrayersLabel, style: muted),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        for (final key in PrayerLog.prayerKeys)
+                          _SettingChip(
+                            label: prayerNameLabel(l10n, key),
+                            selected: settings.checkInPrayers.contains(key),
+                            dark: dark,
+                            onTap: () => settings.toggleCheckInPrayer(key),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    divider,
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.prayerCheckInDelayLabel,
+                                style: TextStyle(fontSize: 13, color: DeenColors.primaryText(dark)),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(l10n.prayerCheckInDelaySubtitle, style: muted),
+                            ],
+                          ),
+                        ),
+                        for (final minutes in checkInDelayChoices)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 6),
+                            child: _SettingChip(
+                              label: l10n.prayerCheckInDelayMinutes(minutes),
+                              selected: settings.checkInDelayMinutes == minutes,
+                              dark: dark,
+                              onTap: () => settings.setCheckInDelay(minutes),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+/// A small pill that's either on or off, in the same on-colours as
+/// [_NotificationSwitch] (gold on dark, teal on light).
+class _SettingChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final bool dark;
+  final VoidCallback onTap;
+
+  const _SettingChip({required this.label, required this.selected, required this.dark, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final onFill = dark ? DeenColors.gold : DeenColors.primary;
+    final onText = dark ? DeenColors.ink : Colors.white;
+    return FilterChip(
+      label: Text(label),
+      selected: selected,
+      showCheckmark: false,
+      onSelected: (_) => onTap(),
+      labelStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+        color: selected ? onText : DeenColors.primaryText(dark),
+      ),
+      backgroundColor: Colors.transparent,
+      selectedColor: onFill,
+      side: BorderSide(color: selected ? onFill : DeenColors.outlineFaint(dark)),
+      shape: const StadiumBorder(),
+      visualDensity: VisualDensity.compact,
     );
   }
 }

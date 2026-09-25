@@ -2,15 +2,22 @@ import 'dart:async';
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../models/habit.dart';
+import '../models/prayer_log.dart';
 import '../services/firestore_service.dart';
 import '../services/habit_notification_scheduler.dart';
 import '../services/notification_service.dart';
+import '../services/prayer_check_in_scheduler.dart';
 import '../utils/daily_quote_notification.dart';
 import '../utils/daily_quote_schedule.dart';
+import '../utils/prayer_check_in_plan.dart';
+import '../utils/prayer_labels.dart';
 import 'habit_provider.dart';
+import 'prayer_log_provider.dart';
+import 'prayer_provider.dart';
 
 /// The user's notification choices, persisted on the device like
 /// [ThemeProvider]'s, and the scheduling that acts on them.
@@ -18,7 +25,9 @@ import 'habit_provider.dart';
 /// Every switch is on by default and can be turned off: the daily
 /// ayah/hadith, the streak reminder, the Friday summary, the come-back
 /// message, and the encouraging wording of habit reminders (which falls back
-/// to the plain "Time for: ..." line when off).
+/// to the plain "Time for: ..." line when off). The one exception is prayer
+/// check-ins (Android only), which are opt-in: up to five a day is a lot to
+/// start sending unasked.
 ///
 /// Two independent schedules live here. The daily quote is a rolling window
 /// of the next [NotificationService.quoteNotificationSlots] days. Everything
@@ -36,6 +45,9 @@ class NotificationSettingsProvider extends ChangeNotifier {
   static const _streakMinuteKey = 'streak_nudge_minute';
   static const _weeklyKey = 'weekly_summary_enabled';
   static const _comebackKey = 'comeback_enabled';
+  static const _checkInEnabledKey = 'prayer_checkin_enabled';
+  static const _checkInPrayersKey = 'prayer_checkin_prayers';
+  static const _checkInDelayKey = 'prayer_checkin_delay_minutes';
 
   static const _defaultQuoteHour = 7;
   static const _defaultStreakHour = 20;
@@ -46,6 +58,8 @@ class NotificationSettingsProvider extends ChangeNotifier {
   final FirestoreService _firestore = FirestoreService();
   late final HabitNotificationScheduler _habitScheduler =
       HabitNotificationScheduler(_notifications);
+  late final PrayerCheckInScheduler _checkInScheduler =
+      PrayerCheckInScheduler(_notifications);
 
   bool _loaded = false;
   bool _quoteEnabled = true;
@@ -57,6 +71,9 @@ class NotificationSettingsProvider extends ChangeNotifier {
   int _streakMinute = 0;
   bool _weeklySummary = true;
   bool _comeback = true;
+  bool _checkInEnabled = false;
+  Set<String> _checkInPrayers = {...PrayerLog.prayerKeys};
+  int _checkInDelay = defaultCheckInDelayMinutes;
   bool _bangla = false;
 
   late final Future<void> _loading;
@@ -79,6 +96,16 @@ class NotificationSettingsProvider extends ChangeNotifier {
   String? _lastHabitSignature;
   DateTime? _lastHabitAt;
 
+  // ---- Prayer check-in schedule state (same one-run-at-a-time shape)
+  PrayerProvider? _prayer;
+  PrayerLogProvider? _prayerLogs;
+  Timer? _checkInDebounceTimer;
+  bool _checkInRunning = false;
+  bool _checkInRerun = false;
+  bool _checkInRerunForce = false;
+  int _checkInGeneration = 0;
+  String? _lastCheckInSignature;
+
   bool get loaded => _loaded;
   bool get quoteEnabled => _quoteEnabled;
   int get quoteHour => _quoteHour;
@@ -89,6 +116,12 @@ class NotificationSettingsProvider extends ChangeNotifier {
   int get streakMinute => _streakMinute;
   bool get weeklySummary => _weeklySummary;
   bool get comeback => _comeback;
+  bool get checkInEnabled => _checkInEnabled;
+  Set<String> get checkInPrayers => _checkInPrayers;
+  int get checkInDelayMinutes => _checkInDelay;
+
+  /// Background notification buttons only work reliably on Android so far.
+  bool get checkInsSupported => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   NotificationSettingsProvider() {
     _loading = _load();
@@ -105,6 +138,13 @@ class NotificationSettingsProvider extends ChangeNotifier {
     _streakMinute = prefs.getInt(_streakMinuteKey) ?? 0;
     _weeklySummary = prefs.getBool(_weeklyKey) ?? true;
     _comeback = prefs.getBool(_comebackKey) ?? true;
+    _checkInEnabled = prefs.getBool(_checkInEnabledKey) ?? false;
+    final savedPrayers = prefs.getStringList(_checkInPrayersKey);
+    _checkInPrayers = savedPrayers == null
+        ? {...PrayerLog.prayerKeys}
+        : {...savedPrayers.where(PrayerLog.prayerKeys.contains)};
+    final delay = prefs.getInt(_checkInDelayKey);
+    _checkInDelay = checkInDelayChoices.contains(delay) ? delay! : defaultCheckInDelayMinutes;
     _loaded = true;
     notifyListeners();
   }
@@ -280,6 +320,7 @@ class NotificationSettingsProvider extends ChangeNotifier {
     _bangla = bangla;
     if (_quoteEnabled) refreshSchedule();
     if (_habits != null) _runHabitSchedule();
+    if (_prayer != null) _runCheckIns();
   }
 
   NotificationPrefs get _habitPrefs => NotificationPrefs(
@@ -358,6 +399,128 @@ class NotificationSettingsProvider extends ChangeNotifier {
     }
   }
 
+  // ---------------- Prayer check-ins ----------------
+
+  Future<void> setCheckInEnabled(bool value) async {
+    await _loading;
+    _checkInEnabled = value;
+    notifyListeners();
+    await _saveBool(_checkInEnabledKey, value);
+    if (value) await _askPermission();
+    await _runCheckIns(force: true);
+  }
+
+  Future<void> toggleCheckInPrayer(String prayerKey) async {
+    await _loading;
+    final next = {..._checkInPrayers};
+    if (!next.remove(prayerKey)) next.add(prayerKey);
+    _checkInPrayers = next;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+      _checkInPrayersKey,
+      [for (final k in PrayerLog.prayerKeys) if (next.contains(k)) k],
+    );
+    await _runCheckIns(force: true);
+  }
+
+  Future<void> setCheckInDelay(int minutes) async {
+    await _loading;
+    _checkInDelay = minutes;
+    notifyListeners();
+    await _saveInt(_checkInDelayKey, minutes);
+    await _runCheckIns(force: true);
+  }
+
+  /// Called on launch and resume.
+  Future<void> refreshPrayerCheckIns(PrayerProvider prayer, PrayerLogProvider logs) {
+    _prayer = prayer;
+    _prayerLogs = logs;
+    return _runCheckIns();
+  }
+
+  /// Called whenever prayer times or today's prayer log change - including
+  /// [PrayerProvider]'s 30-second tick, which is what notices the prayer day
+  /// rolling over. Debounced; most calls change nothing (see [_runCheckIns]).
+  void onPrayerChanged(PrayerProvider prayer, PrayerLogProvider logs) {
+    _prayer = prayer;
+    _prayerLogs = logs;
+    _checkInDebounceTimer?.cancel();
+    _checkInDebounceTimer = Timer(_habitDebounce, _runCheckIns);
+  }
+
+  Future<void> _runCheckIns({bool force = false}) async {
+    await _loading;
+    if (!checkInsSupported) return;
+    if (_checkInRunning) {
+      _checkInRerun = true;
+      _checkInRerunForce = _checkInRerunForce || force;
+      return;
+    }
+    _checkInRunning = true;
+    try {
+      var forceThis = force;
+      do {
+        _checkInRerun = false;
+        final generation = _checkInGeneration;
+        if (!_checkInEnabled || _checkInPrayers.isEmpty) {
+          if (_lastCheckInSignature != 'off') await _checkInScheduler.cancelAll();
+          _lastCheckInSignature = 'off';
+          break;
+        }
+        final prayer = _prayer;
+        final logs = _prayerLogs;
+        if (prayer == null || logs == null || prayer.timings.isEmpty || prayer.sunrise == null) break;
+
+        final lang = _bangla ? 'bn' : 'en';
+        final logged = {
+          for (final k in PrayerLog.prayerKeys)
+            if (logs.statusFor(k) != null) k,
+        };
+        // Everything the plan depends on except the clock: a check-in time
+        // passing needs no rebuild, the notification just fires.
+        final signature = [
+          PrayerLog.dayKey(logs.prayerDay),
+          lang,
+          _checkInDelay,
+          [for (final k in PrayerLog.prayerKeys) if (_checkInPrayers.contains(k)) k].join(','),
+          prayer.timings.values.join(','),
+          prayer.sunrise,
+          logged.join(','),
+          logs.isAvailable,
+        ].join('|');
+        if (!forceThis && signature == _lastCheckInSignature) break;
+
+        final l10n = lookupAppLocalizations(Locale(lang));
+        final timeFormat = DateFormat.jm(lang);
+        final plan = planPrayerCheckIns(
+          now: DateTime.now(),
+          timings: prayer.timings,
+          sunrise: prayer.sunrise,
+          delay: Duration(minutes: _checkInDelay),
+          prayers: _checkInPrayers,
+          loggedToday: logged,
+          lang: lang,
+          text: (key, lateEnd) {
+            final name = prayerNameLabel(l10n, key);
+            return (
+              title: l10n.prayerCheckInTitle(name),
+              body: l10n.prayerCheckInBody(name, timeFormat.format(lateEnd)),
+            );
+          },
+        );
+        await _checkInScheduler.apply(plan, l10n, isCurrent: () => generation == _checkInGeneration);
+        if (generation == _checkInGeneration) _lastCheckInSignature = signature;
+        forceThis = _checkInRerunForce;
+        _checkInRerunForce = false;
+      } while (_checkInRerun);
+    } catch (e) {
+      debugPrint('Prayer check-in schedule failed: $e');
+    } finally {
+      _checkInRunning = false;
+    }
+  }
+
   // ---------------- Logout ----------------
 
   /// Removes every scheduled notification this provider owns without touching
@@ -370,6 +533,11 @@ class NotificationSettingsProvider extends ChangeNotifier {
     _lastHabitSignature = null;
     _lastHabitAt = null;
     _habits = null;
-    await Future.wait([_cancelQuote(), _habitScheduler.cancelAll()]);
+    _checkInDebounceTimer?.cancel();
+    _checkInGeneration++;
+    _lastCheckInSignature = null;
+    _prayer = null;
+    _prayerLogs = null;
+    await Future.wait([_cancelQuote(), _habitScheduler.cancelAll(), _checkInScheduler.cancelAll()]);
   }
 }

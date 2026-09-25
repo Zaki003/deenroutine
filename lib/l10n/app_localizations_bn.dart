@@ -1366,4 +1366,57 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get prayerInsightsEmpty =>
       'নামাজ ট্যাবে আপনার নামাজগুলো চিহ্নিত করুন, আপনার হিসাব এখানে দেখা যাবে।';
+
+  @override
+  String get notificationsPrayerCheckInsLabel => 'নামাজের চেক-ইন';
+
+  @override
+  String get prayerCheckInSettingTitle => 'নামাজ পড়েছি কি না জিজ্ঞেস করুন';
+
+  @override
+  String get prayerCheckInSettingSubtitle =>
+      'প্রতি ওয়াক্তের মাঝামাঝি একটি নীরব রিমাইন্ডার, নামাজ লগ করার বাটনসহ';
+
+  @override
+  String get prayerCheckInPrayersLabel => 'এই নামাজগুলোর জন্য';
+
+  @override
+  String get prayerCheckInDelayLabel => 'কখন জিজ্ঞেস করবে';
+
+  @override
+  String get prayerCheckInDelaySubtitle => 'ওয়াক্ত শুরু হওয়ার পর থেকে';
+
+  @override
+  String prayerCheckInDelayMinutes(int minutes) {
+    return '$minutes মিনিট';
+  }
+
+  @override
+  String get prayerCheckInFootnote =>
+      '“পরে” চাপলে ৩০ মিনিট পর আরেকবার জিজ্ঞেস করবে। আগেই লগ করা নামাজের কথা জিজ্ঞেস করবে না।';
+
+  @override
+  String prayerCheckInTitle(String prayer) {
+    return '$prayer পড়েছেন?';
+  }
+
+  @override
+  String prayerCheckInBody(String prayer, String time) {
+    return 'লগ করতে “পড়েছি” চাপুন। $prayer-এর ওয়াক্ত $time পর্যন্ত।';
+  }
+
+  @override
+  String get prayerCheckInPrayed => 'পড়েছি';
+
+  @override
+  String get prayerCheckInLater => 'পরে';
+
+  @override
+  String prayerCheckInLogged(String prayer, String status) {
+    return '$prayer লগ হয়েছে · $status';
+  }
+
+  @override
+  String get prayerCheckInLoggedBody =>
+      'নামাজ ট্যাব থেকে যেকোনো সময় বদলাতে পারবেন।';
 }

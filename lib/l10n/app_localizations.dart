@@ -2480,6 +2480,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tick off your prayers on the Prayer tab and your insights will show up here.'**
   String get prayerInsightsEmpty;
+
+  /// No description provided for @notificationsPrayerCheckInsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PRAYER CHECK-INS'**
+  String get notificationsPrayerCheckInsLabel;
+
+  /// No description provided for @prayerCheckInSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask if I\'ve prayed'**
+  String get prayerCheckInSettingTitle;
+
+  /// No description provided for @prayerCheckInSettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A quiet reminder partway through each waqt, with a button to log the prayer'**
+  String get prayerCheckInSettingSubtitle;
+
+  /// No description provided for @prayerCheckInPrayersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'For these prayers'**
+  String get prayerCheckInPrayersLabel;
+
+  /// No description provided for @prayerCheckInDelayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask after'**
+  String get prayerCheckInDelayLabel;
+
+  /// No description provided for @prayerCheckInDelaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From the start of the waqt'**
+  String get prayerCheckInDelaySubtitle;
+
+  /// No description provided for @prayerCheckInDelayMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String prayerCheckInDelayMinutes(int minutes);
+
+  /// No description provided for @prayerCheckInFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Later asks once more, 30 minutes on. You won\'t be asked about a prayer that\'s already logged.'**
+  String get prayerCheckInFootnote;
+
+  /// No description provided for @prayerCheckInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Have you prayed {prayer}?'**
+  String prayerCheckInTitle(String prayer);
+
+  /// No description provided for @prayerCheckInBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Prayed to log it. {prayer} lasts until {time}.'**
+  String prayerCheckInBody(String prayer, String time);
+
+  /// No description provided for @prayerCheckInPrayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayed'**
+  String get prayerCheckInPrayed;
+
+  /// No description provided for @prayerCheckInLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get prayerCheckInLater;
+
+  /// No description provided for @prayerCheckInLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'{prayer} logged · {status}'**
+  String prayerCheckInLogged(String prayer, String status);
+
+  /// No description provided for @prayerCheckInLoggedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change it anytime on the Prayer tab.'**
+  String get prayerCheckInLoggedBody;
 }
 
 class _AppLocalizationsDelegate

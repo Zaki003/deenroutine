@@ -9,7 +9,8 @@ import 'daily_quote_schedule.dart' show quoteEpoch;
 //
 //   1_100_000_000 .. 1_900_000_000   per-habit reminders (see [habitReminderId])
 //   2_000_000_000 .. 2_000_000_006   daily ayah/hadith (NotificationService)
-//   2_000_000_100 ..                 the single-slot nudges below
+//   2_000_000_100 .. 2_000_000_103   the single-slot nudges below
+//   2_000_000_200 .. 2_000_000_209   prayer check-ins (prayer_check_in_plan.dart)
 
 const int habitReminderIdMin = 1100000000;
 const int habitReminderIdMax = 1900000000; // exclusive

@@ -61,6 +61,12 @@ class PrayerLog {
       '${day.month.toString().padLeft(2, '0')}-'
       '${day.day.toString().padLeft(2, '0')}';
 
+  /// The inverse of [dayKey]: local midnight of that date.
+  static DateTime parseDayKey(String key) {
+    final p = key.split('-').map(int.parse).toList();
+    return DateTime(p[0], p[1], p[2]);
+  }
+
   PrayerStatus? statusFor(String prayerKey) => statuses[prayerKey];
 
   int get prayedCount => statuses.values.where((s) => s.counted).length;

@@ -51,3 +51,20 @@ String prayerOptionLabel(AppLocalizations l10n, PrayerStatus status) {
       return l10n.prayerOptionExcused;
   }
 }
+
+/// One or two words, for tight spots like a notification title: "On time",
+/// "Late", "Qada".
+String prayerShortStatusLabel(AppLocalizations l10n, PrayerStatus status) {
+  switch (status) {
+    case PrayerStatus.onTime:
+      return l10n.prayerOptionOnTime;
+    case PrayerStatus.late:
+      return l10n.prayerOptionLate;
+    case PrayerStatus.qada:
+      return l10n.prayerLegendQada;
+    case PrayerStatus.missed:
+      return l10n.prayerStatusMissed;
+    case PrayerStatus.excused:
+      return l10n.prayerStatusExcused;
+  }
+}

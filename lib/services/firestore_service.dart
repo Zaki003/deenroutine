@@ -447,6 +447,18 @@ class FirestoreService {
         .map((snap) => snap.docs.isEmpty ? null : PrayerLog.fromMap(snap.docs.first.data()));
   }
 
+  /// One day's record, or null if nothing's logged. A query for the same
+  /// reason as [watchPrayerLog].
+  Future<PrayerLog?> getPrayerLog(String uid, DateTime day) async {
+    final snap = await _db
+        .collection('PrayerLogs')
+        .where('uid', isEqualTo: uid)
+        .where('day', isEqualTo: PrayerLog.dayKey(day))
+        .limit(1)
+        .get();
+    return snap.docs.isEmpty ? null : PrayerLog.fromMap(snap.docs.first.data());
+  }
+
   /// Every record from [from] onward, for the Profile's prayer stats. The
   /// uid equality plus day range needs the PrayerLogs composite index in
   /// firestore.indexes.json.

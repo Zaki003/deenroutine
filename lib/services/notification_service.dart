@@ -3,11 +3,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
+import '../utils/prayer_check_in_plan.dart';
+import 'prayer_check_in_handler.dart';
 
 /// What a notification is for. Each kind gets its own Android channel, so a
 /// user can mute one (say, the weekly summary) from system settings without
 /// losing the others.
-enum NotificationKind { reminder, dailyQuote, streak, weekly, comeback }
+enum NotificationKind { reminder, dailyQuote, streak, weekly, comeback, prayerCheckIn }
 
 /// FR-08: Reminder notifications for scheduled habits and prayer times.
 ///
@@ -31,7 +33,13 @@ class NotificationService {
       android: androidSettings,
       iOS: iosSettings,
     );
-    await _plugin.initialize(settings: initSettings);
+    await _plugin.initialize(
+      settings: initSettings,
+      // Taps on a check-in's Prayed/Later buttons (which don't open the app)
+      // always arrive here, on a background isolate - even while the app is
+      // open. Needs the ActionBroadcastReceiver in AndroidManifest.xml.
+      onDidReceiveBackgroundNotificationResponse: prayerCheckInActionHandler,
+    );
   }
 
   /// Android 13+ requires this explicit runtime permission. Split out of
@@ -88,8 +96,79 @@ class NotificationService {
           channelDescription: 'A gentle message after a few days away',
           styleInformation: style,
         );
+      case NotificationKind.prayerCheckIn:
+        return prayerCheckInDetails(body);
     }
   }
+
+  /// Silent on purpose: it lands a while after the adhan and shouldn't compete
+  /// with it. A channel's sound can't be changed once created, so this one
+  /// has been silent from the start.
+  static AndroidNotificationDetails prayerCheckInDetails(
+    String body, {
+    List<AndroidNotificationAction>? actions,
+    int? timeoutAfter,
+  }) =>
+      AndroidNotificationDetails(
+        'deenroutine_prayer_checkin',
+        'Prayer check-ins',
+        channelDescription: 'Asks whether you have prayed, with a button to log it',
+        playSound: false,
+        enableVibration: false,
+        styleInformation: BigTextStyleInformation(body),
+        actions: actions,
+        timeoutAfter: timeoutAfter,
+      );
+
+  /// The check-in's buttons. Neither opens the app; both dismiss the
+  /// notification and hand over to [prayerCheckInActionHandler]. A repeat
+  /// (from Later) offers no second Later.
+  static List<AndroidNotificationAction> checkInActions({
+    required String prayedLabel,
+    required String laterLabel,
+    required bool isRepeat,
+  }) =>
+      [
+        AndroidNotificationAction(checkInPrayedActionId, prayedLabel),
+        if (!isRepeat) AndroidNotificationAction(checkInLaterActionId, laterLabel),
+      ];
+
+  /// Schedules one prayer check-in, approximately (it doesn't need the
+  /// exact-alarm grant; the tap's own time decides the status anyway).
+  Future<void> scheduleCheckIn({
+    required int id,
+    required DateTime when,
+    required CheckInPayload payload,
+    required String prayedLabel,
+    required String laterLabel,
+  }) async {
+    final scheduled = tz.TZDateTime.from(when, tz.local);
+    if (scheduled.isBefore(tz.TZDateTime.now(tz.local))) return;
+    await _plugin.zonedSchedule(
+      id: id,
+      title: payload.title,
+      body: payload.body,
+      scheduledDate: scheduled,
+      notificationDetails: NotificationDetails(
+        android: prayerCheckInDetails(
+          payload.body,
+          actions: checkInActions(
+            prayedLabel: prayedLabel,
+            laterLabel: laterLabel,
+            isRepeat: payload.isRepeat,
+          ),
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      payload: payload.encode(),
+    );
+  }
+
+  static final _checkInIds = [
+    for (var i = 0; i < prayerCheckInSlots; i++) prayerCheckInIdBase + i,
+  ];
+
+  Future<void> cancelCheckIns() => cancelIds(_checkInIds);
 
   /// Schedules one notification at [when], replacing any pending one with the
   /// same [id]. A [when] already in the past is silently skipped.

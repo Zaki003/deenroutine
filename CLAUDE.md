@@ -32,7 +32,7 @@ npm run seed:quotes        # push data/daily_quotes.json -> DailyQuotes (same :c
 
 These require `scripts/serviceAccountKey.json` (a Firebase service account key; gitignored, never commit it) — see [data/README.md](data/README.md) for the one-time setup and the content-format rules the scripts enforce.
 
-`test/widget_test.dart` is still the default `flutter create` counter-app boilerplate — it doesn't exercise this app and will fail if run as-is. The only real tests are `test/prayer_waqt_test.dart` and `test/prayer_stats_test.dart`, covering prayer tracking's waqt rules and stats.
+`test/widget_test.dart` is still the default `flutter create` counter-app boilerplate — it doesn't exercise this app and will fail if run as-is. The only real tests are `test/prayer_waqt_test.dart`, `test/prayer_stats_test.dart` and `test/prayer_check_in_plan_test.dart`, covering prayer tracking's waqt rules, stats and check-in planning.
 
 ## Architecture
 
@@ -76,6 +76,11 @@ Things that aren't obvious from the code alone:
 - The Friday summary only includes numbers when computed in the same Mon-Sun week as the Friday it's for; otherwise it uses the number-free wording.
 - Every switch on the Notifications screen (daily quote, streak nudge, Friday summary, come-back messages, encouraging wording) is on by default; a stored SharedPreferences value only exists once the user flips one, so users who never touched a switch get the current default.
 - Local scheduling caps out on iOS at 64 pending notifications; with many habits × 7 days that limit would bite. Android is unaffected in practice.
+
+**Prayer check-ins** (`lib/utils/prayer_check_in_plan.dart`, `PrayerCheckInScheduler`, `prayerCheckInActionHandler`): opt-in and Android-only (`NotificationSettingsProvider.checkInsSupported`), a silent "Have you prayed Dhuhr?" notification partway into each chosen waqt with **Prayed** and **Later** buttons. Scheduled for the current prayer day and the next, rebuilt like the habit scheduler (launch/resume, and listeners on `PrayerProvider`/`PrayerLogProvider` in `MainNavScreen`, skipped when a signature hasn't changed); a prayer logged in the app loses its check-in, even one already on screen. IDs are 2_000_000_200..209. Things that aren't obvious:
+- Button taps always run `prayerCheckInActionHandler` on a **background isolate** - the plugin starts one even when the app is open - so it initializes Firebase itself and waits for `authStateChanges().first` (the saved session restores asynchronously there). It needs the `ActionBroadcastReceiver` in AndroidManifest.xml; without it the buttons show but do nothing.
+- Everything a tap needs travels in the notification's payload (`CheckInPayload`: prayer, prayer day, the on-time and qada cut-offs, language, text), so the handler never loads prayer times or settings. The tap's own time decides the status, by the same rules as the Prayer screen, and an already-logged prayer is never overwritten.
+- A check-in is asked `delay` into the waqt but never later than halfway to the point it turns qada, so short waqts (Maghrib, Fajr before sunrise) are still asked in time. "Later" re-schedules the same ID once, 30 minutes on; the rebuild's sweep leaves pending IDs for prayers that are still open and unlogged (`CheckInPlan.keepIds`) so it doesn't cancel that repeat.
 
 **Habit tracking types** (`HabitTrackingType` in `lib/models/habit.dart`): six types share one `Habit` row — only the config field(s) matching a habit's `trackingType` are meaningful (`numericTarget`/`numericUnit`, `timerTargetMinutes`, `checklistItems`, `ratingScale`); the rest just sit at their default. Today's raw progress (count, checklist items checked off, rating given) is denormalized onto `todayProgressValue`/`todayChecklistDone`/`todayRatingValue` alongside `completed`, gated by `hasProgressToday`, so a dashboard row can render e.g. "6/10 pages" without a separate query (`habitProgressSubtitle` reads these per type). `avoidance` has no config field of its own — it reuses the plain `completed` toggle but inverts what counts as a good day, see Habit streaks below.
 

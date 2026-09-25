@@ -614,5 +614,39 @@
   "prayerDayYesterday": "YESTERDAY",
   "prayerInsightsTitle": "Prayer insights",
   "prayerInsightsSubtitle": "Last 30 days",
-  "prayerInsightsEmpty": "Tick off your prayers on the Prayer tab and your insights will show up here."
+  "prayerInsightsEmpty": "Tick off your prayers on the Prayer tab and your insights will show up here.",
+  "notificationsPrayerCheckInsLabel": "PRAYER CHECK-INS",
+  "prayerCheckInSettingTitle": "Ask if I've prayed",
+  "prayerCheckInSettingSubtitle": "A quiet reminder partway through each waqt, with a button to log the prayer",
+  "prayerCheckInPrayersLabel": "For these prayers",
+  "prayerCheckInDelayLabel": "Ask after",
+  "prayerCheckInDelaySubtitle": "From the start of the waqt",
+  "prayerCheckInDelayMinutes": "{minutes} min",
+  "@prayerCheckInDelayMinutes": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "prayerCheckInFootnote": "Later asks once more, 30 minutes on. You won't be asked about a prayer that's already logged.",
+  "prayerCheckInTitle": "Have you prayed {prayer}?",
+  "@prayerCheckInTitle": {
+    "placeholders": {
+      "prayer": { "type": "String" }
+    }
+  },
+  "prayerCheckInBody": "Tap Prayed to log it. {prayer} lasts until {time}.",
+  "@prayerCheckInBody": {
+    "placeholders": {
+      "prayer": { "type": "String" }, "time": { "type": "String" }
+    }
+  },
+  "prayerCheckInPrayed": "Prayed",
+  "prayerCheckInLater": "Later",
+  "prayerCheckInLogged": "{prayer} logged · {status}",
+  "@prayerCheckInLogged": {
+    "placeholders": {
+      "prayer": { "type": "String" }, "status": { "type": "String" }
+    }
+  },
+  "prayerCheckInLoggedBody": "You can change it anytime on the Prayer tab."
 }

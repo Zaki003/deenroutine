@@ -67,6 +67,10 @@
              AlarmManager alarm on time but the broadcast has no component to deliver
              to, so it's dropped silently: no channel, no notification, no crash. -->
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <!-- Delivers taps on a notification's action buttons (the prayer
+             check-in's Prayed / Later) to the plugin. Without it the buttons
+             show but do nothing. -->
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

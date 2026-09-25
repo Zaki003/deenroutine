@@ -1366,4 +1366,57 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get prayerInsightsEmpty =>
       'Tick off your prayers on the Prayer tab and your insights will show up here.';
+
+  @override
+  String get notificationsPrayerCheckInsLabel => 'PRAYER CHECK-INS';
+
+  @override
+  String get prayerCheckInSettingTitle => 'Ask if I\'ve prayed';
+
+  @override
+  String get prayerCheckInSettingSubtitle =>
+      'A quiet reminder partway through each waqt, with a button to log the prayer';
+
+  @override
+  String get prayerCheckInPrayersLabel => 'For these prayers';
+
+  @override
+  String get prayerCheckInDelayLabel => 'Ask after';
+
+  @override
+  String get prayerCheckInDelaySubtitle => 'From the start of the waqt';
+
+  @override
+  String prayerCheckInDelayMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get prayerCheckInFootnote =>
+      'Later asks once more, 30 minutes on. You won\'t be asked about a prayer that\'s already logged.';
+
+  @override
+  String prayerCheckInTitle(String prayer) {
+    return 'Have you prayed $prayer?';
+  }
+
+  @override
+  String prayerCheckInBody(String prayer, String time) {
+    return 'Tap Prayed to log it. $prayer lasts until $time.';
+  }
+
+  @override
+  String get prayerCheckInPrayed => 'Prayed';
+
+  @override
+  String get prayerCheckInLater => 'Later';
+
+  @override
+  String prayerCheckInLogged(String prayer, String status) {
+    return '$prayer logged · $status';
+  }
+
+  @override
+  String get prayerCheckInLoggedBody =>
+      'You can change it anytime on the Prayer tab.';
 }
