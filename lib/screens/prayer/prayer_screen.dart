@@ -113,7 +113,7 @@ class PrayerScreen extends StatelessWidget {
                 ],
                 const SizedBox(height: 8),
               ],
-              for (final entry in _otherPrayers(provider))
+              for (final entry in _otherPrayers(provider, logs))
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Container(
@@ -275,13 +275,20 @@ class PrayerScreen extends StatelessWidget {
     );
   }
 
-  List<({String key, String value, bool passed})> _otherPrayers(PrayerProvider provider) {
+  /// Every prayer except the one in the hero card - unless that one is
+  /// tomorrow's Fajr (from Isha until midnight) or it's between midnight and
+  /// Fajr, when the current prayer day's own Fajr has already started and
+  /// still needs a row to be logged from.
+  List<({String key, String value, bool passed})> _otherPrayers(
+    PrayerProvider provider,
+    PrayerLogProvider logs,
+  ) {
     final entries = provider.timings.entries.toList();
     final nextIndex = entries.indexWhere((e) => e.key == provider.nextPrayerName);
     return [
       for (var i = 0; i < entries.length; i++)
-        if (i != nextIndex)
-          (key: entries[i].key, value: entries[i].value, passed: i < nextIndex),
+        if (i != nextIndex || logs.canLog(entries[i].key))
+          (key: entries[i].key, value: entries[i].value, passed: i <= nextIndex),
     ];
   }
 }
@@ -488,6 +495,9 @@ class _PrayerTick extends StatelessWidget {
         ? prayerStatusLabel(l10n, status!)
         : (enabled ? null : l10n.prayerNotStartedYet);
     return Semantics(
+      // Its own node, or TalkBack merges it into the row and the whole row
+      // becomes the "mark as prayed" button.
+      container: true,
       button: true,
       enabled: enabled,
       label: state == null ? prayerName : '$prayerName, $state',
