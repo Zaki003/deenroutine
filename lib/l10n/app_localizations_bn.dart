@@ -775,7 +775,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get deleteAccountWarning =>
-      'এটি আপনার অভ্যাস, ধারাবাহিকতা, কুইজ ফলাফল এবং প্রোফাইল স্থায়ীভাবে মুছে ফেলবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।';
+      'এটি আপনার অভ্যাস, ধারাবাহিকতা, নামাজের হিসাব, কুইজ ফলাফল, শেখার অগ্রগতি এবং প্রোফাইল স্থায়ীভাবে মুছে ফেলবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।';
 
   @override
   String get deleteAccountPasswordPrompt =>

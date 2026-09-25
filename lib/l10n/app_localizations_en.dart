@@ -780,7 +780,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountWarning =>
-      'This permanently deletes your habits, streaks, quiz results, and profile. This can\'t be undone.';
+      'This permanently deletes your habits, streaks, prayer log, quiz results, Learn progress, and profile. This can\'t be undone.';
 
   @override
   String get deleteAccountPasswordPrompt => 'Enter your password to confirm.';

@@ -1464,7 +1464,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteAccountWarning.
   ///
   /// In en, this message translates to:
-  /// **'This permanently deletes your habits, streaks, quiz results, and profile. This can\'t be undone.'**
+  /// **'This permanently deletes your habits, streaks, prayer log, quiz results, Learn progress, and profile. This can\'t be undone.'**
   String get deleteAccountWarning;
 
   /// No description provided for @deleteAccountPasswordPrompt.
