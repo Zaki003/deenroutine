@@ -430,10 +430,12 @@ class _WeekBars extends StatelessWidget {
       // A bar's width is a share of its own slot rather than a fixed pixel
       // value, so the chart fills the available width on a wider screen
       // (tablet, landscape) instead of leaving 7 skinny bars stranded in
-      // wide gaps - clamped so it still reads as a bar, not a block.
+      // wide gaps. 70% of the slot (about 35dp on a phone) keeps them
+      // chunky with a clear gap between days; the cap stops them turning
+      // into blocks on a tablet.
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final barWidth = (constraints.maxWidth / 7 * 0.5).clamp(6.0, 18.0);
+          final barWidth = (constraints.maxWidth / 7 * 0.7).clamp(6.0, 44.0);
           return TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: 1),
             duration: const Duration(milliseconds: 600),
@@ -459,7 +461,7 @@ class _WeekBars extends StatelessWidget {
                               color: dayCounts[i] == 0
                                   ? DeenColors.statsOutline(dark)
                                   : (dark ? DeenColors.goldSoft : DeenColors.primary),
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                           ),
                         ),
