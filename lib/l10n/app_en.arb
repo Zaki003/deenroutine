@@ -83,6 +83,10 @@
   "@barakahSummaryRemaining": {
     "placeholders": { "done": {}, "total": {}, "remaining": {}, "prayer": {} }
   },
+  "barakahSummaryRemainingNoPrayer": "{done} of {total} habits complete today — {remaining} to go.",
+  "@barakahSummaryRemainingNoPrayer": {
+    "placeholders": { "done": {}, "total": {}, "remaining": {} }
+  },
   "barakahSummaryComplete": "All {total} habits complete today. Well done!",
   "@barakahSummaryComplete": {
     "placeholders": { "total": {} }

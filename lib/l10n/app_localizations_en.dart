@@ -207,6 +207,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String barakahSummaryRemainingNoPrayer(
+      Object done, Object total, Object remaining) {
+    return '$done of $total habits complete today — $remaining to go.';
+  }
+
+  @override
   String barakahSummaryComplete(Object total) {
     return 'All $total habits complete today. Well done!';
   }

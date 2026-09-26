@@ -441,6 +441,13 @@ abstract class AppLocalizations {
   String barakahSummaryRemaining(
       Object done, Object total, Object remaining, Object prayer);
 
+  /// No description provided for @barakahSummaryRemainingNoPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} habits complete today — {remaining} to go.'**
+  String barakahSummaryRemainingNoPrayer(
+      Object done, Object total, Object remaining);
+
   /// No description provided for @barakahSummaryComplete.
   ///
   /// In en, this message translates to:

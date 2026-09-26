@@ -451,9 +451,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (total == 0 || remaining <= 0) {
       return l10n.barakahSummaryComplete(total);
     }
-    final prayer =
-        nextPrayerKey != null ? prayerNameLabel(l10n, nextPrayerKey) : '';
-    return l10n.barakahSummaryRemaining(done, total, remaining, prayer);
+    // Until prayer times load (or if they can't, e.g. no location yet),
+    // there's no prayer to count down to - leave it out rather than end on
+    // "before ." with the name missing.
+    if (nextPrayerKey == null) {
+      return l10n.barakahSummaryRemainingNoPrayer(done, total, remaining);
+    }
+    return l10n.barakahSummaryRemaining(
+        done, total, remaining, prayerNameLabel(l10n, nextPrayerKey));
   }
 }
 

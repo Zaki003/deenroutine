@@ -66,6 +66,7 @@
   "todayLabel": "আজ",
   "nextPrayerLabel": "পরবর্তী নামাজ",
   "barakahSummaryRemaining": "{total} টির মধ্যে {done} টি অভ্যাস আজ সম্পন্ন — {prayer}-এর আগে আরও {remaining} টি বাকি।",
+  "barakahSummaryRemainingNoPrayer": "{total} টির মধ্যে {done} টি অভ্যাস আজ সম্পন্ন — আরও {remaining} টি বাকি।",
   "barakahSummaryComplete": "আজকের সব {total} টি অভ্যাস সম্পন্ন হয়েছে। চমৎকার!",
 
   "prayerScreenTitle": "নামাজের সময়",
