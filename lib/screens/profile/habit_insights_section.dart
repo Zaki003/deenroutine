@@ -314,8 +314,8 @@ class _MonthGrid extends StatelessWidget {
                               color: future ? Colors.transparent : _shade(grid[index]),
                               borderRadius: BorderRadius.circular(4),
                               border: day == today
-                                  ? Border.all(color: DeenColors.gold, width: 1.5)
-                                  : (future ? Border.all(color: DeenColors.outlineFaint(dark)) : null),
+                                  ? Border.all(color: DeenColors.prayerLate(dark), width: 1.5)
+                                  : (future ? Border.all(color: DeenColors.statsOutline(dark)) : null),
                             ),
                           );
                         }),
@@ -365,34 +365,38 @@ class _MilestoneBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // Earned reads as filled with a bolder label; not yet earned is an
+    // outlined ring with a muted label. No opacity on either: faded text at
+    // 45% measured about 2:1, under the 4.5:1 text needs.
     return Semantics(
       label: reached ? l10n.habitMilestoneReached(days) : l10n.habitMilestoneNotReached(days),
       excludeSemantics: true,
-      child: Opacity(
-        opacity: reached ? 1 : 0.45,
-        child: Column(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: reached ? DeenColors.statsFill(dark) : null,
-                border: reached ? null : Border.all(color: DeenColors.outlineFaint(dark), width: 1.5),
-              ),
-              child: Icon(
-                _icons[days] ?? Icons.star_rounded,
-                size: 20,
-                color: reached ? DeenColors.onPrayerOnTime(dark) : DeenColors.textMuted(dark),
-              ),
+      child: Column(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: reached ? DeenColors.statsFill(dark) : null,
+              border: reached ? null : Border.all(color: DeenColors.statsOutline(dark), width: 1.5),
             ),
-            const SizedBox(height: 5),
-            Text(
-              l10n.habitMilestoneDays(days),
-              style: TextStyle(fontSize: 11, color: DeenColors.textMuted(dark)),
+            child: Icon(
+              _icons[days] ?? Icons.star_rounded,
+              size: 20,
+              color: reached ? DeenColors.onPrayerOnTime(dark) : DeenColors.textMuted(dark),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            l10n.habitMilestoneDays(days),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: reached ? FontWeight.w600 : FontWeight.w400,
+              color: reached ? DeenColors.primaryText(dark) : DeenColors.textMuted(dark),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -453,7 +457,7 @@ class _WeekBars extends StatelessWidget {
                                 .clamp(3.0, _maxBarHeight),
                             decoration: BoxDecoration(
                               color: dayCounts[i] == 0
-                                  ? DeenColors.outlineFaint(dark)
+                                  ? DeenColors.statsOutline(dark)
                                   : (dark ? DeenColors.goldSoft : DeenColors.primary),
                               borderRadius: BorderRadius.circular(4),
                             ),

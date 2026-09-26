@@ -48,6 +48,13 @@ class DeenColors {
   static Color statsEmpty(bool dark) =>
       dark ? Colors.white.withValues(alpha: 0.22) : primary.withValues(alpha: 0.32);
 
+  /// A neutral line that still has to be seen - a not-yet-earned badge's
+  /// ring, a zero-day bar, a day still to come - at 3:1 against
+  /// [cardBackground] (3.2:1 light, 3.4:1 dark), where [outlineFaint]
+  /// measures about 1.5-1.7:1 and is only fit for decoration.
+  static Color statsOutline(bool dark) =>
+      dark ? Colors.white.withValues(alpha: 0.42) : primary.withValues(alpha: 0.65);
+
   /// Light-mode wash for the quote card and quiz "best score" banner.
   static const creamPanel = Color(0xFFEFE7D2);
 
