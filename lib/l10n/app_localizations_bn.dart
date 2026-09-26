@@ -1453,4 +1453,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get habitInsightsLoadFailed => 'অভ্যাসের ইতিহাস লোড করা যায়নি।';
+
+  @override
+  String get habitPerfectDayLegend => 'সব অভ্যাস সম্পন্ন';
+
+  @override
+  String habitPerfectDays(int count) {
+    return 'সব অভ্যাস সম্পন্ন হওয়া দিন: $countটি';
+  }
 }

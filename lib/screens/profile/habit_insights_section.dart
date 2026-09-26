@@ -185,9 +185,11 @@ class _HabitInsightsBody extends StatelessWidget {
             dark: dark,
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
             child: Semantics(
-              label: insights.ratePercent == null
-                  ? l10n.habitInsightsSubtitle
-                  : '${l10n.habitInsightsSubtitle}, ${l10n.habitRateLabel}: ${insights.ratePercent}%',
+              label: [
+                l10n.habitInsightsSubtitle,
+                if (insights.ratePercent != null) '${l10n.habitRateLabel}: ${insights.ratePercent}%',
+                l10n.habitPerfectDays(insights.grid.where((v) => v != null && v >= 1).length),
+              ].join(', '),
               excludeSemantics: true,
               child: _MonthGrid(grid: insights.grid, today: todayMidnight, dark: dark),
             ),
@@ -262,6 +264,18 @@ class _MonthGrid extends StatelessWidget {
   /// (and darker than one in light), so a quarter-done day looked like less
   /// than nothing. Empty gets its own much fainter tint instead, and the
   /// fill steps up in thirds.
+  /// On the full-strength fill, in the same colour as the tick on an
+  /// on-time prayer: white in light mode (7:1), ink in dark (5.1:1). In the
+  /// legend it sits on the card, where that ink would vanish in dark mode,
+  /// so it's drawn filled-circle style there too.
+  Widget _perfectStar(double size) => Container(
+        width: size + 3,
+        height: size + 3,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: DeenColors.statsFill(dark), shape: BoxShape.circle),
+        child: Icon(Icons.star_rounded, size: size - 1, color: DeenColors.onPrayerOnTime(dark)),
+      );
+
   Color _shade(double? done) {
     final card = DeenColors.cardBackground(dark);
     if (done == null || done == 0) {
@@ -309,6 +323,7 @@ class _MonthGrid extends StatelessWidget {
                           final index = w * 7 + d;
                           final day = DateTime(gridStart.year, gridStart.month, gridStart.day + index);
                           final future = day.isAfter(today);
+                          final perfect = !future && (grid[index] ?? 0) >= 1;
                           return DecoratedBox(
                             decoration: BoxDecoration(
                               color: future ? Colors.transparent : _shade(grid[index]),
@@ -317,6 +332,10 @@ class _MonthGrid extends StatelessWidget {
                                   ? Border.all(color: DeenColors.prayerLate(dark), width: 1.5)
                                   : (future ? Border.all(color: DeenColors.statsOutline(dark)) : null),
                             ),
+                            // A day with every due habit done gets a star -
+                            // celebrated when it happens, never counted as a
+                            // score that sits at zero.
+                            child: perfect ? Center(child: _perfectStar(13)) : null,
                           );
                         }),
                       ),
@@ -327,8 +346,12 @@ class _MonthGrid extends StatelessWidget {
           ),
         const SizedBox(height: 8),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            _perfectStar(12),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Text(l10n.habitPerfectDayLegend, style: muted, overflow: TextOverflow.ellipsis),
+            ),
             Text(l10n.habitGridLess, style: muted),
             const SizedBox(width: 5),
             for (final v in const [0.0, 0.3, 0.6, 0.9, 1.0]) ...[

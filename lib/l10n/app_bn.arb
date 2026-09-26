@@ -471,5 +471,7 @@
   "habitMilestoneDays": "{days} দিন",
   "habitMilestoneReached": "{days} দিনের ধারাবাহিকতা অর্জিত",
   "habitMilestoneNotReached": "{days} দিনের ধারাবাহিকতা এখনো অর্জিত হয়নি",
-  "habitInsightsLoadFailed": "অভ্যাসের ইতিহাস লোড করা যায়নি।"
+  "habitInsightsLoadFailed": "অভ্যাসের ইতিহাস লোড করা যায়নি।",
+  "habitPerfectDayLegend": "সব অভ্যাস সম্পন্ন",
+  "habitPerfectDays": "সব অভ্যাস সম্পন্ন হওয়া দিন: {count}টি"
 }

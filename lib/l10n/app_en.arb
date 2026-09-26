@@ -669,5 +669,12 @@
       "days": { "type": "int" }
     }
   },
-  "habitInsightsLoadFailed": "Couldn't load your habit history."
+  "habitInsightsLoadFailed": "Couldn't load your habit history.",
+  "habitPerfectDayLegend": "Every habit done",
+  "habitPerfectDays": "{count} days with every habit done",
+  "@habitPerfectDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
 }

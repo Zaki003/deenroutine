@@ -1453,4 +1453,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get habitInsightsLoadFailed => 'Couldn\'t load your habit history.';
+
+  @override
+  String get habitPerfectDayLegend => 'Every habit done';
+
+  @override
+  String habitPerfectDays(int count) {
+    return '$count days with every habit done';
+  }
 }

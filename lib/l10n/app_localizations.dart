@@ -2619,6 +2619,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load your habit history.'**
   String get habitInsightsLoadFailed;
+
+  /// No description provided for @habitPerfectDayLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Every habit done'**
+  String get habitPerfectDayLegend;
+
+  /// No description provided for @habitPerfectDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days with every habit done'**
+  String habitPerfectDays(int count);
 }
 
 class _AppLocalizationsDelegate
