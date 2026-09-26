@@ -431,7 +431,7 @@ class _MilestoneBadge extends StatelessWidget {
 /// itself - the caller opens a bottom sheet, so there's no persistent
 /// "selected day" state to hold here.
 class _WeekBars extends StatelessWidget {
-  static const _maxBarHeight = 40.0;
+  static const _maxBarHeight = 56.0;
 
   final List<int> dayCounts;
   final List<String> dayLabels;
