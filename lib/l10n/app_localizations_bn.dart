@@ -918,25 +918,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get settingsTitle => 'সেটিংস';
 
   @override
-  String get thisWeekLabel => 'এই সপ্তাহ';
-
-  @override
-  String weekProgressLabel(int done, int total) {
-    return 'এই সপ্তাহে $total এর মধ্যে $done সম্পন্ন';
-  }
-
-  @override
-  String get bestHabitLabel => 'সেরা অভ্যাস';
-
-  @override
-  String bestHabitDaysSubtitle(int count) {
-    return '৭ দিনের মধ্যে $count দিন';
-  }
-
-  @override
-  String get habitsTrackedLabel => 'ট্র্যাক করা অভ্যাস';
-
-  @override
   String habitsCompletedOnDay(int count) {
     return '$countটি সম্পন্ন হয়েছে';
   }
@@ -1419,4 +1400,51 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get prayerCheckInLoggedBody =>
       'নামাজ ট্যাব থেকে যেকোনো সময় বদলাতে পারবেন।';
+
+  @override
+  String get habitInsightsTitle => 'অভ্যাসের অগ্রগতি';
+
+  @override
+  String get habitInsightsSubtitle => 'গত ৪ সপ্তাহ';
+
+  @override
+  String get habitBestStreakLabel => 'সেরা ধারাবাহিকতা';
+
+  @override
+  String get habitRateLabel => '৪ সপ্তাহের হার';
+
+  @override
+  String get habitCheckInsLabel => 'মোট সম্পন্ন';
+
+  @override
+  String habitWeekProgress(int done, int total) {
+    return 'এই সপ্তাহ · $totalটির মধ্যে $doneটি';
+  }
+
+  @override
+  String get habitGridLess => 'কম';
+
+  @override
+  String get habitGridMore => 'বেশি';
+
+  @override
+  String get habitMilestonesLabel => 'মাইলফলক';
+
+  @override
+  String habitMilestoneDays(int days) {
+    return '$days দিন';
+  }
+
+  @override
+  String habitMilestoneReached(int days) {
+    return '$days দিনের ধারাবাহিকতা অর্জিত';
+  }
+
+  @override
+  String habitMilestoneNotReached(int days) {
+    return '$days দিনের ধারাবাহিকতা এখনো অর্জিত হয়নি';
+  }
+
+  @override
+  String get habitInsightsLoadFailed => 'অভ্যাসের ইতিহাস লোড করা যায়নি।';
 }

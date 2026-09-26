@@ -422,22 +422,6 @@
   "profileAccountLabel": "ACCOUNT",
   "profileAboutLabel": "ABOUT",
   "settingsTitle": "Settings",
-  "thisWeekLabel": "THIS WEEK",
-  "weekProgressLabel": "This week, {done} of {total} completed",
-  "@weekProgressLabel": {
-    "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
-    }
-  },
-  "bestHabitLabel": "Best habit",
-  "bestHabitDaysSubtitle": "{count} of 7 days",
-  "@bestHabitDaysSubtitle": {
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
-  "habitsTrackedLabel": "Habits tracked",
   "habitsCompletedOnDay": "{count} completed",
   "@habitsCompletedOnDay": {
     "placeholders": {
@@ -648,5 +632,38 @@
       "prayer": { "type": "String" }, "status": { "type": "String" }
     }
   },
-  "prayerCheckInLoggedBody": "You can change it anytime on the Prayer tab."
+  "prayerCheckInLoggedBody": "You can change it anytime on the Prayer tab.",
+  "habitInsightsTitle": "Habit insights",
+  "habitInsightsSubtitle": "Last 4 weeks",
+  "habitBestStreakLabel": "Best streak",
+  "habitRateLabel": "4-week rate",
+  "habitCheckInsLabel": "Check-ins",
+  "habitWeekProgress": "This week · {done} of {total}",
+  "@habitWeekProgress": {
+    "placeholders": {
+      "done": { "type": "int" }, "total": { "type": "int" }
+    }
+  },
+  "habitGridLess": "Less",
+  "habitGridMore": "More",
+  "habitMilestonesLabel": "Milestones",
+  "habitMilestoneDays": "{days} days",
+  "@habitMilestoneDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "habitMilestoneReached": "{days}-day streak reached",
+  "@habitMilestoneReached": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "habitMilestoneNotReached": "{days}-day streak not reached yet",
+  "@habitMilestoneNotReached": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "habitInsightsLoadFailed": "Couldn't load your habit history."
 }

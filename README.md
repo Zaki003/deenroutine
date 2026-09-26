@@ -13,6 +13,7 @@ Built with Flutter and Firebase as an academic Master's (MIT) project at the Ins
 - **Barakah Circle** — a real-time, custom-painted progress ring on the dashboard showing today's completion rate.
 - **Prayer times** — the day's five prayer times by geolocation (or a manually picked city) via the Aladhan API, with a choice of calculation method and Asr school, cached in Firestore to minimize network calls. Optional adhan alarms per prayer.
 - **Prayer tracking** — tick off each prayer; the app knows each waqt and records it as on time, late, or qada, with an "excused" state that pauses streaks without breaking them. Opt-in Android check-in notifications can log a prayer straight from the notification.
+- **Habit insights** — best streak, a 4-week completion rate and calendar grid, this week's bars, and 7/30/40/100-day milestone badges on the Profile.
 - **Prayer insights** — a private, collapsed-by-default Profile section with a five-prayer streak, per-prayer consistency, and a 30-day grid.
 - **Daily motivation** — a rotating Quranic verse or Hadith on the dashboard (optionally as a daily notification), with up to five saved favourites.
 - **Learn & quiz** — step-by-step Islamic knowledge topics with assessments, plus multiple-choice quizzes with instant scoring and history.
@@ -105,10 +106,10 @@ See [data/README.md](data/README.md) for the one-time service account setup and 
 
 ```bash
 flutter analyze                                  # static analysis
-flutter test test/prayer_waqt_test.dart test/prayer_stats_test.dart test/prayer_check_in_plan_test.dart
+flutter test test/habit_insights_test.dart test/prayer_waqt_test.dart test/prayer_stats_test.dart test/prayer_check_in_plan_test.dart
 ```
 
-`test/widget_test.dart` is still the default `flutter create` boilerplate and fails as-is; the prayer-tracking tests above are the real suite so far.
+`test/widget_test.dart` is still the default `flutter create` boilerplate and fails as-is; the tests above are the real suite so far.
 
 ## Roadmap
 
@@ -116,7 +117,7 @@ flutter test test/prayer_waqt_test.dart test/prayer_stats_test.dart test/prayer_
 - Push notifications via FCM (beyond local scheduling)
 - Social/community habit challenges
 - AI-assisted habit recommendations
-- Richer habit analytics (weekly/monthly trends, like Prayer insights has for prayers)
+- Deeper habit analytics (per-habit trends, a 13-week grid) as a premium Insights feature
 
 ## Academic context
 

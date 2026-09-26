@@ -303,22 +303,6 @@
   "profileAccountLabel": "অ্যাকাউন্ট",
   "profileAboutLabel": "সম্পর্কে",
   "settingsTitle": "সেটিংস",
-  "thisWeekLabel": "এই সপ্তাহ",
-  "weekProgressLabel": "এই সপ্তাহে {total} এর মধ্যে {done} সম্পন্ন",
-  "@weekProgressLabel": {
-    "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
-    }
-  },
-  "bestHabitLabel": "সেরা অভ্যাস",
-  "bestHabitDaysSubtitle": "৭ দিনের মধ্যে {count} দিন",
-  "@bestHabitDaysSubtitle": {
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
-  "habitsTrackedLabel": "ট্র্যাক করা অভ্যাস",
   "habitsCompletedOnDay": "{count}টি সম্পন্ন হয়েছে",
   "@habitsCompletedOnDay": {
     "placeholders": {
@@ -473,5 +457,18 @@
   "prayerCheckInPrayed": "পড়েছি",
   "prayerCheckInLater": "পরে",
   "prayerCheckInLogged": "{prayer} লগ হয়েছে · {status}",
-  "prayerCheckInLoggedBody": "নামাজ ট্যাব থেকে যেকোনো সময় বদলাতে পারবেন।"
+  "prayerCheckInLoggedBody": "নামাজ ট্যাব থেকে যেকোনো সময় বদলাতে পারবেন।",
+  "habitInsightsTitle": "অভ্যাসের অগ্রগতি",
+  "habitInsightsSubtitle": "গত ৪ সপ্তাহ",
+  "habitBestStreakLabel": "সেরা ধারাবাহিকতা",
+  "habitRateLabel": "৪ সপ্তাহের হার",
+  "habitCheckInsLabel": "মোট সম্পন্ন",
+  "habitWeekProgress": "এই সপ্তাহ · {total}টির মধ্যে {done}টি",
+  "habitGridLess": "কম",
+  "habitGridMore": "বেশি",
+  "habitMilestonesLabel": "মাইলফলক",
+  "habitMilestoneDays": "{days} দিন",
+  "habitMilestoneReached": "{days} দিনের ধারাবাহিকতা অর্জিত",
+  "habitMilestoneNotReached": "{days} দিনের ধারাবাহিকতা এখনো অর্জিত হয়নি",
+  "habitInsightsLoadFailed": "অভ্যাসের ইতিহাস লোড করা যায়নি।"
 }

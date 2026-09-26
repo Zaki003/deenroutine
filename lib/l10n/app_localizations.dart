@@ -1701,36 +1701,6 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settingsTitle;
 
-  /// No description provided for @thisWeekLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'THIS WEEK'**
-  String get thisWeekLabel;
-
-  /// No description provided for @weekProgressLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'This week, {done} of {total} completed'**
-  String weekProgressLabel(int done, int total);
-
-  /// No description provided for @bestHabitLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Best habit'**
-  String get bestHabitLabel;
-
-  /// No description provided for @bestHabitDaysSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} of 7 days'**
-  String bestHabitDaysSubtitle(int count);
-
-  /// No description provided for @habitsTrackedLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Habits tracked'**
-  String get habitsTrackedLabel;
-
   /// No description provided for @habitsCompletedOnDay.
   ///
   /// In en, this message translates to:
@@ -2564,6 +2534,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can change it anytime on the Prayer tab.'**
   String get prayerCheckInLoggedBody;
+
+  /// No description provided for @habitInsightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit insights'**
+  String get habitInsightsTitle;
+
+  /// No description provided for @habitInsightsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 4 weeks'**
+  String get habitInsightsSubtitle;
+
+  /// No description provided for @habitBestStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best streak'**
+  String get habitBestStreakLabel;
+
+  /// No description provided for @habitRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'4-week rate'**
+  String get habitRateLabel;
+
+  /// No description provided for @habitCheckInsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-ins'**
+  String get habitCheckInsLabel;
+
+  /// No description provided for @habitWeekProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'This week · {done} of {total}'**
+  String habitWeekProgress(int done, int total);
+
+  /// No description provided for @habitGridLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get habitGridLess;
+
+  /// No description provided for @habitGridMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get habitGridMore;
+
+  /// No description provided for @habitMilestonesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones'**
+  String get habitMilestonesLabel;
+
+  /// No description provided for @habitMilestoneDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String habitMilestoneDays(int days);
+
+  /// No description provided for @habitMilestoneReached.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}-day streak reached'**
+  String habitMilestoneReached(int days);
+
+  /// No description provided for @habitMilestoneNotReached.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}-day streak not reached yet'**
+  String habitMilestoneNotReached(int days);
+
+  /// No description provided for @habitInsightsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your habit history.'**
+  String get habitInsightsLoadFailed;
 }
 
 class _AppLocalizationsDelegate

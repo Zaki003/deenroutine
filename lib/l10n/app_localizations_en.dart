@@ -921,25 +921,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTitle => 'Settings';
 
   @override
-  String get thisWeekLabel => 'THIS WEEK';
-
-  @override
-  String weekProgressLabel(int done, int total) {
-    return 'This week, $done of $total completed';
-  }
-
-  @override
-  String get bestHabitLabel => 'Best habit';
-
-  @override
-  String bestHabitDaysSubtitle(int count) {
-    return '$count of 7 days';
-  }
-
-  @override
-  String get habitsTrackedLabel => 'Habits tracked';
-
-  @override
   String habitsCompletedOnDay(int count) {
     return '$count completed';
   }
@@ -1419,4 +1400,51 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get prayerCheckInLoggedBody =>
       'You can change it anytime on the Prayer tab.';
+
+  @override
+  String get habitInsightsTitle => 'Habit insights';
+
+  @override
+  String get habitInsightsSubtitle => 'Last 4 weeks';
+
+  @override
+  String get habitBestStreakLabel => 'Best streak';
+
+  @override
+  String get habitRateLabel => '4-week rate';
+
+  @override
+  String get habitCheckInsLabel => 'Check-ins';
+
+  @override
+  String habitWeekProgress(int done, int total) {
+    return 'This week · $done of $total';
+  }
+
+  @override
+  String get habitGridLess => 'Less';
+
+  @override
+  String get habitGridMore => 'More';
+
+  @override
+  String get habitMilestonesLabel => 'Milestones';
+
+  @override
+  String habitMilestoneDays(int days) {
+    return '$days days';
+  }
+
+  @override
+  String habitMilestoneReached(int days) {
+    return '$days-day streak reached';
+  }
+
+  @override
+  String habitMilestoneNotReached(int days) {
+    return '$days-day streak not reached yet';
+  }
+
+  @override
+  String get habitInsightsLoadFailed => 'Couldn\'t load your habit history.';
 }

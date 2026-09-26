@@ -4,15 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
+import '../models/habit_log.dart';
 import '../services/analytics_service.dart';
 import '../services/firestore_service.dart';
 import '../services/notification_service.dart';
+import '../utils/habit_insights.dart';
 import '../utils/notification_plan.dart';
 
 /// Kinds of error [HabitProvider] can surface. Kept as a type rather than a
 /// pre-formatted English sentence so the UI layer can localize the message
 /// (providers stay `BuildContext`/`AppLocalizations`-free).
-enum HabitErrorType { syncFailed, duplicateTitle, updateFailed, deleteFailed }
+enum HabitErrorType { syncFailed, duplicateTitle, updateFailed, deleteFailed, insightsFailed }
 
 /// Streak lengths a milestone banner celebrates. Ordered ascending —
 /// [HabitProvider._checkMilestone] relies on that to find the highest one
@@ -184,6 +186,9 @@ class HabitProvider extends ChangeNotifier {
     _errorType = null;
     _errorDetail = null;
     _hasLoadedOnce = false;
+    _insightLogs = {};
+    _insightDay = null;
+    _insightsErrorType = null;
     // Deferred: the caller is normally MainNavScreen.dispose(), and the
     // widget tree is locked mid-teardown at that point - notifying
     // synchronously here throws "setState() or markNeedsBuild() called when
@@ -514,5 +519,89 @@ class HabitProvider extends ChangeNotifier {
   Future<List<bool>> weekFor(Habit habit) async {
     final logs = await _service.watchHabitLogs(habit.uid, habit.habitId).first;
     return _service.weekCompletion(logs, trackingType: habit.trackingType);
+  }
+
+  // ---------------- Habit insights (Profile) ----------------
+
+  // Each recurring habit's history before today, fetched once per day for
+  // the Profile's Habit insights. Today comes from the live habit rows
+  // instead (see [insights]), so ticking a habit updates the section without
+  // another fetch.
+  Map<String, List<HabitLog>> _insightLogs = {};
+  DateTime? _insightDay;
+  bool _insightLoading = false;
+
+  /// Kept apart from [errorType]: the dashboard shows a snackbar for that
+  /// one, and a Profile section failing to load isn't worth interrupting for.
+  HabitErrorType? _insightsErrorType;
+  HabitErrorType? get insightsErrorType => _insightsErrorType;
+
+  List<Habit> get _recurring =>
+      _habits.where((h) => h.frequency != HabitFrequency.once).toList();
+
+  static DateTime _today() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day);
+  }
+
+  /// Whether every recurring habit's history is loaded for today.
+  bool get insightsLoaded =>
+      _insightDay == _today() && _recurring.every((h) => _insightLogs.containsKey(h.habitId));
+
+  /// Fetches whatever history [insights] is missing: everything on a new
+  /// day, otherwise just habits added since. A no-op when nothing is.
+  Future<void> loadInsightsHistory() async {
+    if (_insightLoading || insightsLoaded) return;
+    final today = _today();
+    if (_insightDay != today) _insightLogs = {};
+    final missing = _recurring.where((h) => !_insightLogs.containsKey(h.habitId)).toList();
+    _insightLoading = true;
+    try {
+      final fetched = await Future.wait(
+        missing.map((h) => _service.watchHabitLogs(h.uid, h.habitId).first),
+      );
+      for (var i = 0; i < missing.length; i++) {
+        _insightLogs[missing[i].habitId] = [
+          for (final l in fetched[i])
+            if (DateTime(l.date.year, l.date.month, l.date.day) != today) l,
+        ];
+      }
+      _insightDay = today;
+      _insightsErrorType = null;
+    } catch (_) {
+      _insightsErrorType = HabitErrorType.insightsFailed;
+    } finally {
+      _insightLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Null until [loadInsightsHistory] has everything for today.
+  HabitInsights? get insights {
+    if (!insightsLoaded) return null;
+    final today = _today();
+    final recurring = _recurring;
+    return computeHabitInsights(
+      habits: recurring,
+      logsByHabit: {
+        for (final h in recurring)
+          h.habitId: [
+            ..._insightLogs[h.habitId]!,
+            // Today's log, rebuilt from the row: any log today sets
+            // lastCompletedDate, and completed holds its status (an
+            // avoidance slip is a status-false log, like in logProgress).
+            if (h.hasProgressToday)
+              HabitLog(logId: 'today', habitId: h.habitId, uid: h.uid, date: today, status: h.completed),
+          ],
+      },
+      now: DateTime.now(),
+      currentStreak: (h, logs) => _service.calculateStreak(
+        logs,
+        createdAt: h.createdAt,
+        frequency: h.frequency,
+        selectedDays: h.selectedDays,
+        trackingType: h.trackingType,
+      ),
+    );
   }
 }

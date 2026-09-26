@@ -16,5 +16,7 @@ String habitErrorMessage(AppLocalizations l10n, HabitErrorType type, String? det
       return l10n.habitUpdateFailed;
     case HabitErrorType.deleteFailed:
       return l10n.habitDeleteFailed;
+    case HabitErrorType.insightsFailed:
+      return l10n.habitInsightsLoadFailed;
   }
 }

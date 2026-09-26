@@ -30,7 +30,7 @@ class DeenColors {
   /// bar for chart marks), which is why they aren't simply [primaryLight]
   /// and [gold]: those measured 2.7:1 in dark and 2.4:1 in light. Draw an
   /// icon on one in its matching `on...` colour.
-  static Color prayerOnTime(bool dark) => dark ? const Color(0xFF34A88D) : primary;
+  static Color prayerOnTime(bool dark) => statsFill(dark);
   static Color onPrayerOnTime(bool dark) => dark ? ink : Colors.white;
   static Color prayerLate(bool dark) => dark ? gold : const Color(0xFFA8832F);
   static const onPrayerLate = ink;
@@ -39,7 +39,13 @@ class DeenColors {
   /// Empty grid squares and bar tracks in the prayer stats: a little
   /// stronger than [outlineFaint] so the grid's shape reads, but kept well
   /// below the data colours so "nothing here" never looks like a mark.
-  static Color prayerEmpty(bool dark) =>
+  static Color prayerEmpty(bool dark) => statsEmpty(dark);
+
+  /// The done / empty pair every stats chart uses (prayer and habit
+  /// insights), measured the same way: [statsFill] is at least 3:1 against
+  /// [cardBackground] in both themes, [statsEmpty] deliberately well below.
+  static Color statsFill(bool dark) => dark ? const Color(0xFF34A88D) : primary;
+  static Color statsEmpty(bool dark) =>
       dark ? Colors.white.withValues(alpha: 0.22) : primary.withValues(alpha: 0.32);
 
   /// Light-mode wash for the quote card and quiz "best score" banner.
