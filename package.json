@@ -7,6 +7,8 @@
     "seed:quotes": "node scripts/seed_daily_quotes.js",
     "seed:quotes:check": "node scripts/seed_daily_quotes.js --dry-run",
     "seed:quotes:prune": "node scripts/seed_daily_quotes.js --prune",
+    "scrub:prayer-cache": "node scripts/scrub_prayer_cache_coords.js",
+    "scrub:prayer-cache:apply": "node scripts/scrub_prayer_cache_coords.js --apply",
     "test:rules": "firebase emulators:exec --only firestore \"node scripts/test_firestore_rules.js\""
   },
   "dependencies": {

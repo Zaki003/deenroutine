@@ -28,7 +28,10 @@ npm run seed:quiz          # push data/quiz_questions.json -> QuizQuestions
 npm run seed:quiz:check    # validate + dry-run, writes nothing
 npm run seed:quiz:prune    # push, and delete Firestore docs removed from the file
 npm run seed:quotes        # push data/daily_quotes.json -> DailyQuotes (same :check/:prune variants)
+npm run scrub:prayer-cache # report PrayerCache docs still holding unrounded coordinates (:apply rounds them)
 ```
+
+Builds up to 1.0.0+5 wrote full-precision coordinates into `PrayerCache` (fixed in 167ca82); rerun the scrub once older builds have updated, since they keep adding such docs until then.
 
 These require `scripts/serviceAccountKey.json` (a Firebase service account key; gitignored, never commit it) — see [data/README.md](data/README.md) for the one-time setup and the content-format rules the scripts enforce.
 
